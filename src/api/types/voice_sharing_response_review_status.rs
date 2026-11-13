@@ -1,0 +1,58 @@
+pub use crate::prelude::*;
+
+#[non_exhaustive]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum VoiceSharingResponseReviewStatus {
+    NotRequested,
+    Pending,
+    Declined,
+    DeclinedResubmittable,
+    Allowed,
+    AllowedWithChanges,
+    /// This variant is used for forward compatibility.
+    /// If the server sends a value not recognized by the current SDK version,
+    /// it will be captured here with the raw string value.
+    __Unknown(String),
+}
+impl Serialize for VoiceSharingResponseReviewStatus {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        match self {
+            Self::NotRequested => serializer.serialize_str("not_requested"),
+            Self::Pending => serializer.serialize_str("pending"),
+            Self::Declined => serializer.serialize_str("declined"),
+            Self::DeclinedResubmittable => serializer.serialize_str("declined_resubmittable"),
+            Self::Allowed => serializer.serialize_str("allowed"),
+            Self::AllowedWithChanges => serializer.serialize_str("allowed_with_changes"),
+            Self::__Unknown(val) => serializer.serialize_str(val),
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for VoiceSharingResponseReviewStatus {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let value = String::deserialize(deserializer)?;
+        match value.as_str() {
+            "not_requested" => Ok(Self::NotRequested),
+            "pending" => Ok(Self::Pending),
+            "declined" => Ok(Self::Declined),
+            "declined_resubmittable" => Ok(Self::DeclinedResubmittable),
+            "allowed" => Ok(Self::Allowed),
+            "allowed_with_changes" => Ok(Self::AllowedWithChanges),
+            _ => Ok(Self::__Unknown(value)),
+        }
+    }
+}
+
+impl fmt::Display for VoiceSharingResponseReviewStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::NotRequested => write!(f, "not_requested"),
+            Self::Pending => write!(f, "pending"),
+            Self::Declined => write!(f, "declined"),
+            Self::DeclinedResubmittable => write!(f, "declined_resubmittable"),
+            Self::Allowed => write!(f, "allowed"),
+            Self::AllowedWithChanges => write!(f, "allowed_with_changes"),
+            Self::__Unknown(val) => write!(f, "{}", val),
+        }
+    }
+}

@@ -1,0 +1,154 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
+pub struct UpdateSpeechEngineRequest {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speech_engine: Option<SpeechEngineConfig>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub asr: Option<AsrConversationalConfig>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tts: Option<TtsConversationalConfigInput>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub turn: Option<BaseTurnConfig>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vad: Option<VadConfig>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation: Option<ConversationConfigInput>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<PrivacyConfigInput>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub call_limits: Option<AgentCallLimits>,
+    /// Who may start a conversation with this speech engine
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth: Option<SpeechEngineAuthConfig>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    /// Time in seconds to wait for the upstream speech engine endpoint to respond before the attempt is abandoned and retried. Must be between 2 and 15 seconds.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::float::option")]
+    pub cascade_timeout_seconds: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub overrides: Option<SpeechEngineConversationInitiationClientDataConfig>,
+}
+
+impl UpdateSpeechEngineRequest {
+    pub fn builder() -> UpdateSpeechEngineRequestBuilder {
+        <UpdateSpeechEngineRequestBuilder as Default>::default()
+    }
+}
+
+#[derive(Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub struct UpdateSpeechEngineRequestBuilder {
+    name: Option<String>,
+    speech_engine: Option<SpeechEngineConfig>,
+    asr: Option<AsrConversationalConfig>,
+    tts: Option<TtsConversationalConfigInput>,
+    turn: Option<BaseTurnConfig>,
+    vad: Option<VadConfig>,
+    conversation: Option<ConversationConfigInput>,
+    privacy: Option<PrivacyConfigInput>,
+    call_limits: Option<AgentCallLimits>,
+    auth: Option<SpeechEngineAuthConfig>,
+    language: Option<String>,
+    cascade_timeout_seconds: Option<f64>,
+    tags: Option<Vec<String>>,
+    overrides: Option<SpeechEngineConversationInitiationClientDataConfig>,
+}
+
+impl UpdateSpeechEngineRequestBuilder {
+    pub fn name(mut self, value: impl Into<String>) -> Self {
+        self.name = Some(value.into());
+        self
+    }
+
+    pub fn speech_engine(mut self, value: SpeechEngineConfig) -> Self {
+        self.speech_engine = Some(value);
+        self
+    }
+
+    pub fn asr(mut self, value: AsrConversationalConfig) -> Self {
+        self.asr = Some(value);
+        self
+    }
+
+    pub fn tts(mut self, value: TtsConversationalConfigInput) -> Self {
+        self.tts = Some(value);
+        self
+    }
+
+    pub fn turn(mut self, value: BaseTurnConfig) -> Self {
+        self.turn = Some(value);
+        self
+    }
+
+    pub fn vad(mut self, value: VadConfig) -> Self {
+        self.vad = Some(value);
+        self
+    }
+
+    pub fn conversation(mut self, value: ConversationConfigInput) -> Self {
+        self.conversation = Some(value);
+        self
+    }
+
+    pub fn privacy(mut self, value: PrivacyConfigInput) -> Self {
+        self.privacy = Some(value);
+        self
+    }
+
+    pub fn call_limits(mut self, value: AgentCallLimits) -> Self {
+        self.call_limits = Some(value);
+        self
+    }
+
+    pub fn auth(mut self, value: SpeechEngineAuthConfig) -> Self {
+        self.auth = Some(value);
+        self
+    }
+
+    pub fn language(mut self, value: impl Into<String>) -> Self {
+        self.language = Some(value.into());
+        self
+    }
+
+    pub fn cascade_timeout_seconds(mut self, value: f64) -> Self {
+        self.cascade_timeout_seconds = Some(value);
+        self
+    }
+
+    pub fn tags(mut self, value: Vec<String>) -> Self {
+        self.tags = Some(value);
+        self
+    }
+
+    pub fn overrides(mut self, value: SpeechEngineConversationInitiationClientDataConfig) -> Self {
+        self.overrides = Some(value);
+        self
+    }
+
+    /// Consumes the builder and constructs a [`UpdateSpeechEngineRequest`].
+    pub fn build(self) -> Result<UpdateSpeechEngineRequest, BuildError> {
+        Ok(UpdateSpeechEngineRequest {
+            name: self.name,
+            speech_engine: self.speech_engine,
+            asr: self.asr,
+            tts: self.tts,
+            turn: self.turn,
+            vad: self.vad,
+            conversation: self.conversation,
+            privacy: self.privacy,
+            call_limits: self.call_limits,
+            auth: self.auth,
+            language: self.language,
+            cascade_timeout_seconds: self.cascade_timeout_seconds,
+            tags: self.tags,
+            overrides: self.overrides,
+        })
+    }
+}

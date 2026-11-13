@@ -1,0 +1,249 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct TestInvocationSummaryResponseModel {
+    /// The ID of the test invocation
+    #[serde(default)]
+    pub id: String,
+    /// The user-provided name of the test invocation, if one was set.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The ID of the agent this test invocation belongs to
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub agent_id: Option<String>,
+    /// The ID of the branch this test invocation was run on
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branch_id: Option<String>,
+    /// The ID of the agent version this test invocation ran against. For draft or config-override runs this is the version those uncommitted changes were applied on top of. None only for runs recorded before this field existed.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<String>,
+    /// Whether the run included uncommitted changes (a saved draft or an ad-hoc config override) layered on top of version_id.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ran_against_draft: Option<bool>,
+    /// Whether the test runs in this invocation did not all execute against the same version, which happens when a subset of runs was resubmitted after the original run. When true, version_id describes the most recent resubmit rather than every run.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runs_diverged_from_version: Option<bool>,
+    /// Creation time of the test invocation in unix seconds
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int")]
+    pub created_at_unix_secs: i64,
+    /// Number of test runs in this invocation
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int")]
+    pub test_run_count: i64,
+    /// Number of test runs that passed
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int")]
+    pub passed_count: i64,
+    /// Number of test runs that failed
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int")]
+    pub failed_count: i64,
+    /// Number of test runs that are pending
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int")]
+    pub pending_count: i64,
+    /// Number of test runs that were cancelled
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int")]
+    pub cancelled_count: i64,
+    /// Display title of the test invocation: the user-provided name when set, otherwise the folder name, single test name, or test count.
+    #[serde(default)]
+    pub title: String,
+    /// The access information of the test invocation
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_info: Option<ResourceAccessInfo>,
+    /// Number of times each test was repeated in this invocation
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int::option")]
+    pub repeat_count: Option<i64>,
+    /// Whether this test invocation was cancelled
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cancelled: Option<bool>,
+    /// Total credits billed across test runs in this invocation. None when no run has cost data.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int::option")]
+    pub credits_used: Option<i64>,
+    /// Total USD price across test runs in this invocation. None when no run has price data.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::float::option")]
+    pub total_price: Option<f64>,
+}
+
+impl TestInvocationSummaryResponseModel {
+    pub fn builder() -> TestInvocationSummaryResponseModelBuilder {
+        <TestInvocationSummaryResponseModelBuilder as Default>::default()
+    }
+}
+
+#[derive(Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub struct TestInvocationSummaryResponseModelBuilder {
+    id: Option<String>,
+    name: Option<String>,
+    agent_id: Option<String>,
+    branch_id: Option<String>,
+    version_id: Option<String>,
+    ran_against_draft: Option<bool>,
+    runs_diverged_from_version: Option<bool>,
+    created_at_unix_secs: Option<i64>,
+    test_run_count: Option<i64>,
+    passed_count: Option<i64>,
+    failed_count: Option<i64>,
+    pending_count: Option<i64>,
+    cancelled_count: Option<i64>,
+    title: Option<String>,
+    access_info: Option<ResourceAccessInfo>,
+    repeat_count: Option<i64>,
+    cancelled: Option<bool>,
+    credits_used: Option<i64>,
+    total_price: Option<f64>,
+}
+
+impl TestInvocationSummaryResponseModelBuilder {
+    pub fn id(mut self, value: impl Into<String>) -> Self {
+        self.id = Some(value.into());
+        self
+    }
+
+    pub fn name(mut self, value: impl Into<String>) -> Self {
+        self.name = Some(value.into());
+        self
+    }
+
+    pub fn agent_id(mut self, value: impl Into<String>) -> Self {
+        self.agent_id = Some(value.into());
+        self
+    }
+
+    pub fn branch_id(mut self, value: impl Into<String>) -> Self {
+        self.branch_id = Some(value.into());
+        self
+    }
+
+    pub fn version_id(mut self, value: impl Into<String>) -> Self {
+        self.version_id = Some(value.into());
+        self
+    }
+
+    pub fn ran_against_draft(mut self, value: bool) -> Self {
+        self.ran_against_draft = Some(value);
+        self
+    }
+
+    pub fn runs_diverged_from_version(mut self, value: bool) -> Self {
+        self.runs_diverged_from_version = Some(value);
+        self
+    }
+
+    pub fn created_at_unix_secs(mut self, value: i64) -> Self {
+        self.created_at_unix_secs = Some(value);
+        self
+    }
+
+    pub fn test_run_count(mut self, value: i64) -> Self {
+        self.test_run_count = Some(value);
+        self
+    }
+
+    pub fn passed_count(mut self, value: i64) -> Self {
+        self.passed_count = Some(value);
+        self
+    }
+
+    pub fn failed_count(mut self, value: i64) -> Self {
+        self.failed_count = Some(value);
+        self
+    }
+
+    pub fn pending_count(mut self, value: i64) -> Self {
+        self.pending_count = Some(value);
+        self
+    }
+
+    pub fn cancelled_count(mut self, value: i64) -> Self {
+        self.cancelled_count = Some(value);
+        self
+    }
+
+    pub fn title(mut self, value: impl Into<String>) -> Self {
+        self.title = Some(value.into());
+        self
+    }
+
+    pub fn access_info(mut self, value: ResourceAccessInfo) -> Self {
+        self.access_info = Some(value);
+        self
+    }
+
+    pub fn repeat_count(mut self, value: i64) -> Self {
+        self.repeat_count = Some(value);
+        self
+    }
+
+    pub fn cancelled(mut self, value: bool) -> Self {
+        self.cancelled = Some(value);
+        self
+    }
+
+    pub fn credits_used(mut self, value: i64) -> Self {
+        self.credits_used = Some(value);
+        self
+    }
+
+    pub fn total_price(mut self, value: f64) -> Self {
+        self.total_price = Some(value);
+        self
+    }
+
+    /// Consumes the builder and constructs a [`TestInvocationSummaryResponseModel`].
+    /// This method will fail if any of the following fields are not set:
+    /// - [`id`](TestInvocationSummaryResponseModelBuilder::id)
+    /// - [`created_at_unix_secs`](TestInvocationSummaryResponseModelBuilder::created_at_unix_secs)
+    /// - [`test_run_count`](TestInvocationSummaryResponseModelBuilder::test_run_count)
+    /// - [`passed_count`](TestInvocationSummaryResponseModelBuilder::passed_count)
+    /// - [`failed_count`](TestInvocationSummaryResponseModelBuilder::failed_count)
+    /// - [`pending_count`](TestInvocationSummaryResponseModelBuilder::pending_count)
+    /// - [`cancelled_count`](TestInvocationSummaryResponseModelBuilder::cancelled_count)
+    /// - [`title`](TestInvocationSummaryResponseModelBuilder::title)
+    pub fn build(self) -> Result<TestInvocationSummaryResponseModel, BuildError> {
+        Ok(TestInvocationSummaryResponseModel {
+            id: self.id.ok_or_else(|| BuildError::missing_field("id"))?,
+            name: self.name,
+            agent_id: self.agent_id,
+            branch_id: self.branch_id,
+            version_id: self.version_id,
+            ran_against_draft: self.ran_against_draft,
+            runs_diverged_from_version: self.runs_diverged_from_version,
+            created_at_unix_secs: self
+                .created_at_unix_secs
+                .ok_or_else(|| BuildError::missing_field("created_at_unix_secs"))?,
+            test_run_count: self
+                .test_run_count
+                .ok_or_else(|| BuildError::missing_field("test_run_count"))?,
+            passed_count: self
+                .passed_count
+                .ok_or_else(|| BuildError::missing_field("passed_count"))?,
+            failed_count: self
+                .failed_count
+                .ok_or_else(|| BuildError::missing_field("failed_count"))?,
+            pending_count: self
+                .pending_count
+                .ok_or_else(|| BuildError::missing_field("pending_count"))?,
+            cancelled_count: self
+                .cancelled_count
+                .ok_or_else(|| BuildError::missing_field("cancelled_count"))?,
+            title: self
+                .title
+                .ok_or_else(|| BuildError::missing_field("title"))?,
+            access_info: self.access_info,
+            repeat_count: self.repeat_count,
+            cancelled: self.cancelled,
+            credits_used: self.credits_used,
+            total_price: self.total_price,
+        })
+    }
+}

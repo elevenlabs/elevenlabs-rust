@@ -1,0 +1,37 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub struct DubbingAuthError {
+    #[serde(default)]
+    pub error: String,
+}
+
+impl DubbingAuthError {
+    pub fn builder() -> DubbingAuthErrorBuilder {
+        <DubbingAuthErrorBuilder as Default>::default()
+    }
+}
+
+#[derive(Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub struct DubbingAuthErrorBuilder {
+    error: Option<String>,
+}
+
+impl DubbingAuthErrorBuilder {
+    pub fn error(mut self, value: impl Into<String>) -> Self {
+        self.error = Some(value.into());
+        self
+    }
+
+    /// Consumes the builder and constructs a [`DubbingAuthError`].
+    /// This method will fail if any of the following fields are not set:
+    /// - [`error`](DubbingAuthErrorBuilder::error)
+    pub fn build(self) -> Result<DubbingAuthError, BuildError> {
+        Ok(DubbingAuthError {
+            error: self
+                .error
+                .ok_or_else(|| BuildError::missing_field("error"))?,
+        })
+    }
+}

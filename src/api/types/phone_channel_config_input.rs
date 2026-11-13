@@ -1,0 +1,47 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub struct PhoneChannelConfigInput {
+    /// The phone number to call from.
+    #[serde(default)]
+    pub agent_phone_number_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode_config: Option<PhoneVoiceConfigInput>,
+}
+
+impl PhoneChannelConfigInput {
+    pub fn builder() -> PhoneChannelConfigInputBuilder {
+        <PhoneChannelConfigInputBuilder as Default>::default()
+    }
+}
+
+#[derive(Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub struct PhoneChannelConfigInputBuilder {
+    agent_phone_number_id: Option<String>,
+    mode_config: Option<PhoneVoiceConfigInput>,
+}
+
+impl PhoneChannelConfigInputBuilder {
+    pub fn agent_phone_number_id(mut self, value: impl Into<String>) -> Self {
+        self.agent_phone_number_id = Some(value.into());
+        self
+    }
+
+    pub fn mode_config(mut self, value: PhoneVoiceConfigInput) -> Self {
+        self.mode_config = Some(value);
+        self
+    }
+
+    /// Consumes the builder and constructs a [`PhoneChannelConfigInput`].
+    /// This method will fail if any of the following fields are not set:
+    /// - [`agent_phone_number_id`](PhoneChannelConfigInputBuilder::agent_phone_number_id)
+    pub fn build(self) -> Result<PhoneChannelConfigInput, BuildError> {
+        Ok(PhoneChannelConfigInput {
+            agent_phone_number_id: self
+                .agent_phone_number_id
+                .ok_or_else(|| BuildError::missing_field("agent_phone_number_id"))?,
+            mode_config: self.mode_config,
+        })
+    }
+}
