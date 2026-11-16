@@ -1,0 +1,13 @@
+{
+  "name": "Rust Dev Container",
+
+  "image": "rust:1.90-bookworm",
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["rust-lang.rust-analyzer"]
+    }
+  },
+
+  "postCreateCommand": "cargo build"
+}

@@ -1,0 +1,246 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct AgentBranchSummary {
+    #[serde(default)]
+    pub id: String,
+    #[serde(default)]
+    pub name: String,
+    #[serde(default)]
+    pub agent_id: String,
+    #[serde(default)]
+    pub description: String,
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int")]
+    pub created_at: i64,
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int")]
+    pub last_committed_at: i64,
+    #[serde(default)]
+    pub is_archived: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protection_status: Option<BranchProtectionStatus>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_rebase: Option<bool>,
+    /// Set while the branch is kept in sync with another branch (Main today), pulling in its new versions automatically. Null when it is not synced.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_status: Option<BranchSyncStatus>,
+    /// Access information for the branch
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_info: Option<ResourceAccessInfo>,
+    /// Percentage of traffic live on the branch
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::float::option")]
+    pub current_live_percentage: Option<f64>,
+    /// ID of the parent branch
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_branch_id: Option<String>,
+    /// Whether a draft exists for the branch
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub draft_exists: Option<bool>,
+    /// Unix seconds when the caller's draft on this branch was first created, or null when they have no draft. A draft created before last_committed_at was written against a config the branch has since moved past, so it may not reflect the current one.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int::option")]
+    pub draft_created_at: Option<i64>,
+    /// Whether the caller's draft on this branch was created before the branch's last commit, meaning it was written against a config the branch has since moved past and may not reflect the current one.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub draft_is_behind_tip: Option<bool>,
+    /// Number of calls in the last 7 days
+    #[serde(rename = "calls_7d")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int::option")]
+    pub calls_7_d: Option<i64>,
+    /// Number of commits on this branch not yet on main, relative to their common ancestor. Null if it could not be computed (e.g. no common ancestor, or the branch history exceeds the comparison budget).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int::option")]
+    pub commits_ahead: Option<i64>,
+    /// Number of commits on main not yet incorporated into this branch, relative to their common ancestor. Null if it could not be computed (e.g. no common ancestor, or the branch history exceeds the comparison budget).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int::option")]
+    pub commits_behind: Option<i64>,
+    /// ID of the branch this branch's tip version was merged into, if any
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merged_into_branch_id: Option<String>,
+}
+
+impl AgentBranchSummary {
+    pub fn builder() -> AgentBranchSummaryBuilder {
+        <AgentBranchSummaryBuilder as Default>::default()
+    }
+}
+
+#[derive(Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub struct AgentBranchSummaryBuilder {
+    id: Option<String>,
+    name: Option<String>,
+    agent_id: Option<String>,
+    description: Option<String>,
+    created_at: Option<i64>,
+    last_committed_at: Option<i64>,
+    is_archived: Option<bool>,
+    protection_status: Option<BranchProtectionStatus>,
+    auto_rebase: Option<bool>,
+    sync_status: Option<BranchSyncStatus>,
+    access_info: Option<ResourceAccessInfo>,
+    current_live_percentage: Option<f64>,
+    parent_branch_id: Option<String>,
+    draft_exists: Option<bool>,
+    draft_created_at: Option<i64>,
+    draft_is_behind_tip: Option<bool>,
+    calls_7_d: Option<i64>,
+    commits_ahead: Option<i64>,
+    commits_behind: Option<i64>,
+    merged_into_branch_id: Option<String>,
+}
+
+impl AgentBranchSummaryBuilder {
+    pub fn id(mut self, value: impl Into<String>) -> Self {
+        self.id = Some(value.into());
+        self
+    }
+
+    pub fn name(mut self, value: impl Into<String>) -> Self {
+        self.name = Some(value.into());
+        self
+    }
+
+    pub fn agent_id(mut self, value: impl Into<String>) -> Self {
+        self.agent_id = Some(value.into());
+        self
+    }
+
+    pub fn description(mut self, value: impl Into<String>) -> Self {
+        self.description = Some(value.into());
+        self
+    }
+
+    pub fn created_at(mut self, value: i64) -> Self {
+        self.created_at = Some(value);
+        self
+    }
+
+    pub fn last_committed_at(mut self, value: i64) -> Self {
+        self.last_committed_at = Some(value);
+        self
+    }
+
+    pub fn is_archived(mut self, value: bool) -> Self {
+        self.is_archived = Some(value);
+        self
+    }
+
+    pub fn protection_status(mut self, value: BranchProtectionStatus) -> Self {
+        self.protection_status = Some(value);
+        self
+    }
+
+    pub fn auto_rebase(mut self, value: bool) -> Self {
+        self.auto_rebase = Some(value);
+        self
+    }
+
+    pub fn sync_status(mut self, value: BranchSyncStatus) -> Self {
+        self.sync_status = Some(value);
+        self
+    }
+
+    pub fn access_info(mut self, value: ResourceAccessInfo) -> Self {
+        self.access_info = Some(value);
+        self
+    }
+
+    pub fn current_live_percentage(mut self, value: f64) -> Self {
+        self.current_live_percentage = Some(value);
+        self
+    }
+
+    pub fn parent_branch_id(mut self, value: impl Into<String>) -> Self {
+        self.parent_branch_id = Some(value.into());
+        self
+    }
+
+    pub fn draft_exists(mut self, value: bool) -> Self {
+        self.draft_exists = Some(value);
+        self
+    }
+
+    pub fn draft_created_at(mut self, value: i64) -> Self {
+        self.draft_created_at = Some(value);
+        self
+    }
+
+    pub fn draft_is_behind_tip(mut self, value: bool) -> Self {
+        self.draft_is_behind_tip = Some(value);
+        self
+    }
+
+    pub fn calls_7_d(mut self, value: i64) -> Self {
+        self.calls_7_d = Some(value);
+        self
+    }
+
+    pub fn commits_ahead(mut self, value: i64) -> Self {
+        self.commits_ahead = Some(value);
+        self
+    }
+
+    pub fn commits_behind(mut self, value: i64) -> Self {
+        self.commits_behind = Some(value);
+        self
+    }
+
+    pub fn merged_into_branch_id(mut self, value: impl Into<String>) -> Self {
+        self.merged_into_branch_id = Some(value.into());
+        self
+    }
+
+    /// Consumes the builder and constructs a [`AgentBranchSummary`].
+    /// This method will fail if any of the following fields are not set:
+    /// - [`id`](AgentBranchSummaryBuilder::id)
+    /// - [`name`](AgentBranchSummaryBuilder::name)
+    /// - [`agent_id`](AgentBranchSummaryBuilder::agent_id)
+    /// - [`description`](AgentBranchSummaryBuilder::description)
+    /// - [`created_at`](AgentBranchSummaryBuilder::created_at)
+    /// - [`last_committed_at`](AgentBranchSummaryBuilder::last_committed_at)
+    /// - [`is_archived`](AgentBranchSummaryBuilder::is_archived)
+    pub fn build(self) -> Result<AgentBranchSummary, BuildError> {
+        Ok(AgentBranchSummary {
+            id: self.id.ok_or_else(|| BuildError::missing_field("id"))?,
+            name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
+            agent_id: self
+                .agent_id
+                .ok_or_else(|| BuildError::missing_field("agent_id"))?,
+            description: self
+                .description
+                .ok_or_else(|| BuildError::missing_field("description"))?,
+            created_at: self
+                .created_at
+                .ok_or_else(|| BuildError::missing_field("created_at"))?,
+            last_committed_at: self
+                .last_committed_at
+                .ok_or_else(|| BuildError::missing_field("last_committed_at"))?,
+            is_archived: self
+                .is_archived
+                .ok_or_else(|| BuildError::missing_field("is_archived"))?,
+            protection_status: self.protection_status,
+            auto_rebase: self.auto_rebase,
+            sync_status: self.sync_status,
+            access_info: self.access_info,
+            current_live_percentage: self.current_live_percentage,
+            parent_branch_id: self.parent_branch_id,
+            draft_exists: self.draft_exists,
+            draft_created_at: self.draft_created_at,
+            draft_is_behind_tip: self.draft_is_behind_tip,
+            calls_7_d: self.calls_7_d,
+            commits_ahead: self.commits_ahead,
+            commits_behind: self.commits_behind,
+            merged_into_branch_id: self.merged_into_branch_id,
+        })
+    }
+}

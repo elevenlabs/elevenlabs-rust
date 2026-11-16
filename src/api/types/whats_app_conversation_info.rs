@@ -1,0 +1,100 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub struct WhatsAppConversationInfo {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direction: Option<WhatsAppConversationInfoDirection>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub whatsapp_phone_number_id: Option<String>,
+    #[serde(default)]
+    pub whatsapp_user_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub awaiting_first_user_message: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recipient: Option<WhatsAppRecipient>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub call_permission_request: Option<WhatsAppCallPermissionRequest>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub call_result: Option<CallResult>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub opening_message: Option<WhatsAppOpeningMessage>,
+}
+
+impl WhatsAppConversationInfo {
+    pub fn builder() -> WhatsAppConversationInfoBuilder {
+        <WhatsAppConversationInfoBuilder as Default>::default()
+    }
+}
+
+#[derive(Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub struct WhatsAppConversationInfoBuilder {
+    direction: Option<WhatsAppConversationInfoDirection>,
+    whatsapp_phone_number_id: Option<String>,
+    whatsapp_user_id: Option<String>,
+    awaiting_first_user_message: Option<bool>,
+    recipient: Option<WhatsAppRecipient>,
+    call_permission_request: Option<WhatsAppCallPermissionRequest>,
+    call_result: Option<CallResult>,
+    opening_message: Option<WhatsAppOpeningMessage>,
+}
+
+impl WhatsAppConversationInfoBuilder {
+    pub fn direction(mut self, value: WhatsAppConversationInfoDirection) -> Self {
+        self.direction = Some(value);
+        self
+    }
+
+    pub fn whatsapp_phone_number_id(mut self, value: impl Into<String>) -> Self {
+        self.whatsapp_phone_number_id = Some(value.into());
+        self
+    }
+
+    pub fn whatsapp_user_id(mut self, value: impl Into<String>) -> Self {
+        self.whatsapp_user_id = Some(value.into());
+        self
+    }
+
+    pub fn awaiting_first_user_message(mut self, value: bool) -> Self {
+        self.awaiting_first_user_message = Some(value);
+        self
+    }
+
+    pub fn recipient(mut self, value: WhatsAppRecipient) -> Self {
+        self.recipient = Some(value);
+        self
+    }
+
+    pub fn call_permission_request(mut self, value: WhatsAppCallPermissionRequest) -> Self {
+        self.call_permission_request = Some(value);
+        self
+    }
+
+    pub fn call_result(mut self, value: CallResult) -> Self {
+        self.call_result = Some(value);
+        self
+    }
+
+    pub fn opening_message(mut self, value: WhatsAppOpeningMessage) -> Self {
+        self.opening_message = Some(value);
+        self
+    }
+
+    /// Consumes the builder and constructs a [`WhatsAppConversationInfo`].
+    /// This method will fail if any of the following fields are not set:
+    /// - [`whatsapp_user_id`](WhatsAppConversationInfoBuilder::whatsapp_user_id)
+    pub fn build(self) -> Result<WhatsAppConversationInfo, BuildError> {
+        Ok(WhatsAppConversationInfo {
+            direction: self.direction,
+            whatsapp_phone_number_id: self.whatsapp_phone_number_id,
+            whatsapp_user_id: self
+                .whatsapp_user_id
+                .ok_or_else(|| BuildError::missing_field("whatsapp_user_id"))?,
+            awaiting_first_user_message: self.awaiting_first_user_message,
+            recipient: self.recipient,
+            call_permission_request: self.call_permission_request,
+            call_result: self.call_result,
+            opening_message: self.opening_message,
+        })
+    }
+}

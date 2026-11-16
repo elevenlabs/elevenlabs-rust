@@ -1,0 +1,170 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, PartialEq)]
+#[serde(untagged)]
+pub enum ObjectJsonSchemaPropertyOutputProperties {
+    LiteralJsonSchemaProperty(LiteralJsonSchemaProperty),
+    ObjectJsonSchemaPropertyOutput(ObjectJsonSchemaPropertyOutput),
+    ArrayJsonSchemaPropertyOutput(ArrayJsonSchemaPropertyOutput),
+}
+
+impl<'de> serde::Deserialize<'de> for ObjectJsonSchemaPropertyOutputProperties {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <serde_json::Value as serde::Deserialize>::deserialize(deserializer)?;
+        let has_any_key = |keys: &[&str]| {
+            value
+                .as_object()
+                .map(|object| keys.iter().any(|key| object.contains_key(*key)))
+                .unwrap_or(false)
+        };
+
+        let mut matched_literal = false;
+
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("object") {
+            matched_literal = true;
+            if let Ok(parsed) =
+                serde_json::from_value::<ObjectJsonSchemaPropertyOutput>(value.clone())
+            {
+                return Ok(Self::ObjectJsonSchemaPropertyOutput(parsed));
+            }
+        }
+
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("array") {
+            matched_literal = true;
+            if let Ok(parsed) =
+                serde_json::from_value::<ArrayJsonSchemaPropertyOutput>(value.clone())
+            {
+                return Ok(Self::ArrayJsonSchemaPropertyOutput(parsed));
+            }
+        }
+
+        if !matched_literal {
+            if let Ok(parsed) = serde_json::from_value::<LiteralJsonSchemaProperty>(value.clone()) {
+                return Ok(Self::LiteralJsonSchemaProperty(parsed));
+            }
+
+            if has_any_key(&[
+                "description",
+                "dynamic_variable",
+                "constant_value",
+                "is_omitted",
+                "type",
+                "required",
+                "properties",
+                "required_constraints",
+            ]) {
+                if let Ok(parsed) =
+                    serde_json::from_value::<ObjectJsonSchemaPropertyOutput>(value.clone())
+                {
+                    return Ok(Self::ObjectJsonSchemaPropertyOutput(parsed));
+                }
+            }
+
+            if has_any_key(&[
+                "description",
+                "dynamic_variable",
+                "constant_value",
+                "is_omitted",
+                "type",
+                "items",
+            ]) {
+                if let Ok(parsed) =
+                    serde_json::from_value::<ArrayJsonSchemaPropertyOutput>(value.clone())
+                {
+                    return Ok(Self::ArrayJsonSchemaPropertyOutput(parsed));
+                }
+            }
+        }
+
+        Err(serde::de::Error::custom(
+            "data did not match any variant of untagged enum ObjectJsonSchemaPropertyOutputProperties",
+        ))
+    }
+}
+
+impl ObjectJsonSchemaPropertyOutputProperties {
+    pub fn is_literal_json_schema_property(&self) -> bool {
+        matches!(self, Self::LiteralJsonSchemaProperty(_))
+    }
+
+    pub fn as_literal_json_schema_property(&self) -> Option<&LiteralJsonSchemaProperty> {
+        match self {
+            Self::LiteralJsonSchemaProperty(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_literal_json_schema_property(self) -> Option<LiteralJsonSchemaProperty> {
+        match self {
+            Self::LiteralJsonSchemaProperty(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn is_object_json_schema_property_output(&self) -> bool {
+        matches!(self, Self::ObjectJsonSchemaPropertyOutput(_))
+    }
+
+    pub fn as_object_json_schema_property_output(&self) -> Option<&ObjectJsonSchemaPropertyOutput> {
+        match self {
+            Self::ObjectJsonSchemaPropertyOutput(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_object_json_schema_property_output(self) -> Option<ObjectJsonSchemaPropertyOutput> {
+        match self {
+            Self::ObjectJsonSchemaPropertyOutput(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn is_array_json_schema_property_output(&self) -> bool {
+        matches!(self, Self::ArrayJsonSchemaPropertyOutput(_))
+    }
+
+    pub fn as_array_json_schema_property_output(&self) -> Option<&ArrayJsonSchemaPropertyOutput> {
+        match self {
+            Self::ArrayJsonSchemaPropertyOutput(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_array_json_schema_property_output(self) -> Option<ArrayJsonSchemaPropertyOutput> {
+        match self {
+            Self::ArrayJsonSchemaPropertyOutput(value) => Some(value),
+            _ => None,
+        }
+    }
+}
+
+impl fmt::Display for ObjectJsonSchemaPropertyOutputProperties {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::LiteralJsonSchemaProperty(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::ObjectJsonSchemaPropertyOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::ArrayJsonSchemaPropertyOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+        }
+    }
+}
+
+impl Default for ObjectJsonSchemaPropertyOutputProperties {
+    fn default() -> Self {
+        ObjectJsonSchemaPropertyOutputProperties::ObjectJsonSchemaPropertyOutput(Default::default())
+    }
+}

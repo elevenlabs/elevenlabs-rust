@@ -1,0 +1,247 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
+pub struct AgentPlatformSettingsResponseModel {
+    /// Settings to evaluate an agent's performance.
+    /// Agents are evaluated against a set of criteria, with success being defined as meeting some combination of those criteria.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation: Option<EvaluationSettingsOutput>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub widget: Option<WidgetConfig>,
+    /// Data collection fields, keyed by ID. Each field is stored as an analysis item attached to the agent (see analysis_items).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_collection: Option<std::collections::HashMap<String, AnalysisProperty>>,
+    /// Scope per data collection item ID. Missing keys default to conversation scope.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_collection_scopes: Option<std::collections::HashMap<String, AnalysisScope>>,
+    /// Analysis items (evaluation criteria and data collection fields) attached to the agent by reference. They are the source of truth for the agent's analysis. Writing evaluation.criteria or data_collection inline is still supported: a new entry creates an item, and changing an entry publishes a new version of its attached item, which every agent using that item picks up. To attach or detach an existing item, use the analysis item attachments endpoint. None means the agent has no attached items yet, and its inline fields are used as they are.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_items: Option<AgentAnalysisItemsOutput>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub overrides: Option<ConversationInitiationClientDataConfigOutput>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workspace_overrides: Option<AgentWorkspaceOverridesOutput>,
+    /// Settings for agent testing configuration.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub testing: Option<AgentTestingSettings>,
+    /// Whether the agent is archived
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archived: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub guardrails: Option<GuardrailsV1Output>,
+    /// Language for all conversation analysis outputs (summaries, titles, evaluation rationales, data collection rationales). If not set, the language will be inferred from the conversation. Must be one of the supported conversation languages.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary_language: Option<String>,
+    /// When enabled, a conversation transcript is automatically translated to the viewer's application language when they open the transcript page. If not set or false, transcripts are shown in their original language unless the viewer manually selects a translation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_translate_transcript_to_app_language: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth: Option<AuthSettings>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub call_limits: Option<AgentCallLimits>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queueing_config: Option<AgentQueueingConfig>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<PrivacyConfigOutput>,
+    /// The trust context in which the agent operates.
+    ///
+    /// UNKNOWN: not yet classified (existing agents created before this feature).
+    /// LOW: serves untrusted external participants (e.g. customer support, sales) --
+    /// outputs should be vetted and tool access scoped.
+    /// HIGH: serves the owner (e.g. personal assistant) -- full tool access is appropriate.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trust_context: Option<AgentTrustContext>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_llm: Option<Llm>,
+    /// Per-agent topic-discovery configuration. Cadence and analysis window are
+    /// managed internally; this only exposes the customer-facing on/off toggle.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topic_discovery: Option<TopicDiscoverySettings>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sentiment_analysis: Option<SentimentAnalysisSettings>,
+    /// Agent-level alerting configuration overriding workspace settings.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alerting: Option<AlertingSettingsResponse>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub safety: Option<SafetyResponseModel>,
+}
+
+impl AgentPlatformSettingsResponseModel {
+    pub fn builder() -> AgentPlatformSettingsResponseModelBuilder {
+        <AgentPlatformSettingsResponseModelBuilder as Default>::default()
+    }
+}
+
+#[derive(Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub struct AgentPlatformSettingsResponseModelBuilder {
+    evaluation: Option<EvaluationSettingsOutput>,
+    widget: Option<WidgetConfig>,
+    data_collection: Option<std::collections::HashMap<String, AnalysisProperty>>,
+    data_collection_scopes: Option<std::collections::HashMap<String, AnalysisScope>>,
+    analysis_items: Option<AgentAnalysisItemsOutput>,
+    overrides: Option<ConversationInitiationClientDataConfigOutput>,
+    workspace_overrides: Option<AgentWorkspaceOverridesOutput>,
+    testing: Option<AgentTestingSettings>,
+    archived: Option<bool>,
+    guardrails: Option<GuardrailsV1Output>,
+    summary_language: Option<String>,
+    auto_translate_transcript_to_app_language: Option<bool>,
+    auth: Option<AuthSettings>,
+    call_limits: Option<AgentCallLimits>,
+    queueing_config: Option<AgentQueueingConfig>,
+    privacy: Option<PrivacyConfigOutput>,
+    trust_context: Option<AgentTrustContext>,
+    analysis_llm: Option<Llm>,
+    topic_discovery: Option<TopicDiscoverySettings>,
+    sentiment_analysis: Option<SentimentAnalysisSettings>,
+    alerting: Option<AlertingSettingsResponse>,
+    safety: Option<SafetyResponseModel>,
+}
+
+impl AgentPlatformSettingsResponseModelBuilder {
+    pub fn evaluation(mut self, value: EvaluationSettingsOutput) -> Self {
+        self.evaluation = Some(value);
+        self
+    }
+
+    pub fn widget(mut self, value: WidgetConfig) -> Self {
+        self.widget = Some(value);
+        self
+    }
+
+    pub fn data_collection(
+        mut self,
+        value: std::collections::HashMap<String, AnalysisProperty>,
+    ) -> Self {
+        self.data_collection = Some(value);
+        self
+    }
+
+    pub fn data_collection_scopes(
+        mut self,
+        value: std::collections::HashMap<String, AnalysisScope>,
+    ) -> Self {
+        self.data_collection_scopes = Some(value);
+        self
+    }
+
+    pub fn analysis_items(mut self, value: AgentAnalysisItemsOutput) -> Self {
+        self.analysis_items = Some(value);
+        self
+    }
+
+    pub fn overrides(mut self, value: ConversationInitiationClientDataConfigOutput) -> Self {
+        self.overrides = Some(value);
+        self
+    }
+
+    pub fn workspace_overrides(mut self, value: AgentWorkspaceOverridesOutput) -> Self {
+        self.workspace_overrides = Some(value);
+        self
+    }
+
+    pub fn testing(mut self, value: AgentTestingSettings) -> Self {
+        self.testing = Some(value);
+        self
+    }
+
+    pub fn archived(mut self, value: bool) -> Self {
+        self.archived = Some(value);
+        self
+    }
+
+    pub fn guardrails(mut self, value: GuardrailsV1Output) -> Self {
+        self.guardrails = Some(value);
+        self
+    }
+
+    pub fn summary_language(mut self, value: impl Into<String>) -> Self {
+        self.summary_language = Some(value.into());
+        self
+    }
+
+    pub fn auto_translate_transcript_to_app_language(mut self, value: bool) -> Self {
+        self.auto_translate_transcript_to_app_language = Some(value);
+        self
+    }
+
+    pub fn auth(mut self, value: AuthSettings) -> Self {
+        self.auth = Some(value);
+        self
+    }
+
+    pub fn call_limits(mut self, value: AgentCallLimits) -> Self {
+        self.call_limits = Some(value);
+        self
+    }
+
+    pub fn queueing_config(mut self, value: AgentQueueingConfig) -> Self {
+        self.queueing_config = Some(value);
+        self
+    }
+
+    pub fn privacy(mut self, value: PrivacyConfigOutput) -> Self {
+        self.privacy = Some(value);
+        self
+    }
+
+    pub fn trust_context(mut self, value: AgentTrustContext) -> Self {
+        self.trust_context = Some(value);
+        self
+    }
+
+    pub fn analysis_llm(mut self, value: Llm) -> Self {
+        self.analysis_llm = Some(value);
+        self
+    }
+
+    pub fn topic_discovery(mut self, value: TopicDiscoverySettings) -> Self {
+        self.topic_discovery = Some(value);
+        self
+    }
+
+    pub fn sentiment_analysis(mut self, value: SentimentAnalysisSettings) -> Self {
+        self.sentiment_analysis = Some(value);
+        self
+    }
+
+    pub fn alerting(mut self, value: AlertingSettingsResponse) -> Self {
+        self.alerting = Some(value);
+        self
+    }
+
+    pub fn safety(mut self, value: SafetyResponseModel) -> Self {
+        self.safety = Some(value);
+        self
+    }
+
+    /// Consumes the builder and constructs a [`AgentPlatformSettingsResponseModel`].
+    pub fn build(self) -> Result<AgentPlatformSettingsResponseModel, BuildError> {
+        Ok(AgentPlatformSettingsResponseModel {
+            evaluation: self.evaluation,
+            widget: self.widget,
+            data_collection: self.data_collection,
+            data_collection_scopes: self.data_collection_scopes,
+            analysis_items: self.analysis_items,
+            overrides: self.overrides,
+            workspace_overrides: self.workspace_overrides,
+            testing: self.testing,
+            archived: self.archived,
+            guardrails: self.guardrails,
+            summary_language: self.summary_language,
+            auto_translate_transcript_to_app_language: self
+                .auto_translate_transcript_to_app_language,
+            auth: self.auth,
+            call_limits: self.call_limits,
+            queueing_config: self.queueing_config,
+            privacy: self.privacy,
+            trust_context: self.trust_context,
+            analysis_llm: self.analysis_llm,
+            topic_discovery: self.topic_discovery,
+            sentiment_analysis: self.sentiment_analysis,
+            alerting: self.alerting,
+            safety: self.safety,
+        })
+    }
+}

@@ -1,0 +1,56 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
+pub struct AgentQueueingConfig {
+    /// Hold callers in a wait queue when the agent is at its concurrency limit, instead of rejecting them immediately. New agents are created with queueing enabled unless this field is set explicitly.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// Maximum time a caller can wait in the queue before being rejected
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    #[serde(with = "crate::core::number_serializers::int::option")]
+    pub wait_timeout_seconds: Option<i64>,
+    /// Custom hold audio played to queued callers; when unset, callers hear the default hold tone. Read-only: set it by uploading a file through the agent hold-audio endpoint.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hold_audio: Option<AgentHoldAudioConfig>,
+}
+
+impl AgentQueueingConfig {
+    pub fn builder() -> AgentQueueingConfigBuilder {
+        <AgentQueueingConfigBuilder as Default>::default()
+    }
+}
+
+#[derive(Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub struct AgentQueueingConfigBuilder {
+    enabled: Option<bool>,
+    wait_timeout_seconds: Option<i64>,
+    hold_audio: Option<AgentHoldAudioConfig>,
+}
+
+impl AgentQueueingConfigBuilder {
+    pub fn enabled(mut self, value: bool) -> Self {
+        self.enabled = Some(value);
+        self
+    }
+
+    pub fn wait_timeout_seconds(mut self, value: i64) -> Self {
+        self.wait_timeout_seconds = Some(value);
+        self
+    }
+
+    pub fn hold_audio(mut self, value: AgentHoldAudioConfig) -> Self {
+        self.hold_audio = Some(value);
+        self
+    }
+
+    /// Consumes the builder and constructs a [`AgentQueueingConfig`].
+    pub fn build(self) -> Result<AgentQueueingConfig, BuildError> {
+        Ok(AgentQueueingConfig {
+            enabled: self.enabled,
+            wait_timeout_seconds: self.wait_timeout_seconds,
+            hold_audio: self.hold_audio,
+        })
+    }
+}

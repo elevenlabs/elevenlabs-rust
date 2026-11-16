@@ -1,0 +1,35 @@
+pub use crate::prelude::*;
+
+/// Create a new staff member in the system.
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, Eq, Hash)]
+pub struct CreateStaffParams {
+    /// Whether to offer a working_hours timezone, set from the workspace's enable_per_resource_timezones. While that is off every staff member uses the workspace timezone, so the key is not offered.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub per_resource_timezones: Option<bool>,
+}
+
+impl CreateStaffParams {
+    pub fn builder() -> CreateStaffParamsBuilder {
+        <CreateStaffParamsBuilder as Default>::default()
+    }
+}
+
+#[derive(Clone, PartialEq, Default, Debug)]
+#[non_exhaustive]
+pub struct CreateStaffParamsBuilder {
+    per_resource_timezones: Option<bool>,
+}
+
+impl CreateStaffParamsBuilder {
+    pub fn per_resource_timezones(mut self, value: bool) -> Self {
+        self.per_resource_timezones = Some(value);
+        self
+    }
+
+    /// Consumes the builder and constructs a [`CreateStaffParams`].
+    pub fn build(self) -> Result<CreateStaffParams, BuildError> {
+        Ok(CreateStaffParams {
+            per_resource_timezones: self.per_resource_timezones,
+        })
+    }
+}
