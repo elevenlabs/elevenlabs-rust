@@ -1,2 +1,15 @@
 # Specify files that shouldn't be modified by Fern
 README.md
+
+# Hand-written agent-workflows-as-code builder: a layer on top of the generated client that the
+# generator does not emit. Mirrors the Python/TS SDKs and passes the shared conformance fixtures.
+src/agent_workflows/
+tests/agent_workflows_fixtures.rs
+tests/fixtures/agent_workflows/
+
+# Frozen to protect the hand-written wiring Fern does not emit:
+#  - Cargo.toml: the serde_json `preserve_order` feature the builder needs for document-order loads.
+#  - src/lib.rs: the `pub mod agent_workflows;` declaration (a crate-root module must be declared
+#    here). See the PR description for the proper fix (a Fern custom-module extension point).
+Cargo.toml
+src/lib.rs
