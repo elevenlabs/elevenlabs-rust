@@ -1,29 +1,23 @@
-# Elevenlabs Rust Library
+# ElevenLabs Rust Library
 
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Felevenlabs%2Felevenlabs-rust)
+![LOGO](https://github.com/elevenlabs/elevenlabs-python/assets/12028621/21267d89-5e82-4e7e-9c81-caf30b237683)
+
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-SDK%20generated%20by%20Fern-brightgreen)](https://buildwithfern.com/?utm_source=fern-elevenlabs/elevenlabs-rust/readme)
+[![Discord](https://badgen.net/badge/black/ElevenLabs/icon?icon=discord&label)](https://discord.gg/elevenlabs)
+[![Twitter](https://badgen.net/badge/black/elevenlabsio/icon?icon=twitter&label)](https://twitter.com/elevenlabsio)
 [![crates.io shield](https://img.shields.io/crates/v/elevenlabs-rust-sdk)](https://crates.io/crates/elevenlabs-rust-sdk)
 
-The Elevenlabs Rust library provides convenient access to the Elevenlabs APIs from Rust.
+The official Rust SDK for [ElevenLabs](https://elevenlabs.io/). ElevenLabs brings the most compelling, rich and lifelike voices to creators and developers in just a few lines of code.
 
-## Table of Contents
+## 📖 API & Docs
 
-- [Installation](#installation)
-- [Reference](#reference)
-- [Usage](#usage)
-- [Environments](#environments)
-- [Errors](#errors)
-- [Request Types](#request-types)
-- [Websockets](#websockets)
-- [Advanced](#advanced)
-  - [Configuration](#configuration)
-  - [Retries](#retries)
-  - [Timeouts](#timeouts)
-  - [Additional Headers](#additional-headers)
-  - [Additional Query String Parameters](#additional-query-string-parameters)
-  - [Custom Client](#custom-client)
-- [Contributing](#contributing)
+Check out the [HTTP API documentation](https://elevenlabs.io/docs/api-reference). A full reference for this library is available [here](./reference.md).
 
-## Installation
+## Requirements
+
+This SDK targets the Rust 2021 edition and builds on a recent stable toolchain.
+
+## Install
 
 Add this to your `Cargo.toml`:
 
@@ -32,17 +26,37 @@ Add this to your `Cargo.toml`:
 elevenlabs-rust-sdk = "1.0.0"
 ```
 
-Or install via cargo:
+Or add it with cargo:
 
 ```sh
 cargo add elevenlabs-rust-sdk
 ```
 
-## Reference
-
-A full reference for this library is available [here](./reference.md).
-
 ## Usage
+
+### Main Models
+
+1. **Eleven v4** (`eleven_v4`)
+    - Highest quality and most expressive speech, with reliable voice cloning across long generations
+    - 90+ languages with consistent voice quality across language switches
+    - Up to 10,000 characters (~10 minutes of audio) per request
+    - Used via the [Text to Dialogue API](https://elevenlabs.io/docs/api-reference/text-to-dialogue/convert)
+
+2. **Eleven v4 Turbo** (`eleven_v4_turbo`)
+    - State-of-the-art real-time speech, with a median latency of ~100ms
+    - 90+ languages
+    - Ideal for voice agents and other latency-sensitive use cases
+
+3. **Eleven Multilingual v2** (`eleven_multilingual_v2`)
+    - Excels in stability, language diversity, and accent accuracy
+    - The most stable choice for long-form Text to Speech
+    - Supports 29 languages
+
+4. **Eleven Flash v2.5** (`eleven_flash_v2_5`)
+    - Ultra-low latency and lowest cost
+    - Supports 32 languages
+
+For more detailed information about these models and others, visit the [ElevenLabs Models documentation](https://elevenlabs.io/docs/models).
 
 Instantiate and use the client with the following:
 
@@ -50,116 +64,185 @@ Instantiate and use the client with the following:
 use elevenlabs_rust_sdk::prelude::*;
 
 #[tokio::main]
-async fn main() {
-    let config = ClientConfig::default();
-    let client = ApiClient::new(config).expect("Failed to build client");
-    client
-        .history
-        .list(
-            &ListQueryRequest {
-                page_size: Some(100),
-                start_after_history_item_id: Some("start_after_history_item_id".to_string()),
-                voice_id: Some("voice_id".to_string()),
-                model_id: Some("model_id".to_string()),
-                date_before_unix: Some(8),
-                date_after_unix: Some(2),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
-                search: Some("search".to_string()),
-                source: Some(ListSource::Tts),
-                ..Default::default()
-            },
-            None,
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // ClientConfig::default() reads the API key from the ELEVENLABS_API_KEY environment variable.
+    // Pass it explicitly with ClientConfig::builder().api_key("YOUR_API_KEY").build()? if you prefer.
+    let client = ApiClient::new(ClientConfig::default())?;
+
+    let request = TextToSpeechConvertRequest::builder()
+        .output_format(ConvertOutputFormatQueryParameter1::Mp3_44100_128)
+        .body(
+            BodyTextToSpeechFull::builder()
+                .text("The first move is what sets everything in motion.")
+                .model_id("eleven_multilingual_v2")
+                .build()?,
         )
-        .await;
+        .build()?;
+
+    let audio = client
+        .text_to_speech
+        .convert("JBFqnCBsd6RMkjVDRZzb", &request, None)
+        .await?;
+
+    // `convert` returns a lazy `ByteStream`. `collect` buffers the whole body in one call.
+    std::fs::write("output.mp3", audio.collect().await?)?;
+    Ok(())
 }
 ```
 
-## Environments
+### Text to Dialogue (Eleven v4)
 
-This SDK allows you to configure different environments for API requests.
+Eleven v4 and Eleven v4 Turbo are served through the Text to Dialogue API, which turns a list of speaker turns into a single expressive audio stream.
 
 ```rust
-let config = ClientConfig::builder()
-    .environment(Environment::Default)
-    .build()
-    .expect("Failed to build config");
-let client = ApiClient::new(config).expect("Failed to build client");
+let request = TextToDialogueConvertRequest::builder()
+    .output_format(ConvertOutputFormatQueryParameter1::Mp3_44100_128)
+    .body(
+        BodyTextToDialogueMultiVoiceV1TextToDialoguePost::builder()
+            .model_id("eleven_v4")
+            .inputs(vec![
+                DialogueInput::builder()
+                    .text("[giggling] Knock knock")
+                    .voice_id("JBFqnCBsd6RMkjVDRZzb")
+                    .build()?,
+                DialogueInput::builder()
+                    .text("[curious] Who is there?")
+                    .voice_id("Aw4FAjKCGjjNkVhN1Xmq")
+                    .build()?,
+            ])
+            .build()?,
+    )
+    .build()?;
+
+let audio = client.text_to_dialogue.convert(&request, None).await?;
+std::fs::write("dialogue.mp3", audio.collect().await?)?;
 ```
 
-## Errors
+## Voices
 
-When the API returns a non-success status code (4xx or 5xx response), an error will be returned.
+List all your available voices with `search`.
 
 ```rust
-match client
-        .history
-        .list(
-            &ListQueryRequest {
-                page_size: Some(100),
-                start_after_history_item_id: Some("start_after_history_item_id".to_string()),
-                voice_id: Some("voice_id".to_string()),
-                model_id: Some("model_id".to_string()),
-                date_before_unix: Some(8),
-                date_after_unix: Some(2),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
-                search: Some("search".to_string()),
-                source: Some(ListSource::Tts),
-                ..Default::default()
-            },
-            None,
-        ).await {
-    Ok(response) => {
-        println!("Success: {:?}", response);
-    },
-    Err(ApiError::Http { status, message }) => {
-        println!("API Error {}: {:?}", status, message);
-    },
-    Err(e) => {
-        println!("Other error: {:?}", e);
+let response = client.voices.search(&SearchQueryRequest::default(), None).await?;
+for voice in response.voices {
+    if let Some(name) = voice.name {
+        println!("{name}");
     }
 }
 ```
 
-## Request Types
+For information about the structure of the voices output, please refer to the [official ElevenLabs API documentation for Get Voices](https://elevenlabs.io/docs/api-reference/get-voices).
 
-The SDK exports all request types as Rust structs. Simply import them from the crate to access them:
+## Streaming
+
+Stream audio in real-time, as it's being generated. `stream` returns a lazy `ByteStream`: the request
+is sent on the first poll and each chunk is yielded as it arrives, so playback or a file write can
+start before the server has finished.
 
 ```rust
-use elevenlabs-rust-sdk::prelude::{*};
+use std::io::Write;
 
-let request = DownloadHistoryRequest {
-    ...
-};
+let request = StreamRequest::builder()
+    .output_format(StreamOutputFormatQueryParameter1::Mp3_44100_128)
+    .body(
+        BodyTextToSpeechStream::builder()
+            .text("This is a... streaming voice.")
+            .model_id("eleven_multilingual_v2")
+            .build()?,
+    )
+    .build()?;
+
+let mut audio = client
+    .text_to_speech
+    .stream("JBFqnCBsd6RMkjVDRZzb", &request, None)
+    .await?;
+
+let mut stdout = std::io::stdout();
+while let Some(chunk) = audio.try_next().await? {
+    // Process each chunk as it arrives.
+    stdout.write_all(&chunk)?;
+}
 ```
 
-## Websockets
+Call `collect` instead of iterating to buffer the whole body as one `Vec<u8>`.
 
-The SDK supports WebSocket connections for real-time communication. Use the generated channel clients to connect, send, and receive messages.
+## Environments
+
+This SDK allows you to configure different environments for API requests. It defaults to the production environment.
+
+```rust
+let config = ClientConfig::builder()
+    .environment(Environment::ProductionUs)
+    .build()?;
+let client = ApiClient::new(config)?;
+```
+
+Available environments:
+- `Environment::Production`
+- `Environment::ProductionUs`
+- `Environment::ProductionEu`
+- `Environment::ProductionIndia`
+- `Environment::ProductionSingapore`
+
+## Errors
+
+When the API returns a non-success status code (4xx or 5xx response), the SDK returns an `ApiError`.
+A 400 is surfaced as `ApiError::BadRequestError` and a 422 as `ApiError::UnprocessableEntityError`
+with the parsed response body; every other status arrives as `ApiError::Http { status, message }`.
+
+```rust
+match client.text_to_speech.convert("JBFqnCBsd6RMkjVDRZzb", &request, None).await {
+    Ok(audio) => {
+        std::fs::write("output.mp3", audio.collect().await?)?;
+    }
+    Err(ApiError::Http { status, message }) => {
+        println!("API Error {status}: {message}");
+    }
+    Err(e) => {
+        println!("Other error: {e:?}");
+    }
+}
+```
+
+## WebSockets
+
+The SDK supports WebSocket connections for real-time communication. Use the generated channel clients
+to connect, send, and receive messages.
 
 ```rust
 use elevenlabs_rust_sdk::prelude::*;
 use elevenlabs_rust_sdk::api::websocket::TextToDialogueMultiContextConnectOptions;
 
-let client = ApiClient::new(ClientConfig {
-    api_key: Some("YOUR_API_KEY".to_string()),
-    ..Default::default()
-})
-.expect("Failed to create client");
+let client = ApiClient::new(ClientConfig::default())?;
 
-// Connect to the WebSocket
-let mut text_to_dialogue_multi_context = client.text_to_dialogue_multi_context.realtime(&TextToDialogueMultiContextConnectOptions::default()).await.expect("Failed to connect");
+// Connect to the WebSocket.
+let mut socket = client
+    .text_to_dialogue_multi_context
+    .realtime(&TextToDialogueMultiContextConnectOptions::default())
+    .await?;
 
-// Iterate over messages as they arrive
-while let Some(Ok(message)) = text_to_dialogue_multi_context.recv().await {
-    println!("{:?}", message);
+// Iterate over messages as they arrive.
+while let Some(Ok(message)) = socket.recv().await {
+    println!("{message:?}");
 }
 
-// Send a message
-text_to_dialogue_multi_context.send_publish(&TextToDialogueMultiClientMessage { /* fields */ }).await.expect("Failed to send");
+// Send a message.
+socket.send_publish(&TextToDialogueMultiClientMessage { /* fields */ }).await?;
 
-// Close the connection when done
-text_to_dialogue_multi_context.close().await.expect("Failed to close");
+// Close the connection when done.
+socket.close().await?;
 ```
+
+The SDK exposes one channel client per real-time endpoint:
+
+- `client.text_to_speech.realtime`
+- `client.text_to_speech_multi_context.realtime`
+- `client.text_to_dialogue.realtime`
+- `client.text_to_dialogue_multi_context.realtime`
+- `client.speech_to_text.realtime`
+- `client.translation.realtime`
+- `client.dubbing.live`
+- `client.speech_engine.upstream`
 
 ## Advanced
 
@@ -176,7 +259,7 @@ let config = ClientConfig {
     api_key: Some("YOUR_API_KEY".to_string()),
     ..Default::default()
 };
-let client = ApiClient::new(config).expect("Failed to build client");
+let client = ApiClient::new(config)?;
 ```
 
 The builder, which reads better for a longer chain and offers `.environment(…)` as a shorthand for
@@ -185,9 +268,8 @@ the base URL:
 ```rust
 let config = ClientConfig::builder()
     .api_key("YOUR_API_KEY")
-    .build()
-    .expect("Failed to build config");
-let client = ApiClient::new(config).expect("Failed to build client");
+    .build()?;
+let client = ApiClient::new(config)?;
 ```
 
 ### Retries
@@ -202,121 +284,88 @@ A request is deemed retryable when any of the following HTTP status codes is ret
 - [429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) (Too Many Requests)
 - [5XX](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#server_error_responses) (Internal Server Error)
 
-Use the `max_retries` method to configure this behavior.
+Pass `RequestOptions` per call to override the retry limit:
 
 ```rust
-let response = client
-        .history
-        .list(
-            &ListQueryRequest {
-                page_size: Some(100),
-                start_after_history_item_id: Some("start_after_history_item_id".to_string()),
-                voice_id: Some("voice_id".to_string()),
-                model_id: Some("model_id".to_string()),
-                date_before_unix: Some(8),
-                date_after_unix: Some(2),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
-                search: Some("search".to_string()),
-                source: Some(ListSource::Tts),
-                ..Default::default()
-            },
-            Some(elevenlabs-rust-sdk::core::RequestOptions::new().max_retries(3)),
-        ).await?;
+let audio = client
+    .text_to_speech
+    .convert(
+        "JBFqnCBsd6RMkjVDRZzb",
+        &request,
+        Some(RequestOptions::new().max_retries(3)),
+    )
+    .await?;
 ```
 
 ### Timeouts
 
-The SDK defaults to a 240 second timeout. Use the `timeout` method to configure this behavior.
+The SDK defaults to a 240 second timeout. Use `timeout_seconds` to configure this behavior per call.
 
 ```rust
-let response = client
-        .history
-        .list(
-            &ListQueryRequest {
-                page_size: Some(100),
-                start_after_history_item_id: Some("start_after_history_item_id".to_string()),
-                voice_id: Some("voice_id".to_string()),
-                model_id: Some("model_id".to_string()),
-                date_before_unix: Some(8),
-                date_after_unix: Some(2),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
-                search: Some("search".to_string()),
-                source: Some(ListSource::Tts),
-                ..Default::default()
-            },
-            Some(elevenlabs-rust-sdk::core::RequestOptions::new().timeout_seconds(30)),
-        ).await?;
+let audio = client
+    .text_to_speech
+    .convert(
+        "JBFqnCBsd6RMkjVDRZzb",
+        &request,
+        Some(RequestOptions::new().timeout_seconds(30)),
+    )
+    .await?;
 ```
 
 ### Additional Headers
 
-You can add custom headers to requests using `RequestOptions`.
+You can add custom headers to a single request using `RequestOptions`.
 
 ```rust
-let response = client
-        .history
-        .list(
-            &ListQueryRequest {
-                page_size: Some(100),
-                start_after_history_item_id: Some("start_after_history_item_id".to_string()),
-                voice_id: Some("voice_id".to_string()),
-                model_id: Some("model_id".to_string()),
-                date_before_unix: Some(8),
-                date_after_unix: Some(2),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
-                search: Some("search".to_string()),
-                source: Some(ListSource::Tts),
-                ..Default::default()
-            },
-            Some(elevenlabs-rust-sdk::core::RequestOptions::new().additional_header("X-Custom-Header", "custom-value").additional_header("X-Another-Header", "another-value")),
-        ).await?;
+let audio = client
+    .text_to_speech
+    .convert(
+        "JBFqnCBsd6RMkjVDRZzb",
+        &request,
+        Some(
+            RequestOptions::new()
+                .additional_header("X-Custom-Header", "custom-value")
+                .additional_header("X-Another-Header", "another-value"),
+        ),
+    )
+    .await?;
 ```
 
 ### Additional Query String Parameters
 
-You can add custom query parameters to requests using `RequestOptions`.
+You can add custom query parameters to a single request using `RequestOptions`.
 
 ```rust
-let response = client
-        .history
-        .list(
-            &ListQueryRequest {
-                page_size: Some(100),
-                start_after_history_item_id: Some("start_after_history_item_id".to_string()),
-                voice_id: Some("voice_id".to_string()),
-                model_id: Some("model_id".to_string()),
-                date_before_unix: Some(8),
-                date_after_unix: Some(2),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
-                search: Some("search".to_string()),
-                source: Some(ListSource::Tts),
-                ..Default::default()
-            },
-            Some(elevenlabs-rust-sdk::core::RequestOptions::new().additional_query_param("filter", "active").additional_query_param("sort", "desc")),
-        ).await?;
+let audio = client
+    .text_to_speech
+    .convert(
+        "JBFqnCBsd6RMkjVDRZzb",
+        &request,
+        Some(
+            RequestOptions::new()
+                .additional_query_param("filter", "active")
+                .additional_query_param("sort", "desc"),
+        ),
+    )
+    .await?;
 ```
 
-### Custom Client
+### Authentication
 
-The SDK builds its own `reqwest` client by default, but you can supply your own through
-`ClientConfig.reqwest_client` (or `ApiClientBuilder::reqwest_client`) when you need control over the
-transport — custom root certificates, client certificates, proxies or connection tuning. The supplied
-client is used as-is; authentication, custom headers and retries are still applied by the SDK.
+Most calls authenticate with an API key, read from the `ELEVENLABS_API_KEY` environment variable by
+default. The client also supports a bearer token, basic auth and OAuth client credentials, set either
+on `ClientConfig` or through `ApiClientBuilder`:
 
 ```rust
-use elevenlabs-rust-sdk::prelude::*;
-
-let certificate = reqwest::Certificate::from_pem(&std::fs::read("ca.pem")?)?;
-let reqwest_client = reqwest::Client::builder()
-    .add_root_certificate(certificate)
-    .build()
-    .expect("Failed to build reqwest client");
-let config = ClientConfig {
-    reqwest_client: Some(reqwest_client),
-    ..Default::default()
-};
-let client = ApiClient::new(config).expect("Failed to build client");
+let client = ApiClientBuilder::default()
+    .environment(Environment::Production)
+    .api_key("YOUR_API_KEY")
+    .build()?;
 ```
+
+## Languages Supported
+
+Explore [all models & languages](https://elevenlabs.io/docs/models).
 
 ## Contributing
 
