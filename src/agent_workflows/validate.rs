@@ -19,7 +19,9 @@ pub fn validate(graph: &WorkflowGraph) -> Vec<WorkflowIssue> {
         if merged.contains_key(&i) {
             continue;
         }
-        let pair: BTreeSet<String> = [edge.source.clone(), edge.target.clone()].into_iter().collect();
+        let pair: BTreeSet<String> = [edge.source.clone(), edge.target.clone()]
+            .into_iter()
+            .collect();
         if connected.contains(&pair) {
             issues.push(WorkflowIssue::error(
                 WorkflowIssueCode::DuplicateEdge,
@@ -55,7 +57,9 @@ pub fn validate(graph: &WorkflowGraph) -> Vec<WorkflowIssue> {
         if edge.target == graph.start_id {
             issues.push(WorkflowIssue::error(
                 WorkflowIssueCode::EdgeIntoStart,
-                format!("Edge {name} points into the start node; go to the first node after it instead"),
+                format!(
+                    "Edge {name} points into the start node; go to the first node after it instead"
+                ),
                 Some(edge.source.clone()),
             ));
         }
@@ -77,7 +81,9 @@ pub fn validate(graph: &WorkflowGraph) -> Vec<WorkflowIssue> {
         if source_type.as_deref() == Some("tool") && condition_type != Some("result") {
             issues.push(WorkflowIssue::error(
                 WorkflowIssueCode::ToolEdgeNeedsResult,
-                format!("Edge {name} leaves a tool node, so it must use on_success() or on_failure()"),
+                format!(
+                    "Edge {name} leaves a tool node, so it must use on_success() or on_failure()"
+                ),
                 Some(edge.source.clone()),
             ));
         }
@@ -87,9 +93,54 @@ pub fn validate(graph: &WorkflowGraph) -> Vec<WorkflowIssue> {
         {
             issues.push(WorkflowIssue::error(
                 WorkflowIssueCode::ResultEdgeNeedsTool,
-                format!("Edge {name} uses on_success()/on_failure(), which only applies to tool nodes"),
+                format!(
+                    "Edge {name} uses on_success()/on_failure(), which only applies to tool nodes"
+                ),
                 Some(edge.source.clone()),
             ));
+        }
+
+        // A backward condition is a second transition the other way, target → source, that the API
+        // stores on this same edge. It must satisfy the same routing rules as any edge leaving
+        // edge.target, so check it in the reverse direction too.
+        if let Some(backward) = &edge.backward_condition {
+            let back_name = format!("\"{}\" → \"{}\"", edge.target, edge.source);
+            let back_source_type = graph.node_type(&edge.target);
+            let back_condition_type = backward.get("type").and_then(|v| v.as_str());
+            if edge.source == graph.start_id {
+                issues.push(WorkflowIssue::error(
+                    WorkflowIssueCode::EdgeIntoStart,
+                    format!("Edge {back_name} points into the start node; go to the first node after it instead"),
+                    Some(edge.target.clone()),
+                ));
+            }
+            if back_source_type.as_deref() == Some("end") && !ends_with_edges.contains(&edge.target)
+            {
+                ends_with_edges.insert(edge.target.clone());
+                issues.push(WorkflowIssue::error(
+                    WorkflowIssueCode::EndHasOutgoingEdges,
+                    format!("End node \"{}\" can't have outgoing edges", edge.target),
+                    Some(edge.target.clone()),
+                ));
+            }
+            if back_source_type.as_deref() == Some("tool") && back_condition_type != Some("result")
+            {
+                issues.push(WorkflowIssue::error(
+                    WorkflowIssueCode::ToolEdgeNeedsResult,
+                    format!("Edge {back_name} leaves a tool node, so it must use on_success() or on_failure()"),
+                    Some(edge.target.clone()),
+                ));
+            }
+            if back_source_type.is_some()
+                && back_source_type.as_deref() != Some("tool")
+                && back_condition_type == Some("result")
+            {
+                issues.push(WorkflowIssue::error(
+                    WorkflowIssueCode::ResultEdgeNeedsTool,
+                    format!("Edge {back_name} uses on_success()/on_failure(), which only applies to tool nodes"),
+                    Some(edge.target.clone()),
+                ));
+            }
         }
     }
 
@@ -201,7 +252,5 @@ pub fn depths_from(graph: &WorkflowGraph) -> (HashMap<String, i64>, Vec<String>)
 
 /// A whole number carried as JSON `x`/`y`, as an integer grid coordinate.
 pub fn coord(value: &Value) -> Option<i64> {
-    value
-        .as_i64()
-        .or_else(|| value.as_f64().map(|f| f as i64))
+    value.as_i64().or_else(|| value.as_f64().map(|f| f as i64))
 }

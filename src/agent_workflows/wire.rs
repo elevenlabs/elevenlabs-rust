@@ -33,7 +33,11 @@ pub fn canonical(value: &Value) -> Value {
 }
 
 fn num_to_i64(f: f64) -> Option<i64> {
-    if f >= i64::MIN as f64 && f <= i64::MAX as f64 {
+    // `i64::MAX as f64` rounds up to 2^63, which is one past the range, so the upper bound is
+    // exclusive: a value equal to it (e.g. 9223372036854775808.0) would otherwise saturate to
+    // i64::MAX on the `as i64` cast and silently change the number. `i64::MIN as f64` is exactly
+    // -2^63, so the lower bound stays inclusive.
+    if f >= i64::MIN as f64 && f < i64::MAX as f64 {
         Some(f as i64)
     } else {
         None
@@ -46,6 +50,28 @@ pub fn to_json_string(value: &Value) -> String {
     let mut out = serde_json::to_string_pretty(value).expect("wire value serializes");
     out.push('\n');
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn whole_float_at_i64_max_boundary_is_left_as_float() {
+        // 9223372036854775808.0 is 2^63, which equals `i64::MAX as f64` (that cast rounds up past
+        // i64::MAX). Casting it to i64 would saturate to 9223372036854775807 and silently change the
+        // value, so canonicalization must leave it as a float.
+        let two_pow_63 = json!(9_223_372_036_854_775_808.0_f64);
+        let out = canonical(&two_pow_63);
+        assert!(out.is_f64(), "boundary float must stay a float, got {out}");
+        assert_eq!(out.as_f64(), Some(9_223_372_036_854_775_808.0));
+    }
+
+    #[test]
+    fn in_range_whole_float_still_canonicalizes_to_int() {
+        assert_eq!(canonical(&json!(300.0_f64)), json!(300));
+    }
 }
 
 /// A node/edge model as an object map.
