@@ -24,6 +24,11 @@ pub mod environment;
 pub mod error;
 pub mod prelude;
 
+// Hand-written Speech Engine inbound-server surface (see `.fernignore`). Declared here because a
+// crate-root module must be; this one line is part of the hand-written wiring Fern does not emit.
+#[cfg(feature = "websocket")]
+pub mod speech_engine;
+
 pub use api::*;
 pub use client::ApiClient;
 pub use client::ApiClientBuilder;
