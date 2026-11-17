@@ -197,6 +197,13 @@ impl SpeechEngineSession {
         tokio::spawn(async move {
             while let Some((transcript, event_id)) = transcript_rx.recv().await {
                 let Some(inner) = weak.upgrade() else { break };
+                // Register cancellation interest BEFORE reading `closed`: otherwise a close() or
+                // handle_disconnect() that calls notify_waiters() between the check and the select
+                // would be lost (notify_waiters does not retain for a future created later), and the
+                // worker could start a stalled handler after closure. enable() arms the future now.
+                let cancelled = inner.cancel.notified();
+                tokio::pin!(cancelled);
+                cancelled.as_mut().enable();
                 // Discard queued turns once the session is closed.
                 if inner.closed.load(Ordering::SeqCst) {
                     break;
@@ -209,7 +216,7 @@ impl SpeechEngineSession {
                 // handler future and releases its session references.
                 tokio::select! {
                     _ = session.run_transcript(transcript, event_id) => {}
-                    _ = inner.cancel.notified() => break,
+                    _ = &mut cancelled => break,
                 }
             }
         });
@@ -402,9 +409,14 @@ impl SpeechEngineSession {
         }
         // Cancel a running transcript handler and stop the worker starting queued turns.
         self.inner.cancel.notify_waiters();
-        // Best-effort close frame: try_send rather than await so closing never blocks on a full
-        // outbound queue. closed is already set, so the stream producers have stopped.
-        let _ = self.inner.outbound.try_send(OutboundFrame::Close);
+        // Deliver the terminal close frame reliably without blocking the caller. try_send would drop
+        // it when the bounded queue is full, and `closed` is already set so no later close() could
+        // retry — leaving the writer parked on a live channel. Enqueue it from a task that awaits
+        // capacity instead.
+        let outbound = self.inner.outbound.clone();
+        tokio::spawn(async move {
+            let _ = outbound.send(OutboundFrame::Close).await;
+        });
     }
 
     async fn emit_error(&self, error: SpeechEngineError) {
@@ -828,6 +840,20 @@ mod tests {
             !done.load(Ordering::SeqCst),
             "a bounded outbound queue must apply backpressure when the peer is not reading"
         );
+    }
+
+    #[tokio::test]
+    async fn close_enqueues_a_close_frame() {
+        let (session, mut rx) =
+            SpeechEngineSession::new(Arc::new(SpeechEngineCallbacks::default()), false);
+
+        session.close().await;
+
+        // The close frame is enqueued from a task that awaits capacity, so await it.
+        let frame = tokio::time::timeout(std::time::Duration::from_secs(5), rx.recv())
+            .await
+            .expect("close frame should be delivered");
+        assert!(matches!(frame, Some(OutboundFrame::Close)));
     }
 
     #[tokio::test]
