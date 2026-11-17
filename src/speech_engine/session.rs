@@ -16,9 +16,13 @@ use std::sync::{Arc, Mutex};
 
 use futures::{Stream, StreamExt};
 use serde_json::{json, Value};
-use tokio::sync::mpsc;
+use tokio::sync::{mpsc, Notify};
 
 use super::error::SpeechEngineError;
+
+/// Bound on the outbound frame queue. A slow-reading peer applies backpressure to streamed
+/// responses at this depth instead of letting the queue grow without limit.
+const OUTBOUND_BUFFER: usize = 256;
 
 /// A single message in a Speech Engine conversation transcript.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -143,10 +147,14 @@ struct SessionInner {
     // close() and by an inbound `close` message) so the transport-ended callback fires exactly
     // once when the transport actually ends, even after a prior close.
     disconnect_fired: AtomicBool,
-    outbound: mpsc::UnboundedSender<OutboundFrame>,
+    // Bounded so a slow-reading peer cannot make streamed responses buffer without limit.
+    outbound: mpsc::Sender<OutboundFrame>,
     // Transcript turns are queued here and run serially on a dedicated worker task, so a slow
     // transcript handler never blocks the transport's read loop from answering ping/close frames.
     transcript_tx: mpsc::UnboundedSender<TranscriptJob>,
+    // Signalled by close()/handle_disconnect() to cancel a running transcript handler and stop the
+    // worker from starting queued turns on a closed session.
+    cancel: Notify,
     callbacks: Arc<SpeechEngineCallbacks>,
     debug: bool,
 }
@@ -167,8 +175,8 @@ impl SpeechEngineSession {
     pub fn new(
         callbacks: Arc<SpeechEngineCallbacks>,
         debug: bool,
-    ) -> (Self, mpsc::UnboundedReceiver<OutboundFrame>) {
-        let (tx, rx) = mpsc::unbounded_channel();
+    ) -> (Self, mpsc::Receiver<OutboundFrame>) {
+        let (tx, rx) = mpsc::channel(OUTBOUND_BUFFER);
         let (transcript_tx, mut transcript_rx) = mpsc::unbounded_channel::<TranscriptJob>();
         let inner = Arc::new(SessionInner {
             conversation_id: Mutex::new(None),
@@ -178,6 +186,7 @@ impl SpeechEngineSession {
             disconnect_fired: AtomicBool::new(false),
             outbound: tx,
             transcript_tx,
+            cancel: Notify::new(),
             callbacks,
             debug,
         });
@@ -188,8 +197,20 @@ impl SpeechEngineSession {
         tokio::spawn(async move {
             while let Some((transcript, event_id)) = transcript_rx.recv().await {
                 let Some(inner) = weak.upgrade() else { break };
-                let session = Self { inner };
-                session.run_transcript(transcript, event_id).await;
+                // Discard queued turns once the session is closed.
+                if inner.closed.load(Ordering::SeqCst) {
+                    break;
+                }
+                let session = Self {
+                    inner: Arc::clone(&inner),
+                };
+                // Race the handler against a close/disconnect so a stalled LLM request cannot pin
+                // the worker (and its upstream) after the transport ends; cancelling drops the
+                // handler future and releases its session references.
+                tokio::select! {
+                    _ = session.run_transcript(transcript, event_id) => {}
+                    _ = inner.cancel.notified() => break,
+                }
             }
         });
 
@@ -289,8 +310,9 @@ impl SpeechEngineSession {
             return Ok(());
         }
         let event_id = *self.inner.current_event_id.lock().unwrap();
-        self.send_agent_response(text.as_ref(), false, event_id);
-        self.send_agent_response("", true, event_id);
+        self.send_agent_response(text.as_ref(), false, event_id)
+            .await;
+        self.send_agent_response("", true, event_id).await;
         Ok(())
     }
 
@@ -316,12 +338,12 @@ impl SpeechEngineSession {
             }
             if let Some(text) = extract_text(&item.into().0) {
                 if !text.is_empty() {
-                    self.send_agent_response(&text, false, event_id);
+                    self.send_agent_response(&text, false, event_id).await;
                 }
             }
         }
         if !self.inner.closed.load(Ordering::SeqCst) {
-            self.send_agent_response("", true, event_id);
+            self.send_agent_response("", true, event_id).await;
         }
         Ok(())
     }
@@ -365,6 +387,9 @@ impl SpeechEngineSession {
             return;
         }
         self.inner.closed.store(true, Ordering::SeqCst);
+        // Cancel any running transcript handler so a stalled LLM request does not outlive the
+        // transport.
+        self.inner.cancel.notify_waiters();
         if let Some(cb) = &self.inner.callbacks.on_disconnect {
             cb(self.clone()).await;
         }
@@ -375,7 +400,11 @@ impl SpeechEngineSession {
         if self.inner.closed.swap(true, Ordering::SeqCst) {
             return;
         }
-        let _ = self.inner.outbound.send(OutboundFrame::Close);
+        // Cancel a running transcript handler and stop the worker starting queued turns.
+        self.inner.cancel.notify_waiters();
+        // Best-effort close frame: try_send rather than await so closing never blocks on a full
+        // outbound queue. closed is already set, so the stream producers have stopped.
+        let _ = self.inner.outbound.try_send(OutboundFrame::Close);
     }
 
     async fn emit_error(&self, error: SpeechEngineError) {
@@ -386,13 +415,22 @@ impl SpeechEngineSession {
         }
     }
 
-    fn send_agent_response(&self, content: &str, is_final: bool, event_id: Option<i64>) {
-        self.send_json(json!({
+    async fn send_agent_response(&self, content: &str, is_final: bool, event_id: Option<i64>) {
+        if self.inner.closed.load(Ordering::SeqCst) {
+            return;
+        }
+        let value = json!({
             "type": "agent_response",
             "content": content,
             "event_id": event_id,
             "is_final": is_final,
-        }));
+        });
+        if let Ok(text) = serde_json::to_string(&value) {
+            // Await capacity on the bounded queue: a slow-reading peer applies backpressure to the
+            // response stream rather than letting it buffer without limit. A send error means the
+            // transport is gone; the read loop detects it.
+            let _ = self.inner.outbound.send(OutboundFrame::Text(text)).await;
+        }
     }
 
     fn send_json(&self, value: Value) {
@@ -400,8 +438,10 @@ impl SpeechEngineSession {
             return;
         }
         if let Ok(text) = serde_json::to_string(&value) {
-            // Send failure means the transport is gone; the read loop detects it.
-            let _ = self.inner.outbound.send(OutboundFrame::Text(text));
+            // Control frames (pong) are best-effort and must never block the read loop, so drop
+            // rather than await when the bounded queue is full — a peer that backed up is not
+            // reading anyway. A send error means the transport is gone; the read loop detects it.
+            let _ = self.inner.outbound.try_send(OutboundFrame::Text(text));
         }
     }
 }
@@ -496,7 +536,7 @@ fn extract_text(chunk: &Value) -> Option<String> {
 mod tests {
     use super::*;
 
-    fn drain_text(rx: &mut mpsc::UnboundedReceiver<OutboundFrame>) -> Vec<Value> {
+    fn drain_text(rx: &mut mpsc::Receiver<OutboundFrame>) -> Vec<Value> {
         let mut out = Vec::new();
         while let Ok(frame) = rx.try_recv() {
             if let OutboundFrame::Text(t) = frame {
@@ -508,7 +548,7 @@ mod tests {
 
     // Transcript responses are produced on the worker task, so await them rather than draining
     // synchronously. Collects up to `n` text frames (ignoring Close), with a timeout guard.
-    async fn recv_text(rx: &mut mpsc::UnboundedReceiver<OutboundFrame>, n: usize) -> Vec<Value> {
+    async fn recv_text(rx: &mut mpsc::Receiver<OutboundFrame>, n: usize) -> Vec<Value> {
         let mut out = Vec::new();
         while out.len() < n {
             match tokio::time::timeout(std::time::Duration::from_secs(5), rx.recv()).await {
@@ -709,6 +749,84 @@ mod tests {
         assert!(
             disconnected.load(Ordering::SeqCst),
             "on_disconnect must fire when the transport ends even after a close message"
+        );
+    }
+
+    #[tokio::test]
+    async fn close_cancels_a_running_transcript_handler() {
+        // A guard whose Drop records cancellation: if the handler future is dropped (cancelled),
+        // the guard drops and sets the flag.
+        struct Guard(Arc<AtomicBool>);
+        impl Drop for Guard {
+            fn drop(&mut self) {
+                self.0.store(true, Ordering::SeqCst);
+            }
+        }
+
+        let cancelled = Arc::new(AtomicBool::new(false));
+        let cancelled2 = Arc::clone(&cancelled);
+        let started = Arc::new(Notify::new());
+        let started2 = Arc::clone(&started);
+        let callbacks = SpeechEngineCallbacks::default().on_transcript(move |_t, _s| {
+            let cancelled = Arc::clone(&cancelled2);
+            let started = Arc::clone(&started2);
+            async move {
+                let _guard = Guard(cancelled);
+                started.notify_one();
+                std::future::pending::<()>().await; // never completes on its own
+            }
+        });
+        let (session, _rx) = SpeechEngineSession::new(Arc::new(callbacks), false);
+
+        session
+            .handle_raw_message(r#"{"type":"user_transcript","event_id":1,"user_transcript":[]}"#)
+            .await;
+        tokio::time::timeout(std::time::Duration::from_secs(5), started.notified())
+            .await
+            .unwrap();
+
+        session.close().await;
+
+        // The worker observes the cancel and drops the handler future; wait for the guard to drop.
+        for _ in 0..500 {
+            if cancelled.load(Ordering::SeqCst) {
+                break;
+            }
+            tokio::time::sleep(std::time::Duration::from_millis(10)).await;
+        }
+        assert!(
+            cancelled.load(Ordering::SeqCst),
+            "close() must cancel a running transcript handler"
+        );
+    }
+
+    #[tokio::test]
+    async fn outbound_backpressure_blocks_an_undrained_stream() {
+        // With the receiver never drained, a bounded queue fills and the stream cannot finish
+        // (an unbounded queue would enqueue everything and complete immediately).
+        let done = Arc::new(AtomicBool::new(false));
+        let done2 = Arc::clone(&done);
+        let callbacks = SpeechEngineCallbacks::default().on_transcript(move |_t, session| {
+            let done = Arc::clone(&done2);
+            async move {
+                let chunks: Vec<StreamChunk> =
+                    (0..10_000).map(|i| format!("chunk{i}").into()).collect();
+                let _ = session
+                    .send_response_stream(futures::stream::iter(chunks))
+                    .await;
+                done.store(true, Ordering::SeqCst);
+            }
+        });
+        let (session, _rx) = SpeechEngineSession::new(Arc::new(callbacks), false);
+
+        session
+            .handle_raw_message(r#"{"type":"user_transcript","event_id":1,"user_transcript":[]}"#)
+            .await;
+        tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+
+        assert!(
+            !done.load(Ordering::SeqCst),
+            "a bounded outbound queue must apply backpressure when the peer is not reading"
         );
     }
 

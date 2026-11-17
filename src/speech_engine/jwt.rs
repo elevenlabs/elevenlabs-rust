@@ -38,7 +38,12 @@ fn jwt_err(msg: impl Into<String>) -> SpeechEngineError {
 /// matches the other SDKs when the key is missing, the token is malformed, the signature does not
 /// match, or a claim (issuer, subject, exp, iat) is invalid.
 pub fn verify_speech_engine_jwt(value: &str, api_key: &str) -> Result<Value, SpeechEngineError> {
-    if api_key.is_empty() {
+    // Normalize (and reject) the key up front: the HMAC secret is SHA-256 of the
+    // residency-suffix-stripped key, so a whitespace-only key — or one whose residency suffix
+    // leaves an empty base — would otherwise hash to SHA-256("") , a publicly known secret that
+    // would let anyone forge an accepted token.
+    let normalized_key = normalize_api_key_for_signing(api_key);
+    if normalized_key.is_empty() {
         return Err(jwt_err(
             "No API key configured for Speech Engine verification",
         ));
@@ -65,10 +70,10 @@ pub fn verify_speech_engine_jwt(value: &str, api_key: &str) -> Result<Value, Spe
         return Err(jwt_err("Invalid JWT: payload is not an object"));
     }
 
-    // HMAC secret is the SHA-256 of the residency-suffix-stripped API key.
+    // HMAC secret is the SHA-256 of the residency-suffix-stripped API key (normalized above).
     let secret = {
         let mut hasher = Sha256::new();
-        hasher.update(normalize_api_key_for_signing(api_key).as_bytes());
+        hasher.update(normalized_key.as_bytes());
         hasher.finalize()
     };
     let signing_input = format!("{header_b64}.{payload_b64}");
@@ -213,6 +218,21 @@ mod tests {
     #[test]
     fn missing_api_key_is_rejected() {
         let err = verify_speech_engine_jwt(GOLDEN_TOKEN, "").unwrap_err();
+        assert!(err.to_string().contains("No API key configured"));
+    }
+
+    #[test]
+    fn whitespace_only_api_key_is_rejected() {
+        // Must be rejected before deriving the secret: a key that normalizes to "" would hash to
+        // SHA-256("") — a publicly known secret that would accept forged tokens.
+        let err = verify_speech_engine_jwt(GOLDEN_TOKEN, "   ").unwrap_err();
+        assert!(err.to_string().contains("No API key configured"));
+    }
+
+    #[test]
+    fn api_key_that_is_only_a_residency_suffix_is_rejected() {
+        // The residency suffix is stripped for signing, leaving an empty base key.
+        let err = verify_speech_engine_jwt(GOLDEN_TOKEN, "_residency_us").unwrap_err();
         assert!(err.to_string().contains("No API key configured"));
     }
 

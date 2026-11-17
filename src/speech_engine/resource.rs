@@ -72,7 +72,7 @@ impl SpeechEngineResource {
         &self,
         callbacks: SpeechEngineCallbacks,
         debug: bool,
-    ) -> (SpeechEngineSession, mpsc::UnboundedReceiver<OutboundFrame>) {
+    ) -> (SpeechEngineSession, mpsc::Receiver<OutboundFrame>) {
         SpeechEngineSession::new(Arc::new(callbacks), debug)
     }
 
