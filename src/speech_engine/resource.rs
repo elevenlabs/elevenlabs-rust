@@ -93,6 +93,7 @@ impl SpeechEngineResource {
                 api_key: self.api_key.clone(),
                 debug,
                 disable_auth,
+                ..Default::default()
             },
             Arc::new(callbacks),
         );
@@ -117,6 +118,7 @@ impl SpeechEngineResource {
                 api_key: self.api_key.clone(),
                 debug,
                 disable_auth,
+                ..Default::default()
             },
             Arc::new(callbacks),
         )

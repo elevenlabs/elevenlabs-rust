@@ -12,7 +12,9 @@
 //!
 //! Hand-written (see `.fernignore`), mirroring `SpeechEngineServer` in the Python/TS/PHP SDKs.
 
-use std::sync::Arc;
+use std::net::SocketAddr;
+use std::sync::{Arc, Mutex};
+use std::time::Duration;
 
 use futures::{SinkExt, StreamExt};
 use tokio::net::TcpStream;
@@ -41,6 +43,9 @@ pub struct SpeechEngineServerOptions {
     /// Skip JWT verification. **Insecure** — only enable behind an IP allowlist scoped to
     /// ElevenLabs' egress ranges.
     pub disable_auth: bool,
+    /// How long a connection has to complete the WebSocket handshake before it is dropped. Stops an
+    /// unauthenticated peer from holding a socket and task open indefinitely. Defaults to 10s.
+    pub handshake_timeout: Duration,
 }
 
 impl Default for SpeechEngineServerOptions {
@@ -51,6 +56,7 @@ impl Default for SpeechEngineServerOptions {
             api_key: None,
             debug: false,
             disable_auth: false,
+            handshake_timeout: Duration::from_secs(10),
         }
     }
 }
@@ -59,6 +65,7 @@ struct ServerInner {
     options: SpeechEngineServerOptions,
     callbacks: Arc<SpeechEngineCallbacks>,
     shutdown: Notify,
+    local_addr: Mutex<Option<SocketAddr>>,
 }
 
 /// Standalone WebSocket server for inbound Speech Engine connections.
@@ -75,8 +82,15 @@ impl SpeechEngineServer {
                 options,
                 callbacks,
                 shutdown: Notify::new(),
+                local_addr: Mutex::new(None),
             }),
         }
+    }
+
+    /// The address the server is bound to, once [`serve`](Self::serve) has started listening.
+    /// Useful when `options.port` is 0 and the OS assigns a port.
+    pub fn local_addr(&self) -> Option<SocketAddr> {
+        *self.inner.local_addr.lock().unwrap()
     }
 
     fn log(&self, msg: &str) {
@@ -114,6 +128,9 @@ impl SpeechEngineServer {
         let listener = tokio::net::TcpListener::bind(("0.0.0.0", self.inner.options.port))
             .await
             .map_err(|e| SpeechEngineError::WebSocket(format!("failed to bind: {e}")))?;
+        if let Ok(addr) = listener.local_addr() {
+            *self.inner.local_addr.lock().unwrap() = Some(addr);
+        }
         self.log(&format!(
             "speech engine server listening on port {}",
             self.inner.options.port
@@ -133,12 +150,15 @@ impl SpeechEngineServer {
                 }
             }
         }
+        *self.inner.local_addr.lock().unwrap() = None;
         Ok(())
     }
 
     /// Signal the server to stop accepting connections and return from [`serve`](Self::serve).
     pub fn stop(&self) {
-        self.inner.shutdown.notify_waiters();
+        // notify_one, not notify_waiters: it stores a permit, so a stop() that races ahead of the
+        // serve loop reaching `.notified()` is not lost.
+        self.inner.shutdown.notify_one();
     }
 }
 
@@ -149,6 +169,7 @@ async fn handle_connection(stream: TcpStream, api_key: Option<String>, inner: Ar
     let disable_auth = inner.options.disable_auth;
     let path = inner.options.path.clone();
     let debug = inner.options.debug;
+    let handshake_timeout = inner.options.handshake_timeout;
 
     let callback = move |req: &Request, response: Response| -> Result<Response, ErrorResponse> {
         if let Some(expected) = &path {
@@ -166,7 +187,12 @@ async fn handle_connection(stream: TcpStream, api_key: Option<String>, inner: Ar
             .filter(|t| !t.is_empty());
         let token = match token {
             Some(t) => t,
-            None => return Err(reject(StatusCode::UNAUTHORIZED, "missing authorization header")),
+            None => {
+                return Err(reject(
+                    StatusCode::UNAUTHORIZED,
+                    "missing authorization header",
+                ))
+            }
         };
         match verify_speech_engine_jwt(token, api_key.as_deref().unwrap_or("")) {
             Ok(_) => Ok(response),
@@ -174,11 +200,21 @@ async fn handle_connection(stream: TcpStream, api_key: Option<String>, inner: Ar
         }
     };
 
-    let ws_stream = match tokio_tungstenite::accept_hdr_async(stream, callback).await {
-        Ok(ws) => ws,
-        Err(e) => {
+    // Bound the handshake: an unauthenticated peer that opens a socket and sends an incomplete
+    // upgrade must not hold a task and file descriptor open past this deadline. On timeout the
+    // future is dropped, which closes the stream.
+    let accept = tokio_tungstenite::accept_hdr_async(stream, callback);
+    let ws_stream = match tokio::time::timeout(handshake_timeout, accept).await {
+        Ok(Ok(ws)) => ws,
+        Ok(Err(e)) => {
             if debug {
                 eprintln!("[SpeechEngine] rejected connection — {e}");
+            }
+            return;
+        }
+        Err(_) => {
+            if debug {
+                eprintln!("[SpeechEngine] dropped connection — handshake not completed in time");
             }
             return;
         }
@@ -350,4 +386,80 @@ async fn drive_axum_session(
 
     session.handle_disconnect().await;
     writer.abort();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::speech_engine::session::SpeechEngineCallbacks;
+    use tokio::io::AsyncReadExt;
+
+    fn test_server(options: SpeechEngineServerOptions) -> SpeechEngineServer {
+        SpeechEngineServer::new(options, Arc::new(SpeechEngineCallbacks::default()))
+    }
+
+    async fn bound_addr(server: &SpeechEngineServer) -> SocketAddr {
+        loop {
+            if let Some(addr) = server.local_addr() {
+                return addr;
+            }
+            tokio::time::sleep(Duration::from_millis(10)).await;
+        }
+    }
+
+    // stop() must not lose its signal even when it races ahead of the serve loop (notify_one).
+    #[tokio::test]
+    async fn stop_before_serve_loop_still_returns() {
+        let server = test_server(SpeechEngineServerOptions {
+            port: 0,
+            api_key: Some("sk_test".to_string()),
+            ..Default::default()
+        });
+        let serving = server.clone();
+        let handle = tokio::spawn(async move { serving.serve().await });
+
+        server.stop();
+
+        let joined = tokio::time::timeout(Duration::from_secs(5), handle)
+            .await
+            .expect("serve() should return promptly after stop()");
+        joined
+            .expect("serve task panicked")
+            .expect("serve returned an error");
+    }
+
+    // An accepted connection that never completes the WebSocket handshake is dropped after the
+    // handshake deadline, so a silent peer cannot pin a socket and task indefinitely.
+    #[tokio::test]
+    async fn connection_that_never_handshakes_is_dropped() {
+        let server = test_server(SpeechEngineServerOptions {
+            port: 0,
+            api_key: Some("sk_test".to_string()),
+            handshake_timeout: Duration::from_millis(300),
+            ..Default::default()
+        });
+        let serving = server.clone();
+        tokio::spawn(async move { serving.serve().await });
+
+        let addr = tokio::time::timeout(Duration::from_secs(5), bound_addr(&server))
+            .await
+            .expect("server should bind");
+        let mut stream = tokio::net::TcpStream::connect(addr)
+            .await
+            .expect("connect should succeed");
+
+        // Send nothing. Once the deadline passes the server drops the connection, so the read
+        // returns 0 bytes (EOF).
+        let mut buf = [0u8; 1];
+        let n = tokio::time::timeout(Duration::from_secs(5), stream.read(&mut buf))
+            .await
+            .expect("read should not hang past the handshake deadline")
+            .expect("read should succeed");
+        assert_eq!(
+            n, 0,
+            "server should drop a connection that never handshakes"
+        );
+
+        server.stop();
+    }
 }
