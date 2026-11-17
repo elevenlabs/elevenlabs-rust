@@ -50,3 +50,22 @@ fn backward_loop_between_converse_nodes_is_allowed() {
     wf.build()
         .expect("a converse-to-converse backward loop is valid");
 }
+
+#[test]
+fn loaded_edge_with_explicit_null_backward_condition_builds() {
+    // A nullable wire field present as JSON `null` means "no condition", not a reverse transition. A
+    // loaded start → converse edge with `backward_condition: null` must not trip edge_into_start.
+    let wf = Workflow::new(None);
+    wf.converse("greet", "Hi", Default::default())
+        .end(Default::default());
+    let json = wf.to_json_string().expect("valid workflow");
+    let mut wire: serde_json::Value = serde_json::from_str(&json).unwrap();
+    for (_id, edge) in wire["edges"].as_object_mut().unwrap().iter_mut() {
+        edge.as_object_mut()
+            .unwrap()
+            .insert("backward_condition".into(), serde_json::Value::Null);
+    }
+    Workflow::from_json(&wire)
+        .build()
+        .expect("explicit null backward_condition must not invent a reverse transition");
+}

@@ -377,8 +377,11 @@ impl WorkflowGraph {
             .remove("target")
             .and_then(|v| v.as_str().map(str::to_string))
             .unwrap_or_default();
-        let forward_condition = rest.remove("forward_condition");
-        let backward_condition = rest.remove("backward_condition");
+        // A nullable wire field present as JSON `null` means "no condition", the same as being absent.
+        // Keep it as `None` so a loaded `"backward_condition": null` doesn't look like a reverse
+        // transition (which would wrongly trip edge_into_start and the reverse-edge merge).
+        let forward_condition = rest.remove("forward_condition").filter(|v| !v.is_null());
+        let backward_condition = rest.remove("backward_condition").filter(|v| !v.is_null());
         let uid = self.next_uid();
         placed.insert(edge_id.to_string(), uid);
         self.edges.push(GraphEdge {
