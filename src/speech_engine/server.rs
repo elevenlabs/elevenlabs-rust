@@ -261,6 +261,9 @@ async fn drive_tungstenite_session(
 
     while let Some(frame) = read.next().await {
         match frame {
+            // handle_raw_message hands a user_transcript to the session's worker task and returns
+            // at once (it does not await the transcript callback), so this read loop stays free to
+            // process ping/close even while a slow LLM response streams.
             Ok(Message::Text(text)) => session.handle_raw_message(text.as_str()).await,
             Ok(Message::Close(_)) => break,
             // Ping/Pong/Binary are the transport's business; tungstenite answers pings itself.
@@ -377,6 +380,9 @@ async fn drive_axum_session(
 
     while let Some(frame) = read.next().await {
         match frame {
+            // See drive_tungstenite_session: handle_raw_message enqueues transcript work on the
+            // session's worker and returns promptly, so this loop keeps handling ping/close while a
+            // response streams.
             Ok(AxumMessage::Text(text)) => session.handle_raw_message(&text).await,
             Ok(AxumMessage::Close(_)) => break,
             Ok(_) => {}
