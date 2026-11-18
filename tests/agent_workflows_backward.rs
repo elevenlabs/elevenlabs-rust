@@ -149,3 +149,27 @@ fn loaded_backward_only_edge_has_no_forward_transition() {
         "x has no forward transition via e4, so it must not be in x's edge_order: {x_order:?}"
     );
 }
+
+#[test]
+fn malformed_loaded_field_is_a_validation_error_not_a_panic() {
+    // Validation covers topology and option names, not every field's shape. A loaded edge whose
+    // `reroutes` is an object (the model wants an array) must make build() return an error.
+    let wf = Workflow::new(None);
+    wf.converse("greet", "Hi", Default::default())
+        .end(Default::default());
+    let mut wire: serde_json::Value = serde_json::from_str(&wf.to_json_string().unwrap()).unwrap();
+    for (_id, edge) in wire["edges"].as_object_mut().unwrap().iter_mut() {
+        edge.as_object_mut()
+            .unwrap()
+            .insert("reroutes".into(), json!({"x": 1, "y": 2}));
+    }
+    let loaded = Workflow::from_json(&wire);
+    let err = loaded
+        .build()
+        .expect_err("a malformed field must be reported, not panic");
+    assert_eq!(err.codes(), vec!["invalid_model"]);
+    let err = loaded
+        .build_with_warnings(|_| {})
+        .expect_err("build_with_warnings reports it too");
+    assert_eq!(err.codes(), vec!["invalid_model"]);
+}

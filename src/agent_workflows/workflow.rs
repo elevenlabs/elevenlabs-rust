@@ -9,7 +9,7 @@ use serde_json::{json, Map, Value};
 use crate::api::types::AgentWorkflowRequestModel;
 
 use super::condition::{Condition, ConditionInput};
-use super::errors::{Severity, WorkflowIssue, WorkflowValidationError};
+use super::errors::{Severity, WorkflowIssue, WorkflowIssueCode, WorkflowValidationError};
 use super::graph::{GraphEdge, WorkflowGraph};
 use super::layout::layout;
 use super::node::{branch, Chain, EdgeOrigin, WorkflowBranch, WorkflowNode};
@@ -205,7 +205,7 @@ impl Workflow {
     /// Validate and return the model `agents.create()` / `agents.update()` accept.
     pub fn build(&self) -> Result<AgentWorkflowRequestModel, WorkflowValidationError> {
         let wire = self.to_wire::<fn(&WorkflowIssue)>(None)?;
-        Ok(serde_json::from_value(wire).expect("builder output is a valid request model"))
+        to_request_model(wire)
     }
 
     /// Like [`build`](Self::build), but `on_warning` is called once per non-fatal problem.
@@ -214,7 +214,7 @@ impl Workflow {
         on_warning: F,
     ) -> Result<AgentWorkflowRequestModel, WorkflowValidationError> {
         let wire = self.to_wire(Some(on_warning))?;
-        Ok(serde_json::from_value(wire).expect("builder output is a valid request model"))
+        to_request_model(wire)
     }
 
     /// The workflow in API format (snake_case keys, sorted at every level). Validates like
@@ -337,6 +337,21 @@ impl Chain for Workflow {
             backward_condition: None,
         }
     }
+}
+
+/// Deserialize validated wire output into the generated request model. Validation covers topology
+/// and option names, not every field's shape, so caller-provided JSON (a loaded `reroutes` object
+/// instead of an array, say) can still fail here; report that as a validation error, never panic.
+fn to_request_model(wire: Value) -> Result<AgentWorkflowRequestModel, WorkflowValidationError> {
+    serde_json::from_value(wire).map_err(|err| WorkflowValidationError {
+        issues: vec![WorkflowIssue::error(
+            WorkflowIssueCode::InvalidModel,
+            format!(
+                "The workflow doesn't match the agent workflow request model: {err}. A loaded field likely has the wrong shape; fix it in the source JSON"
+            ),
+            None,
+        )],
+    })
 }
 
 /// A loaded node's order for the edges it still has, then any others in edge-list order.

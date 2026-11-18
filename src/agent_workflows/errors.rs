@@ -20,6 +20,10 @@ pub enum WorkflowIssueCode {
     MissingInsertResult,
     UnreachableNode,
     UnknownNodeType,
+    /// Rust-specific: the validated workflow still doesn't deserialize into the generated
+    /// `AgentWorkflowRequestModel` (e.g. a loaded field has the wrong shape). Other SDKs surface
+    /// their native deserialization error here instead.
+    InvalidModel,
 }
 
 impl WorkflowIssueCode {
@@ -41,6 +45,7 @@ impl WorkflowIssueCode {
             Self::MissingInsertResult => "missing_insert_result",
             Self::UnreachableNode => "unreachable_node",
             Self::UnknownNodeType => "unknown_node_type",
+            Self::InvalidModel => "invalid_model",
         }
     }
 }

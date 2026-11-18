@@ -276,6 +276,41 @@ impl WorkflowNode {
 
     /// Route both outcomes of this tool node. `success` runs on the success branch, then `failure`
     /// on the failure branch — always in that order. Returns this node.
+    ///
+    /// To route only one outcome, use [`on_success`](Self::on_success) or
+    /// [`on_failure`](Self::on_failure): `on_result(None, Some(f))` is the same as
+    /// `f(node.on_failure(None))`. If you do pass `None` here, Rust can't infer the omitted
+    /// callback's type, so name it as a function pointer: `None::<fn(WorkflowBranch)>`.
+    ///
+    /// ```no_run
+    /// use elevenlabs_rust_sdk::agent_workflows::{Chain, Workflow, WorkflowBranch};
+    ///
+    /// let wf = Workflow::new(None);
+    /// let lookup = wf.tool("lookup_order", vec!["tool_get_order".into()], Default::default());
+    /// lookup.on_result(
+    ///     Some(|ok: WorkflowBranch| {
+    ///         ok.converse("resolve", "Explain the order status", Default::default());
+    ///     }),
+    ///     Some(|failed: WorkflowBranch| {
+    ///         failed.end(Default::default());
+    ///     }),
+    /// );
+    ///
+    /// // One outcome only, with an explicitly typed `None`:
+    /// let refund = wf.tool("refund", vec!["tool_refund".into()], Default::default());
+    /// refund.on_result(
+    ///     None::<fn(WorkflowBranch)>,
+    ///     Some(|failed: WorkflowBranch| {
+    ///         failed.converse("apologize", "Apologize and offer a human", Default::default());
+    ///     }),
+    /// );
+    ///
+    /// // ...or, equivalently and more simply:
+    /// let cancel = wf.tool("cancel", vec!["tool_cancel".into()], Default::default());
+    /// cancel
+    ///     .on_failure(None)
+    ///     .converse("explain", "Explain why it failed", Default::default());
+    /// ```
     pub fn on_result<S, F>(&self, success: Option<S>, failure: Option<F>) -> &Self
     where
         S: FnOnce(WorkflowBranch),
