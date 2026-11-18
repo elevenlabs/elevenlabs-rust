@@ -32,3 +32,9 @@ src/lib.rs
 # Declared in src/lib.rs (`pub mod webhooks;`), which is already frozen above.
 src/webhooks/
 tests/webhooks_verifier.rs
+
+# Hand-written parsed music `compose_detailed`. `POST /v1/music/detailed` returns a `multipart/mixed`
+# body (JSON metadata + audio) that the generated method decodes as JSON and fails on. Declared in
+# src/lib.rs (`pub mod music_detailed;`), which is already frozen above.
+src/music_detailed/
+tests/music_detailed.rs
