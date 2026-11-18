@@ -41,6 +41,10 @@ pub mod webhooks;
 // crate-root module must be; this one line is part of the hand-written wiring Fern does not emit.
 pub mod flows;
 
+// Hand-written parsed music `compose_detailed` (see `.fernignore`). Declared here because a
+// crate-root module must be; this one line is part of the hand-written wiring Fern does not emit.
+pub mod music_detailed;
+
 pub use api::*;
 pub use client::ApiClient;
 pub use client::ApiClientBuilder;

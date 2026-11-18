@@ -35,7 +35,14 @@ tests/webhooks_verifier.rs
 
 # Hand-written flows `create_and_wait` helpers (`client.flows().image().create_and_wait(...)`).
 # The generated flows `create`/`get` methods don't expose response headers, so this module builds
-# the same requests on the shared HttpClient to read `Retry-After`. Matches the Python/TS SDKs.
+# the same requests, on a transport built from the root client config, to read `Retry-After`.
+# Matches the Python/TS SDKs.
 # Declared in src/lib.rs (`pub mod flows;`), which is already frozen above.
 src/flows/
 tests/flows_create_and_wait.rs
+
+# Hand-written parsed music `compose_detailed`. `POST /v1/music/detailed` returns a `multipart/mixed`
+# body (JSON metadata + audio) that the generated method decodes as JSON and fails on. Declared in
+# src/lib.rs (`pub mod music_detailed;`), which is already frozen above.
+src/music_detailed/
+tests/music_detailed.rs
