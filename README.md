@@ -204,6 +204,30 @@ match client.text_to_speech.convert("JBFqnCBsd6RMkjVDRZzb", &request, None).awai
 }
 ```
 
+## Webhooks
+
+ElevenLabs signs every webhook it sends with your webhook secret. Use `webhooks::construct_event`
+to verify the `ElevenLabs-Signature` header and decode the event. Pass the raw request body, not
+a re-serialized one: any change to the bytes breaks verification.
+
+```rust
+use elevenlabs_rust_sdk::webhooks::{construct_event, WebhookError};
+
+fn handle_webhook(raw_body: &[u8], signature_header: &str) -> Result<(), WebhookError> {
+    let secret = std::env::var("ELEVENLABS_WEBHOOK_SECRET").unwrap_or_default();
+    let event = construct_event(raw_body, signature_header, &secret)?;
+
+    if event["type"] == "post_call_transcription" {
+        println!("Transcript for agent {}", event["data"]["agent_id"]);
+    }
+    Ok(())
+}
+```
+
+`construct_event` returns the event as a `serde_json::Value`. It returns a `WebhookError` if the
+header or secret is missing, the signature does not match, or the timestamp is more than 30 minutes
+old.
+
 ## WebSockets
 
 The SDK supports WebSocket connections for real-time communication. Use the generated channel clients

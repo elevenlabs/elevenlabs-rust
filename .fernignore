@@ -26,3 +26,9 @@ src/speech_engine/
 #    hand. See the PR description for the proper fix (a Fern custom-module extension point).
 Cargo.toml
 src/lib.rs
+
+# Hand-written webhook signature verifier. Fern's built-in verifier can't parse the compound
+# `ElevenLabs-Signature: t=...,v0=...` header, so this matches the Python/TS/PHP/Ruby SDKs by hand.
+# Declared in src/lib.rs (`pub mod webhooks;`), which is already frozen above.
+src/webhooks/
+tests/webhooks_verifier.rs
