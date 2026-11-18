@@ -32,3 +32,10 @@ src/lib.rs
 # Declared in src/lib.rs (`pub mod webhooks;`), which is already frozen above.
 src/webhooks/
 tests/webhooks_verifier.rs
+
+# Hand-written flows `create_and_wait` helpers (`client.flows().image().create_and_wait(...)`).
+# The generated flows `create`/`get` methods don't expose response headers, so this module builds
+# the same requests on the shared HttpClient to read `Retry-After`. Matches the Python/TS SDKs.
+# Declared in src/lib.rs (`pub mod flows;`), which is already frozen above.
+src/flows/
+tests/flows_create_and_wait.rs
