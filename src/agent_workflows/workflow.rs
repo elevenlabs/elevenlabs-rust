@@ -132,6 +132,19 @@ impl Workflow {
             }
         };
 
+        // Splitting a bidirectional edge can't preserve the original target's reverse route, so reject
+        // it rather than silently drop or misattach that route. Remove the backward condition first.
+        if self.graph.borrow().edges[index].backward_condition.is_some() {
+            self.graph.borrow_mut().issue(
+                super::errors::WorkflowIssueCode::CannotInsertBidirectional,
+                format!(
+                    "Edge \"{source_id}\" → \"{target_id}\" has a backward condition; inserting into a bidirectional edge would drop its reverse route. Remove the backward condition first"
+                ),
+                Some(source_id),
+            );
+            return None;
+        }
+
         let (original_uid, origin) = {
             let mut g = self.graph.borrow_mut();
             let original = g.edges.remove(index);
@@ -268,7 +281,12 @@ impl Workflow {
                 }
                 continue;
             }
-            outgoing.entry(edge.source.clone()).or_default().push(edge.uid);
+            // An edge belongs in a node's outgoing order only for a transition that leaves it: the
+            // source has a forward transition when there is a forward condition, the target a reverse
+            // transition when there is a backward condition. A loaded edge may carry only one.
+            if edge.forward_condition.is_some() {
+                outgoing.entry(edge.source.clone()).or_default().push(edge.uid);
+            }
             if edge.backward_condition.is_some() {
                 outgoing.entry(edge.target.clone()).or_default().push(edge.uid);
             }

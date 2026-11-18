@@ -54,50 +54,49 @@ pub fn validate(graph: &WorkflowGraph) -> Vec<WorkflowIssue> {
                 ));
             }
         }
-        if edge.target == graph.start_id {
-            issues.push(WorkflowIssue::error(
-                WorkflowIssueCode::EdgeIntoStart,
-                format!(
-                    "Edge {name} points into the start node; go to the first node after it instead"
-                ),
-                Some(edge.source.clone()),
-            ));
-        }
-
-        let source_type = graph.node_type(&edge.source);
-        let condition_type = edge
-            .forward_condition
-            .as_ref()
-            .and_then(|c| c.get("type"))
-            .and_then(|v| v.as_str());
-        if source_type.as_deref() == Some("end") && !ends_with_edges.contains(&edge.source) {
-            ends_with_edges.insert(edge.source.clone());
-            issues.push(WorkflowIssue::error(
-                WorkflowIssueCode::EndHasOutgoingEdges,
-                format!("End node \"{}\" can't have outgoing edges", edge.source),
-                Some(edge.source.clone()),
-            ));
-        }
-        if source_type.as_deref() == Some("tool") && condition_type != Some("result") {
-            issues.push(WorkflowIssue::error(
-                WorkflowIssueCode::ToolEdgeNeedsResult,
-                format!(
-                    "Edge {name} leaves a tool node, so it must use on_success() or on_failure()"
-                ),
-                Some(edge.source.clone()),
-            ));
-        }
-        if source_type.is_some()
-            && source_type.as_deref() != Some("tool")
-            && condition_type == Some("result")
-        {
-            issues.push(WorkflowIssue::error(
-                WorkflowIssueCode::ResultEdgeNeedsTool,
-                format!(
-                    "Edge {name} uses on_success()/on_failure(), which only applies to tool nodes"
-                ),
-                Some(edge.source.clone()),
-            ));
+        // Forward routing rules apply only when there is a forward transition (a forward condition).
+        // A loaded edge can be backward-only, and then source → target does not exist.
+        if let Some(forward) = &edge.forward_condition {
+            let source_type = graph.node_type(&edge.source);
+            let condition_type = forward.get("type").and_then(|v| v.as_str());
+            if edge.target == graph.start_id {
+                issues.push(WorkflowIssue::error(
+                    WorkflowIssueCode::EdgeIntoStart,
+                    format!(
+                        "Edge {name} points into the start node; go to the first node after it instead"
+                    ),
+                    Some(edge.source.clone()),
+                ));
+            }
+            if source_type.as_deref() == Some("end") && !ends_with_edges.contains(&edge.source) {
+                ends_with_edges.insert(edge.source.clone());
+                issues.push(WorkflowIssue::error(
+                    WorkflowIssueCode::EndHasOutgoingEdges,
+                    format!("End node \"{}\" can't have outgoing edges", edge.source),
+                    Some(edge.source.clone()),
+                ));
+            }
+            if source_type.as_deref() == Some("tool") && condition_type != Some("result") {
+                issues.push(WorkflowIssue::error(
+                    WorkflowIssueCode::ToolEdgeNeedsResult,
+                    format!(
+                        "Edge {name} leaves a tool node, so it must use on_success() or on_failure()"
+                    ),
+                    Some(edge.source.clone()),
+                ));
+            }
+            if source_type.is_some()
+                && source_type.as_deref() != Some("tool")
+                && condition_type == Some("result")
+            {
+                issues.push(WorkflowIssue::error(
+                    WorkflowIssueCode::ResultEdgeNeedsTool,
+                    format!(
+                        "Edge {name} uses on_success()/on_failure(), which only applies to tool nodes"
+                    ),
+                    Some(edge.source.clone()),
+                ));
+            }
         }
 
         // A backward condition is a second transition the other way, target → source, that the API
@@ -218,6 +217,7 @@ pub fn depths_from(graph: &WorkflowGraph) -> (HashMap<String, i64>, Vec<String>)
             let current_depth = depths[&current];
             for edge in &graph.edges {
                 if edge.source == current
+                    && edge.forward_condition.is_some()
                     && !depths.contains_key(&edge.target)
                     && graph.nodes.contains_key(&edge.target)
                 {

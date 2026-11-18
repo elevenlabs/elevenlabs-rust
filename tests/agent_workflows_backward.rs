@@ -2,7 +2,8 @@
 //! It must obey the same routing rules as any outgoing edge, so validate() checks it in the reverse
 //! direction too. These tests cover that reverse-direction validation.
 
-use elevenlabs_rust_sdk::agent_workflows::{Chain, Workflow};
+use elevenlabs_rust_sdk::agent_workflows::{Chain, Condition, Options, Workflow};
+use serde_json::json;
 
 #[test]
 fn backward_condition_into_start_is_rejected() {
@@ -68,4 +69,83 @@ fn loaded_edge_with_explicit_null_backward_condition_builds() {
     Workflow::from_json(&wire)
         .build()
         .expect("explicit null backward_condition must not invent a reverse transition");
+}
+
+#[test]
+fn insert_between_bidirectional_edge_is_rejected() {
+    let wf = Workflow::new(None);
+    let a = wf.converse("a", "A", Default::default());
+    // a → b with a backward b → a: a bidirectional edge.
+    a.when("to b".into(), Some("back to a".into()))
+        .converse("b", "B", Default::default());
+    let result = wf.insert_between("a", "b", |br| {
+        Some(br.converse("mid", "M", Default::default()))
+    });
+    assert!(
+        result.is_none(),
+        "inserting into a bidirectional edge must be rejected"
+    );
+    let err = wf
+        .build()
+        .expect_err("a rejected bidirectional insert records an error");
+    assert!(
+        err.codes().contains(&"cannot_insert_bidirectional"),
+        "got {:?}",
+        err.codes()
+    );
+}
+
+#[test]
+fn position_option_is_accepted_for_unmapped_node_types() {
+    // `say`/`update_state` are valid generated node types with no dedicated option map; `position` is
+    // shared by every node kind, so updating it must not record invalid_option.
+    let fc = Condition::llm("go", None).to_wire();
+    let wire = json!({
+        "nodes": {
+            "start_node": {"type": "start"},
+            "announce": {"type": "say", "text": "hello"}
+        },
+        "edges": {
+            "start_node__announce": {"source": "start_node", "target": "announce", "forward_condition": fc}
+        }
+    });
+    let wf = Workflow::from_json(&wire);
+    let mut opts = Options::new();
+    opts.raw
+        .insert("position".to_string(), json!({"x": 10.0, "y": 20.0}));
+    wf.node("announce").update(opts);
+    wf.build()
+        .expect("position must be accepted on a node kind with no dedicated field map");
+}
+
+#[test]
+fn loaded_backward_only_edge_has_no_forward_transition() {
+    // An edge stored as x → start_node carrying ONLY a backward condition is the reverse transition
+    // start_node → x; there is no forward x → start_node, so it must not trip edge_into_start, and x's
+    // outgoing edge_order must not list it.
+    let fc = Condition::llm("go", None).to_wire();
+    let bc = Condition::llm("restart", None).to_wire();
+    let wire = json!({
+        "nodes": {
+            "start_node": {"type": "start"},
+            "hub": {"type": "override_agent", "label": "hub", "additional_prompt": "H"},
+            "x": {"type": "override_agent", "label": "x", "additional_prompt": "X"},
+            "end": {"type": "end"}
+        },
+        "edges": {
+            "e1": {"source": "start_node", "target": "hub", "forward_condition": fc.clone()},
+            "e2": {"source": "hub", "target": "x", "forward_condition": fc.clone()},
+            "e3": {"source": "hub", "target": "end", "forward_condition": fc.clone()},
+            "e4": {"source": "x", "target": "start_node", "backward_condition": bc}
+        }
+    });
+    let wf = Workflow::from_json(&wire);
+    let out = wf
+        .to_json()
+        .expect("a backward-only edge must not trip the forward routing checks");
+    let x_order = out["nodes"]["x"]["edge_order"].as_array().unwrap();
+    assert!(
+        !x_order.iter().any(|v| v == "e4"),
+        "x has no forward transition via e4, so it must not be in x's edge_order: {x_order:?}"
+    );
 }

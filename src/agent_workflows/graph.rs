@@ -80,7 +80,12 @@ fn api_field(node_type: Option<&str>, key: &str) -> Option<&'static str> {
             "preserve_voice_settings" => Some("preserve_voice_settings"),
             _ => None,
         },
-        _ => None,
+        // Node kinds without a dedicated field map (e.g. generated `say`/`update_state`): position is
+        // common to every node kind, so keep it rather than rejecting it as an invalid option.
+        _ => match key {
+            "position" => Some("position"),
+            _ => None,
+        },
     }
 }
 
