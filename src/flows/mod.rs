@@ -30,8 +30,13 @@
 //! This whole module is hand-written (it is listed in `.fernignore`), mirroring
 //! `create_and_wait` in the Python SDK and `createAndWait` in the TypeScript SDK. The generated
 //! `create` and `get` methods do not expose response headers, so the requests are built here
-//! with the same shared `HttpClient`, configuration, auth and retries the generated methods use,
-//! which lets the wait read the server's `Retry-After` header.
+//! with the same configuration, auth and retries the generated methods use, which lets the wait
+//! read the server's `Retry-After` header.
+//!
+//! The helpers always use the root client's configuration, for the transport (base URL, timeout,
+//! retries) as well as the credentials, so both always come from the same place. Replacing a public
+//! sub-client such as `client.image` with a standalone one does not change where they send
+//! requests.
 
 mod poll;
 
@@ -186,7 +191,6 @@ impl<'a> Flows<'a> {
             self.client,
             "/v1/flows/image",
             ConfigManager::get_image_config,
-            &self.client.image.http_client,
         )
     }
 
@@ -196,7 +200,6 @@ impl<'a> Flows<'a> {
             self.client,
             "/v1/flows/video",
             ConfigManager::get_video_config,
-            &self.client.video.http_client,
         )
     }
 
@@ -207,7 +210,6 @@ impl<'a> Flows<'a> {
             self.client,
             "/v1/flows/text-to-speech",
             ConfigManager::get_text_to_speech_config,
-            &self.client.text_to_speech.http_client,
         )
     }
 
@@ -225,7 +227,6 @@ pub struct MediaFlow<'a, B> {
     client: &'a ApiClient,
     path: &'static str,
     config: fn(&ConfigManager) -> ClientConfig,
-    http_client: &'a HttpClient,
     body: PhantomData<fn(&B)>,
 }
 
@@ -234,13 +235,11 @@ impl<'a, B: Serialize> MediaFlow<'a, B> {
         client: &'a ApiClient,
         path: &'static str,
         config: fn(&ConfigManager) -> ClientConfig,
-        http_client: &'a HttpClient,
     ) -> Self {
         Self {
             client,
             path,
             config,
-            http_client,
             body: PhantomData,
         }
     }
@@ -279,10 +278,11 @@ impl<'a, B: Serialize> MediaFlow<'a, B> {
     ) -> Result<MediaGenerationResponse, FlowsWaitError> {
         wait.validate()?;
         let config = (self.config)(&self.client.config);
+        let http_client = transport(&config)?;
         let (created, headers): (MediaGenerationCreateResponse, HeaderMap) = send(
-            self.http_client,
+            &http_client,
             &config,
-            self.http_client.post(self.path),
+            http_client.post(self.path),
             Some(body),
             options.as_ref(),
         )
@@ -304,11 +304,13 @@ impl<'a, B: Serialize> MediaFlow<'a, B> {
             headers,
             || {
                 let config = (self.config)(&self.client.config);
-                let request = self.http_client.get(&url);
+                http_client.set_base_url(config.base_url.clone());
+                let request = http_client.get(&url);
                 let options = poll_options.as_ref();
+                let http_client = &http_client;
                 async move {
                     send::<(), MediaGenerationResponse>(
-                        self.http_client,
+                        http_client,
                         &config,
                         request,
                         None,
@@ -363,10 +365,10 @@ impl<'a> TemplateRunsFlow<'a> {
         pacer: &dyn Pacer,
     ) -> Result<TemplateRunResponse, FlowsWaitError> {
         wait.validate()?;
-        let http_client: &HttpClient = &self.client.runs.http_client;
         let config = self.client.config.get_runs_config();
+        let http_client = transport(&config)?;
         let (created, headers): (TemplateRunResponse, HeaderMap) = send(
-            http_client,
+            &http_client,
             &config,
             http_client.post(format!("/v1/flows/templates/{}/runs", template_id)),
             Some(body),
@@ -385,8 +387,10 @@ impl<'a> TemplateRunsFlow<'a> {
             headers,
             || {
                 let config = self.client.config.get_runs_config();
+                http_client.set_base_url(config.base_url.clone());
                 let request = http_client.get(&url);
                 let options = poll_options.as_ref();
+                let http_client = &http_client;
                 async move {
                     send::<(), TemplateRunResponse>(http_client, &config, request, None, options)
                         .await
@@ -424,6 +428,18 @@ impl poll::Polled for TemplateRunResponse {
             TemplateRunStatus::__Unknown(status) => status.clone(),
         }
     }
+}
+
+/// A transport built from the same configuration that supplies the credentials, so requests never
+/// carry the root client's API key or custom headers to another sub-client's base URL. Each status
+/// check re-reads the base URL with the credentials, so `set_base_url` during a wait applies to both.
+fn transport(config: &ClientConfig) -> Result<HttpClient, ApiError> {
+    HttpClient::new(
+        config.base_url.clone(),
+        config.timeout.as_millis() as u64,
+        config.max_retries,
+    )
+    .map_err(ApiError::Network)
 }
 
 /// The caller's options for the status checks: everything except body parameters, which only the
