@@ -11,5 +11,17 @@ tests/fixtures/agent_workflows/
 #  - Cargo.toml: the serde_json `preserve_order` feature the builder needs for document-order loads.
 #  - src/lib.rs: the `pub mod agent_workflows;` declaration (a crate-root module must be declared
 #    here). See the PR description for the proper fix (a Fern custom-module extension point).
+
+# Hand-written Speech Engine inbound-server surface. The generator only emits the upstream channel
+# client (src/api/websocket/speech_engine.rs); the server side is maintained by hand to match the
+# Python/TS/PHP SDKs.
+src/speech_engine/
+
+# Frozen to protect the hand-written wiring Fern does not emit:
+#  - Cargo.toml: the hmac/sha2/base64 (and optional axum) dependencies the server surface needs.
+#  - src/lib.rs: the `pub mod speech_engine;` declaration (a crate-root module must be declared
+#    here). Keeping it in .fernignore means a regeneration cannot silently drop these; the
+#    trade-off is that genuinely new generated top-level modules would need to be merged in by
+#    hand. See the PR description for the proper fix (a Fern custom-module extension point).
 Cargo.toml
 src/lib.rs
