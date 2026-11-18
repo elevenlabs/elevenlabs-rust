@@ -228,6 +228,43 @@ fn handle_webhook(raw_body: &[u8], signature_header: &str) -> Result<(), Webhook
 header or secret is missing, the signature does not match, or the timestamp is more than 30 minutes
 old.
 
+## Flows
+
+Image, video and text-to-speech generations and template runs are asynchronous: `create` returns
+straight away with a `pending` status, and `get` reports progress. `create_and_wait` does both and
+returns once the work is `completed` or `failed`:
+
+```rust
+use elevenlabs_rust_sdk::flows::{FlowsWaitError, FlowsWaitOptions};
+use std::time::Duration;
+
+let wait = FlowsWaitOptions::default().wait_timeout(Duration::from_secs(300));
+match client.flows().image().create_and_wait(&request, None, wait).await {
+    Ok(generation) => match generation.as_completed() {
+        Some(completed) => println!("{}", completed.content_url),
+        None => println!("Generation failed: {:?}", generation.as_failed()),
+    },
+    Err(FlowsWaitError::Timeout(timeout)) => {
+        // Still running on the server: resume with client.image.get(&timeout.id, None).
+        println!("{timeout}");
+    }
+    Err(e) => return Err(e.into()),
+}
+```
+
+`client.flows().video()` and `client.flows().text_to_speech()` work the same way, and
+`client.flows().runs().create_and_wait(template_id, &request, None, wait)` waits for a template
+run. A failed generation or run is returned, not raised, so check its status.
+
+Between status checks the SDK waits as long as the server's `Retry-After` header asks, never less
+than `min_poll_interval` (3 seconds by default, 0.5 at the least), plus up to 20% jitter.
+`wait_timeout` bounds the whole wait and defaults to waiting indefinitely; when it runs out you get
+`FlowsWaitError::Timeout`, which carries the generation or run id. Request options apply to every
+request, except `additional_body_params`, which only the create call gets.
+
+This is meant for scripts and quickstarts. In production, set `webhook` on the request and handle
+the webhook event instead of holding a process open.
+
 ## Composing music with metadata
 
 `POST /v1/music/detailed` returns the song's metadata and its audio file in one `multipart/mixed`
