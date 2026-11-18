@@ -78,34 +78,46 @@ pub(crate) fn construct_event_at(
     mac.update(timestamp.as_bytes());
     mac.update(b".");
     mac.update(raw_body);
-    let expected = format!("v0={}", to_hex(&mac.finalize().into_bytes()));
 
-    if !constant_time_eq(expected.as_bytes(), signature.as_bytes()) {
+    // The digest must be exactly 64 lowercase hex characters, as the other SDKs produce.
+    // `verify_slice` then compares it in constant time.
+    let digest =
+        decode_lower_hex(&signature["v0=".len()..]).ok_or(WebhookError::SignatureMismatch)?;
+    if mac.verify_slice(&digest).is_err() {
         return Err(WebhookError::SignatureMismatch);
     }
 
     serde_json::from_slice(raw_body).map_err(WebhookError::InvalidPayload)
 }
 
-fn to_hex(bytes: &[u8]) -> String {
-    use std::fmt::Write;
-    bytes
-        .iter()
-        .fold(String::with_capacity(bytes.len() * 2), |mut out, b| {
-            let _ = write!(out, "{b:02x}");
-            out
-        })
-}
-
-/// Compare two byte strings without short-circuiting on the first difference. The length check
-/// leaks only the length, which is fixed (`v0=` plus 64 hex characters) for a valid signature.
-fn constant_time_eq(a: &[u8], b: &[u8]) -> bool {
-    a.len() == b.len() && a.iter().zip(b).fold(0u8, |acc, (x, y)| acc | (x ^ y)) == 0
+/// Decode a 64-character lowercase hex string into a 32-byte SHA-256 digest. Returns `None` for
+/// any other length or for uppercase or non-hex characters.
+fn decode_lower_hex(hex: &str) -> Option<[u8; 32]> {
+    fn nibble(c: u8) -> Option<u8> {
+        match c {
+            b'0'..=b'9' => Some(c - b'0'),
+            b'a'..=b'f' => Some(c - b'a' + 10),
+            _ => None,
+        }
+    }
+    let bytes = hex.as_bytes();
+    if bytes.len() != 64 {
+        return None;
+    }
+    let mut out = [0u8; 32];
+    for (i, pair) in bytes.chunks_exact(2).enumerate() {
+        out[i] = (nibble(pair[0])? << 4) | nibble(pair[1])?;
+    }
+    Some(out)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn to_hex(bytes: &[u8]) -> String {
+        bytes.iter().map(|b| format!("{b:02x}")).collect()
+    }
 
     const SECRET: &str = "wsec_0123456789abcdef0123456789abcdef";
 
@@ -144,9 +156,28 @@ mod tests {
     }
 
     #[test]
-    fn constant_time_eq_compares_length_and_content() {
-        assert!(constant_time_eq(b"v0=abc", b"v0=abc"));
-        assert!(!constant_time_eq(b"v0=abc", b"v0=abd"));
-        assert!(!constant_time_eq(b"v0=abc", b"v0=ab"));
+    fn decode_lower_hex_requires_64_lowercase_hex_characters() {
+        let hex = "00ff".repeat(16);
+        let decoded = decode_lower_hex(&hex).unwrap();
+        assert_eq!(decoded[0], 0x00);
+        assert_eq!(decoded[1], 0xff);
+        assert!(decode_lower_hex(&hex.to_uppercase()).is_none());
+        assert!(decode_lower_hex(&hex[..62]).is_none());
+        assert!(decode_lower_hex(&format!("{hex}00")).is_none());
+        assert!(decode_lower_hex(&format!("{}zz", &hex[..62])).is_none());
+    }
+
+    #[test]
+    fn rejects_an_uppercase_signature() {
+        let now = 1_700_000_000;
+        let ts = now.to_string();
+        let body = r#"{"type":"ping"}"#;
+        let header = sign(&ts, body);
+        let (t, v0) = header.split_once(",v0=").unwrap();
+        let upper = format!("{t},v0={}", v0.to_uppercase());
+        assert!(matches!(
+            construct_event_at(body.as_bytes(), &upper, SECRET, now),
+            Err(WebhookError::SignatureMismatch)
+        ));
     }
 }
