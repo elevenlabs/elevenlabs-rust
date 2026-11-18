@@ -234,12 +234,14 @@ pub(crate) fn parse_multipart(body: &[u8], boundary: Option<&str>) -> Result<Par
                 "Could not find the multipart boundary in the music response".to_string()
             })?
     };
-    // The body uses one line ending throughout; read it from the first delimiter line.
-    let line_break: &[u8] = if body[pos + delimiter.len()..].starts_with(b"\r\n") {
-        b"\r\n"
-    } else {
-        b"\n"
-    };
+    // The body uses one line ending throughout; read it from the end of the first delimiter line,
+    // past any transport padding (spaces or tabs, which MIME allows after a delimiter).
+    let line_break: &[u8] =
+        if body[skip_padding(body, pos + delimiter.len())..].starts_with(b"\r\n") {
+            b"\r\n"
+        } else {
+            b"\n"
+        };
     let break_then_delimiter = [line_break, delimiter].concat();
 
     let mut parts = Vec::new();
@@ -248,6 +250,7 @@ pub(crate) fn parse_multipart(body: &[u8], boundary: Option<&str>) -> Result<Par
         if body[after..].starts_with(b"--") {
             break; // Closing delimiter.
         }
+        let after = skip_padding(body, after);
         let start = if body[after..].starts_with(line_break) {
             after + line_break.len()
         } else {
@@ -308,26 +311,35 @@ fn delimiter_for(body: &[u8], boundary: Option<&str>) -> Result<Vec<u8>, String>
     Ok(delimiter.to_vec())
 }
 
+/// Spaces and tabs after a delimiter are MIME transport padding; returns the offset past them.
+fn skip_padding(body: &[u8], offset: usize) -> usize {
+    offset
+        + body[offset..]
+            .iter()
+            .take_while(|&&b| b == b' ' || b == b'\t')
+            .count()
+}
+
 fn split_part(part: &[u8], line_break: &[u8]) -> Part {
-    // Prepend a line break so a part with no headers (the blank line straight after the delimiter)
-    // is found at offset 0 too.
-    let with_break = [line_break, part].concat();
-    let double_break = [line_break, line_break].concat();
-    match find(&with_break, &double_break, 0) {
+    // A part with no headers starts with the blank line that ends them.
+    if let Some(body) = part.strip_prefix(line_break) {
+        return Part {
+            headers: HashMap::new(),
+            body: body.to_vec(),
+            separated: true,
+        };
+    }
+    match find(part, &[line_break, line_break].concat(), 0) {
         None => Part {
             headers: headers(part, line_break),
             body: Vec::new(),
             separated: false,
         },
-        Some(separator) => {
-            let header_len = separator.saturating_sub(line_break.len());
-            let header_block = &with_break[line_break.len()..line_break.len() + header_len];
-            Part {
-                headers: headers(header_block, line_break),
-                body: with_break[separator + 2 * line_break.len()..].to_vec(),
-                separated: true,
-            }
-        }
+        Some(separator) => Part {
+            headers: headers(&part[..separator], line_break),
+            body: part[separator + 2 * line_break.len()..].to_vec(),
+            separated: true,
+        },
     }
 }
 
@@ -446,6 +458,26 @@ mod tests {
         body.extend_from_slice(b"\r\n--b--\r\n");
         let parsed = parse_multipart(&body, Some("b")).unwrap();
         assert_eq!(parsed.json["a"], 1);
+        assert_eq!(parsed.audio, audio());
+    }
+
+    #[test]
+    fn skips_transport_padding_after_each_delimiter() {
+        let mut body = b"--b \t\r\nContent-Type: application/json\r\n\r\n{\"a\":1}\r\n--b\t\r\nContent-Type: audio/mpeg\r\n\r\n".to_vec();
+        body.extend(audio());
+        body.extend_from_slice(b"\r\n--b--\r\n");
+        let parsed = parse_multipart(&body, Some("b")).unwrap();
+        assert_eq!(parsed.json["a"], 1);
+        assert_eq!(parsed.audio, audio());
+    }
+
+    #[test]
+    fn reads_a_part_with_no_headers() {
+        let mut body =
+            b"--b\r\nContent-Type: application/json\r\n\r\n{\"a\":1}\r\n--b\r\n\r\n".to_vec();
+        body.extend(audio());
+        body.extend_from_slice(b"\r\n--b--\r\n");
+        let parsed = parse_multipart(&body, None).unwrap();
         assert_eq!(parsed.audio, audio());
     }
 
