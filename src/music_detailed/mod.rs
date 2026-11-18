@@ -157,9 +157,15 @@ impl MusicDetailed {
             .get("song-id")
             .and_then(|value| value.to_str().ok())
             .map(str::to_string);
+        let boundary = boundary_from(
+            response
+                .headers()
+                .get(reqwest::header::CONTENT_TYPE)
+                .and_then(|value| value.to_str().ok()),
+        );
         let bytes = response.bytes().await?;
-        let parsed =
-            parse_multipart(&bytes).map_err(|message| ApiError::DecodeError { status, message })?;
+        let parsed = parse_multipart(&bytes, boundary.as_deref())
+            .map_err(|message| ApiError::DecodeError { status, message })?;
         Ok(ComposeDetailedResponse {
             json: parsed.json,
             audio: parsed.audio,
@@ -190,27 +196,55 @@ impl Part {
     }
 }
 
+/// The `boundary` parameter of a `Content-Type` header, unquoted, or `None`.
+pub(crate) fn boundary_from(content_type: Option<&str>) -> Option<String> {
+    let content_type = content_type?;
+    // ASCII lowercasing keeps byte offsets, so an index into it indexes the original too.
+    let i = content_type.to_ascii_lowercase().find("boundary=")?;
+    let rest = &content_type[i + "boundary=".len()..];
+    let value = match rest.strip_prefix('"') {
+        Some(quoted) => quoted.split('"').next().unwrap_or(""),
+        None => rest
+            .split(|c: char| c == ';' || c.is_whitespace())
+            .next()
+            .unwrap_or(""),
+    };
+    (!value.is_empty()).then(|| value.to_string())
+}
+
 /// Splits the `multipart/mixed` body into its JSON part and its audio part. Works on bytes throughout,
 /// so the audio is returned exactly as sent: the line break before each delimiter and the closing
 /// `--boundary--` are stripped, never left on the end of the audio. Mirrors `parseMultipart` in the
 /// TypeScript SDK.
-pub(crate) fn parse_multipart(body: &[u8]) -> Result<Parsed, String> {
-    let first_break = body.iter().position(|&b| b == b'\n');
-    let delimiter = trim_ascii(&body[..first_break.unwrap_or(body.len())]);
-    if !delimiter.starts_with(b"--") || delimiter.len() < 3 {
-        return Err("Could not find the multipart boundary in the music response".to_string());
-    }
-    // The body uses one line ending throughout; read it from the delimiter line.
-    let line_break: &[u8] = match first_break {
-        Some(i) if i > 0 && body[i - 1] == b'\r' => b"\r\n",
-        _ => b"\n",
+///
+/// `boundary` is the `boundary` parameter of the response's `Content-Type`; without it the delimiter
+/// is read from the body's first line. A body that ends before its closing `--boundary--` (truncated)
+/// is an error.
+pub(crate) fn parse_multipart(body: &[u8], boundary: Option<&str>) -> Result<Parsed, String> {
+    let delimiter = delimiter_for(body, boundary)?;
+    let delimiter = delimiter.as_slice();
+
+    // The first delimiter starts the body or a line: anything before it is a preamble, which is ignored.
+    let mut pos = if body.starts_with(delimiter) {
+        0
+    } else {
+        find(body, &[b"\n", delimiter].concat(), 0)
+            .map(|found| found + 1)
+            .ok_or_else(|| {
+                "Could not find the multipart boundary in the music response".to_string()
+            })?
+    };
+    // The body uses one line ending throughout; read it from the first delimiter line.
+    let line_break: &[u8] = if body[pos + delimiter.len()..].starts_with(b"\r\n") {
+        b"\r\n"
+    } else {
+        b"\n"
     };
     let break_then_delimiter = [line_break, delimiter].concat();
 
     let mut parts = Vec::new();
-    let mut pos = find(body, delimiter, 0);
-    while let Some(p) = pos {
-        let after = p + delimiter.len();
+    loop {
+        let after = pos + delimiter.len();
         if body[after..].starts_with(b"--") {
             break; // Closing delimiter.
         }
@@ -219,10 +253,14 @@ pub(crate) fn parse_multipart(body: &[u8]) -> Result<Parsed, String> {
         } else {
             after
         };
-        let next = find(body, &break_then_delimiter, start);
-        let end = next.unwrap_or(body.len());
-        parts.push(split_part(&body[start..end], line_break));
-        pos = next.map(|n| n + line_break.len());
+        // Every part ends at a delimiter, and the body at `--boundary--`; the API always sends it. A
+        // body that stops first was cut off, so its last part (the audio, usually) is incomplete.
+        let next = find(body, &break_then_delimiter, start).ok_or_else(|| {
+            "The music response ended before its closing multipart boundary; it is incomplete"
+                .to_string()
+        })?;
+        parts.push(split_part(&body[start..next], line_break));
+        pos = next + line_break.len();
     }
 
     let mut json_part: Option<&Part> = None;
@@ -256,6 +294,18 @@ pub(crate) fn parse_multipart(body: &[u8]) -> Result<Parsed, String> {
         audio: audio_part.body.clone(),
         filename: filename(audio_part.headers.get("content-disposition")),
     })
+}
+
+fn delimiter_for(body: &[u8], boundary: Option<&str>) -> Result<Vec<u8>, String> {
+    if let Some(boundary) = boundary.filter(|b| !b.is_empty()) {
+        return Ok(format!("--{boundary}").into_bytes());
+    }
+    let first_break = body.iter().position(|&b| b == b'\n');
+    let delimiter = trim_ascii(&body[..first_break.unwrap_or(body.len())]);
+    if !delimiter.starts_with(b"--") || delimiter.len() < 3 {
+        return Err("Could not find the multipart boundary in the music response".to_string());
+    }
+    Ok(delimiter.to_vec())
 }
 
 fn split_part(part: &[u8], line_break: &[u8]) -> Part {
@@ -350,7 +400,7 @@ mod tests {
             b"\r\n--b\r\nContent-Type: application/json\r\n\r\n{\"a\":1}\r\n--b--\r\n",
         );
 
-        let parsed = parse_multipart(&body).unwrap();
+        let parsed = parse_multipart(&body, None).unwrap();
 
         assert_eq!(parsed.json["a"], 1);
         assert_eq!(parsed.audio, audio());
@@ -366,7 +416,41 @@ mod tests {
     }
 
     #[test]
+    fn reads_the_boundary_parameter() {
+        assert_eq!(
+            boundary_from(Some("multipart/mixed; boundary=\"abc\"")).as_deref(),
+            Some("abc")
+        );
+        assert_eq!(
+            boundary_from(Some("multipart/mixed; boundary=----boundaryf00")).as_deref(),
+            Some("----boundaryf00")
+        );
+        assert_eq!(boundary_from(Some("application/json")), None);
+        assert_eq!(boundary_from(None), None);
+    }
+
+    #[test]
+    fn rejects_a_body_cut_off_before_the_closing_boundary() {
+        let mut body = b"--b\r\nContent-Type: application/json\r\n\r\n{}\r\n--b\r\nContent-Type: audio/mpeg\r\n\r\n".to_vec();
+        body.extend(audio());
+        let error = parse_multipart(&body, Some("b")).err().unwrap();
+        assert!(error.contains("incomplete"), "{error}");
+        body.extend_from_slice(b"\r\n--");
+        assert!(parse_multipart(&body, Some("b")).is_err());
+    }
+
+    #[test]
+    fn skips_a_preamble() {
+        let mut body = b"preamble\r\n--b\r\nContent-Type: application/json\r\n\r\n{\"a\":1}\r\n--b\r\nContent-Type: audio/mpeg\r\n\r\n".to_vec();
+        body.extend(audio());
+        body.extend_from_slice(b"\r\n--b--\r\n");
+        let parsed = parse_multipart(&body, Some("b")).unwrap();
+        assert_eq!(parsed.json["a"], 1);
+        assert_eq!(parsed.audio, audio());
+    }
+
+    #[test]
     fn rejects_a_body_without_a_boundary() {
-        assert!(parse_multipart(b"not multipart").is_err());
+        assert!(parse_multipart(b"not multipart", None).is_err());
     }
 }
