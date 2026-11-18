@@ -228,6 +228,40 @@ fn handle_webhook(raw_body: &[u8], signature_header: &str) -> Result<(), Webhook
 header or secret is missing, the signature does not match, or the timestamp is more than 30 minutes
 old.
 
+## Composing music with metadata
+
+`POST /v1/music/detailed` returns the song's metadata and its audio file in one `multipart/mixed`
+response. `MusicDetailed::compose_detailed` sends that request and splits the response for you.
+
+```rust
+use elevenlabs_rust_sdk::music_detailed::MusicDetailed;
+use elevenlabs_rust_sdk::{BodyComposeMusicWithADetailedResponseV1MusicDetailedPost, ComposeDetailedRequest};
+
+let music = MusicDetailed::new(&client);
+let song = music
+    .compose_detailed(
+        &ComposeDetailedRequest {
+            body: Some(BodyComposeMusicWithADetailedResponseV1MusicDetailedPost {
+                prompt: Some("Epic orchestral music with dramatic strings and powerful brass".into()),
+                music_length_ms: Some(60_000),
+                ..Default::default()
+            }),
+            ..Default::default()
+        },
+        None,
+    )
+    .await?;
+
+println!("{}", song.json["song_metadata"]["title"]);
+std::fs::write(&song.filename, &song.audio)?;
+```
+
+- `json` is the metadata part as the API sends it: `composition_plan`, `song_metadata` and
+  `words_timestamps`.
+- `audio` is the audio file's bytes and `filename` the name the API suggests for it.
+- `song_id` is set when the request has `store_for_inpainting` enabled.
+- Use this rather than `client.music.compose_detailed`, which can't decode the multipart response.
+
 ## WebSockets
 
 The SDK supports WebSocket connections for real-time communication. Use the generated channel clients
