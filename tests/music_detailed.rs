@@ -286,3 +286,64 @@ async fn api_errors_keep_the_generated_error_handling() {
         "expected the generated 422 mapping, got {error:?}"
     );
 }
+
+async fn decode_error(server: &MockServer, body: Vec<u8>) -> String {
+    Mock::given(method("POST"))
+        .and(path("/v1/music/detailed"))
+        .respond_with(reply(body))
+        .mount(server)
+        .await;
+    match music(server)
+        .await
+        .compose_detailed(&request(), None)
+        .await
+        .unwrap_err()
+    {
+        ApiError::DecodeError { message, .. } => message,
+        other => panic!("expected DecodeError, got {other:?}"),
+    }
+}
+
+#[tokio::test]
+async fn errors_when_the_body_ends_mid_audio() {
+    let server = MockServer::start().await;
+    let mut body = multipart("\r\n", None, true);
+    // Cut inside the audio, so the closing delimiter never arrives.
+    body.truncate(body.len() - format!("\r\n{BOUNDARY}--\r\n").len() - 100);
+
+    let message = decode_error(&server, body).await;
+
+    assert!(message.contains("incomplete"), "{message}");
+}
+
+#[tokio::test]
+async fn errors_on_a_partial_closing_boundary() {
+    let server = MockServer::start().await;
+    let mut body = multipart("\r\n", None, true);
+    body.truncate(body.len() - "3--\r\n".len()); // ends in "...\r\n--boundary12"
+
+    let message = decode_error(&server, body).await;
+
+    assert!(message.contains("incomplete"), "{message}");
+}
+
+#[tokio::test]
+async fn skips_a_preamble_using_the_content_type_boundary() {
+    let server = MockServer::start().await;
+    let mut body = b"This is a multipart message.\r\n".to_vec();
+    body.extend(multipart("\r\n", None, true));
+    Mock::given(method("POST"))
+        .and(path("/v1/music/detailed"))
+        .respond_with(reply(body))
+        .mount(&server)
+        .await;
+
+    let song = music(&server)
+        .await
+        .compose_detailed(&request(), None)
+        .await
+        .unwrap();
+
+    assert_eq!(song.json, metadata());
+    assert_eq!(song.audio, audio());
+}
