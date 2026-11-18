@@ -6,7 +6,7 @@ use crate::api::types::ClientToolConfigInput;
 
 use super::errors::{ToolIssue, ToolIssueCode};
 use super::options::ToolOptions;
-use super::schema::{ObjectSchema, Schema, WireMap};
+use super::schema::{ObjectSchema, Schema, SchemaKind, WireMap};
 use super::tool::{accepted_options, set_config_option, tool_methods};
 use super::validate::check_schema;
 use super::webhook::COMMON_OPTIONS;
@@ -34,7 +34,8 @@ pub struct ClientTool {
     config: WireMap,
     /// Problems found while building, reported by `build()`.
     issues: Vec<ToolIssue>,
-    parameters: Option<ObjectSchema>,
+    /// An object, unless a loaded config declared another type (reported by `build()`).
+    parameters: Option<Schema>,
 }
 
 impl ClientTool {
@@ -45,7 +46,7 @@ impl ClientTool {
         Self::load(config, None)
     }
 
-    pub(crate) fn load(config: WireMap, parameters: Option<ObjectSchema>) -> Self {
+    pub(crate) fn load(config: WireMap, parameters: Option<Schema>) -> Self {
         ClientTool {
             config,
             issues: Vec::new(),
@@ -56,22 +57,37 @@ impl ClientTool {
     tool_methods!(ToolKind::Client, Client, ClientToolConfigInput);
 
     /// Sets the param `name`, or replaces it in place. Required unless the schema is
-    /// `optional()`. Any schema kind.
+    /// `optional()`. Any schema kind. Loaded params that aren't an object are left as they are,
+    /// and `build()` reports them.
     pub fn param(mut self, name: impl Into<String>, schema: impl Into<Schema>) -> Self {
-        let parameters = self.parameters.take().unwrap_or_else(Schema::object);
-        self.parameters = Some(parameters.property(name, schema));
+        self.parameters = match self.parameters.take() {
+            None => Some(Schema::object().property(name, schema).into()),
+            Some(Schema::Object(parameters)) => Some(parameters.property(name, schema).into()),
+            other => other,
+        };
         self
     }
 
-    /// Removes the param `name`. Does nothing if there is none.
+    /// Removes the param `name`. Does nothing if there is none. Removing the last param leaves
+    /// `parameters` out.
     pub fn remove_param(mut self, name: &str) -> Self {
-        self.parameters = self.parameters.map(|parameters| parameters.without(name));
+        if let Some(Schema::Object(parameters)) = &self.parameters {
+            if parameters.property_schema(name).is_some() {
+                let parameters = parameters.clone().without(name);
+                self.parameters = if parameters.property_names().is_empty() {
+                    None
+                } else {
+                    Some(parameters.into())
+                };
+            }
+        }
         self
     }
 
-    /// The params, as an object schema.
+    /// The params, as an object schema. `None` if there are none, or if loaded params declare
+    /// a type other than object.
     pub fn parameters_schema(&self) -> Option<&ObjectSchema> {
-        self.parameters.as_ref()
+        self.parameters.as_ref().and_then(Schema::as_object)
     }
 
     /// Merges options for client tools (see [`ToolOptions`]). A key that doesn't apply is
@@ -91,6 +107,13 @@ impl ClientTool {
     fn validate(&self) -> Vec<ToolIssue> {
         let mut issues = Vec::new();
         if let Some(parameters) = &self.parameters {
+            if parameters.kind() != SchemaKind::Object {
+                issues.push(ToolIssue::error(
+                    ToolIssueCode::BodyNotObject,
+                    Some("params"),
+                    "The params schema must be an object",
+                ));
+            }
             // Checks the params object's own require_any_of()/require_all_of() and every param.
             check_schema(parameters.state(), "params", false, &mut issues);
         }

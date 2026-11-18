@@ -3,7 +3,7 @@
 use serde_json::Value;
 
 use super::errors::{ToolIssue, ToolIssueCode};
-use super::schema::{SchemaKind, SchemaState};
+use super::schema::{is_nullable, SchemaKind, SchemaState};
 
 /// Checks a schema and everything under it. `path` names it in messages, e.g. `"body.reason"`.
 /// `is_property` is whether the schema is a property (or a param), so `omit()` needs it optional.
@@ -96,12 +96,6 @@ pub(crate) fn check_schema(
         },
         _ => {}
     }
-}
-
-/// Whether a loaded literal's `type` is a list that includes `"null"`, e.g. `["integer", "null"]`.
-fn is_nullable(ty: Option<&Value>) -> bool {
-    ty.and_then(Value::as_array)
-        .is_some_and(|types| types.iter().any(|t| t.as_str() == Some("null")))
 }
 
 fn matches_kind(kind: SchemaKind, value: &Value, nullable: bool) -> bool {

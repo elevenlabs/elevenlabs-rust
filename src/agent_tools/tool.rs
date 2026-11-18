@@ -1,6 +1,7 @@
 //! `Tool`: any kind of tool, the loaders, and the machinery the kinds share.
 
 use serde::de::DeserializeOwned;
+use serde::Serialize;
 use serde_json::Value;
 
 use crate::agent_workflows::wire::{canonical, to_json_string};
@@ -9,7 +10,7 @@ use crate::api::types::{ToolRequestModel, ToolRequestModelToolConfig, ToolRespon
 use super::client::ClientTool;
 use super::errors::{Severity, ToolIssue, ToolIssueCode, ToolValidationError};
 use super::options::ToolOptions;
-use super::schema::{strip_nulls, ObjectSchema, Schema, SchemaKind, WireMap};
+use super::schema::{container_schema, strip_nulls, WireMap};
 use super::system::SystemTool;
 use super::webhook::WebhookTool;
 
@@ -114,7 +115,7 @@ impl Tool {
             Some("client") => {
                 let parameters = config.remove("parameters").map(|params| {
                     let params = params.as_object().cloned().unwrap_or_default();
-                    object_schema(&params)
+                    container_schema(&params)
                 });
                 Tool::Client(ClientTool::load(config, parameters))
             }
@@ -371,15 +372,6 @@ pub(crate) fn name_of(config: &WireMap) -> &str {
     config.get("name").and_then(Value::as_str).unwrap_or("")
 }
 
-/// Loads a schema the API only allows to be an object (a tool's params, query or body), so an
-/// empty one with no `type` is still an object.
-pub(crate) fn object_schema(model: &WireMap) -> ObjectSchema {
-    match Schema::from_model(model, false, SchemaKind::Object) {
-        Schema::Object(schema) => schema,
-        _ => unreachable!("from_model with SchemaKind::Object returns an object"),
-    }
-}
-
 /// Sets `key` in `map`, or removes it when `value` is `null`.
 pub(crate) fn set_value(map: &mut WireMap, key: &str, value: Value) {
     if value.is_null() {
@@ -452,21 +444,56 @@ pub(crate) fn check<F: FnMut(&ToolIssue)>(
 /// Deserializes validated wire output into a generated type. Validation covers the builder's
 /// rules, not every loaded field's shape, so a loaded field of the wrong shape can still fail
 /// here; that is reported as a validation error, never a panic.
-pub(crate) fn to_model<T: DeserializeOwned>(
+pub(crate) fn to_model<T: DeserializeOwned + Serialize>(
     name: &str,
     mut wire: WireMap,
 ) -> Result<T, ToolValidationError> {
     // The generated config structs are the variants of a `type`-tagged enum, so they have no
     // `type` field of their own.
     wire.remove("type");
-    serde_json::from_value(canonical(&Value::Object(wire))).map_err(|err| ToolValidationError {
+    let wire = canonical(&Value::Object(wire));
+    let model: T = serde_json::from_value(wire.clone()).map_err(|err| ToolValidationError {
         tool_name: name.to_string(),
         issues: vec![ToolIssue::error(
             ToolIssueCode::InvalidModel,
             None,
             format!("The tool doesn't match the generated tool config model: {err}. A loaded field likely has the wrong shape; fix it in the source JSON"),
         )],
-    })
+    })?;
+    // A nullable literal's `null` constant is valid, but the generated model reads `null` as
+    // unset. Never drop it silently: report it, and point at `to_json()`, which keeps it.
+    let wanted = null_constants(&wire);
+    if wanted > 0 {
+        let kept = serde_json::to_value(&model).map_or(0, |v| null_constants(&v));
+        if kept < wanted {
+            return Err(ToolValidationError {
+                tool_name: name.to_string(),
+                issues: vec![ToolIssue::error(
+                    ToolIssueCode::ConstantTypeMismatch,
+                    None,
+                    "A schema has the constant null, which this SDK's generated request model can't send (it reads null as unset). Send the to_json() output directly, or use another constant",
+                )],
+            });
+        }
+    }
+    Ok(model)
+}
+
+/// How many schemas in `value` have `constant_value: null`. Free-form JSON values (constants and
+/// dynamic variable placeholders) aren't schemas, so they aren't searched.
+fn null_constants(value: &Value) -> usize {
+    match value {
+        Value::Object(map) => map
+            .iter()
+            .map(|(key, v)| match key.as_str() {
+                "constant_value" => usize::from(v.is_null()),
+                "dynamic_variable_placeholders" => 0,
+                _ => null_constants(v),
+            })
+            .sum(),
+        Value::Array(items) => items.iter().map(null_constants).sum(),
+        _ => 0,
+    }
 }
 
 /// The public methods every editable tool kind shares. The type it's used in provides `config`

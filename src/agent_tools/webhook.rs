@@ -9,8 +9,8 @@ use crate::api::types::WebhookToolConfigInput;
 use super::errors::{ToolIssue, ToolIssueCode};
 use super::header::{AuthConnection, Header};
 use super::options::{AssignOptions, ToolOptions};
-use super::schema::{kind_of, ObjectSchema, Schema, SchemaKind, WireMap};
-use super::tool::{accepted_options, object_schema, set_config_option, set_value, tool_methods};
+use super::schema::{container_schema, kind_of, ObjectSchema, Schema, SchemaKind, WireMap};
+use super::tool::{accepted_options, set_config_option, set_value, tool_methods};
 use super::validate::check_schema;
 use super::ToolKind;
 
@@ -59,7 +59,8 @@ pub struct WebhookTool {
     /// The `api_schema` fields not kept below: url, method, auth, content type and so on.
     api: WireMap,
     path_params: Vec<(String, Schema)>,
-    query: Option<ObjectSchema>,
+    /// An object, unless a loaded config declared another type (reported by `build()`).
+    query: Option<Schema>,
     body: Option<Schema>,
     response: Option<Schema>,
     headers: Vec<(String, Value)>,
@@ -95,15 +96,15 @@ impl WebhookTool {
             api.remove("path_params_schema");
         }
         if let Some(Value::Object(query)) = api.get("query_params_schema") {
-            tool.query = Some(object_schema(query));
+            tool.query = Some(container_schema(query));
             api.remove("query_params_schema");
         }
         if let Some(Value::Object(body)) = api.get("request_body_schema") {
-            tool.body = Some(object_schema(body).into());
+            tool.body = Some(container_schema(body));
             api.remove("request_body_schema");
         }
         if let Some(Value::Object(response)) = api.get("response_body_schema") {
-            tool.response = Some(object_schema(response).into());
+            tool.response = Some(container_schema(response));
             api.remove("response_body_schema");
         }
         if let Some(Value::Object(headers)) = api.get("request_headers") {
@@ -163,8 +164,12 @@ impl WebhookTool {
     /// Sets the query param `name`. Required unless the schema is `optional()`. Literal schemas
     /// only.
     pub fn query_param(mut self, name: impl Into<String>, schema: impl Into<Schema>) -> Self {
-        let query = self.query.take().unwrap_or_else(Schema::object);
-        self.query = Some(query.property(name, schema));
+        self.query = match self.query.take() {
+            None => Some(Schema::object().property(name, schema).into()),
+            Some(Schema::Object(query)) => Some(query.property(name, schema).into()),
+            // A loaded query schema that isn't an object is kept as loaded; build() reports it.
+            other => other,
+        };
         self
     }
 
@@ -238,7 +243,17 @@ impl WebhookTool {
 
     /// Removes the query param `name`. Does nothing if there is none.
     pub fn remove_query_param(mut self, name: &str) -> Self {
-        self.query = self.query.map(|query| query.without(name));
+        if let Some(Schema::Object(query)) = &self.query {
+            if query.property_schema(name).is_some() {
+                let query = query.clone().without(name);
+                // Removing the last query param leaves `query_params_schema` out.
+                self.query = if query.property_names().is_empty() {
+                    None
+                } else {
+                    Some(query.into())
+                };
+            }
+        }
         self
     }
 
@@ -251,8 +266,14 @@ impl WebhookTool {
     /// Removes every assignment to `variable`. Does nothing if there is none.
     pub fn remove_assignment(mut self, variable: &str) -> Self {
         if let Some(Value::Array(assignments)) = self.config.get_mut("assignments") {
+            let before = assignments.len();
             assignments
                 .retain(|a| a.get("dynamic_variable").and_then(Value::as_str) != Some(variable));
+            // Removing the last assignment leaves `assignments` out; a loaded `[]` that is never
+            // edited round-trips.
+            if assignments.is_empty() && before > 0 {
+                self.config.remove("assignments");
+            }
         }
         self
     }
@@ -295,7 +316,12 @@ impl WebhookTool {
         let mut issues = Vec::new();
         let error =
             |code, path: Option<&str>, message: String| ToolIssue::error(code, path, message);
-        let url = self.api.get("url").and_then(Value::as_str);
+        // The API reads an empty URL as unset.
+        let url = self
+            .api
+            .get("url")
+            .and_then(Value::as_str)
+            .filter(|url| !url.is_empty());
         if url.is_none() {
             issues.push(error(
                 ToolIssueCode::MissingUrl,
@@ -350,6 +376,15 @@ impl WebhookTool {
             check_schema(schema.state(), &path, true, &mut issues);
         }
         if let Some(query) = &self.query {
+            if query.kind() != SchemaKind::Object {
+                issues.push(error(
+                    ToolIssueCode::BodyNotObject,
+                    Some("query"),
+                    "The query params schema must be an object".into(),
+                ));
+            }
+        }
+        if let Some(query) = self.query.as_ref().and_then(Schema::as_object) {
             for name in query.property_names() {
                 let schema = query.property_schema(name).expect("listed property exists");
                 let path = format!("query.{name}");
@@ -396,6 +431,7 @@ impl WebhookTool {
         let query_names = self
             .query
             .as_ref()
+            .and_then(Schema::as_object)
             .map(ObjectSchema::property_names)
             .unwrap_or_default();
         let body_names = self
@@ -472,16 +508,13 @@ impl WebhookTool {
             api.insert("path_params_schema".into(), Value::Object(params));
         }
         if let Some(query) = &self.query {
-            // The API's query schema has only `properties` and `required`.
-            let model = query.to_model();
-            if let Some(properties) = model.get("properties") {
-                let mut schema = WireMap::new();
-                schema.insert("properties".into(), properties.clone());
-                if let Some(required) = model.get("required") {
-                    schema.insert("required".into(), required.clone());
-                }
-                api.insert("query_params_schema".into(), Value::Object(schema));
+            // The API's query schema has no `type`: leave out the one the builder writes, and
+            // keep every loaded field (a loaded `type` included).
+            let mut model = query.to_model();
+            if !query.state().type_loaded {
+                model.remove("type");
             }
+            api.insert("query_params_schema".into(), Value::Object(model));
         }
         if let Some(body) = &self.body {
             api.insert("request_body_schema".into(), Value::Object(body.to_model()));

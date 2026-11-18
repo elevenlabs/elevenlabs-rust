@@ -48,6 +48,8 @@ pub(crate) struct SchemaState {
     /// A loaded literal's `type`, kept as is (the API also allows a list such as
     /// `["integer", "null"]`).
     pub literal_type: Option<Value>,
+    /// Whether the loaded schema declared a `type` (otherwise the builder writes one).
+    pub type_loaded: bool,
     pub description: Option<String>,
     pub dynamic_variable: Option<String>,
     /// `Some` when a constant is set; the value itself may be `null`.
@@ -71,6 +73,7 @@ impl SchemaState {
         Self {
             kind,
             literal_type: None,
+            type_loaded: false,
             description: None,
             dynamic_variable: None,
             constant: None,
@@ -288,15 +291,6 @@ pub struct ObjectSchema {
 
 impl ObjectSchema {
     common_schema_methods!();
-
-    pub(crate) fn state(&self) -> &SchemaState {
-        &self.state
-    }
-
-    /// The schema in wire format, unsorted.
-    pub(crate) fn to_model(&self) -> WireMap {
-        self.state.to_model()
-    }
 
     /// Adds the property `name`, or replaces it in place if it exists.
     pub fn property(mut self, name: impl Into<String>, schema: impl Into<Schema>) -> Self {
@@ -632,7 +626,16 @@ impl Schema {
                 None => {}
             }
         }
-        state.constant = set("constant_value").cloned();
+        // `null` is absent, except as the constant of a literal whose type list includes "null".
+        let null_constant = kind.is_literal()
+            && model.get("constant_value") == Some(&Value::Null)
+            && is_nullable(model.get("type"));
+        state.constant = if null_constant {
+            Some(Value::Null)
+        } else {
+            set("constant_value").cloned()
+        };
+        state.type_loaded = model.get("type").is_some_and(|t| !t.is_null());
         state.omitted = model.get("is_omitted") == Some(&Value::Bool(true));
         state.extra = extra;
         match kind {
@@ -759,13 +762,31 @@ fn constraint_groups(value: Option<&Value>) -> Vec<Vec<String>> {
         .unwrap_or_default()
 }
 
+/// Whether a literal's `type` is a list that includes `"null"`, e.g. `["integer", "null"]`.
+pub(crate) fn is_nullable(ty: Option<&Value>) -> bool {
+    ty.and_then(Value::as_array)
+        .is_some_and(|types| types.iter().any(|t| t.as_str() == Some("null")))
+}
+
+/// Loads a schema the API only allows to be an object (a tool's params, query, body or
+/// response). One with no `type` is an object, even when empty; a declared `type` is kept as
+/// loaded, so validation can report a schema that isn't an object.
+pub(crate) fn container_schema(model: &WireMap) -> Schema {
+    let kind = match model.get("type") {
+        None | Some(Value::Null) => SchemaKind::Object,
+        Some(_) => kind_of(model),
+    };
+    Schema::from_model(model, false, kind)
+}
+
 /// Drops `null` object entries at every level, as the other SDKs' serializers read them as
-/// absent. Free-form JSON values (constants, dynamic variable placeholders) are kept as they are.
+/// absent. Free-form JSON values (constants, dynamic variable placeholders) are kept as they are,
+/// and so is a `null` constant, which `Schema::from_model` keeps for a nullable literal.
 pub(crate) fn strip_nulls(value: Value) -> Value {
     match value {
         Value::Object(map) => Value::Object(
             map.into_iter()
-                .filter(|(_, v)| !v.is_null())
+                .filter(|(key, v)| !v.is_null() || key == "constant_value")
                 .map(|(key, v)| {
                     let free_form =
                         key == "constant_value" || key == "dynamic_variable_placeholders";

@@ -407,13 +407,62 @@ fn accepts_a_constant_of_a_nullable_literal_type_and_writes_the_type_back() {
 }
 
 #[test]
-fn accepts_a_null_constant_only_for_a_nullable_literal_type() {
+fn a_null_constant_of_a_nullable_literal_round_trips_and_build_does_not_drop_it() {
+    // Loaded: `constant_value: null` survives from_json -> to_json, and reloading it.
+    let raw = json!({
+        "description": "T",
+        "name": "t",
+        "parameters": {
+            "properties": { "x": { "constant_value": null, "type": ["integer", "null"] } },
+            "required": ["x"],
+            "type": "object"
+        },
+        "type": "client"
+    });
+    let tool = Tool::from_json(&raw);
+    assert_eq!(tool.to_json().unwrap(), raw);
+    let reloaded = Tool::from_json(&tool.to_json().unwrap());
+    assert_eq!(reloaded.to_json().unwrap(), raw);
+    // The generated request model reads null as unset, so build() reports it instead of
+    // silently sending a param with no value source.
+    let err = tool.build().unwrap_err();
+    assert_eq!(err.codes(), ["constant_type_mismatch"]);
+    assert!(err.issues[0].message.contains("to_json()"));
+    assert_eq!(codes_of(tool.build_config()), ["constant_type_mismatch"]);
+
+    // Built in code: the same.
     let nullable = Schema::from_json(&json!({ "type": ["integer", "null"] })).constant(Value::Null);
-    assert!(Tool::client("t", "T").param("x", nullable).build().is_ok());
+    let tool = Tool::client("t", "T").param("x", nullable);
+    assert_eq!(
+        tool.to_json().unwrap()["parameters"]["properties"]["x"],
+        json!({ "constant_value": null, "type": ["integer", "null"] })
+    );
+    assert_eq!(codes_of(tool.build()), ["constant_type_mismatch"]);
+
+    // A null constant is only valid on a nullable type.
     let plain = Schema::integer().constant(Value::Null);
     assert_eq!(
         codes_of(Tool::client("t", "T").param("x", plain).build()),
         ["constant_type_mismatch"]
+    );
+}
+
+#[test]
+fn a_loaded_null_constant_of_a_non_nullable_literal_is_absent() {
+    let tool = Tool::from_json(&json!({
+        "name": "t",
+        "description": "T",
+        "type": "client",
+        "parameters": {
+            "type": "object",
+            "properties": { "x": { "type": "string", "description": "X", "constant_value": null } },
+            "required": ["x"]
+        }
+    }));
+    assert!(tool.build().is_ok());
+    assert_eq!(
+        tool.to_json().unwrap()["parameters"]["properties"]["x"],
+        json!({ "description": "X", "type": "string" })
     );
 }
 
@@ -751,4 +800,225 @@ fn a_loaded_field_of_the_wrong_shape_is_a_validation_error_not_a_panic() {
     assert_eq!(codes_of(tool.build()), ["invalid_model"]);
     // The canonical JSON still round-trips.
     assert_eq!(tool.to_json().unwrap(), raw);
+}
+
+// ---- review fixes: rules shared by every SDK ----------------------------------------------
+
+#[test]
+fn removing_the_last_assignment_leaves_assignments_out() {
+    let tool = get_order()
+        .assign("a", "a", Default::default())
+        .remove_assignment("a");
+    assert!(tool.to_json().unwrap().get("assignments").is_none());
+    assert_eq!(tool.to_json().unwrap(), get_order().to_json().unwrap());
+}
+
+#[test]
+fn a_loaded_empty_assignments_list_round_trips_unless_edited() {
+    let mut raw = get_order().to_json().unwrap();
+    raw["assignments"] = json!([]);
+    let tool = Tool::from_json(&raw).into_webhook().unwrap();
+    assert_eq!(tool.to_json().unwrap(), raw);
+    // Removing a variable that isn't there changes nothing.
+    assert_eq!(tool.remove_assignment("missing").to_json().unwrap(), raw);
+}
+
+#[test]
+fn removing_the_last_client_param_leaves_parameters_out() {
+    let tool = Tool::client("show", "Show")
+        .param("a", Schema::string().describe("A"))
+        .remove_param("a");
+    assert!(tool.parameters_schema().is_none());
+    assert_eq!(
+        tool.to_json().unwrap(),
+        json!({ "description": "Show", "name": "show", "type": "client" })
+    );
+    // Removing a param that isn't there changes nothing.
+    let one = Tool::client("show", "Show").param("a", Schema::string().describe("A"));
+    assert_eq!(
+        one.clone().remove_param("missing").to_json().unwrap(),
+        one.to_json().unwrap()
+    );
+}
+
+#[test]
+fn loaded_empty_parameters_round_trip_unless_edited() {
+    let raw = json!({
+        "description": "T",
+        "name": "t",
+        "parameters": { "type": "object" },
+        "type": "client"
+    });
+    let tool = Tool::from_json(&raw).into_client().unwrap();
+    assert_eq!(tool.to_json().unwrap(), raw);
+    assert_eq!(tool.remove_param("missing").to_json().unwrap(), raw);
+}
+
+#[test]
+fn an_empty_url_is_missing() {
+    assert_eq!(
+        codes_of(Tool::webhook("t", "T").get("").build()),
+        ["missing_url"]
+    );
+    let loaded = Tool::from_json(&json!({
+        "name": "t",
+        "description": "T",
+        "type": "webhook",
+        "api_schema": { "method": "GET", "url": "" }
+    }));
+    assert_eq!(codes_of(loaded.build()), ["missing_url"]);
+}
+
+#[test]
+fn a_loaded_body_or_response_of_another_type_is_kept_and_reported() {
+    let not_object = json!({ "type": "string", "description": "X" });
+    let tool = Tool::from_json(&json!({
+        "name": "t",
+        "description": "T",
+        "type": "webhook",
+        "api_schema": {
+            "method": "POST",
+            "url": "https://api.example.com/t",
+            "request_body_schema": not_object,
+            "response_body_schema": not_object
+        }
+    }))
+    .into_webhook()
+    .unwrap();
+    assert_eq!(tool.body_schema().unwrap().kind(), SchemaKind::String);
+    assert_eq!(tool.body_schema().unwrap().to_json(), not_object);
+    assert_eq!(tool.response_schema().unwrap().kind(), SchemaKind::String);
+    assert_eq!(
+        paths_of(tool.build()),
+        [
+            ("body_not_object", Some("body".to_string())),
+            ("body_not_object", Some("response".to_string())),
+        ]
+    );
+}
+
+#[test]
+fn loaded_client_params_of_another_type_are_kept_and_reported() {
+    let tool = Tool::from_json(&json!({
+        "name": "t",
+        "description": "T",
+        "type": "client",
+        "parameters": { "type": "string", "description": "X" }
+    }))
+    .into_client()
+    .unwrap();
+    assert!(tool.parameters_schema().is_none());
+    // Adding a param doesn't rewrite them as an object either.
+    let tool = tool.param("y", Schema::string().describe("Y"));
+    assert_eq!(
+        paths_of(tool.build()),
+        [("body_not_object", Some("params".to_string()))]
+    );
+}
+
+#[test]
+fn a_loaded_query_schema_of_another_type_is_kept_and_reported() {
+    let tool = Tool::from_json(&json!({
+        "name": "t",
+        "description": "T",
+        "type": "webhook",
+        "api_schema": {
+            "method": "GET",
+            "url": "https://api.example.com/t",
+            "query_params_schema": { "type": "string", "description": "X" }
+        }
+    }));
+    assert_eq!(
+        paths_of(tool.build()),
+        [("body_not_object", Some("query".to_string()))]
+    );
+}
+
+#[test]
+fn a_loaded_empty_schema_is_a_valid_empty_object() {
+    let tool = Tool::from_json(&json!({
+        "name": "t",
+        "description": "T",
+        "type": "webhook",
+        "api_schema": {
+            "method": "POST",
+            "url": "https://api.example.com/t",
+            "request_body_schema": {},
+            "response_body_schema": {},
+            "query_params_schema": {}
+        }
+    }));
+    assert!(tool.build().is_ok());
+    // Body and response get `"type": "object"`, as in JS; the query schema's type stays
+    // synthetic, so none is written.
+    let api = &tool.to_json().unwrap()["api_schema"];
+    assert_eq!(api["request_body_schema"], json!({ "type": "object" }));
+    assert_eq!(api["response_body_schema"], json!({ "type": "object" }));
+    assert_eq!(api["query_params_schema"], json!({}));
+    let client = Tool::from_json(&json!({
+        "name": "t", "description": "T", "type": "client", "parameters": {}
+    }));
+    assert!(client.build().is_ok());
+    assert_eq!(
+        client.to_json().unwrap()["parameters"],
+        json!({ "type": "object" })
+    );
+    // And after an edit.
+    let edited = client
+        .into_client()
+        .unwrap()
+        .param("x", Schema::string().describe("X"));
+    assert_eq!(
+        edited.to_json().unwrap()["parameters"]["type"],
+        json!("object")
+    );
+}
+
+#[test]
+fn a_loaded_query_schema_keeps_every_loaded_field() {
+    let query = json!({
+        "description": "",
+        "properties": { "q": { "description": "Query", "type": "string" } },
+        "required": ["q"],
+        "x_custom": { "kept": true }
+    });
+    let raw = json!({
+        "api_schema": {
+            "method": "GET",
+            "query_params_schema": query,
+            "url": "https://api.example.com/search"
+        },
+        "description": "Search",
+        "name": "search",
+        "type": "webhook"
+    });
+    let tool = Tool::from_json(&raw).into_webhook().unwrap();
+    assert_eq!(tool.to_json().unwrap(), raw);
+    // Extra fields survive an edit, and no `type` is added.
+    let edited = tool.query_param("limit", Schema::integer().constant(10));
+    let written = &api_schema(&edited)["query_params_schema"];
+    assert_eq!(written["x_custom"], json!({ "kept": true }));
+    assert_eq!(written["description"], json!(""));
+    assert!(written.get("type").is_none());
+    assert_eq!(written["required"], json!(["q", "limit"]));
+}
+
+#[test]
+fn a_loaded_query_schema_with_extra_fields_but_no_properties_round_trips() {
+    for query in [
+        json!({ "required": [], "x_custom": 1 }),
+        json!({ "properties": {}, "type": "object" }),
+    ] {
+        let raw = json!({
+            "api_schema": {
+                "method": "GET",
+                "query_params_schema": query,
+                "url": "https://api.example.com/search"
+            },
+            "description": "Search",
+            "name": "search",
+            "type": "webhook"
+        });
+        assert_eq!(Tool::from_json(&raw).to_json().unwrap(), raw);
+    }
 }
