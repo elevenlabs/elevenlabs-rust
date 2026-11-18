@@ -204,6 +204,65 @@ match client.text_to_speech.convert("JBFqnCBsd6RMkjVDRZzb", &request, None).awai
 }
 ```
 
+## Agent tools as code
+
+`agent_tools` builds agent tools (webhook, client and system tools) in code. `build()` validates the
+tool and returns the `ToolRequestModel` that `client.tools.create` and `client.tools.update` accept;
+`to_json_string()` returns the same config as canonical JSON (sorted keys, 2-space indent), the
+format of the CLI's `tool_configs/*.json` files, so tools can be reviewed and stored in git.
+
+```rust
+use elevenlabs_rust_sdk::agent_tools::{
+    Destination, Header, Schema, SystemTool, Tool, ToolOptions,
+};
+
+let get_order = Tool::webhook("get_order", "Look up an order by the number the caller gives")
+    .get("https://api.example.com/orders/{order_id}")
+    .path_param("order_id", Schema::string().describe("The order number, e.g. A-1042"))
+    .query_param("include", Schema::string().constant("items"))
+    .header("Authorization", Header::secret("sec_orders_api"))
+    .assign("order_status", "order.status", Default::default())
+    .options(ToolOptions::new().set("response_timeout_secs", 10).set("pre_tool_speech", "force"));
+
+let refund = Tool::webhook("issue_refund", "Refund an order the caller asked to return")
+    .post("https://api.example.com/refunds")
+    .body(
+        Schema::object()
+            .property("order_id", Schema::string().from_variable("order_id"))
+            .property(
+                "reason",
+                Schema::string()
+                    .describe("Why the caller wants a refund")
+                    .choices(["damaged", "late", "other"]),
+            )
+            .property("note", Schema::string().describe("Anything else the caller said").optional()),
+    );
+
+let transfer = SystemTool::transfer_to_number(Default::default())
+    .transfer("Caller asks for billing", Destination::phone("+15551234567"), Default::default())
+    .transfer(
+        "Caller asks for a manager",
+        Destination::sip_variable("manager_sip"),
+        ToolOptions::new().set("transfer_type", "sip_refer"),
+    );
+
+let created = client.tools.create(&get_order.build()?, None).await?;
+std::fs::write("tool_configs/issue_refund.json", refund.to_json_string()?)?;
+let built_in_entry = transfer.build_config()?; // for the agent's prompt.built_in_tools
+```
+
+- Every literal param needs exactly one value source: `describe` (the LLM fills it in),
+  `from_variable`, `constant`, `system_provided` or `omit`. Params are required unless marked
+  `optional()`.
+- Options use the API field names in snake_case (`response_timeout_secs`, `content_type`,
+  `expects_response`, `transfer_type`...). A value can be plain JSON or one of the SDK's generated
+  enums.
+- `build()` reports every problem at once in a `ToolValidationError` (`err.issues`, each with a
+  `code` such as `missing_path_param` and a `path`) instead of failing on the first one.
+- `Tool::from_json` loads a tool config (or a `tools.get()` response with `Tool::from_response`) for
+  editing: `into_webhook()`, `into_client()` and `into_system()` return the typed tool. Fields the
+  builder doesn't model, and tools of types it can't edit, are written back unchanged.
+
 ## Webhooks
 
 ElevenLabs signs every webhook it sends with your webhook secret. Use `webhooks::construct_event`
