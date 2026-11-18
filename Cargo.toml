@@ -11,7 +11,11 @@ categories = ["api-bindings"]
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+# `preserve_order`: the agent_workflows builder loads workflows preserving the document order of
+# the `nodes`/`edges` objects (required for byte-identical output across SDKs). This only changes
+# the key order of free-form `serde_json::Value` objects, which carry no sorted-order contract;
+# the builder sorts keys explicitly when emitting canonical JSON.
+serde_json = { version = "1", features = ["preserve_order"] }
 reqwest = { version = "0.12.4", default-features = false, features = ["json", "rustls-tls", "http2", "multipart", "stream"] }
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "time", "net", "sync"] }
 thiserror = "2"
