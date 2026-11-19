@@ -25,7 +25,8 @@ mod layout;
 mod node;
 mod node_types;
 mod validate;
-mod wire;
+// Shared with the agent_tools builder, which writes the same canonical JSON.
+pub(crate) mod wire;
 mod workflow;
 
 pub use condition::{Condition, ConditionInput};

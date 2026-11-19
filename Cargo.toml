@@ -15,7 +15,10 @@ serde = { version = "1", features = ["derive"] }
 # the `nodes`/`edges` objects (required for byte-identical output across SDKs). This only changes
 # the key order of free-form `serde_json::Value` objects, which carry no sorted-order contract;
 # the builder sorts keys explicitly when emitting canonical JSON.
-serde_json = { version = "1", features = ["preserve_order"] }
+# `float_roundtrip`: the agent_tools builder reloads its own `to_json_string()` output, so every
+# float must parse back to the exact f64 it was written from (the default parser can be one ulp
+# off for long numbers such as `123456789012345680000`).
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
 reqwest = { version = "0.12.4", default-features = false, features = ["json", "rustls-tls", "http2", "multipart", "stream"] }
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "time", "net", "sync"] }
 thiserror = "2"

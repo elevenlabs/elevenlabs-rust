@@ -8,8 +8,16 @@ tests/agent_workflows_fixtures.rs
 tests/agent_workflows_backward.rs
 tests/fixtures/agent_workflows/
 
+# Hand-written agent-tools-as-code builder (webhook, client and system tools): a layer on top of
+# the generated client that the generator does not emit. Mirrors the TS/Python SDKs and passes the
+# shared conformance fixtures. Declared in src/lib.rs (`pub mod agent_tools;`), which is frozen below.
+src/agent_tools/
+tests/agent_tools_fixtures.rs
+tests/fixtures/agent_tools/
+
 # Frozen to protect the hand-written wiring Fern does not emit:
-#  - Cargo.toml: the serde_json `preserve_order` feature the builder needs for document-order loads.
+#  - Cargo.toml: the serde_json `preserve_order` feature the builder needs for document-order loads,
+#    and `float_roundtrip`, which the agent_tools builder needs to reload its floats exactly.
 #  - src/lib.rs: the `pub mod agent_workflows;` declaration (a crate-root module must be declared
 #    here). See the PR description for the proper fix (a Fern custom-module extension point).
 
