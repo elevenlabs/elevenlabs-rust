@@ -1022,3 +1022,251 @@ fn a_loaded_query_schema_with_extra_fields_but_no_properties_round_trips() {
         assert_eq!(Tool::from_json(&raw).to_json().unwrap(), raw);
     }
 }
+
+// ---- review fixes, round 2 ---------------------------------------------------------------------
+
+#[test]
+fn rejects_an_integer_constant_the_request_model_would_round() {
+    // Above i64::MAX, the generated constant union falls back to f64 and rounds it.
+    let big = 9_223_372_036_854_775_809_u64;
+    let tool = Tool::client("t", "T").param("id", Schema::integer().constant(big));
+    assert_eq!(
+        paths_of(tool.build()),
+        [("constant_type_mismatch", Some("params.id".to_string()))]
+    );
+    assert_eq!(codes_of(tool.to_json()), ["constant_type_mismatch"]);
+    let tool = Tool::client("t", "T").param("n", Schema::number().constant(u64::MAX));
+    assert_eq!(codes_of(tool.build()), ["constant_type_mismatch"]);
+    // Loaded the same.
+    let loaded = Tool::from_json_str(
+        r#"{"name":"t","description":"T","type":"client","parameters":{"type":"object",
+            "properties":{"id":{"type":"integer","constant_value":9223372036854775809}},
+            "required":["id"]}}"#,
+    )
+    .unwrap();
+    assert_eq!(codes_of(loaded.build()), ["constant_type_mismatch"]);
+    // i64::MAX, a negative integer and a whole float beyond i64 are all sent exactly.
+    for constant in [json!(i64::MAX), json!(i64::MIN), json!(1e19)] {
+        let schema = Schema::number().constant(constant.clone());
+        let tool = Tool::client("t", "T").param("n", schema);
+        let sent = serde_json::to_value(tool.build().unwrap()).unwrap();
+        assert_eq!(
+            sent["tool_config"]["parameters"]["properties"]["n"]["constant_value"],
+            constant
+        );
+    }
+    // Inside an array constant the value is free-form JSON, sent as is.
+    let tags = Schema::array(Schema::integer().describe("Tag")).constant(json!([big]));
+    let sent =
+        serde_json::to_value(Tool::client("t", "T").param("tags", tags).build().unwrap()).unwrap();
+    assert_eq!(
+        sent["tool_config"]["parameters"]["properties"]["tags"]["constant_value"],
+        json!([big])
+    );
+}
+
+#[test]
+fn a_null_constant_of_a_param_named_like_a_schema_field_is_still_reported() {
+    let nullable =
+        || Schema::from_json(&json!({ "type": ["string", "null"] })).constant(Value::Null);
+    for name in [
+        "constant_value",
+        "dynamic_variable_placeholders",
+        "properties",
+    ] {
+        let tool = Tool::client("t", "T").param(name, nullable());
+        assert_eq!(
+            paths_of(tool.build()),
+            [("constant_type_mismatch", Some(format!("params.{name}")))],
+            "{name}"
+        );
+        // to_json() keeps it, and it survives a reload.
+        let json = tool.to_json().unwrap();
+        assert_eq!(
+            json["parameters"]["properties"][name],
+            json!({ "constant_value": null, "type": ["string", "null"] })
+        );
+        assert_eq!(Tool::from_json(&json).to_json().unwrap(), json);
+
+        let webhook = Tool::webhook("t", "T")
+            .post(format!("https://api.example.com/{{{name}}}"))
+            .path_param(name, nullable())
+            .body(Schema::object().property("b", Schema::object().property(name, nullable())));
+        assert_eq!(
+            paths_of(webhook.build()),
+            [
+                (
+                    "constant_type_mismatch",
+                    Some(format!("path_params.{name}"))
+                ),
+                ("constant_type_mismatch", Some(format!("body.b.{name}"))),
+            ],
+            "{name}"
+        );
+        let json = webhook.to_json().unwrap();
+        assert_eq!(
+            json["api_schema"]["path_params_schema"][name]["constant_value"],
+            Value::Null
+        );
+    }
+    // Nested in the body, too.
+    let body = Schema::object().property(
+        "order",
+        Schema::object().property("constant_value", nullable()),
+    );
+    let tool = Tool::webhook("t", "T")
+        .post("https://api.example.com/t")
+        .body(body);
+    assert_eq!(
+        paths_of(tool.build()),
+        [(
+            "constant_type_mismatch",
+            Some("body.order.constant_value".to_string())
+        )]
+    );
+}
+
+#[test]
+fn a_loaded_null_property_is_absent_whatever_its_name() {
+    for name in ["x", "constant_value", "dynamic_variable_placeholders"] {
+        let tool = Tool::from_json(&json!({
+            "name": "t",
+            "description": "T",
+            "type": "client",
+            "parameters": {
+                "type": "object",
+                "properties": { "a": { "type": "string", "description": "A" }, name: null }
+            }
+        }));
+        assert!(tool.build().is_ok(), "{name}");
+        assert_eq!(
+            tool.to_json().unwrap()["parameters"]["properties"],
+            json!({ "a": { "description": "A", "type": "string" } })
+        );
+    }
+}
+
+#[test]
+fn a_modeled_schema_field_of_the_wrong_shape_is_kept_and_reported() {
+    let client = |parameters: Value| {
+        json!({
+            "description": "T",
+            "name": "t",
+            "parameters": parameters,
+            "type": "client"
+        })
+    };
+    for parameters in [
+        json!({ "properties": { "x": { "description": "X", "is_system_provided": "yes", "type": "string" } }, "type": "object" }),
+        json!({ "properties": { "x": { "description": "X", "is_omitted": "yes", "type": "string" } }, "type": "object" }),
+        json!({ "properties": { "x": { "description": "X", "type": "string" } }, "required": "x", "type": "object" }),
+        json!({ "properties": { "x": { "description": "X", "type": "string" } }, "required": ["x", 1], "type": "object" }),
+        json!({ "properties": "x", "type": "object" }),
+        json!({ "properties": { "x": 5 }, "required": ["x"], "type": "object" }),
+        json!({ "properties": { "x": { "description": "X", "type": "string" } }, "required_constraints": { "any_of": "x" }, "type": "object" }),
+        json!({ "properties": { "x": { "items": "x", "type": "array" } }, "type": "object" }),
+        json!({ "properties": { "x": { "allowed_values": "x", "description": "X", "type": "string" } }, "type": "object" }),
+    ] {
+        let raw = client(parameters);
+        let tool = Tool::from_json(&raw);
+        assert_eq!(codes_of(tool.build()), ["invalid_model"], "{raw}");
+        // to_json() writes the input back as loaded.
+        assert_eq!(tool.to_json().unwrap(), raw);
+    }
+}
+
+#[test]
+fn loaded_client_parameters_that_are_not_an_object_are_kept_and_reported() {
+    for parameters in [json!(42), json!("x"), json!([])] {
+        let raw = json!({
+            "description": "T",
+            "name": "t",
+            "parameters": parameters,
+            "type": "client"
+        });
+        let tool = Tool::from_json(&raw).into_client().unwrap();
+        assert!(tool.parameters_schema().is_none());
+        assert_eq!(codes_of(tool.build()), ["invalid_model"]);
+        assert_eq!(tool.to_json().unwrap(), raw);
+        // Adding a param doesn't replace them.
+        let edited = tool.param("y", Schema::string().describe("Y"));
+        assert_eq!(edited.to_json().unwrap(), raw);
+        assert_eq!(codes_of(edited.build()), ["invalid_model"]);
+    }
+}
+
+#[test]
+fn loaded_system_params_without_a_system_tool_type_are_kept_and_reported() {
+    for params in [
+        Some(json!([])),
+        Some(json!(42)),
+        Some(json!({})),
+        Some(json!({ "system_tool_type": 5 })),
+        Some(json!({ "system_tool_type": "" })),
+        None,
+    ] {
+        let mut raw = json!({ "name": "end_call", "type": "system" });
+        if let Some(params) = &params {
+            raw["params"] = params.clone();
+        }
+        let tool = Tool::from_json(&raw);
+        assert_eq!(
+            paths_of(tool.build()),
+            [("invalid_model", Some("params".to_string()))],
+            "{raw}"
+        );
+        assert_eq!(tool.to_json().unwrap(), raw);
+    }
+    // A system_tool_type the builder has no constructor for is still fine.
+    let raw =
+        json!({ "name": "x", "params": { "system_tool_type": "end_procedure" }, "type": "system" });
+    assert!(Tool::from_json(&raw).build().is_ok());
+}
+
+#[test]
+fn a_path_param_is_required_even_when_marked_optional() {
+    let tool = Tool::webhook("t", "T")
+        .get("https://api.example.com/{id}")
+        .path_param("id", Schema::string().omit().optional());
+    assert_eq!(
+        paths_of(tool.build()),
+        [("omitted_required", Some("path_params.id".to_string()))]
+    );
+    // optional() alone is a no-op: the reloaded JSON is the same and builds.
+    let tool = Tool::webhook("t", "T")
+        .get("https://api.example.com/{id}")
+        .path_param("id", Schema::string().describe("Id").optional());
+    let json = tool.to_json().unwrap();
+    assert!(tool.build().is_ok());
+    let reloaded = Tool::from_json(&json);
+    assert!(reloaded.build().is_ok());
+    assert_eq!(reloaded.to_json().unwrap(), json);
+}
+
+#[test]
+fn to_json_string_formats_numbers_as_the_js_sdk_does() {
+    let tool = Tool::client("t", "T")
+        .param("a", Schema::number().constant(1e-7))
+        .param("b", Schema::number().constant(1.5e-7))
+        .param("c", Schema::number().constant(1e21))
+        .param("d", Schema::number().constant(123456789012345680000.0))
+        .param("e", Schema::number().constant(0.000001));
+    let out = tool.clone().to_json_string().unwrap();
+    for (name, js) in [
+        ("a", "1e-7"),
+        ("b", "1.5e-7"),
+        ("c", "1e+21"),
+        ("d", "123456789012345680000"),
+        ("e", "0.000001"),
+    ] {
+        let line = format!(
+            "\"{name}\": {{\n        \"constant_value\": {js},\n        \"type\": \"number\"\n      }}"
+        );
+        assert!(out.contains(&line), "{name}: {out}");
+    }
+    // And it loads back to the same values. (Not checked for "d": serde_json's default parser
+    // isn't correctly rounded for every long number; it reads it one ulp off.)
+    let out = tool.remove_param("d").to_json_string().unwrap();
+    let reloaded = Tool::from_json_str(&out).unwrap();
+    assert_eq!(reloaded.to_json_string().unwrap(), out);
+}

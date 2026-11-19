@@ -21,6 +21,7 @@
 mod client;
 mod errors;
 mod header;
+mod json;
 mod options;
 mod schema;
 mod system;

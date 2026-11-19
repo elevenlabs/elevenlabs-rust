@@ -11,7 +11,7 @@ use super::header::{AuthConnection, Header};
 use super::options::{AssignOptions, ToolOptions};
 use super::schema::{container_schema, kind_of, ObjectSchema, Schema, SchemaKind, WireMap};
 use super::tool::{accepted_options, set_config_option, set_value, tool_methods};
-use super::validate::check_schema;
+use super::validate::{check_model_shape, check_schema};
 use super::ToolKind;
 
 pub(crate) const COMMON_OPTIONS: &[&str] = &[
@@ -373,7 +373,16 @@ impl WebhookTool {
                     format!("Path param \"{name}\" must be a string, integer, number or bool"),
                 ));
             }
-            check_schema(schema.state(), &path, true, &mut issues);
+            // A path param is always required (the URL needs it), whatever `optional()` says:
+            // the API schema has no `required` list for path params to leave it out of.
+            if schema.state().omitted {
+                issues.push(error(
+                    ToolIssueCode::OmittedRequired,
+                    Some(&path),
+                    format!("Path param \"{name}\" can't use omit(): the URL always needs it"),
+                ));
+            }
+            check_schema(schema.state(), &path, false, &mut issues);
         }
         if let Some(query) = &self.query {
             if query.kind() != SchemaKind::Object {
@@ -493,6 +502,23 @@ impl WebhookTool {
                 Some("follow_redirects"),
                 "follow_redirects needs follow_redirects_allowed_domains".into(),
             ));
+        }
+        issues
+    }
+
+    fn model_issues(&self) -> Vec<ToolIssue> {
+        let mut issues = Vec::new();
+        for (name, schema) in &self.path_params {
+            check_model_shape(schema.state(), &format!("path_params.{name}"), &mut issues);
+        }
+        for (label, schema) in [
+            ("query", &self.query),
+            ("body", &self.body),
+            ("response", &self.response),
+        ] {
+            if let Some(schema) = schema {
+                check_model_shape(schema.state(), label, &mut issues);
+            }
         }
         issues
     }

@@ -61,6 +61,14 @@ pub(crate) fn check_schema(
                 ToolIssueCode::ConstantTypeMismatch,
                 format!("\"{path}\" can't have \"\" as a constant: the API reads it as unset"),
             ));
+        } else if s.kind.is_literal() && constant.is_u64() && !constant.is_i64() {
+            // The request model holds a literal constant as an i64 or an f64, so an integer above
+            // i64::MAX would be rounded to the nearest f64 and `build()` would send a different
+            // value from `to_json()`.
+            issues.push(error(
+                ToolIssueCode::ConstantTypeMismatch,
+                format!("\"{path}\" has the constant {constant}, which is above {} and can't be sent exactly", i64::MAX),
+            ));
         }
     }
     // The API rejects a literal with no value source wherever it appears, response schemas too.
@@ -88,6 +96,8 @@ pub(crate) fn check_schema(
             }
         }
         SchemaKind::Array => match &s.items {
+            // Loaded items of the wrong shape are reported by build() as invalid_model.
+            None if s.malformed.contains(&"items") => {}
             None => issues.push(error(
                 ToolIssueCode::MissingArrayItems,
                 format!("Array \"{path}\" has no items schema"),
@@ -118,5 +128,23 @@ fn matches_kind(kind: SchemaKind, value: &Value, nullable: bool) -> bool {
         SchemaKind::Boolean => value.is_boolean(),
         SchemaKind::Object => value.is_object(),
         SchemaKind::Array => value.is_array(),
+    }
+}
+
+/// Reports each loaded field under a schema that has the wrong shape for the generated request
+/// model (kept as loaded, so `to_json()` writes it back), as `invalid_model`.
+pub(crate) fn check_model_shape(s: &SchemaState, path: &str, issues: &mut Vec<ToolIssue>) {
+    for key in &s.malformed {
+        issues.push(ToolIssue::error(
+            ToolIssueCode::InvalidModel,
+            Some(path),
+            format!("\"{path}\" has a loaded {key} of the wrong shape, which the generated tool config model can't take. Fix it in the source JSON"),
+        ));
+    }
+    for (name, child) in &s.properties {
+        check_model_shape(child.state(), &format!("{path}.{name}"), issues);
+    }
+    if let Some(items) = &s.items {
+        check_model_shape(items.state(), &format!("{path}[]"), issues);
     }
 }

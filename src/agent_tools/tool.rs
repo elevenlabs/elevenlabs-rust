@@ -4,11 +4,12 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::Value;
 
-use crate::agent_workflows::wire::{canonical, to_json_string};
+use crate::agent_workflows::wire::canonical;
 use crate::api::types::{ToolRequestModel, ToolRequestModelToolConfig, ToolResponseModel};
 
 use super::client::ClientTool;
 use super::errors::{Severity, ToolIssue, ToolIssueCode, ToolValidationError};
+use super::json::to_json_string;
 use super::options::ToolOptions;
 use super::schema::{container_schema, strip_nulls, WireMap};
 use super::system::SystemTool;
@@ -113,21 +114,37 @@ impl Tool {
                 Tool::Webhook(WebhookTool::load(config, api))
             }
             Some("client") => {
-                let parameters = config.remove("parameters").map(|params| {
-                    let params = params.as_object().cloned().unwrap_or_default();
-                    container_schema(&params)
-                });
+                // Params that aren't an object stay in `config`, written back as loaded, and
+                // build() reports them (`invalid_model`).
+                let parameters = match config.get("parameters") {
+                    Some(Value::Object(params)) => Some(container_schema(params)),
+                    _ => None,
+                };
+                if parameters.is_some() {
+                    config.remove("parameters");
+                }
                 Tool::Client(ClientTool::load(config, parameters))
             }
             _ => {
-                let mut params = match config.remove("params") {
-                    Some(Value::Object(params)) => params,
-                    _ => WireMap::new(),
+                // Params that aren't an object with a `system_tool_type` (or are missing) stay
+                // in `config`, written back as loaded, and build() reports them
+                // (`invalid_model`): the generated params enum's catch-all would accept them.
+                let well_formed = config
+                    .get("params")
+                    .and_then(Value::as_object)
+                    .and_then(|params| params.get("system_tool_type"))
+                    .and_then(Value::as_str)
+                    .is_some_and(|t| !t.is_empty());
+                if !well_formed {
+                    return Tool::System(SystemTool::load_malformed(config));
+                }
+                let Some(Value::Object(mut params)) = config.remove("params") else {
+                    unreachable!("checked above");
                 };
-                let system_tool_type = params
-                    .remove("system_tool_type")
-                    .and_then(|t| t.as_str().map(str::to_string))
-                    .unwrap_or_default();
+                let system_tool_type = match params.remove("system_tool_type") {
+                    Some(Value::String(t)) => t,
+                    _ => unreachable!("checked above"),
+                };
                 Tool::System(SystemTool::load(system_tool_type, config, params))
             }
         }
@@ -460,44 +477,134 @@ pub(crate) fn to_model<T: DeserializeOwned + Serialize>(
             format!("The tool doesn't match the generated tool config model: {err}. A loaded field likely has the wrong shape; fix it in the source JSON"),
         )],
     })?;
-    // A nullable literal's `null` constant is valid, but the generated model reads `null` as
-    // unset. Never drop it silently: report it, and point at `to_json()`, which keeps it.
-    let wanted = null_constants(&wire);
-    if wanted > 0 {
-        let kept = serde_json::to_value(&model).map_or(0, |v| null_constants(&v));
-        if kept < wanted {
+    // The generated model must send every constant exactly as `to_json()` writes it. It doesn't
+    // for a nullable literal's `null` constant (it reads `null` as unset), and validation can't
+    // foresee every other conversion, so compare: never change or drop a constant silently.
+    let wanted = constants(&wire);
+    if !wanted.is_empty() {
+        let sent = serde_json::to_value(&model).map_or_else(|_| Vec::new(), |v| constants(&v));
+        let issues: Vec<ToolIssue> = wanted
+            .into_iter()
+            .filter_map(|(path, value)| {
+                let sent = sent.iter().find(|(p, _)| *p == path).map(|(_, v)| v);
+                if sent == Some(&value) {
+                    return None;
+                }
+                let at = display_path(&path);
+                let message = match sent {
+                    _ if value.is_null() => format!("\"{at}\" has the constant null, which this SDK's generated request model can't send (it reads null as unset). Send the to_json() output directly, or use another constant"),
+                    Some(sent) => format!("\"{at}\" has the constant {value}, which this SDK's generated request model would send as {sent}. Use a constant it can represent exactly"),
+                    None => format!("\"{at}\" has the constant {value}, which this SDK's generated request model would drop. Send the to_json() output directly, or use another constant"),
+                };
+                Some(ToolIssue::error(
+                    ToolIssueCode::ConstantTypeMismatch,
+                    Some(&at),
+                    message,
+                ))
+            })
+            .collect();
+        if !issues.is_empty() {
             return Err(ToolValidationError {
                 tool_name: name.to_string(),
-                issues: vec![ToolIssue::error(
-                    ToolIssueCode::ConstantTypeMismatch,
-                    None,
-                    "A schema has the constant null, which this SDK's generated request model can't send (it reads null as unset). Send the to_json() output directly, or use another constant",
-                )],
+                issues,
             });
         }
     }
     Ok(model)
 }
 
-/// How many schemas in `value` have `constant_value: null`. Free-form JSON values (constants and
-/// dynamic variable placeholders) aren't schemas, so they aren't searched.
-fn null_constants(value: &Value) -> usize {
-    match value {
-        Value::Object(map) => map
-            .iter()
-            .map(|(key, v)| match key.as_str() {
-                "constant_value" => usize::from(v.is_null()),
-                "dynamic_variable_placeholders" => 0,
-                _ => null_constants(v),
-            })
-            .sum(),
-        Value::Array(items) => items.iter().map(null_constants).sum(),
-        _ => 0,
+/// A step from a tool config down to one of its schemas' constants.
+#[derive(Debug, Clone, PartialEq)]
+enum Step {
+    /// A config or schema field.
+    Key(String),
+    /// A property or path param name: never a schema field, even when it is spelled like one.
+    Name(String),
+    Index(usize),
+}
+
+/// Every schema constant in a tool config (wire format, or the generated model serialized), by
+/// where it is. Free-form JSON values (constants, dynamic variable placeholders, headers) aren't
+/// schemas, so they aren't searched.
+fn constants(value: &Value) -> Vec<(Vec<Step>, Value)> {
+    fn walk(value: &Value, path: &mut Vec<Step>, out: &mut Vec<(Vec<Step>, Value)>) {
+        match value {
+            Value::Object(map) => {
+                for (key, v) in map {
+                    match key.as_str() {
+                        "constant_value" => out.push((path.clone(), v.clone())),
+                        "dynamic_variable_placeholders" | "request_headers" => {}
+                        // Names mapped to schemas: walk each schema, so a param named
+                        // `constant_value` isn't read as a constant.
+                        "properties" | "path_params_schema" => {
+                            path.push(Step::Key(key.clone()));
+                            for (name, schema) in v.as_object().into_iter().flatten() {
+                                path.push(Step::Name(name.clone()));
+                                walk(schema, path, out);
+                                path.pop();
+                            }
+                            path.pop();
+                        }
+                        _ => {
+                            path.push(Step::Key(key.clone()));
+                            walk(v, path, out);
+                            path.pop();
+                        }
+                    }
+                }
+            }
+            Value::Array(items) => {
+                for (index, item) in items.iter().enumerate() {
+                    path.push(Step::Index(index));
+                    walk(item, path, out);
+                    path.pop();
+                }
+            }
+            _ => {}
+        }
     }
+    let mut out = Vec::new();
+    walk(value, &mut Vec::new(), &mut out);
+    out
+}
+
+/// A constant's location as validation names it, e.g. `"body.order.id"` or `"params.tags[]"`.
+fn display_path(path: &[Step]) -> String {
+    let mut out = String::new();
+    for step in path {
+        let label = match step {
+            Step::Name(name) => name.as_str(),
+            Step::Index(index) => {
+                out.push_str(&format!("[{index}]"));
+                continue;
+            }
+            Step::Key(key) => match key.as_str() {
+                "api_schema" | "properties" => continue,
+                "items" => {
+                    out.push_str("[]");
+                    continue;
+                }
+                "path_params_schema" => "path_params",
+                "query_params_schema" => "query",
+                "request_body_schema" => "body",
+                "response_body_schema" => "response",
+                "parameters" => "params",
+                other => other,
+            },
+        };
+        if !out.is_empty() {
+            out.push('.');
+        }
+        out.push_str(label);
+    }
+    out
 }
 
 /// The public methods every editable tool kind shares. The type it's used in provides `config`
-/// and `issues` fields and `validate()` / `to_wire()` methods.
+/// and `issues` fields and `validate()` / `to_wire()` / `model_issues()` methods. `validate()`
+/// covers the builder's rules (checked by `to_json()` too); `model_issues()` covers loaded input
+/// that `to_json()` writes back as loaded but the generated request model can't take, so only
+/// `build()` reports it.
 macro_rules! tool_methods {
     ($kind:expr, $variant:ident, $config:ty) => {
         /// The tool's name, as the LLM sees it.
@@ -542,6 +649,7 @@ macro_rules! tool_methods {
             on_warning: F,
         ) -> Result<$config, $crate::agent_tools::ToolValidationError> {
             let wire = self.checked_wire(on_warning)?;
+            $crate::agent_tools::tool::check(self.name(), self.model_issues(), |_| {})?;
             $crate::agent_tools::tool::to_model(self.name(), wire)
         }
 
@@ -559,9 +667,7 @@ macro_rules! tool_methods {
         /// `to_json()` as a string with 2-space indentation and a trailing newline: the canonical
         /// file format.
         pub fn to_json_string(&self) -> Result<String, $crate::agent_tools::ToolValidationError> {
-            Ok($crate::agent_workflows::wire::to_json_string(
-                &self.to_json()?,
-            ))
+            Ok($crate::agent_tools::json::to_json_string(&self.to_json()?))
         }
 
         fn checked_wire<F: FnMut(&$crate::agent_tools::ToolIssue)>(

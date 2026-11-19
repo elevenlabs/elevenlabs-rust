@@ -8,7 +8,7 @@ use super::errors::{ToolIssue, ToolIssueCode};
 use super::options::ToolOptions;
 use super::schema::{ObjectSchema, Schema, SchemaKind, WireMap};
 use super::tool::{accepted_options, set_config_option, tool_methods};
-use super::validate::check_schema;
+use super::validate::{check_model_shape, check_schema};
 use super::webhook::COMMON_OPTIONS;
 use super::ToolKind;
 
@@ -30,7 +30,8 @@ const CLIENT_ONLY_OPTIONS: &[&str] = &[
 /// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClientTool {
-    /// The tool config fields other than `parameters`.
+    /// The tool config fields other than `parameters`. Loaded `parameters` that aren't an
+    /// object stay here, written back as loaded; `build()` reports them.
     config: WireMap,
     /// Problems found while building, reported by `build()`.
     issues: Vec<ToolIssue>,
@@ -61,6 +62,8 @@ impl ClientTool {
     /// and `build()` reports them.
     pub fn param(mut self, name: impl Into<String>, schema: impl Into<Schema>) -> Self {
         self.parameters = match self.parameters.take() {
+            // Loaded params that aren't an object at all are kept in `config`.
+            None if self.config.contains_key("parameters") => None,
             None => Some(Schema::object().property(name, schema).into()),
             Some(Schema::Object(parameters)) => Some(parameters.property(name, schema).into()),
             other => other,
@@ -137,6 +140,14 @@ impl ClientTool {
                 Some("response_timeout_secs"),
                 "response_timeout_secs: -1 needs expects_response: true",
             ));
+        }
+        issues
+    }
+
+    fn model_issues(&self) -> Vec<ToolIssue> {
+        let mut issues = Vec::new();
+        if let Some(parameters) = &self.parameters {
+            check_model_shape(parameters.state(), "params", &mut issues);
         }
         issues
     }

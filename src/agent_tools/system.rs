@@ -59,6 +59,9 @@ pub struct SystemTool {
     system_tool_type: String,
     /// The `params` fields other than `system_tool_type`.
     params: WireMap,
+    /// Whether the loaded `params` were missing, not an object or without a `system_tool_type`.
+    /// They are then kept in `config` as loaded, and `build()` reports them.
+    malformed_params: bool,
 }
 
 impl SystemTool {
@@ -68,6 +71,16 @@ impl SystemTool {
             issues: Vec::new(),
             system_tool_type,
             params,
+            malformed_params: false,
+        }
+    }
+
+    /// A loaded system tool whose `params` (kept in `config`, if any) aren't an object with a
+    /// `system_tool_type`.
+    pub(crate) fn load_malformed(config: WireMap) -> Self {
+        SystemTool {
+            malformed_params: true,
+            ..SystemTool::load(String::new(), config, WireMap::new())
         }
     }
 
@@ -253,12 +266,25 @@ impl SystemTool {
         Vec::new()
     }
 
+    fn model_issues(&self) -> Vec<ToolIssue> {
+        if !self.malformed_params {
+            return Vec::new();
+        }
+        vec![ToolIssue::error(
+            ToolIssueCode::InvalidModel,
+            Some("params"),
+            "The loaded params aren't an object with a system_tool_type, so the tool doesn't match the generated tool config model. Fix it in the source JSON",
+        )]
+    }
+
     fn to_wire(&self) -> WireMap {
-        let mut params = self.params.clone();
-        params.insert("system_tool_type".into(), json!(self.system_tool_type));
         let mut wire = self.config.clone();
         wire.insert("type".into(), json!("system"));
-        wire.insert("params".into(), Value::Object(params));
+        if !self.malformed_params {
+            let mut params = self.params.clone();
+            params.insert("system_tool_type".into(), json!(self.system_tool_type));
+            wire.insert("params".into(), Value::Object(params));
+        }
         wire
     }
 }

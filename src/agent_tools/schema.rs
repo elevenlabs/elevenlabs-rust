@@ -66,6 +66,9 @@ pub(crate) struct SchemaState {
     pub any_of: Vec<Vec<String>>,
     pub all_of: Vec<Vec<String>>,
     pub extra: WireMap,
+    /// Loaded modeled fields of the wrong shape, kept in `extra` as loaded. The generated request
+    /// model would drop some of them silently, so `build()` reports each one.
+    pub malformed: Vec<&'static str>,
 }
 
 impl SchemaState {
@@ -88,6 +91,7 @@ impl SchemaState {
             any_of: Vec::new(),
             all_of: Vec::new(),
             extra: WireMap::new(),
+            malformed: Vec::new(),
         }
     }
 
@@ -636,49 +640,104 @@ impl Schema {
             set("constant_value").cloned()
         };
         state.type_loaded = model.get("type").is_some_and(|t| !t.is_null());
-        state.omitted = model.get("is_omitted") == Some(&Value::Bool(true));
-        state.extra = extra;
+        // A modeled field whose value has the wrong shape isn't read: it stays in `extra`, so it
+        // is written back as loaded and `build()` reports it (`invalid_model`) instead of the
+        // builder dropping it.
+        let mut malformed = Vec::new();
+        let mut keep = |key: &'static str, wrong_shape: bool| {
+            if let Some(value) = set(key) {
+                extra.insert(key.into(), value.clone());
+                if wrong_shape {
+                    malformed.push(key);
+                }
+            }
+        };
+        match set("is_omitted") {
+            Some(Value::Bool(true)) => state.omitted = true,
+            Some(_) => keep("is_omitted", true),
+            None => {}
+        }
         match kind {
             SchemaKind::Object => {
-                let required: Option<Vec<String>> = set("required")
-                    .and_then(Value::as_array)
-                    .map(|names| strings(names));
-                let required_names = required.clone().unwrap_or_default();
-                if let Some(properties) = set("properties").and_then(Value::as_object) {
-                    for (name, child) in properties {
-                        let child = child.as_object().cloned().unwrap_or_default();
-                        let optional = !required_names.contains(name);
-                        let schema = Schema::from_model(&child, optional, kind_of(&child));
-                        state.properties.push((name.clone(), schema));
+                let properties = set("properties").map(|properties| {
+                    properties
+                        .as_object()
+                        .filter(|properties| properties.values().all(Value::is_object))
+                });
+                let required =
+                    set("required").map(|names| names.as_array().and_then(|n| names_of(n)));
+                let (bad_properties, bad_required) =
+                    (properties == Some(None), required == Some(None));
+                match (properties, required) {
+                    // Each needs the other: a property's optional() comes from `required`.
+                    _ if bad_properties || bad_required => {
+                        keep("properties", bad_properties);
+                        keep("required", bad_required);
+                    }
+                    (properties, required) => {
+                        let required = required.flatten();
+                        let required_names = required.clone().unwrap_or_default();
+                        for (name, child) in properties.flatten().into_iter().flatten() {
+                            let child = child.as_object().cloned().unwrap_or_default();
+                            let optional = !required_names.contains(name);
+                            let schema = Schema::from_model(&child, optional, kind_of(&child));
+                            state.properties.push((name.clone(), schema));
+                        }
+                        state.loaded_required = required;
                     }
                 }
-                state.loaded_required = required;
-                if let Some(constraints) = set("required_constraints").and_then(Value::as_object) {
-                    state.any_of = constraint_groups(constraints.get("any_of"));
-                    state.all_of = constraint_groups(constraints.get("all_of"));
+                if let Some(constraints) = set("required_constraints") {
+                    match required_constraints(constraints) {
+                        Some((any_of, all_of)) => {
+                            state.any_of = any_of;
+                            state.all_of = all_of;
+                        }
+                        None => keep("required_constraints", true),
+                    }
                 }
+                state.extra = extra;
+                state.malformed = malformed;
                 Schema::Object(ObjectSchema {
                     state: Box::new(state),
                 })
             }
             SchemaKind::Array => {
-                if let Some(items) = set("items") {
-                    let items = items.as_object().cloned().unwrap_or_default();
-                    let kind = kind_of(&items);
-                    state.items = Some(Box::new(Schema::from_model(&items, true, kind)));
+                match set("items") {
+                    Some(Value::Object(items)) => {
+                        let kind = kind_of(items);
+                        state.items = Some(Box::new(Schema::from_model(items, true, kind)));
+                    }
+                    Some(_) => keep("items", true),
+                    None => {}
                 }
+                state.extra = extra;
+                state.malformed = malformed;
                 Schema::Array(ArraySchema {
                     state: Box::new(state),
                 })
             }
             _ => {
                 state.literal_type = model.get("type").filter(|t| !t.is_null()).cloned();
-                state.system_provided = model.get("is_system_provided") == Some(&Value::Bool(true));
+                match set("is_system_provided") {
+                    Some(Value::Bool(true)) => state.system_provided = true,
+                    Some(_) => keep("is_system_provided", true),
+                    None => {}
+                }
                 state.choices = set("enum").cloned();
-                state.allowed_from = set("allowed_values")
-                    .and_then(|allowed| allowed.get("dynamic_variable"))
-                    .and_then(Value::as_str)
-                    .map(str::to_string);
+                match set("allowed_values") {
+                    Some(Value::Object(allowed)) if allowed.len() == 1 => {
+                        match allowed.get("dynamic_variable") {
+                            Some(Value::String(variable)) => {
+                                state.allowed_from = Some(variable.clone());
+                            }
+                            _ => keep("allowed_values", true),
+                        }
+                    }
+                    Some(_) => keep("allowed_values", true),
+                    None => {}
+                }
+                state.extra = extra;
+                state.malformed = malformed;
                 Schema::Literal(LiteralSchema {
                     state: Box::new(state),
                 })
@@ -741,25 +800,41 @@ pub(crate) fn kind_of(model: &WireMap) -> SchemaKind {
     }
 }
 
-fn strings(values: &[Value]) -> Vec<String> {
+/// `values` as strings, or `None` if one isn't a string.
+fn names_of(values: &[Value]) -> Option<Vec<String>> {
     values
         .iter()
-        .filter_map(Value::as_str)
-        .map(str::to_string)
+        .map(|value| value.as_str().map(str::to_string))
         .collect()
 }
 
-fn constraint_groups(value: Option<&Value>) -> Vec<Vec<String>> {
-    value
-        .and_then(Value::as_array)
-        .map(|groups| {
-            groups
+/// Groups of property names, as in `required_constraints.any_of`.
+type Groups = Vec<Vec<String>>;
+
+/// A loaded `required_constraints`' `any_of` and `all_of` groups, or `None` if it has another
+/// shape (fields other than these two, or a group that isn't `{"required": [names]}`).
+fn required_constraints(value: &Value) -> Option<(Groups, Groups)> {
+    let constraints = value.as_object()?;
+    if constraints
+        .keys()
+        .any(|key| key != "any_of" && key != "all_of")
+    {
+        return None;
+    }
+    let groups = |key: &str| -> Option<Groups> {
+        match constraints.get(key) {
+            None | Some(Value::Null) => Some(Vec::new()),
+            Some(Value::Array(groups)) => groups
                 .iter()
-                .filter_map(|group| group.get("required").and_then(Value::as_array))
-                .map(|names| strings(names))
-                .collect()
-        })
-        .unwrap_or_default()
+                .map(|group| {
+                    let group = group.as_object().filter(|group| group.len() == 1)?;
+                    names_of(group.get("required")?.as_array()?)
+                })
+                .collect(),
+            Some(_) => None,
+        }
+    };
+    Some((groups("any_of")?, groups("all_of")?))
 }
 
 /// Whether a literal's `type` is a list that includes `"null"`, e.g. `["integer", "null"]`.
@@ -781,16 +856,29 @@ pub(crate) fn container_schema(model: &WireMap) -> Schema {
 
 /// Drops `null` object entries at every level, as the other SDKs' serializers read them as
 /// absent. Free-form JSON values (constants, dynamic variable placeholders) are kept as they are,
-/// and so is a `null` constant, which `Schema::from_model` keeps for a nullable literal.
+/// and so is a `null` constant, which `Schema::from_model` keeps for a nullable literal. The
+/// values of name maps (`properties`, `path_params_schema`, `request_headers`) are walked as they
+/// are, so a param named `constant_value` is no exception.
 pub(crate) fn strip_nulls(value: Value) -> Value {
     match value {
         Value::Object(map) => Value::Object(
             map.into_iter()
                 .filter(|(key, v)| !v.is_null() || key == "constant_value")
                 .map(|(key, v)| {
-                    let free_form =
-                        key == "constant_value" || key == "dynamic_variable_placeholders";
-                    let v = if free_form { v } else { strip_nulls(v) };
+                    let v = match key.as_str() {
+                        "constant_value" | "dynamic_variable_placeholders" => v,
+                        "properties" | "path_params_schema" | "request_headers" => match v {
+                            Value::Object(names) => Value::Object(
+                                names
+                                    .into_iter()
+                                    .filter(|(_, v)| !v.is_null())
+                                    .map(|(name, v)| (name, strip_nulls(v)))
+                                    .collect(),
+                            ),
+                            other => strip_nulls(other),
+                        },
+                        _ => strip_nulls(v),
+                    };
                     (key, v)
                 })
                 .collect(),
