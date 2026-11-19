@@ -5,7 +5,7 @@
 
 use serde_json::{json, Map, Value};
 
-use crate::agent_workflows::wire::canonical;
+use super::json::js_canonical;
 
 pub(crate) type WireMap = Map<String, Value>;
 
@@ -65,6 +65,9 @@ pub(crate) struct SchemaState {
     pub loaded_required: Option<Vec<String>>,
     pub any_of: Vec<Vec<String>>,
     pub all_of: Vec<Vec<String>>,
+    /// Which of `any_of` / `all_of` a loaded `required_constraints` had, or `None` if it had
+    /// none, so an empty one (or an empty `required_constraints`) is written back as loaded.
+    pub loaded_constraints: Option<(bool, bool)>,
     pub extra: WireMap,
     /// Loaded modeled fields of the wrong shape, kept in `extra` as loaded. The generated request
     /// model would drop some of them silently, so `build()` reports each one.
@@ -90,6 +93,7 @@ impl SchemaState {
             loaded_required: None,
             any_of: Vec::new(),
             all_of: Vec::new(),
+            loaded_constraints: None,
             extra: WireMap::new(),
             malformed: Vec::new(),
         }
@@ -127,8 +131,12 @@ impl SchemaState {
                     out.insert("required".into(), json!(required));
                 }
                 let mut constraints = WireMap::new();
-                for (key, groups) in [("any_of", &self.any_of), ("all_of", &self.all_of)] {
-                    if !groups.is_empty() {
+                let (any_of_loaded, all_of_loaded) = self.loaded_constraints.unwrap_or_default();
+                for (key, groups, loaded) in [
+                    ("any_of", &self.any_of, any_of_loaded),
+                    ("all_of", &self.all_of, all_of_loaded),
+                ] {
+                    if !groups.is_empty() || loaded {
                         let entries: Vec<Value> = groups
                             .iter()
                             .map(|names| json!({ "required": names }))
@@ -136,7 +144,7 @@ impl SchemaState {
                         constraints.insert(key.into(), Value::Array(entries));
                     }
                 }
-                if !constraints.is_empty() {
+                if !constraints.is_empty() || self.loaded_constraints.is_some() {
                     out.insert("required_constraints".into(), Value::Object(constraints));
                 }
             }
@@ -242,7 +250,7 @@ macro_rules! common_schema_methods {
 
         /// The schema in API format (snake_case keys, sorted). Doesn't validate.
         pub fn to_json(&self) -> Value {
-            canonical(&Value::Object(self.state.to_model()))
+            js_canonical(&Value::Object(self.state.to_model()))
         }
     };
 }
@@ -522,7 +530,7 @@ impl Schema {
 
     /// The schema in API format (snake_case keys, sorted). Doesn't validate.
     pub fn to_json(&self) -> Value {
-        canonical(&Value::Object(self.to_model()))
+        js_canonical(&Value::Object(self.to_model()))
     }
 
     /// This schema as a literal, or `None` if it's another kind.
@@ -691,6 +699,8 @@ impl Schema {
                         Some((any_of, all_of)) => {
                             state.any_of = any_of;
                             state.all_of = all_of;
+                            let has = |key| constraints.get(key).is_some_and(|g| !g.is_null());
+                            state.loaded_constraints = Some((has("any_of"), has("all_of")));
                         }
                         None => keep("required_constraints", true),
                     }
@@ -723,7 +733,15 @@ impl Schema {
                     Some(_) => keep("is_system_provided", true),
                     None => {}
                 }
-                state.choices = set("enum").cloned();
+                // The generated property union only takes an `enum` of strings: another one
+                // would match its object variant, which drops it.
+                match set("enum") {
+                    Some(Value::Array(values)) if values.iter().all(Value::is_string) => {
+                        state.choices = Some(Value::Array(values.clone()));
+                    }
+                    Some(_) => keep("enum", true),
+                    None => {}
+                }
                 match set("allowed_values") {
                     Some(Value::Object(allowed)) if allowed.len() == 1 => {
                         match allowed.get("dynamic_variable") {

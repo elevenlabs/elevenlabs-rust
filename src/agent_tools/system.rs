@@ -3,8 +3,9 @@
 use serde::Serialize;
 use serde_json::{json, Value};
 
+use crate::agent_workflows::wire::canonical;
 use crate::agent_workflows::Destination;
-use crate::api::types::SystemToolConfigInput;
+use crate::api::types::{SystemToolConfigInput, SystemToolConfigInputParams};
 
 use super::errors::{ToolIssue, ToolIssueCode};
 use super::options::{
@@ -23,6 +24,24 @@ const PHONE_TRANSFER_OPTIONS: &[&str] = &[
     "sip_refer_play_dialtone",
     "uui",
     "post_dial_digits",
+];
+
+/// The `system_tool_type`s the generated params enum has a variant for, as in
+/// `src/api/types/system_tool_config_input_params.rs` (a test keeps the two in step). Params of
+/// one of these types that don't match its variant would fall back to the enum's catch-all and
+/// be sent unchecked, so `build()` reports them.
+pub(crate) const MODELED_SYSTEM_TOOL_TYPES: &[&str] = &[
+    "end_call",
+    "end_procedure",
+    "knowledge_base",
+    "knowledge_base_rag",
+    "language_detection",
+    "play_keypad_touch_tone",
+    "skip_turn",
+    "start_procedure",
+    "transfer_to_agent",
+    "transfer_to_number",
+    "voicemail_detection",
 ];
 
 const AGENT_TRANSFER_OPTIONS: &[&str] = &[
@@ -267,14 +286,36 @@ impl SystemTool {
     }
 
     fn model_issues(&self) -> Vec<ToolIssue> {
-        if !self.malformed_params {
+        if self.malformed_params {
+            return vec![ToolIssue::error(
+                ToolIssueCode::InvalidModel,
+                Some("params"),
+                "The loaded params aren't an object with a system_tool_type, so the tool doesn't match the generated tool config model. Fix it in the source JSON",
+            )];
+        }
+        // A type the generated enum doesn't model goes to its catch-all as loaded, which is fine;
+        // a modeled one must match its own variant.
+        if !MODELED_SYSTEM_TOOL_TYPES.contains(&self.system_tool_type.as_str()) {
             return Vec::new();
         }
-        vec![ToolIssue::error(
-            ToolIssueCode::InvalidModel,
-            Some("params"),
-            "The loaded params aren't an object with a system_tool_type, so the tool doesn't match the generated tool config model. Fix it in the source JSON",
-        )]
+        let mut params = self.params.clone();
+        params.insert("system_tool_type".into(), json!(self.system_tool_type));
+        let parsed: Result<SystemToolConfigInputParams, _> =
+            serde_json::from_value(canonical(&Value::Object(params)));
+        if matches!(
+            parsed,
+            Ok(SystemToolConfigInputParams::__Unknown(_)) | Err(_)
+        ) {
+            return vec![ToolIssue::error(
+                ToolIssueCode::InvalidModel,
+                Some("params"),
+                format!(
+                    "The params don't match the generated model for {}: a field likely has the wrong shape or type. Fix the options or the source JSON",
+                    self.system_tool_type
+                ),
+            )];
+        }
+        Vec::new()
     }
 
     fn to_wire(&self) -> WireMap {

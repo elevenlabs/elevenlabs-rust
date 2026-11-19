@@ -9,7 +9,7 @@ use crate::api::types::{ToolRequestModel, ToolRequestModelToolConfig, ToolRespon
 
 use super::client::ClientTool;
 use super::errors::{Severity, ToolIssue, ToolIssueCode, ToolValidationError};
-use super::json::to_json_string;
+use super::json::{js_canonical, to_json_string};
 use super::options::ToolOptions;
 use super::schema::{container_schema, strip_nulls, WireMap};
 use super::system::SystemTool;
@@ -356,7 +356,7 @@ impl OtherTool {
     /// The loaded config in API format, keys sorted. Validates like `build()`.
     pub fn to_json(&self) -> Result<Value, ToolValidationError> {
         check(self.name(), self.all_issues(), |_| {})?;
-        Ok(canonical(&Value::Object(self.raw.clone())))
+        Ok(js_canonical(&Value::Object(self.raw.clone())))
     }
 
     /// `to_json()` as a string with 2-space indentation and a trailing newline.
@@ -468,6 +468,8 @@ pub(crate) fn to_model<T: DeserializeOwned + Serialize>(
     // The generated config structs are the variants of a `type`-tagged enum, so they have no
     // `type` field of their own.
     wire.remove("type");
+    // Whole floats become integers here (and only here, not in `to_json()`), since the generated
+    // integer fields don't accept a float such as 5.0.
     let wire = canonical(&Value::Object(wire));
     let model: T = serde_json::from_value(wire.clone()).map_err(|err| ToolValidationError {
         tool_name: name.to_string(),
@@ -487,7 +489,7 @@ pub(crate) fn to_model<T: DeserializeOwned + Serialize>(
             .into_iter()
             .filter_map(|(path, value)| {
                 let sent = sent.iter().find(|(p, _)| *p == path).map(|(_, v)| v);
-                if sent == Some(&value) {
+                if sent.is_some_and(|sent| same_value(sent, &value)) {
                     return None;
                 }
                 let at = display_path(&path);
@@ -511,6 +513,40 @@ pub(crate) fn to_model<T: DeserializeOwned + Serialize>(
         }
     }
     Ok(model)
+}
+
+/// Whether `a` and `b` are the same JSON value, numbers compared by their exact value: the
+/// generated literal constant holds an integer above `i64::MAX` (e.g. `10000000000000000000`) as
+/// the f64 it equals, which is the same number, not a changed one.
+fn same_value(a: &Value, b: &Value) -> bool {
+    match (a, b) {
+        (Value::Number(a), Value::Number(b)) => {
+            a == b || exact(a).is_some_and(|a| Some(a) == exact(b))
+        }
+        (Value::Array(a), Value::Array(b)) => {
+            a.len() == b.len() && a.iter().zip(b).all(|(a, b)| same_value(a, b))
+        }
+        (Value::Object(a), Value::Object(b)) => {
+            a.len() == b.len()
+                && a.iter()
+                    .all(|(key, a)| b.get(key).is_some_and(|b| same_value(a, b)))
+        }
+        _ => a == b,
+    }
+}
+
+/// An integer, or a whole float, as the exact integer it is.
+fn exact(n: &serde_json::Number) -> Option<i128> {
+    if let Some(i) = n.as_i64() {
+        return Some(i.into());
+    }
+    if let Some(u) = n.as_u64() {
+        return Some(u.into());
+    }
+    // Every whole f64 below 2^127 in magnitude converts to i128 exactly.
+    n.as_f64()
+        .filter(|f| f.fract() == 0.0 && f.abs() < 2f64.powi(127))
+        .map(|f| f as i128)
 }
 
 /// A step from a tool config down to one of its schemas' constants.
@@ -659,7 +695,7 @@ macro_rules! tool_methods {
             &self,
         ) -> Result<serde_json::Value, $crate::agent_tools::ToolValidationError> {
             let wire = self.checked_wire(|_| {})?;
-            Ok($crate::agent_workflows::wire::canonical(
+            Ok($crate::agent_tools::json::js_canonical(
                 &serde_json::Value::Object(wire),
             ))
         }

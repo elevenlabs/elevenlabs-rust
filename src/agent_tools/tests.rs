@@ -1264,9 +1264,231 @@ fn to_json_string_formats_numbers_as_the_js_sdk_does() {
         );
         assert!(out.contains(&line), "{name}: {out}");
     }
-    // And it loads back to the same values. (Not checked for "d": serde_json's default parser
-    // isn't correctly rounded for every long number; it reads it one ulp off.)
-    let out = tool.remove_param("d").to_json_string().unwrap();
+    // And it loads back to the same values ("d" too: serde_json's `float_roundtrip` parser reads
+    // it as the f64 it was written from).
     let reloaded = Tool::from_json_str(&out).unwrap();
     assert_eq!(reloaded.to_json_string().unwrap(), out);
+    assert!(reloaded.build().is_ok());
+    let schema =
+        Schema::from_json_str("{\"constant_value\": 123456789012345680000, \"type\": \"number\"}");
+    assert_eq!(
+        schema.unwrap().to_json()["constant_value"],
+        json!(123456789012345680000.0)
+    );
+}
+
+// ---- review fixes, round 3 ---------------------------------------------------------------------
+
+#[test]
+fn accepts_a_constant_above_i64_max_that_is_exact_as_an_f64() {
+    // `1e19` is written as the integer 10000000000000000000, which loads as a u64 above i64::MAX.
+    // The request model sends it as the f64 it equals, so it reloads and builds.
+    let tool = Tool::client("t", "T").param("n", Schema::number().constant(1e19));
+    let out = tool.to_json_string().unwrap();
+    assert!(
+        out.contains("\"constant_value\": 10000000000000000000,"),
+        "{out}"
+    );
+    let reloaded = Tool::from_json_str(&out).unwrap();
+    assert_eq!(reloaded.to_json_string().unwrap(), out);
+    let sent = serde_json::to_value(reloaded.build().unwrap()).unwrap();
+    assert_eq!(
+        sent["tool_config"]["parameters"]["properties"]["n"]["constant_value"],
+        json!(1e19)
+    );
+    // An integer schema too, and 2^63 (the first value above i64::MAX), which is exact.
+    for json in [
+        r#"{"type":"integer","constant_value":10000000000000000000}"#,
+        r#"{"type":"number","constant_value":9223372036854775808}"#,
+    ] {
+        let tool = Tool::client("t", "T").param("n", Schema::from_json_str(json).unwrap());
+        assert!(tool.build().is_ok(), "{json}");
+    }
+    // One the f64 would round is still rejected.
+    let tool = Tool::client("t", "T").param(
+        "n",
+        Schema::from_json_str(r#"{"type":"number","constant_value":10000000000000000001}"#)
+            .unwrap(),
+    );
+    assert_eq!(codes_of(tool.build()), ["constant_type_mismatch"]);
+}
+
+#[test]
+fn loaded_empty_required_constraint_groups_round_trip() {
+    let client = |constraints: Value| {
+        json!({
+            "description": "T",
+            "name": "t",
+            "parameters": {
+                "properties": { "a": { "description": "A", "type": "string" } },
+                "required": ["a"],
+                "required_constraints": constraints,
+                "type": "object"
+            },
+            "type": "client"
+        })
+    };
+    for constraints in [
+        json!({}),
+        json!({ "any_of": [] }),
+        json!({ "all_of": [], "any_of": [] }),
+        json!({ "all_of": [], "any_of": [{ "required": ["a"] }] }),
+    ] {
+        let raw = client(constraints);
+        let tool = Tool::from_json(&raw);
+        assert_eq!(tool.to_json().unwrap(), raw);
+        assert!(tool.build().is_ok(), "{raw}");
+    }
+    // A group appended to a loaded schema merges with its groups, keeping the empty one.
+    let body = Schema::from_json(&json!({
+        "properties": { "a": { "description": "A", "type": "string" } },
+        "required_constraints": { "all_of": [] },
+        "type": "object"
+    }))
+    .into_object()
+    .unwrap()
+    .require_any_of(["a"]);
+    assert_eq!(
+        body.to_json()["required_constraints"],
+        json!({ "all_of": [], "any_of": [{ "required": ["a"] }] })
+    );
+}
+
+#[test]
+fn a_loaded_enum_that_is_not_a_list_of_strings_is_kept_and_reported() {
+    for choices in [json!(["a", 1]), json!("a"), json!({ "a": 1 })] {
+        let raw = json!({
+            "description": "T",
+            "name": "t",
+            "parameters": {
+                "properties": { "x": { "description": "X", "enum": choices, "type": "string" } },
+                "required": ["x"],
+                "type": "object"
+            },
+            "type": "client"
+        });
+        let tool = Tool::from_json(&raw);
+        assert_eq!(
+            paths_of(tool.build()),
+            [("invalid_model", Some("params.x".to_string()))],
+            "{raw}"
+        );
+        assert_eq!(tool.to_json().unwrap(), raw);
+    }
+}
+
+#[test]
+fn rejects_params_a_modeled_system_tool_type_does_not_match() {
+    let tool = SystemTool::transfer_to_agent().transfer(
+        "Caller asks for sales",
+        Destination::agent("agent_sales", None),
+        ToolOptions::new().set("delay_ms", "soon"),
+    );
+    assert_eq!(
+        paths_of(tool.build()),
+        [("invalid_model", Some("params".to_string()))]
+    );
+    // to_json() writes it as given.
+    assert_eq!(
+        tool.to_json().unwrap()["params"]["transfers"][0]["delay_ms"],
+        json!("soon")
+    );
+    // Loaded the same.
+    let raw = json!({
+        "name": "skip_turn",
+        "params": { "system_tool_type": "skip_turn", "wait_timeout_secs": "later" },
+        "type": "system"
+    });
+    let loaded = Tool::from_json(&raw);
+    assert_eq!(
+        paths_of(loaded.build()),
+        [("invalid_model", Some("params".to_string()))]
+    );
+    // A type the generated enum doesn't model still goes to its catch-all as loaded.
+    let raw = json!({ "name": "x", "params": { "system_tool_type": "future_tool", "a": 1 }, "type": "system" });
+    let sent = serde_json::to_value(Tool::from_json(&raw).build().unwrap()).unwrap();
+    assert_eq!(sent["tool_config"]["params"], raw["params"]);
+}
+
+#[test]
+fn modeled_system_tool_types_match_the_generated_params_enum() {
+    // The variants' wire names, read from the generated source, so a regeneration that adds or
+    // renames one fails here until `MODELED_SYSTEM_TOOL_TYPES` is updated.
+    let source = include_str!("../api/types/system_tool_config_input_params.rs");
+    let generated: Vec<&str> = source
+        .lines()
+        .filter_map(|line| line.trim().strip_prefix("#[serde(rename = \""))
+        .filter_map(|rest| rest.split('"').next())
+        .collect();
+    assert!(!generated.is_empty());
+    assert_eq!(generated, super::system::MODELED_SYSTEM_TOOL_TYPES);
+}
+
+#[test]
+fn to_json_string_writes_a_whole_float_as_javascript_does() {
+    // The nearest i64 to this f64 is 1000000000000000128; JavaScript writes 1000000000000000100.
+    let tool = Tool::client("t", "T").param("n", Schema::number().constant(1000000000000000100.0));
+    let out = tool.to_json_string().unwrap();
+    assert!(
+        out.contains("\"constant_value\": 1000000000000000100,"),
+        "{out}"
+    );
+    let schema = Schema::number().constant(1000000000000000100.0);
+    assert!(super::json::to_json_string(&schema.to_json()).contains("1000000000000000100,"));
+    // It reloads to the same bytes, and builds.
+    let reloaded = Tool::from_json_str(&out).unwrap();
+    assert_eq!(reloaded.to_json_string().unwrap(), out);
+    assert!(tool.build().is_ok());
+    // A whole float JavaScript writes as its integer is still an integer in to_json().
+    let tool = Tool::client("t", "T").param("n", Schema::number().constant(3.0));
+    assert_eq!(
+        tool.to_json().unwrap()["parameters"]["properties"]["n"]["constant_value"],
+        json!(3)
+    );
+}
+
+#[test]
+fn loaded_empty_path_params_and_headers_round_trip_until_emptied() {
+    let raw = json!({
+        "api_schema": {
+            "method": "GET",
+            "path_params_schema": {},
+            "request_headers": {},
+            "url": "https://api.example.com/x"
+        },
+        "description": "T",
+        "name": "t",
+        "type": "webhook"
+    });
+    let tool = Tool::from_json(&raw);
+    assert_eq!(tool.to_json().unwrap(), raw);
+    assert!(tool.build().is_ok());
+    // Removing what isn't there leaves them as loaded.
+    let tool = tool
+        .into_webhook()
+        .unwrap()
+        .remove_header("X")
+        .remove_path_param("x");
+    assert_eq!(tool.to_json().unwrap(), raw);
+    // Removing the last entry of a loaded map leaves the field out.
+    let raw = json!({
+        "api_schema": {
+            "method": "GET",
+            "path_params_schema": { "id": { "description": "Id", "type": "string" } },
+            "request_headers": { "X": "1" },
+            "url": "https://api.example.com/{id}"
+        },
+        "description": "T",
+        "name": "t",
+        "type": "webhook"
+    });
+    let tool = Tool::from_json(&raw)
+        .into_webhook()
+        .unwrap()
+        .get("https://api.example.com/x")
+        .remove_path_param("id")
+        .remove_header("X");
+    let api = api_schema(&tool);
+    assert!(api.get("path_params_schema").is_none(), "{api}");
+    assert!(api.get("request_headers").is_none(), "{api}");
 }

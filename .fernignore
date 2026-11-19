@@ -16,7 +16,8 @@ tests/agent_tools_fixtures.rs
 tests/fixtures/agent_tools/
 
 # Frozen to protect the hand-written wiring Fern does not emit:
-#  - Cargo.toml: the serde_json `preserve_order` feature the builder needs for document-order loads.
+#  - Cargo.toml: the serde_json `preserve_order` feature the builder needs for document-order loads,
+#    and `float_roundtrip`, which the agent_tools builder needs to reload its floats exactly.
 #  - src/lib.rs: the `pub mod agent_workflows;` declaration (a crate-root module must be declared
 #    here). See the PR description for the proper fix (a Fern custom-module extension point).
 

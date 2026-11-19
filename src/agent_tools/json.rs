@@ -11,6 +11,48 @@ use serde::Serialize;
 use serde_json::ser::{Formatter, PrettyFormatter, Serializer};
 use serde_json::Value;
 
+/// `value` with its object keys sorted at every level: the shape `to_json()` returns. A whole
+/// float becomes an integer (`3.0` is `3`, as in JavaScript) only when the integer has the digits
+/// JavaScript writes for it. Otherwise it stays an f64, so [`to_json_string`] writes it as
+/// JavaScript does: `1000000000000000100.0` is written `1000000000000000100`, where the nearest
+/// i64 (the workflow builder's `canonical()`) would be written `1000000000000000128`.
+pub(crate) fn js_canonical(value: &Value) -> Value {
+    match value {
+        Value::Object(map) => {
+            let mut keys: Vec<&String> = map.keys().collect();
+            keys.sort();
+            Value::Object(
+                keys.into_iter()
+                    .map(|k| (k.clone(), js_canonical(&map[k])))
+                    .collect(),
+            )
+        }
+        Value::Array(items) => Value::Array(items.iter().map(js_canonical).collect()),
+        Value::Number(n) if n.is_f64() => {
+            let f = n.as_f64().expect("an f64 number");
+            whole_as_integer(f).unwrap_or_else(|| value.clone())
+        }
+        other => other.clone(),
+    }
+}
+
+/// `f` as an i64 or u64 number, if it is whole and that integer reads the same as `js_number(f)`.
+fn whole_as_integer(f: f64) -> Option<Value> {
+    if !f.is_finite() || f.fract() != 0.0 {
+        return None;
+    }
+    // 2^63 and 2^64: `as` saturates at the bounds, so they are exclusive.
+    let (integer, digits): (Value, String) =
+        if (-9223372036854775808.0..9223372036854775808.0).contains(&f) {
+            ((f as i64).into(), (f as i64).to_string())
+        } else if (0.0..18446744073709551616.0).contains(&f) {
+            ((f as u64).into(), (f as u64).to_string())
+        } else {
+            return None;
+        };
+    (digits == js_number(f)).then_some(integer)
+}
+
 /// `value` with 2-space indentation and a trailing newline, numbers formatted as in JavaScript.
 pub(crate) fn to_json_string(value: &Value) -> String {
     let mut out = Vec::new();

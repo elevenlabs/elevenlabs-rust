@@ -61,10 +61,7 @@ pub(crate) fn check_schema(
                 ToolIssueCode::ConstantTypeMismatch,
                 format!("\"{path}\" can't have \"\" as a constant: the API reads it as unset"),
             ));
-        } else if s.kind.is_literal() && constant.is_u64() && !constant.is_i64() {
-            // The request model holds a literal constant as an i64 or an f64, so an integer above
-            // i64::MAX would be rounded to the nearest f64 and `build()` would send a different
-            // value from `to_json()`.
+        } else if s.kind.is_literal() && constant.as_u64().is_some_and(|u| !fits_model(u)) {
             issues.push(error(
                 ToolIssueCode::ConstantTypeMismatch,
                 format!("\"{path}\" has the constant {constant}, which is above {} and can't be sent exactly", i64::MAX),
@@ -106,6 +103,20 @@ pub(crate) fn check_schema(
         },
         _ => {}
     }
+}
+
+/// Whether the request model can hold the literal constant `u` exactly. It holds one as an i64 or
+/// an f64, so an integer above `i64::MAX` is sent as the nearest f64: exact for a value such as
+/// `10000000000000000000` (`1e19`, which `to_json_string()` writes for a whole float as JavaScript
+/// does), but rounded, so `build()` would send a different value from `to_json()`, for one such as
+/// `9223372036854775809`.
+fn fits_model(u: u64) -> bool {
+    if i64::try_from(u).is_ok() {
+        return true;
+    }
+    let f = u as f64;
+    // `u64::MAX as f64` is 2^64, one past the range, where `as u64` would saturate.
+    f < u64::MAX as f64 && f as u64 == u
 }
 
 fn matches_kind(kind: SchemaKind, value: &Value, nullable: bool) -> bool {

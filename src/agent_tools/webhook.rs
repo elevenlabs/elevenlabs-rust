@@ -64,6 +64,10 @@ pub struct WebhookTool {
     body: Option<Schema>,
     response: Option<Schema>,
     headers: Vec<(String, Value)>,
+    /// Whether a loaded `path_params_schema` / `request_headers` is written back when empty, so a
+    /// loaded `{}` round-trips. Removing the last entry clears it: the field is then left out.
+    keep_empty_path_params: bool,
+    keep_empty_headers: bool,
 }
 
 impl WebhookTool {
@@ -84,6 +88,8 @@ impl WebhookTool {
             body: None,
             response: None,
             headers: Vec::new(),
+            keep_empty_path_params: false,
+            keep_empty_headers: false,
         };
         // A loaded field of an unexpected shape stays in `api` and is written back as loaded.
         if let Some(Value::Object(params)) = api.get("path_params_schema") {
@@ -94,6 +100,7 @@ impl WebhookTool {
                     .push((name.clone(), Schema::from_model(&model, false, kind)));
             }
             api.remove("path_params_schema");
+            tool.keep_empty_path_params = true;
         }
         if let Some(Value::Object(query)) = api.get("query_params_schema") {
             tool.query = Some(container_schema(query));
@@ -113,6 +120,7 @@ impl WebhookTool {
                 .map(|(k, v)| (k.clone(), v.clone()))
                 .collect();
             api.remove("request_headers");
+            tool.keep_empty_headers = true;
         }
         tool.api = api;
         tool
@@ -237,7 +245,12 @@ impl WebhookTool {
 
     /// Removes the path param `name`. Does nothing if there is none.
     pub fn remove_path_param(mut self, name: &str) -> Self {
+        let before = self.path_params.len();
         self.path_params.retain(|(existing, _)| existing != name);
+        // Removing the last path param leaves `path_params_schema` out.
+        if self.path_params.len() < before && self.path_params.is_empty() {
+            self.keep_empty_path_params = false;
+        }
         self
     }
 
@@ -259,7 +272,12 @@ impl WebhookTool {
 
     /// Removes the request header `name`. Does nothing if there is none.
     pub fn remove_header(mut self, name: &str) -> Self {
+        let before = self.headers.len();
         self.headers.retain(|(existing, _)| existing != name);
+        // Removing the last header leaves `request_headers` out.
+        if self.headers.len() < before && self.headers.is_empty() {
+            self.keep_empty_headers = false;
+        }
         self
     }
 
@@ -525,7 +543,7 @@ impl WebhookTool {
 
     fn to_wire(&self) -> WireMap {
         let mut api = self.api.clone();
-        if !self.path_params.is_empty() {
+        if !self.path_params.is_empty() || self.keep_empty_path_params {
             let params: WireMap = self
                 .path_params
                 .iter()
@@ -551,7 +569,7 @@ impl WebhookTool {
                 Value::Object(response.to_model()),
             );
         }
-        if !self.headers.is_empty() {
+        if !self.headers.is_empty() || self.keep_empty_headers {
             let headers: WireMap = self.headers.iter().cloned().collect();
             api.insert("request_headers".into(), Value::Object(headers));
         }
