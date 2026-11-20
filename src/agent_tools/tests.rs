@@ -1492,3 +1492,64 @@ fn loaded_empty_path_params_and_headers_round_trip_until_emptied() {
     assert!(api.get("path_params_schema").is_none(), "{api}");
     assert!(api.get("request_headers").is_none(), "{api}");
 }
+
+fn transfer_rule() -> Value {
+    json!({
+        "condition": "Caller asks for the front desk",
+        "provider_configs": [{
+            "type": "twilio",
+            "config": {
+                "type": "twilio_cold_blind_transfer",
+                "transfer_destination": { "type": "phone", "destination": "+15551234567" }
+            }
+        }]
+    })
+}
+
+fn loaded_transfer(system_tool_type: &str) -> Tool {
+    Tool::from_json(&json!({
+        "type": "system",
+        "name": system_tool_type,
+        "params": {
+            "system_tool_type": system_tool_type,
+            "transfers": [],
+            "transfer_rules": [transfer_rule()]
+        }
+    }))
+}
+
+#[test]
+fn transfer_rules_do_not_satisfy_an_agent_transfer() {
+    assert_eq!(
+        codes_of(loaded_transfer("transfer_to_agent").to_json()),
+        ["no_transfers"]
+    );
+}
+
+#[test]
+fn build_never_drops_loaded_transfer_rules() {
+    let tool = loaded_transfer("transfer_to_number");
+    assert_eq!(
+        tool.to_json().unwrap()["params"]["transfer_rules"],
+        json!([transfer_rule()])
+    );
+    match tool.build() {
+        // The generated model has transfer_rules: the request carries them.
+        Ok(request) => {
+            let sent = serde_json::to_value(&request).unwrap();
+            assert_eq!(
+                sent["tool_config"]["params"]["transfer_rules"],
+                json!([transfer_rule()]),
+                "{sent}"
+            );
+        }
+        // It doesn't yet: build() refuses rather than send a tool with no destinations.
+        Err(err) => assert_eq!(
+            err.issues
+                .iter()
+                .map(|i| (i.code.as_str(), i.path.clone()))
+                .collect::<Vec<_>>(),
+            [("invalid_model", Some("params.transfer_rules".to_string()))]
+        ),
+    }
+}
