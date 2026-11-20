@@ -351,10 +351,11 @@ impl Agent {
         Self::from_json_with_tools(config, &HashMap::new())
     }
 
-    /// Like [`from_json`](Self::from_json). Tool ids found in `tools_by_id` become [`Tool`]
-    /// objects (in the agent's tools, and in its workflow's tool nodes); the rest stay as
-    /// `tool_ids()`. Webhook and client tools are then managed by `push`; other kinds (such as
-    /// `mcp`) stay attached by the id they were loaded under.
+    /// Like [`from_json`](Self::from_json). Webhook and client tools whose ids are in
+    /// `tools_by_id` become [`Tool`] objects `push` manages (in `tools()`); every other id,
+    /// including tools of other kinds (such as `mcp`), stays in `tool_ids()`. In the workflow's
+    /// tool nodes every `tools_by_id` match becomes a tool object; one of another kind keeps the
+    /// id it was loaded under.
     pub fn from_json_with_tools(config: &Value, tools_by_id: &HashMap<String, Tool>) -> Self {
         let mut base = config.as_object().cloned().unwrap_or_default();
         let name = match base.remove("name") {
@@ -378,9 +379,11 @@ impl Agent {
             agent.tool_list_given = true;
             for id in ids.iter().filter_map(Value::as_str) {
                 agent.loaded_tool_ids.push(id.to_string());
+                // Only tools push manages become tool objects. Other kinds (such as `mcp`) stay
+                // attached by id, as `pull` leaves them, so replacing `tools` keeps them.
                 match tools_by_id.get(id) {
-                    Some(tool) => agent.tools.push(tool.clone()),
-                    None => agent.tool_ids.push(id.to_string()),
+                    Some(tool) if is_managed(tool) => agent.tools.push(tool.clone()),
+                    _ => agent.tool_ids.push(id.to_string()),
                 }
             }
         }
@@ -720,7 +723,13 @@ impl Agent {
                 issues.push(conflict("tools", TOOL_IDS_PATH));
             }
             let mut ids = self.tool_ids.clone();
-            ids.extend(attached.iter().map(|t| id_of(t)));
+            for tool in &attached {
+                let id = id_of(tool);
+                // An mcp tool added back with `add_tool` while its id is still attached.
+                if is_managed(tool) || !ids.contains(&id) {
+                    ids.push(id);
+                }
+            }
             let ids = keep_order(ids, &self.loaded_tool_ids);
             set_path(&mut config, TOOL_IDS_PATH, Some(json!(ids)));
         }

@@ -1284,6 +1284,50 @@ async fn push_leaves_a_loaded_mcp_tool_object_attached_by_its_id() {
 }
 
 #[test]
+fn a_loaded_mcp_tool_stays_attached_by_id_when_the_tools_are_replaced() {
+    let config = json!({
+        "name": "A",
+        "conversation_config": { "agent": { "prompt": { "prompt": "p", "tool_ids": ["tool_mcp", "tool_ping"] } } }
+    });
+    let ping: Tool = Tool::client("ping", "Ping the client").into();
+    let mut agent = Agent::from_json_with_tools(
+        &config,
+        &HashMap::from([
+            ("tool_mcp".to_string(), Tool::from_json(&mcp_tool_config())),
+            ("tool_ping".to_string(), ping.clone()),
+        ]),
+    );
+    assert_eq!(agent.tool_ids(), ["tool_mcp"]);
+    assert_eq!(agent.tools(), [ping]);
+
+    agent.update(AgentOptions::new().tools(vec![default_get_order()]));
+    assert_eq!(agent.tool_ids(), ["tool_mcp"]);
+    let config = agent
+        .to_json(&HashMap::from([(
+            "get_order".to_string(),
+            "tool_order".to_string(),
+        )]))
+        .unwrap();
+    assert_eq!(
+        config["conversation_config"]["agent"]["prompt"]["tool_ids"],
+        json!(["tool_mcp", "tool_order"])
+    );
+
+    // Added back as an object, it still goes in once, under its loaded id.
+    agent.add_tool(Tool::from_json(&mcp_tool_config()));
+    let config = agent
+        .to_json(&HashMap::from([(
+            "get_order".to_string(),
+            "tool_order".to_string(),
+        )]))
+        .unwrap();
+    assert_eq!(
+        config["conversation_config"]["agent"]["prompt"]["tool_ids"],
+        json!(["tool_mcp", "tool_order"])
+    );
+}
+
+#[test]
 fn an_mcp_tool_object_without_an_id_is_an_invalid_tool() {
     let mcp = Tool::from_json(&mcp_tool_config());
     let agent = Agent::new(
