@@ -270,16 +270,35 @@ impl SystemTool {
             self.system_tool_type.as_str(),
             "transfer_to_number" | "transfer_to_agent"
         );
-        let has_transfers = self
-            .params
-            .get("transfers")
-            .and_then(Value::as_array)
-            .is_some_and(|transfers| !transfers.is_empty());
-        if is_transfer && !has_transfers {
+        if !is_transfer {
+            return Vec::new();
+        }
+        // A loaded transfer_to_number tool may use transfer_rules instead of transfers; the API takes exactly one.
+        let has_entries = |key: &str| {
+            self.params
+                .get(key)
+                .and_then(Value::as_array)
+                .is_some_and(|entries| !entries.is_empty())
+        };
+        let has_transfers = has_entries("transfers");
+        // Only transfer_to_number has transfer_rules; transfer_to_agent needs transfers.
+        let has_rules =
+            self.system_tool_type == "transfer_to_number" && has_entries("transfer_rules");
+        if !has_transfers && !has_rules {
             return vec![ToolIssue::error(
                 ToolIssueCode::NoTransfers,
                 Some("transfer"),
                 format!("{} needs at least one transfer()", self.system_tool_type),
+            )];
+        }
+        if has_transfers && has_rules {
+            return vec![ToolIssue::error(
+                ToolIssueCode::ConflictingTransfers,
+                Some("transfer"),
+                format!(
+                    "{} has both transfers and transfer_rules; the API takes only one",
+                    self.system_tool_type
+                ),
             )];
         }
         Vec::new()
@@ -300,22 +319,45 @@ impl SystemTool {
         }
         let mut params = self.params.clone();
         params.insert("system_tool_type".into(), json!(self.system_tool_type));
-        let parsed: Result<SystemToolConfigInputParams, _> =
-            serde_json::from_value(canonical(&Value::Object(params)));
-        if matches!(
-            parsed,
-            Ok(SystemToolConfigInputParams::__Unknown(_)) | Err(_)
-        ) {
-            return vec![ToolIssue::error(
-                ToolIssueCode::InvalidModel,
-                Some("params"),
-                format!(
-                    "The params don't match the generated model for {}: a field likely has the wrong shape or type. Fix the options or the source JSON",
-                    self.system_tool_type
-                ),
-            )];
-        }
-        Vec::new()
+        let wire = canonical(&Value::Object(params));
+        let parsed: Result<SystemToolConfigInputParams, _> = serde_json::from_value(wire.clone());
+        let model = match parsed {
+            Ok(SystemToolConfigInputParams::__Unknown(_)) | Err(_) => {
+                return vec![ToolIssue::error(
+                    ToolIssueCode::InvalidModel,
+                    Some("params"),
+                    format!(
+                        "The params don't match the generated model for {}: a field likely has the wrong shape or type. Fix the options or the source JSON",
+                        self.system_tool_type
+                    ),
+                )];
+            }
+            Ok(model) => model,
+        };
+        // serde ignores fields the generated model doesn't declare. When it predates an API field
+        // (such as transfer_rules), build() would send the tool with that field silently removed, so
+        // report it. This stops firing once the SDK is regenerated with the field.
+        let sent = serde_json::to_value(&model).unwrap_or(Value::Null);
+        let sent = sent.as_object();
+        wire.as_object()
+            .into_iter()
+            .flatten()
+            .filter(|(key, value)| {
+                key.as_str() != "system_tool_type"
+                    && !is_empty_value(value)
+                    && !sent.is_some_and(|sent| sent.contains_key(key.as_str()))
+            })
+            .map(|(key, _)| {
+                ToolIssue::error(
+                    ToolIssueCode::InvalidModel,
+                    Some(&format!("params.{key}")),
+                    format!(
+                        "This SDK version's generated {} model has no \"{key}\" field, so build() would drop it from the request. to_json() keeps it; upgrade the SDK, or send the to_json() output directly",
+                        self.system_tool_type
+                    ),
+                )
+            })
+            .collect()
     }
 
     fn to_wire(&self) -> WireMap {
@@ -327,5 +369,15 @@ impl SystemTool {
             wire.insert("params".into(), Value::Object(params));
         }
         wire
+    }
+}
+
+/// `null`, `[]` or `{}`: a value whose loss changes nothing the API reads.
+fn is_empty_value(value: &Value) -> bool {
+    match value {
+        Value::Null => true,
+        Value::Array(items) => items.is_empty(),
+        Value::Object(map) => map.is_empty(),
+        _ => false,
     }
 }

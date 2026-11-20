@@ -324,7 +324,7 @@ fn all_fixtures_pass() {
         .filter(|p| p.extension().and_then(|e| e.to_str()) == Some("json"))
         .collect();
     files.sort();
-    assert_eq!(files.len(), 21, "expected 21 fixtures");
+    assert_eq!(files.len(), 23, "expected 23 fixtures");
 
     let mut failures = Vec::new();
     for path in files {
