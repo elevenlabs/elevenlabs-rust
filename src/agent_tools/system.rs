@@ -270,16 +270,33 @@ impl SystemTool {
             self.system_tool_type.as_str(),
             "transfer_to_number" | "transfer_to_agent"
         );
-        let has_transfers = self
-            .params
-            .get("transfers")
-            .and_then(Value::as_array)
-            .is_some_and(|transfers| !transfers.is_empty());
-        if is_transfer && !has_transfers {
+        if !is_transfer {
+            return Vec::new();
+        }
+        // A loaded transfer_to_number tool may use transfer_rules instead of transfers; the API takes exactly one.
+        let has_entries = |key: &str| {
+            self.params
+                .get(key)
+                .and_then(Value::as_array)
+                .is_some_and(|entries| !entries.is_empty())
+        };
+        let has_transfers = has_entries("transfers");
+        let has_rules = has_entries("transfer_rules");
+        if !has_transfers && !has_rules {
             return vec![ToolIssue::error(
                 ToolIssueCode::NoTransfers,
                 Some("transfer"),
                 format!("{} needs at least one transfer()", self.system_tool_type),
+            )];
+        }
+        if has_transfers && has_rules {
+            return vec![ToolIssue::error(
+                ToolIssueCode::ConflictingTransfers,
+                Some("transfer"),
+                format!(
+                    "{} has both transfers and transfer_rules; the API takes only one",
+                    self.system_tool_type
+                ),
             )];
         }
         Vec::new()
