@@ -420,7 +420,6 @@ impl AgentProject {
         };
         let uid = self.uid;
         let slot = &mut self.agents[index];
-        slot.entry.id = Some(id.to_string());
         let branch = branch_id.and_then(|branch_id| {
             slot.entry.branches.as_mut().and_then(|branches| {
                 branches
@@ -428,17 +427,21 @@ impl AgentProject {
                     .find(|b| b.get("branch_id").and_then(Value::as_str) == Some(branch_id))
             })
         });
+        // A branch writes only its own file, never the main branch's. `check_branch` rejects one
+        // without a file before anything is sent; this guards the write itself.
+        if let (Some(branch_id), Some(branch)) = (branch_id, &branch) {
+            if usable_config(branch).is_none() {
+                return Err(no_branch_file(branch_id, agent.name()));
+            }
+        }
+        slot.entry.id = Some(id.to_string());
         let path = match branch {
             // A branch has its own file; the slot's agent is the main branch's.
             Some(branch) => {
                 if let (Some(version_id), Some(obj)) = (version_id, branch.as_object_mut()) {
                     obj.insert("version_id".into(), Value::String(version_id.to_string()));
                 }
-                branch
-                    .get("config")
-                    .and_then(Value::as_str)
-                    .unwrap_or_default()
-                    .to_string()
+                usable_config(branch).unwrap_or_default().to_string()
             }
             None => {
                 let mut stored = agent.clone();
@@ -648,19 +651,34 @@ fn check_branch_of(
     if slot.is_some_and(|s| s.entry.branch_id.as_deref() == Some(branch_id)) {
         return Ok(());
     }
+    // The branch recording writes to: the first with this id. It needs its own file.
     let known = slot
         .and_then(|s| s.entry.branches.as_ref())
-        .is_some_and(|branches| {
+        .and_then(|branches| {
             branches
                 .values()
-                .any(|b| b.get("branch_id").and_then(Value::as_str) == Some(branch_id))
-        });
+                .find(|b| b.get("branch_id").and_then(Value::as_str) == Some(branch_id))
+        })
+        .and_then(usable_config)
+        .is_some();
     if known {
         return Ok(());
     }
-    Err(AgentProjectError::new(format!(
+    Err(no_branch_file(branch_id, label))
+}
+
+/// A branch entry's `config` path, if it's a non-empty string.
+fn usable_config(branch: &Value) -> Option<&str> {
+    branch
+        .get("config")
+        .and_then(Value::as_str)
+        .filter(|path| !path.is_empty())
+}
+
+fn no_branch_file(branch_id: &str, label: &str) -> AgentProjectError {
+    AgentProjectError::new(format!(
         "Branch {branch_id} of \"{label}\" has no config file in {AGENTS_FILE}. Add it under \"branches\" (the CLI's `agents pull --all-branches` does), or push the main branch"
-    )))
+    ))
 }
 
 fn branch_configs(entry: &AgentEntry) -> Vec<String> {

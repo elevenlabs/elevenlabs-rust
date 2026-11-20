@@ -352,8 +352,9 @@ impl Agent {
     }
 
     /// Like [`from_json`](Self::from_json). Tool ids found in `tools_by_id` become [`Tool`]
-    /// objects the agent manages (in its `tools()`, and in its workflow's tool nodes); the rest
-    /// stay as `tool_ids()`.
+    /// objects (in the agent's tools, and in its workflow's tool nodes); the rest stay as
+    /// `tool_ids()`. Webhook and client tools are then managed by `push`; other kinds (such as
+    /// `mcp`) stay attached by the id they were loaded under.
     pub fn from_json_with_tools(config: &Value, tools_by_id: &HashMap<String, Tool>) -> Self {
         let mut base = config.as_object().cloned().unwrap_or_default();
         let name = match base.remove("name") {
@@ -512,15 +513,29 @@ impl Agent {
 
     /// Every webhook and client tool the agent and its workflow use, each once, in first-use
     /// order: the tools `push` creates or updates. System tools aren't included; they live inside
-    /// the agent's config. Tools are values, so "once" means one of each distinct definition.
+    /// the agent's config. Nor are tools of other types (such as `mcp`): they stay attached by the
+    /// id the agent was loaded with. Tools are values, so "once" means one of each distinct
+    /// definition.
     pub fn tools(&self) -> Vec<Tool> {
         let mut out: Vec<Tool> = Vec::new();
         for tool in self.tools.iter().cloned().chain(self.workflow_tools()) {
-            if tool.kind() != ToolKind::System && !out.iter().any(|t| t.same_as(&tool)) {
+            if is_managed(&tool) && !out.iter().any(|t| t.same_as(&tool)) {
                 out.push(tool);
             }
         }
         out
+    }
+
+    /// The id a tool was loaded under (through `tools_by_id`), checking the loaded `tool_ids`
+    /// first so the answer doesn't depend on map order.
+    fn known_id(&self, tool: &Tool) -> Option<String> {
+        let mut rest: Vec<&String> = self.tools_by_id.keys().collect();
+        rest.sort();
+        self.loaded_tool_ids
+            .iter()
+            .chain(rest)
+            .find(|id| self.tools_by_id.get(*id).is_some_and(|t| t.same_as(tool)))
+            .cloned()
     }
 
     fn workflow_tools(&self) -> Vec<Tool> {
@@ -599,7 +614,14 @@ impl Agent {
     ) -> Result<Value, AgentValidationError> {
         let mut issues: Vec<AgentIssue> = Vec::new();
         let mut config = self.base.clone();
+        // Webhook and client tools get the id push gives them; other kinds keep the id they were
+        // loaded with (a missing one is reported below).
         let id_of = |tool: &Tool| -> String {
+            if !is_managed(tool) {
+                if let Some(id) = self.known_id(tool) {
+                    return id;
+                }
+            }
             tool_ids
                 .and_then(|ids| ids.get(tool.name()).cloned())
                 .unwrap_or_else(|| format!("<tool:{}>", tool.name()))
@@ -668,12 +690,27 @@ impl Agent {
                             Some(format!("tools.{}", tool.name())),
                         ));
                     }
+                    if tool.kind() == ToolKind::Other && self.known_id(&tool).is_none() {
+                        let tool_type = match &tool {
+                            Tool::Other(other) => other.tool_type(),
+                            _ => None,
+                        }
+                        .unwrap_or(ToolKind::Other.as_str());
+                        issues.push(AgentIssue::error(
+                            AgentIssueCode::InvalidTool,
+                            format!(
+                                "Tool \"{}\" has type \"{tool_type}\", which push doesn't create or update: load it with its id or attach it with tool_ids",
+                                tool.name()
+                            ),
+                            Some(format!("tools.{}", tool.name())),
+                        ));
+                    }
                     by_name.push(tool);
                 }
             }
         }
 
-        let managed: Vec<&Tool> = self
+        let attached: Vec<&Tool> = self
             .tools
             .iter()
             .filter(|t| t.kind() != ToolKind::System)
@@ -683,7 +720,7 @@ impl Agent {
                 issues.push(conflict("tools", TOOL_IDS_PATH));
             }
             let mut ids = self.tool_ids.clone();
-            ids.extend(managed.iter().map(|t| id_of(t)));
+            ids.extend(attached.iter().map(|t| id_of(t)));
             let ids = keep_order(ids, &self.loaded_tool_ids);
             set_path(&mut config, TOOL_IDS_PATH, Some(json!(ids)));
         }
@@ -740,6 +777,7 @@ impl Agent {
             map_raw_workflow_tool_ids(&mut wire, &|id: &str| {
                 self.tools_by_id
                     .get(id)
+                    .filter(|tool| is_managed(tool))
                     .and_then(|tool| tool_ids.and_then(|ids| ids.get(tool.name())))
                     .cloned()
                     .unwrap_or_else(|| id.to_string())
@@ -798,6 +836,11 @@ impl Agent {
         config.insert("tags".into(), json!(self.tags.clone().unwrap_or_default()));
         Ok(js_canonical(&Value::Object(config)))
     }
+}
+
+/// Whether `push` creates and updates the tool: webhook and client tools only.
+fn is_managed(tool: &Tool) -> bool {
+    matches!(tool.kind(), ToolKind::Webhook | ToolKind::Client)
 }
 
 /// `ids` with the ones in `loaded` first, in that order, then the rest as they are.

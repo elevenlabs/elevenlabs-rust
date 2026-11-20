@@ -6,8 +6,8 @@ use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
 use elevenlabs_rust_sdk::agent_builder::{
-    Agent, AgentOptions, AgentProject, AgentPushAction, PullOptions, PushError, PushOptions,
-    ToolPushAction,
+    Agent, AgentIssueCode, AgentOptions, AgentProject, AgentPushAction, PullOptions, PushError,
+    PushOptions, ToolPushAction,
 };
 use elevenlabs_rust_sdk::agent_tools::{Schema, SystemTool, Tool};
 use elevenlabs_rust_sdk::agent_workflows::{Chain, Options, Workflow};
@@ -1243,6 +1243,128 @@ async fn pull_without_a_project_keeps_other_tool_kinds_attached_by_id() {
         config["conversation_config"]["agent"]["prompt"]["tool_ids"],
         json!(["tool_mcp", "tool_show"])
     );
+}
+
+fn mcp_tool_config() -> Value {
+    json!({ "type": "mcp", "name": "docs_search", "description": "Search the docs" })
+}
+
+#[tokio::test]
+async fn push_leaves_a_loaded_mcp_tool_object_attached_by_its_id() {
+    let server = FakeServer::start().await;
+    server.add_tool("tool_mcp", mcp_tool_config(), &["agent_1"]);
+    let config = json!({
+        "name": "A",
+        "conversation_config": { "agent": { "prompt": { "prompt": "p", "tool_ids": ["tool_mcp"] } } }
+    });
+    server.add_agent("agent_1", config.clone());
+    let agent = Agent::from_json_with_tools(
+        &config,
+        &HashMap::from([("tool_mcp".to_string(), Tool::from_json(&mcp_tool_config()))]),
+    );
+    assert!(agent.tools().is_empty());
+    let result = server
+        .client()
+        .agents_as_code()
+        .push(
+            &agent,
+            PushOptions {
+                agent_id: Some("agent_1".into()),
+                ..Default::default()
+            },
+        )
+        .await
+        .unwrap();
+    assert!(result.tools.is_empty(), "{:?}", result.tools);
+    assert_eq!(server.writes(), ["PATCH /v1/convai/agents/agent_1"]);
+    assert_eq!(
+        server.agent("agent_1")["conversation_config"]["agent"]["prompt"]["tool_ids"],
+        json!(["tool_mcp"])
+    );
+}
+
+#[test]
+fn an_mcp_tool_object_without_an_id_is_an_invalid_tool() {
+    let mcp = Tool::from_json(&mcp_tool_config());
+    let agent = Agent::new(
+        "A",
+        AgentOptions::new().prompt("p").tools(vec![mcp.clone()]),
+    );
+    let err = agent.validate().unwrap_err();
+    let issue = err
+        .issues
+        .iter()
+        .find(|i| i.code == AgentIssueCode::InvalidTool)
+        .unwrap_or_else(|| panic!("{err}"));
+    assert_eq!(issue.path.as_deref(), Some("tools.docs_search"));
+    assert_eq!(
+        issue.message,
+        "Tool \"docs_search\" has type \"mcp\", which push doesn't create or update: load it with its id or attach it with tool_ids"
+    );
+
+    let wf = Workflow::new(None);
+    wf.converse("triage", "Find out what the caller needs", Options::new())
+        .when("Caller asked about the docs".into(), None)
+        .tool("search", vec![mcp.into()], Options::new());
+    let agent = Agent::new("A", AgentOptions::new().prompt("p").workflow(wf));
+    let err = agent.validate().unwrap_err();
+    assert!(
+        err.issues
+            .iter()
+            .any(|i| i.code == AgentIssueCode::InvalidTool
+                && i.path.as_deref() == Some("tools.docs_search")),
+        "{err}"
+    );
+}
+
+#[tokio::test]
+async fn rejects_a_branch_entry_without_a_config_before_any_write() {
+    let server = FakeServer::start().await;
+    let client = server.client();
+    let mut files = read_tree(&fixture_dir());
+    let mut index = parse(&files["agents.json"]);
+    index["agents"][0]["branches"]["beta"] = json!({ "branch_id": "agtbrch_beta" });
+    files.insert(
+        "agents.json".to_string(),
+        serde_json::to_string_pretty(&index).unwrap(),
+    );
+    let mut project = AgentProject::from_files(&files).unwrap();
+    let main_before = project.to_files()["agent_configs/support.json"].clone();
+    let support = project.agent("Support").unwrap().clone();
+    let err = client
+        .agents_as_code()
+        .push(
+            &support,
+            PushOptions {
+                project: Some(&mut project),
+                branch_id: Some("agtbrch_beta".into()),
+                ..Default::default()
+            },
+        )
+        .await
+        .unwrap_err();
+    assert!(matches!(err, PushError::Project(_)));
+    assert!(err.to_string().contains("has no config file"), "{err}");
+    let err = client
+        .agents_as_code()
+        .pull(
+            "agent_support",
+            PullOptions {
+                project: Some(&mut project),
+                branch_id: Some("agtbrch_beta".into()),
+                ..Default::default()
+            },
+        )
+        .await
+        .unwrap_err();
+    assert!(err.to_string().contains("has no config file"), "{err}");
+    assert!(server.calls().is_empty());
+    assert!(project.changed_files().is_empty());
+    assert_eq!(
+        project.to_files()["agent_configs/support.json"],
+        main_before
+    );
+    assert_eq!(main_before, files["agent_configs/support.json"]);
 }
 
 #[tokio::test]
