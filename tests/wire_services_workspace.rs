@@ -34,7 +34,7 @@ async fn set_third_party_disabling_policy_sends_the_real_wire_request() {
 
     let result = client
         .workspace
-        .set_third_party_disabling_policy(&body, None)
+        .set_third_party_disabling_policy(Some(&body), None)
         .await;
     assert!(result.is_ok(), "call failed: {:?}", result.as_ref().err());
 
@@ -112,7 +112,7 @@ async fn set_third_party_disabling_policy_surfaces_the_declared_422() {
 
     let result = client
         .workspace
-        .set_third_party_disabling_policy(&body, None)
+        .set_third_party_disabling_policy(Some(&body), None)
         .await;
 
     match result {

@@ -45,7 +45,7 @@ pub struct BytedanceSeedance2Request {
     pub audios: Option<Vec<AudioReference>>,
     /// The resolution of the output video.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resolution: Option<BytedanceSeedance2RequestResolution>,
+    pub resolution: Option<BytedanceSeedance25RequestResolution>,
 }
 
 impl BytedanceSeedance2Request {
@@ -68,7 +68,7 @@ pub struct BytedanceSeedance2RequestBuilder {
     images: Option<Vec<ImageReference>>,
     videos: Option<Vec<VideoReference>>,
     audios: Option<Vec<AudioReference>>,
-    resolution: Option<BytedanceSeedance2RequestResolution>,
+    resolution: Option<BytedanceSeedance25RequestResolution>,
 }
 
 impl BytedanceSeedance2RequestBuilder {
@@ -127,7 +127,7 @@ impl BytedanceSeedance2RequestBuilder {
         self
     }
 
-    pub fn resolution(mut self, value: BytedanceSeedance2RequestResolution) -> Self {
+    pub fn resolution(mut self, value: BytedanceSeedance25RequestResolution) -> Self {
         self.resolution = Some(value);
         self
     }

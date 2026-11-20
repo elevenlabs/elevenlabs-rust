@@ -18,14 +18,7 @@ impl EnvironmentVariablesClient {
     /// configuration, so a later `set_access_token` reaches it; one built here
     /// owns its configuration outright and is unaffected by the root client.
     pub fn new(config: ClientConfig) -> Result<Self, crate::error::ApiError> {
-        let http_client = Arc::new(
-            HttpClient::new(
-                config.base_url.clone(),
-                config.timeout.as_millis() as u64,
-                config.max_retries,
-            )
-            .map_err(crate::error::ApiError::Network)?,
-        );
+        let http_client = Arc::new(HttpClient::new(config.clone())?);
         let config_manager = Arc::new(ConfigManager::new(config));
         Ok(Self::with_shared(http_client, config_manager))
     }
@@ -367,7 +360,7 @@ impl EnvironmentVariablesClient {
 
     /// Delete Environment Variable
     ///
-    /// Delete an environment variable and its values in all environments. WARNING: Agents are not checked. A variable that an agent still uses (custom LLM, webhooks or cloud storage export, on any branch or version) is deleted anyway, and that agent's conversations then fail. The delete is only rejected while tools, MCP servers or the workspace conversation initiation webhook use the variable.
+    /// Delete an environment variable and its values in all environments. The delete is rejected while the latest version of an unarchived agent branch, a tool, an MCP server or the workspace conversation initiation webhook uses the variable. Archived branches and earlier versions are not checked.
     ///
     /// # Arguments
     ///

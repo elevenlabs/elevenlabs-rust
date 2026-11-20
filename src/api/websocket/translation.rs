@@ -12,7 +12,7 @@ pub struct TranslationConnectOptions {
         Option<crate::api::types::BodyTextToDialogueFullWithTimestampsApplyTextNormalization>,
     pub eagerness: Option<crate::api::types::TranslationRealtimeEagerness>,
     pub client_session_id: Option<String>,
-    pub enable_zrm: Option<bool>,
+    pub enable_logging: Option<bool>,
 }
 
 /// A JSON message the server sends on the `v1_translation_realtime` channel.
@@ -155,10 +155,10 @@ impl TranslationClient {
                 .query_params
                 .push(("client_session_id".to_string(), value.clone()));
         }
-        if let Some(value) = options.enable_zrm {
+        if let Some(value) = options.enable_logging {
             ws_options
                 .query_params
-                .push(("enable_zrm".to_string(), value.to_string()));
+                .push(("enable_logging".to_string(), value.to_string()));
         }
         let full_url = crate::core::websocket::ws_url(url, "/v1/translation/realtime");
         Self::open(&full_url, ws_options).await
@@ -335,10 +335,10 @@ impl TranslationConnector {
                 .query_params
                 .push(("client_session_id".to_string(), value.clone()));
         }
-        if let Some(value) = options.enable_zrm {
+        if let Some(value) = options.enable_logging {
             ws_options
                 .query_params
-                .push(("enable_zrm".to_string(), value.to_string()));
+                .push(("enable_logging".to_string(), value.to_string()));
         }
         let base_url = match &self.source {
             TranslationConnectorSource::Fixed {

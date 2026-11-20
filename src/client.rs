@@ -19,7 +19,9 @@ use crate::api::AuditLogsClient;
 use crate::api::AuthConnectionsClient;
 use crate::api::AvatarClient;
 use crate::api::BatchCallsClient;
+use crate::api::BillingClient;
 use crate::api::BranchesClient;
+use crate::api::BusinessProfileClient;
 use crate::api::CallsClient;
 use crate::api::CaptchaClient;
 use crate::api::ChaptersClient;
@@ -29,6 +31,7 @@ use crate::api::CollectionsClient;
 use crate::api::CompositionPlanClient;
 use crate::api::ConfigClient;
 use crate::api::ContentClient;
+use crate::api::ContentProvenanceClient;
 use crate::api::ConversationsClient;
 use crate::api::CrawlJobsClient;
 use crate::api::DeliverablesClient;
@@ -50,12 +53,14 @@ use crate::api::ForcedAlignmentClient;
 use crate::api::GroupsClient;
 use crate::api::HistoryClient;
 use crate::api::HoldAudioClient;
+use crate::api::HolidaysClient;
 use crate::api::ImageClient;
 use crate::api::InvitesClient;
 use crate::api::InvocationsClient;
 use crate::api::ItemsClient;
 use crate::api::IvcClient;
 use crate::api::KnowledgeBaseClient;
+use crate::api::KnowledgeSourcesClient;
 use crate::api::LanguageClient;
 use crate::api::LanguagesClient;
 use crate::api::LeadsClient;
@@ -63,6 +68,7 @@ use crate::api::LinkClient;
 use crate::api::LiveCountClient;
 use crate::api::LlmClient;
 use crate::api::LlmUsageClient;
+use crate::api::LocationsClient;
 use crate::api::McpServersClient;
 use crate::api::MediaClient;
 use crate::api::MembersClient;
@@ -75,11 +81,13 @@ use crate::api::OutboundCampaignsClient;
 use crate::api::PhoneNumbersClient;
 use crate::api::PreviewClient;
 use crate::api::ProceduresClient;
+use crate::api::ProductsClient;
 use crate::api::ProjectClient;
 use crate::api::ProjectsClient;
 use crate::api::PronunciationDictionariesClient;
 use crate::api::PvcClient;
 use crate::api::RealtimeClient;
+use crate::api::ReceptionistsClient;
 use crate::api::RequestsClient;
 use crate::api::ResourcesClient;
 use crate::api::RulesClient;
@@ -87,6 +95,7 @@ use crate::api::RunsClient;
 use crate::api::SamplesClient;
 use crate::api::SecretsClient;
 use crate::api::ServiceAccountsClient;
+use crate::api::ServicesClient;
 use crate::api::SettingsClient;
 use crate::api::SingleUseClient;
 use crate::api::SipTrunkClient;
@@ -95,8 +104,12 @@ use crate::api::SpeakersClient;
 use crate::api::SpeechEngineClient;
 use crate::api::SpeechToSpeechClient;
 use crate::api::SpeechToTextClient;
+use crate::api::StaffClient;
+use crate::api::StockClient;
 use crate::api::StudioClient;
+use crate::api::SubagentsClient;
 use crate::api::SubscriptionClient;
+use crate::api::SubscriptionsClient;
 use crate::api::SummariesClient;
 use crate::api::TagsClient;
 use crate::api::TemplatesClient;
@@ -105,12 +118,14 @@ use crate::api::TextToDialogueClient;
 use crate::api::TextToSoundEffectsClient;
 use crate::api::TextToSpeechClient;
 use crate::api::TextToVoiceClient;
+use crate::api::TiersClient;
 use crate::api::ToolApprovalsClient;
 use crate::api::ToolConfigsClient;
 use crate::api::ToolsClient;
 use crate::api::TopicsClient;
 use crate::api::TranscriptClient;
 use crate::api::TranscriptsClient;
+use crate::api::TransferRulesClient;
 use crate::api::TriageTicketsClient;
 use crate::api::TwilioClient;
 use crate::api::UsageClient;
@@ -126,6 +141,7 @@ use crate::api::WhatsappAccountsClient;
 use crate::api::WhatsappClient;
 use crate::api::WidgetClient;
 use crate::api::WorkspaceClient;
+use crate::api::WorkspacesClient;
 use crate::config::ClientConfig;
 use crate::config::ClientConfigBuilder;
 use crate::core::config_manager::ConfigManager;
@@ -167,6 +183,7 @@ pub struct ApiClient {
     pub transcripts: TranscriptsClient,
     pub models: ModelsClient,
     pub audio_native: AudioNativeClient,
+    pub content_provenance: ContentProvenanceClient,
     pub rules: RulesClient,
     pub api_keys: ApiKeysClient,
     pub workspace: WorkspaceClient,
@@ -188,6 +205,7 @@ pub struct ApiClient {
     pub whatsapp: WhatsappClient,
     pub agents: AgentsClient,
     pub summaries: SummariesClient,
+    pub subagents: SubagentsClient,
     pub widget: WidgetClient,
     pub link: LinkClient,
     pub avatar: AvatarClient,
@@ -258,6 +276,20 @@ pub struct ApiClient {
     pub assets: AssetsClient,
     pub usage: UsageClient,
     pub requests: RequestsClient,
+    pub services: ServicesClient,
+    pub products: ProductsClient,
+    pub stock: StockClient,
+    pub staff: StaffClient,
+    pub receptionists: ReceptionistsClient,
+    pub transfer_rules: TransferRulesClient,
+    pub holidays: HolidaysClient,
+    pub locations: LocationsClient,
+    pub business_profile: BusinessProfileClient,
+    pub knowledge_sources: KnowledgeSourcesClient,
+    pub workspaces: WorkspacesClient,
+    pub subscriptions: SubscriptionsClient,
+    pub tiers: TiersClient,
+    pub billing: BillingClient,
     #[cfg(feature = "websocket")]
     pub text_to_dialogue_multi_context: TextToDialogueMultiContextConnector,
     #[cfg(feature = "websocket")]
@@ -268,14 +300,7 @@ pub struct ApiClient {
 
 impl ApiClient {
     pub fn new(config: ClientConfig) -> Result<Self, crate::error::ApiError> {
-        let http_client = Arc::new(
-            HttpClient::new(
-                config.base_url.clone(),
-                config.timeout.as_millis() as u64,
-                config.max_retries,
-            )
-            .map_err(crate::error::ApiError::Network)?,
-        );
+        let http_client = Arc::new(HttpClient::new(config.clone())?);
         let config_manager = Arc::new(ConfigManager::new(config));
         let history = HistoryClient::with_shared(http_client.clone(), config_manager.clone());
         let text_to_sound_effects =
@@ -322,6 +347,8 @@ impl ApiClient {
         let models = ModelsClient::with_shared(http_client.clone(), config_manager.clone());
         let audio_native =
             AudioNativeClient::with_shared(http_client.clone(), config_manager.clone());
+        let content_provenance =
+            ContentProvenanceClient::with_shared(http_client.clone(), config_manager.clone());
         let rules = RulesClient::with_shared(http_client.clone(), config_manager.clone());
         let api_keys = ApiKeysClient::with_shared(http_client.clone(), config_manager.clone());
         let workspace = WorkspaceClient::with_shared(http_client.clone(), config_manager.clone());
@@ -348,6 +375,7 @@ impl ApiClient {
         let whatsapp = WhatsappClient::with_shared(http_client.clone(), config_manager.clone());
         let agents = AgentsClient::with_shared(http_client.clone(), config_manager.clone());
         let summaries = SummariesClient::with_shared(http_client.clone(), config_manager.clone());
+        let subagents = SubagentsClient::with_shared(http_client.clone(), config_manager.clone());
         let widget = WidgetClient::with_shared(http_client.clone(), config_manager.clone());
         let link = LinkClient::with_shared(http_client.clone(), config_manager.clone());
         let avatar = AvatarClient::with_shared(http_client.clone(), config_manager.clone());
@@ -438,6 +466,25 @@ impl ApiClient {
         let assets = AssetsClient::with_shared(http_client.clone(), config_manager.clone());
         let usage = UsageClient::with_shared(http_client.clone(), config_manager.clone());
         let requests = RequestsClient::with_shared(http_client.clone(), config_manager.clone());
+        let services = ServicesClient::with_shared(http_client.clone(), config_manager.clone());
+        let products = ProductsClient::with_shared(http_client.clone(), config_manager.clone());
+        let stock = StockClient::with_shared(http_client.clone(), config_manager.clone());
+        let staff = StaffClient::with_shared(http_client.clone(), config_manager.clone());
+        let receptionists =
+            ReceptionistsClient::with_shared(http_client.clone(), config_manager.clone());
+        let transfer_rules =
+            TransferRulesClient::with_shared(http_client.clone(), config_manager.clone());
+        let holidays = HolidaysClient::with_shared(http_client.clone(), config_manager.clone());
+        let locations = LocationsClient::with_shared(http_client.clone(), config_manager.clone());
+        let business_profile =
+            BusinessProfileClient::with_shared(http_client.clone(), config_manager.clone());
+        let knowledge_sources =
+            KnowledgeSourcesClient::with_shared(http_client.clone(), config_manager.clone());
+        let workspaces = WorkspacesClient::with_shared(http_client.clone(), config_manager.clone());
+        let subscriptions =
+            SubscriptionsClient::with_shared(http_client.clone(), config_manager.clone());
+        let tiers = TiersClient::with_shared(http_client.clone(), config_manager.clone());
+        let billing = BillingClient::with_shared(http_client.clone(), config_manager.clone());
         #[cfg(feature = "websocket")]
         let text_to_dialogue_multi_context =
             TextToDialogueMultiContextConnector::with_shared(config_manager.clone());
@@ -480,6 +527,7 @@ impl ApiClient {
             transcripts,
             models,
             audio_native,
+            content_provenance,
             rules,
             api_keys,
             workspace,
@@ -501,6 +549,7 @@ impl ApiClient {
             whatsapp,
             agents,
             summaries,
+            subagents,
             widget,
             link,
             avatar,
@@ -571,6 +620,20 @@ impl ApiClient {
             assets,
             usage,
             requests,
+            services,
+            products,
+            stock,
+            staff,
+            receptionists,
+            transfer_rules,
+            holidays,
+            locations,
+            business_profile,
+            knowledge_sources,
+            workspaces,
+            subscriptions,
+            tiers,
+            billing,
             #[cfg(feature = "websocket")]
             text_to_dialogue_multi_context,
             #[cfg(feature = "websocket")]
@@ -693,6 +756,16 @@ impl ApiClientBuilder {
     /// Set the user agent
     pub fn user_agent(mut self, user_agent: impl Into<String>) -> Self {
         self.config = self.config.user_agent(user_agent);
+        self
+    }
+
+    /// Use a custom `reqwest` client for every request
+    ///
+    /// The supplied client is used as-is, so it owns all transport-level
+    /// configuration — custom certificates, proxies, timeouts and user agent.
+    /// Authentication, custom headers and retries are still applied by the SDK.
+    pub fn reqwest_client(mut self, client: reqwest::Client) -> Self {
+        self.config = self.config.reqwest_client(client);
         self
     }
 

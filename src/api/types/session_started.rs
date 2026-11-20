@@ -5,7 +5,7 @@ pub struct SessionStarted {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_type: Option<DubbingSessionStartedMessageType>,
     pub session_id: String,
-    pub config: Config,
+    pub config: SessionStartedConfig,
 }
 
 impl SessionStarted {
@@ -19,7 +19,7 @@ impl SessionStarted {
 pub struct SessionStartedBuilder {
     message_type: Option<DubbingSessionStartedMessageType>,
     session_id: Option<String>,
-    config: Option<Config>,
+    config: Option<SessionStartedConfig>,
 }
 
 impl SessionStartedBuilder {
@@ -33,7 +33,7 @@ impl SessionStartedBuilder {
         self
     }
 
-    pub fn config(mut self, value: Config) -> Self {
+    pub fn config(mut self, value: SessionStartedConfig) -> Self {
         self.config = Some(value);
         self
     }

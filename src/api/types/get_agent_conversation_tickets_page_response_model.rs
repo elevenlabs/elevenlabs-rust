@@ -1,6 +1,6 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct GetAgentConversationTicketsPageResponseModel {
     #[serde(default)]
     pub agent_conversation_tickets: Vec<AgentConversationTicketResponseModel>,

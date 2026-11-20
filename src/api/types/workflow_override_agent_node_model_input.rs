@@ -23,6 +23,9 @@ pub struct WorkflowOverrideAgentNodeModelInput {
     pub label: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entry_behavior: Option<EntryBehavior>,
+    /// Lets the caller interrupt the response this node gives on entry. Ignored unless entry_behavior is "generate_immediately".
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_interruptions_on_entry: Option<bool>,
 }
 
 impl WorkflowOverrideAgentNodeModelInput {
@@ -42,6 +45,7 @@ pub struct WorkflowOverrideAgentNodeModelInputBuilder {
     additional_tool_ids: Option<Vec<String>>,
     label: Option<String>,
     entry_behavior: Option<EntryBehavior>,
+    allow_interruptions_on_entry: Option<bool>,
 }
 
 impl WorkflowOverrideAgentNodeModelInputBuilder {
@@ -88,6 +92,11 @@ impl WorkflowOverrideAgentNodeModelInputBuilder {
         self
     }
 
+    pub fn allow_interruptions_on_entry(mut self, value: bool) -> Self {
+        self.allow_interruptions_on_entry = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`WorkflowOverrideAgentNodeModelInput`].
     /// This method will fail if any of the following fields are not set:
     /// - [`label`](WorkflowOverrideAgentNodeModelInputBuilder::label)
@@ -103,6 +112,7 @@ impl WorkflowOverrideAgentNodeModelInputBuilder {
                 .label
                 .ok_or_else(|| BuildError::missing_field("label"))?,
             entry_behavior: self.entry_behavior,
+            allow_interruptions_on_entry: self.allow_interruptions_on_entry,
         })
     }
 }

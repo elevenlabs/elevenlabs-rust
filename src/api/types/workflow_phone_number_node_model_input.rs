@@ -22,6 +22,9 @@ pub struct WorkflowPhoneNumberNodeModelInput {
     /// The ids of outgoing edges in the order they should be evaluated.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edge_order: Option<Vec<String>>,
+    /// Per-provider transfer configuration. Mutually exclusive with a non-empty `transfer_destination`: when present, the configuration matching the call's telephony provider is executed and the legacy transfer fields are ignored.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_configs: Option<Vec<WorkflowPhoneNumberNodeModelInputProviderConfigsItem>>,
 }
 
 impl WorkflowPhoneNumberNodeModelInput {
@@ -41,6 +44,7 @@ pub struct WorkflowPhoneNumberNodeModelInputBuilder {
     post_dial_digits: Option<WorkflowPhoneNumberNodeModelInputPostDialDigits>,
     position: Option<PositionInput>,
     edge_order: Option<Vec<String>>,
+    provider_configs: Option<Vec<WorkflowPhoneNumberNodeModelInputProviderConfigsItem>>,
 }
 
 impl WorkflowPhoneNumberNodeModelInputBuilder {
@@ -93,6 +97,14 @@ impl WorkflowPhoneNumberNodeModelInputBuilder {
         self
     }
 
+    pub fn provider_configs(
+        mut self,
+        value: Vec<WorkflowPhoneNumberNodeModelInputProviderConfigsItem>,
+    ) -> Self {
+        self.provider_configs = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`WorkflowPhoneNumberNodeModelInput`].
     /// This method will fail if any of the following fields are not set:
     /// - [`transfer_destination`](WorkflowPhoneNumberNodeModelInputBuilder::transfer_destination)
@@ -108,6 +120,7 @@ impl WorkflowPhoneNumberNodeModelInputBuilder {
             post_dial_digits: self.post_dial_digits,
             position: self.position,
             edge_order: self.edge_order,
+            provider_configs: self.provider_configs,
         })
     }
 }

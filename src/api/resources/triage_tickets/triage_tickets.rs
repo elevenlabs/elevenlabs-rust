@@ -18,14 +18,7 @@ impl TriageTicketsClient {
     /// configuration, so a later `set_access_token` reaches it; one built here
     /// owns its configuration outright and is unaffected by the root client.
     pub fn new(config: ClientConfig) -> Result<Self, crate::error::ApiError> {
-        let http_client = Arc::new(
-            HttpClient::new(
-                config.base_url.clone(),
-                config.timeout.as_millis() as u64,
-                config.max_retries,
-            )
-            .map_err(crate::error::ApiError::Network)?,
-        );
+        let http_client = Arc::new(HttpClient::new(config.clone())?);
         let config_manager = Arc::new(ConfigManager::new(config));
         Ok(Self::with_shared(http_client, config_manager))
     }
@@ -39,7 +32,7 @@ impl TriageTicketsClient {
 
     /// List Agent Conversation Tickets
     ///
-    /// List an agent's conversation triage tickets, ordered by most recently created first unless sorted by priority. These are tickets about the agent's own performance on a conversation (for triage with Architect), not tickets an agent opens for end users.
+    /// List an agent's issues, ordered by most recently created first unless sorted by priority. These are issues about the agent's own performance on a conversation (to work on with Architect), not tickets an agent opens for end users.
     ///
     /// # Arguments
     ///
@@ -64,7 +57,6 @@ impl TriageTicketsClient {
         let sort_by = request.sort_by.clone();
         let owner_user_id = request.owner_user_id.clone();
         let assignee_user_id = request.assignee_user_id.clone();
-        let issue_type = request.issue_type.clone();
         let label = request.label.clone();
         let merged_into_ticket_id = request.merged_into_ticket_id.clone();
         let search = request.search.clone();
@@ -99,9 +91,6 @@ impl TriageTicketsClient {
         }
         if let Some(val) = &assignee_user_id {
             request = request.query(&[("assignee_user_id", &val.to_string())]);
-        }
-        if let Some(val) = &issue_type {
-            request = request.query(&[("issue_type", &val.to_string())]);
         }
         if let Some(val) = &label {
             request = request.query(&[("label", &val.to_string())]);
@@ -170,7 +159,7 @@ impl TriageTicketsClient {
 
     /// Create Manual Agent Ticket
     ///
-    /// Manually raise a follow-up ticket against an agent, not tied to any conversation (for example a task like 'add the KB about X'). Without a title, one is derived from the comment. Requires viewer access to the agent.
+    /// Manually raise a follow-up issue against an agent, not tied to any conversation (for example a task like 'add the KB about X'). Without a title, one is derived from the comment. Requires viewer access to the agent.
     ///
     /// # Arguments
     ///
@@ -252,7 +241,7 @@ impl TriageTicketsClient {
 
     /// List Workspace Conversation Tickets
     ///
-    /// List conversation triage tickets across every agent in the workspace, ordered by most recently created first. Use this to build a workspace-wide view (for example, tickets assigned to the caller). Supports the same filters, sorting and search as the per-agent endpoint. Tickets for agents the caller cannot access are omitted.
+    /// List agent issues across every agent in the workspace, ordered by most recently created first. Use this to build a workspace-wide view (for example, issues assigned to the caller). Supports the same filters, sorting and search as the per-agent endpoint. Issues for agents the caller cannot access are omitted.
     ///
     /// # Arguments
     ///
@@ -275,7 +264,6 @@ impl TriageTicketsClient {
         let sort_by = request.sort_by.clone();
         let owner_user_id = request.owner_user_id.clone();
         let assignee_user_id = request.assignee_user_id.clone();
-        let issue_type = request.issue_type.clone();
         let label = request.label.clone();
         let merged_into_ticket_id = request.merged_into_ticket_id.clone();
         let search = request.search.clone();
@@ -310,9 +298,6 @@ impl TriageTicketsClient {
         }
         if let Some(val) = &assignee_user_id {
             request = request.query(&[("assignee_user_id", &val.to_string())]);
-        }
-        if let Some(val) = &issue_type {
-            request = request.query(&[("issue_type", &val.to_string())]);
         }
         if let Some(val) = &label {
             request = request.query(&[("label", &val.to_string())]);
@@ -381,7 +366,7 @@ impl TriageTicketsClient {
 
     /// Create Agent Conversation Ticket
     ///
-    /// Raise a ticket about an agent's performance on a conversation, for triage with Architect. Provide an overall comment and/or turn-level comments describing what went wrong.
+    /// Raise an issue about an agent's performance on a conversation, to work on with Architect. Provide an overall comment and/or turn-level comments describing what went wrong.
     ///
     /// # Arguments
     ///
@@ -538,7 +523,7 @@ impl TriageTicketsClient {
 
     /// Get Agent Conversation Ticket
     ///
-    /// Get an agent conversation ticket by ID.
+    /// Get an agent issue by ID.
     ///
     /// # Arguments
     ///
@@ -611,7 +596,7 @@ impl TriageTicketsClient {
 
     /// Update Agent Conversation Ticket
     ///
-    /// Update a ticket's title, comment, status, priority, and/or assignee. Requires viewer access to the ticket's agent.
+    /// Update an agent issue's title, comment, status, priority, and/or assignee. Requires viewer access to the issue's agent.
     ///
     /// # Arguments
     ///
@@ -693,7 +678,7 @@ impl TriageTicketsClient {
 
     /// Delete Agent Conversation Ticket
     ///
-    /// Delete an agent conversation ticket. Restricted to the ticket creator or a workspace admin.
+    /// Delete an agent issue. Restricted to the issue creator or a workspace admin.
     ///
     /// # Arguments
     ///
@@ -758,7 +743,7 @@ impl TriageTicketsClient {
 
     /// Add Comment To Agent Conversation Ticket
     ///
-    /// Append a comment discussing how to resolve the ticket. Requires viewer access to the ticket's agent.
+    /// Append a comment discussing how to resolve the agent issue. Requires viewer access to the issue's agent.
     ///
     /// # Arguments
     ///
@@ -840,7 +825,7 @@ impl TriageTicketsClient {
 
     /// Merge Agent Conversation Tickets
     ///
-    /// Merge other open tickets of the same agent into this pending, in-progress, or resolved one. Their conversations move onto this ticket, its priority is raised to the highest among them, and they are kept with status 'merged'. Requires viewer access to the ticket's agent.
+    /// Merge other open issues of the same agent into this pending, in-progress, or resolved one. Their conversations move onto this issue, its priority is raised to the highest among them, and they are kept with status 'merged'. Requires viewer access to the issue's agent.
     ///
     /// # Arguments
     ///
@@ -922,7 +907,7 @@ impl TriageTicketsClient {
 
     /// Add Turn Comment To Agent Conversation Ticket
     ///
-    /// Append a turn-level comment to a ticket. Requires viewer access to the ticket's agent.
+    /// Append a turn-level comment to an agent issue. Requires viewer access to the issue's agent.
     ///
     /// # Arguments
     ///

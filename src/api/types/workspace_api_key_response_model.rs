@@ -19,7 +19,7 @@ pub struct WorkspaceApiKeyResponseModel {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<PermissionType>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub disable_reason: Option<LocItemkReason>,
+    pub disable_reason: Option<LockReason>,
     /// Maximum number of credits allowed in the current billing period.
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -62,7 +62,7 @@ pub struct WorkspaceApiKeyResponseModelBuilder {
     created_at_unix: Option<i64>,
     is_disabled: Option<bool>,
     permissions: Option<Vec<PermissionType>>,
-    disable_reason: Option<LocItemkReason>,
+    disable_reason: Option<LockReason>,
     character_limit: Option<i64>,
     character_count: Option<i64>,
     hashed_xi_api_key: Option<String>,
@@ -108,7 +108,7 @@ impl WorkspaceApiKeyResponseModelBuilder {
         self
     }
 
-    pub fn disable_reason(mut self, value: LocItemkReason) -> Self {
+    pub fn disable_reason(mut self, value: LockReason) -> Self {
         self.disable_reason = Some(value);
         self
     }

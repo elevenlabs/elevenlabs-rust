@@ -18,14 +18,7 @@ impl BranchesClient {
     /// configuration, so a later `set_access_token` reaches it; one built here
     /// owns its configuration outright and is unaffected by the root client.
     pub fn new(config: ClientConfig) -> Result<Self, crate::error::ApiError> {
-        let http_client = Arc::new(
-            HttpClient::new(
-                config.base_url.clone(),
-                config.timeout.as_millis() as u64,
-                config.max_retries,
-            )
-            .map_err(crate::error::ApiError::Network)?,
-        );
+        let http_client = Arc::new(HttpClient::new(config.clone())?);
         let config_manager = Arc::new(ConfigManager::new(config));
         Ok(Self::with_shared(http_client, config_manager))
     }
@@ -366,7 +359,7 @@ impl BranchesClient {
 
     /// Preview Merged Configuration
     ///
-    /// Returns the result of merging the source branch into the target branch without performing the merge. Useful for showing an accurate diff before confirming.
+    /// Returns the result of merging the source branch into the target branch without performing the merge. When `conflicts` is not empty, the merge itself is rejected unless `conflict_resolutions` settles every conflict or `force` is set; until then the returned configuration shows one side of each conflict only as a placeholder.
     ///
     /// # Arguments
     ///
@@ -461,7 +454,7 @@ impl BranchesClient {
 
     /// Merge A Branch Into A Target Branch
     ///
-    /// Merge a branch into a target branch
+    /// Merge a branch into a target branch. If both branches changed the same field, the merge returns 409 unless `conflict_resolutions` settles every conflict the merge preview reports, or `force` is set.
     ///
     /// # Arguments
     ///
@@ -551,7 +544,7 @@ impl BranchesClient {
 
     /// Preview Rebased Configuration
     ///
-    /// Returns the result of pulling changes from a source branch (defaults to main) into the given branch without performing it, preserving the given branch's own changes. Useful for showing an accurate diff before confirming.
+    /// Returns the result of pulling changes from a source branch (defaults to main) into the given branch without performing it. When `conflicts` is not empty, the rebase itself is rejected unless `conflict_resolutions` settles every conflict; until then the returned configuration keeps the given branch's side of each conflict.
     ///
     /// # Arguments
     ///
@@ -644,7 +637,7 @@ impl BranchesClient {
 
     /// Rebase A Branch Onto Main
     ///
-    /// Pull changes from a source branch (defaults to main) into this branch as a new version, preserving this branch's own changes on conflicts.
+    /// Pull changes from a source branch (defaults to main) into this branch as a new version. If both branches changed the same field, the rebase returns 409 unless `conflict_resolutions` settles every conflict the rebase preview reports.
     ///
     /// # Arguments
     ///

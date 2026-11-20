@@ -23,6 +23,8 @@ pub struct AgentConfig {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_behavior_overrides: Option<std::collections::HashMap<String, BehaviorOverride>>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub subagent_config: Option<SubagentConfigInput>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub prompt: Option<PromptAgentApiModelInput>,
 }
 
@@ -42,6 +44,7 @@ pub struct AgentConfigBuilder {
     disable_first_message_interruptions: Option<bool>,
     max_conversation_duration_message: Option<String>,
     text_behavior_overrides: Option<std::collections::HashMap<String, BehaviorOverride>>,
+    subagent_config: Option<SubagentConfigInput>,
     prompt: Option<PromptAgentApiModelInput>,
 }
 
@@ -84,6 +87,11 @@ impl AgentConfigBuilder {
         self
     }
 
+    pub fn subagent_config(mut self, value: SubagentConfigInput) -> Self {
+        self.subagent_config = Some(value);
+        self
+    }
+
     pub fn prompt(mut self, value: PromptAgentApiModelInput) -> Self {
         self.prompt = Some(value);
         self
@@ -99,6 +107,7 @@ impl AgentConfigBuilder {
             disable_first_message_interruptions: self.disable_first_message_interruptions,
             max_conversation_duration_message: self.max_conversation_duration_message,
             text_behavior_overrides: self.text_behavior_overrides,
+            subagent_config: self.subagent_config,
             prompt: self.prompt,
         })
     }

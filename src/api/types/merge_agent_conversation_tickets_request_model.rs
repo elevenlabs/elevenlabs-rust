@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct MergeAgentConversationTicketsRequestModel {
-    /// Open tickets of the same agent to fold into this one. They are kept with status 'merged', pointing at this ticket.
+    /// Open issues of the same agent to fold into this one. They are kept with status 'merged', pointing at this issue.
     #[serde(default)]
     pub source_ticket_ids: Vec<String>,
 }

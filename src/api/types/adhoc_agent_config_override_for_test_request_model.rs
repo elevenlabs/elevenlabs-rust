@@ -1,11 +1,12 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
 pub struct AdhocAgentConfigOverrideForTestRequestModel {
-    #[serde(default)]
-    pub conversation_config: ConversationalConfig,
-    #[serde(default)]
-    pub platform_settings: AgentPlatformSettingsRequestModel,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conversation_config: Option<ConversationalConfig>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform_settings: Option<AgentPlatformSettingsRequestModel>,
+    /// A workflow to run instead of the agent's. It replaces the agent's workflow whole.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workflow: Option<AgentWorkflowRequestModel>,
 }
@@ -41,17 +42,10 @@ impl AdhocAgentConfigOverrideForTestRequestModelBuilder {
     }
 
     /// Consumes the builder and constructs a [`AdhocAgentConfigOverrideForTestRequestModel`].
-    /// This method will fail if any of the following fields are not set:
-    /// - [`conversation_config`](AdhocAgentConfigOverrideForTestRequestModelBuilder::conversation_config)
-    /// - [`platform_settings`](AdhocAgentConfigOverrideForTestRequestModelBuilder::platform_settings)
     pub fn build(self) -> Result<AdhocAgentConfigOverrideForTestRequestModel, BuildError> {
         Ok(AdhocAgentConfigOverrideForTestRequestModel {
-            conversation_config: self
-                .conversation_config
-                .ok_or_else(|| BuildError::missing_field("conversation_config"))?,
-            platform_settings: self
-                .platform_settings
-                .ok_or_else(|| BuildError::missing_field("platform_settings"))?,
+            conversation_config: self.conversation_config,
+            platform_settings: self.platform_settings,
             workflow: self.workflow,
         })
     }

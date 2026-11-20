@@ -1,3 +1,4 @@
+use crate::config::ClientConfig;
 use crate::core::RequestOptions;
 use futures::stream::{Stream, StreamExt};
 use reqwest::{Client, RequestBuilder, Response};
@@ -56,24 +57,36 @@ pub struct HttpClient {
     client: Client,
     base_url: RwLock<String>,
     timeout: std::time::Duration,
+    apply_timeout: bool,
     max_retries: u32,
 }
 
 impl HttpClient {
-    pub fn new(
-        base_url: String,
-        timeout_ms: u64,
-        max_retries: u32,
-    ) -> Result<Self, reqwest::Error> {
-        let timeout = std::time::Duration::from_millis(timeout_ms);
-        let client = Client::builder()
-            .user_agent("postman-codegen/3.22.0 elevenlabs-rust-sdk/1.0.0 (rust)")
-            .connect_timeout(timeout)
-            .read_timeout(timeout)
-            .build()?;
+    pub fn new(config: ClientConfig) -> Result<Self, crate::error::ApiError> {
+        let ClientConfig {
+            base_url,
+            timeout,
+            max_retries,
+            user_agent,
+            reqwest_client,
+            ..
+        } = config;
+        let (client, apply_timeout) = match reqwest_client {
+            Some(client) => (client, false),
+            None => {
+                let client = Client::builder()
+                    .user_agent(&user_agent)
+                    .connect_timeout(timeout)
+                    .read_timeout(timeout)
+                    .build()
+                    .map_err(crate::error::ApiError::Network)?;
+                (client, true)
+            }
+        };
         Ok(Self {
             client,
             timeout,
+            apply_timeout,
             base_url: RwLock::new(base_url),
             max_retries,
         })
@@ -91,33 +104,58 @@ impl HttpClient {
     }
 
     pub fn get(&self, path: impl AsRef<str>) -> RequestBuilder {
-        self.client
-            .get(self.url(path.as_ref()))
-            .timeout(self.timeout)
+        {
+            let request = self.client.get(self.url(path.as_ref()));
+            if self.apply_timeout {
+                request.timeout(self.timeout)
+            } else {
+                request
+            }
+        }
     }
 
     pub fn post(&self, path: impl AsRef<str>) -> RequestBuilder {
-        self.client
-            .post(self.url(path.as_ref()))
-            .timeout(self.timeout)
+        {
+            let request = self.client.post(self.url(path.as_ref()));
+            if self.apply_timeout {
+                request.timeout(self.timeout)
+            } else {
+                request
+            }
+        }
     }
 
     pub fn put(&self, path: impl AsRef<str>) -> RequestBuilder {
-        self.client
-            .put(self.url(path.as_ref()))
-            .timeout(self.timeout)
+        {
+            let request = self.client.put(self.url(path.as_ref()));
+            if self.apply_timeout {
+                request.timeout(self.timeout)
+            } else {
+                request
+            }
+        }
     }
 
     pub fn delete(&self, path: impl AsRef<str>) -> RequestBuilder {
-        self.client
-            .delete(self.url(path.as_ref()))
-            .timeout(self.timeout)
+        {
+            let request = self.client.delete(self.url(path.as_ref()));
+            if self.apply_timeout {
+                request.timeout(self.timeout)
+            } else {
+                request
+            }
+        }
     }
 
     pub fn patch(&self, path: impl AsRef<str>) -> RequestBuilder {
-        self.client
-            .patch(self.url(path.as_ref()))
-            .timeout(self.timeout)
+        {
+            let request = self.client.patch(self.url(path.as_ref()));
+            if self.apply_timeout {
+                request.timeout(self.timeout)
+            } else {
+                request
+            }
+        }
     }
 
     /// A request for a streamed binary download. Unlike the verb methods it carries no total

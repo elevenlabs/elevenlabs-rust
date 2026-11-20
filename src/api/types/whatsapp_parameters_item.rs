@@ -1,110 +1,182 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "type")]
-#[non_exhaustive]
+#[derive(Debug, Clone, Serialize, PartialEq, Eq, Hash)]
+#[serde(untagged)]
 pub enum ParametersItem {
-    #[serde(rename = "document")]
-    Document {
-        #[serde(flatten)]
-        data: WhatsAppTemplateDocumentParam,
-    },
+    WhatsAppTemplateTextParam(WhatsAppTemplateTextParam),
+    WhatsAppTemplateImageParam(WhatsAppTemplateImageParam),
+    WhatsAppTemplateDocumentParam(WhatsAppTemplateDocumentParam),
+    WhatsAppTemplateLocationParam(WhatsAppTemplateLocationParam),
+}
 
-    #[serde(rename = "image")]
-    Image {
-        #[serde(flatten)]
-        data: WhatsAppTemplateImageParam,
-    },
+impl<'de> serde::Deserialize<'de> for ParametersItem {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <serde_json::Value as serde::Deserialize>::deserialize(deserializer)?;
 
-    #[serde(rename = "location")]
-    Location {
-        #[serde(flatten)]
-        data: WhatsAppTemplateLocationParam,
-    },
+        let mut matched_literal = false;
 
-    #[serde(rename = "text")]
-    Text {
-        #[serde(flatten)]
-        data: WhatsAppTemplateTextParam,
-    },
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("text") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<WhatsAppTemplateTextParam>(value.clone()) {
+                return Ok(Self::WhatsAppTemplateTextParam(parsed));
+            }
+        }
 
-    /// Catch-all variant for unrecognized discriminant values.
-    /// If the server sends a discriminant not recognized by the current SDK
-    /// version, the raw payload is captured here so callers can still inspect it.
-    #[serde(untagged)]
-    __Unknown(serde_json::Value),
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("image") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<WhatsAppTemplateImageParam>(value.clone())
+            {
+                return Ok(Self::WhatsAppTemplateImageParam(parsed));
+            }
+        }
+
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("document") {
+            matched_literal = true;
+            if let Ok(parsed) =
+                serde_json::from_value::<WhatsAppTemplateDocumentParam>(value.clone())
+            {
+                return Ok(Self::WhatsAppTemplateDocumentParam(parsed));
+            }
+        }
+
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("location") {
+            matched_literal = true;
+            if let Ok(parsed) =
+                serde_json::from_value::<WhatsAppTemplateLocationParam>(value.clone())
+            {
+                return Ok(Self::WhatsAppTemplateLocationParam(parsed));
+            }
+        }
+
+        if !matched_literal {
+            if let Ok(parsed) = serde_json::from_value::<WhatsAppTemplateTextParam>(value.clone()) {
+                return Ok(Self::WhatsAppTemplateTextParam(parsed));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<WhatsAppTemplateImageParam>(value.clone())
+            {
+                return Ok(Self::WhatsAppTemplateImageParam(parsed));
+            }
+
+            if let Ok(parsed) =
+                serde_json::from_value::<WhatsAppTemplateDocumentParam>(value.clone())
+            {
+                return Ok(Self::WhatsAppTemplateDocumentParam(parsed));
+            }
+
+            if let Ok(parsed) =
+                serde_json::from_value::<WhatsAppTemplateLocationParam>(value.clone())
+            {
+                return Ok(Self::WhatsAppTemplateLocationParam(parsed));
+            }
+        }
+
+        Err(serde::de::Error::custom(
+            "data did not match any variant of untagged enum ParametersItem",
+        ))
+    }
 }
 
 impl ParametersItem {
-    pub fn is_document(&self) -> bool {
-        matches!(self, Self::Document { .. })
+    pub fn is_whats_app_template_text_param(&self) -> bool {
+        matches!(self, Self::WhatsAppTemplateTextParam(_))
     }
 
-    pub fn as_document(&self) -> Option<&WhatsAppTemplateDocumentParam> {
+    pub fn as_whats_app_template_text_param(&self) -> Option<&WhatsAppTemplateTextParam> {
         match self {
-            Self::Document { data } => Some(data),
+            Self::WhatsAppTemplateTextParam(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_document(self) -> Option<WhatsAppTemplateDocumentParam> {
+    pub fn into_whats_app_template_text_param(self) -> Option<WhatsAppTemplateTextParam> {
         match self {
-            Self::Document { data } => Some(data),
+            Self::WhatsAppTemplateTextParam(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_image(&self) -> bool {
-        matches!(self, Self::Image { .. })
+    pub fn is_whats_app_template_image_param(&self) -> bool {
+        matches!(self, Self::WhatsAppTemplateImageParam(_))
     }
 
-    pub fn as_image(&self) -> Option<&WhatsAppTemplateImageParam> {
+    pub fn as_whats_app_template_image_param(&self) -> Option<&WhatsAppTemplateImageParam> {
         match self {
-            Self::Image { data } => Some(data),
+            Self::WhatsAppTemplateImageParam(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_image(self) -> Option<WhatsAppTemplateImageParam> {
+    pub fn into_whats_app_template_image_param(self) -> Option<WhatsAppTemplateImageParam> {
         match self {
-            Self::Image { data } => Some(data),
+            Self::WhatsAppTemplateImageParam(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_location(&self) -> bool {
-        matches!(self, Self::Location { .. })
+    pub fn is_whats_app_template_document_param(&self) -> bool {
+        matches!(self, Self::WhatsAppTemplateDocumentParam(_))
     }
 
-    pub fn as_location(&self) -> Option<&WhatsAppTemplateLocationParam> {
+    pub fn as_whats_app_template_document_param(&self) -> Option<&WhatsAppTemplateDocumentParam> {
         match self {
-            Self::Location { data } => Some(data),
+            Self::WhatsAppTemplateDocumentParam(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_location(self) -> Option<WhatsAppTemplateLocationParam> {
+    pub fn into_whats_app_template_document_param(self) -> Option<WhatsAppTemplateDocumentParam> {
         match self {
-            Self::Location { data } => Some(data),
+            Self::WhatsAppTemplateDocumentParam(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_text(&self) -> bool {
-        matches!(self, Self::Text { .. })
+    pub fn is_whats_app_template_location_param(&self) -> bool {
+        matches!(self, Self::WhatsAppTemplateLocationParam(_))
     }
 
-    pub fn as_text(&self) -> Option<&WhatsAppTemplateTextParam> {
+    pub fn as_whats_app_template_location_param(&self) -> Option<&WhatsAppTemplateLocationParam> {
         match self {
-            Self::Text { data } => Some(data),
+            Self::WhatsAppTemplateLocationParam(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_text(self) -> Option<WhatsAppTemplateTextParam> {
+    pub fn into_whats_app_template_location_param(self) -> Option<WhatsAppTemplateLocationParam> {
         match self {
-            Self::Text { data } => Some(data),
+            Self::WhatsAppTemplateLocationParam(value) => Some(value),
             _ => None,
+        }
+    }
+}
+
+impl fmt::Display for ParametersItem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::WhatsAppTemplateTextParam(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::WhatsAppTemplateImageParam(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::WhatsAppTemplateDocumentParam(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::WhatsAppTemplateLocationParam(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
         }
     }
 }

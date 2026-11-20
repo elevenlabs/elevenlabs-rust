@@ -3,10 +3,11 @@ pub use crate::prelude::*;
 /// A webhook tool is a tool that calls an external webhook from our server
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct WebhookToolConfigOutput {
-    #[serde(default)]
+    /// The type of tool
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<WebhookToolConfigInputType>,
     pub name: String,
     /// Description of when the tool should be used and what it does.
-    #[serde(default)]
     pub description: String,
     /// The maximum time in seconds to wait for the tool call to complete. Must be between 5 and 300 seconds (inclusive).
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -57,6 +58,7 @@ impl WebhookToolConfigOutput {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct WebhookToolConfigOutputBuilder {
+    r#type: Option<WebhookToolConfigInputType>,
     name: Option<String>,
     description: Option<String>,
     response_timeout_secs: Option<i64>,
@@ -76,6 +78,11 @@ pub struct WebhookToolConfigOutputBuilder {
 }
 
 impl WebhookToolConfigOutputBuilder {
+    pub fn r#type(mut self, value: WebhookToolConfigInputType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn name(mut self, value: impl Into<String>) -> Self {
         self.name = Some(value.into());
         self
@@ -163,6 +170,7 @@ impl WebhookToolConfigOutputBuilder {
     /// - [`api_schema`](WebhookToolConfigOutputBuilder::api_schema)
     pub fn build(self) -> Result<WebhookToolConfigOutput, BuildError> {
         Ok(WebhookToolConfigOutput {
+            r#type: self.r#type,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             description: self
                 .description

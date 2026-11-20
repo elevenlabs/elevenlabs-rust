@@ -4,7 +4,8 @@ pub use crate::prelude::*;
 pub struct WhatsAppTemplateTextParam {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_name: Option<String>,
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<GetKnowledgeBaseSummaryTextResponseModelType>,
     pub text: String,
 }
 
@@ -18,12 +19,18 @@ impl WhatsAppTemplateTextParam {
 #[non_exhaustive]
 pub struct WhatsAppTemplateTextParamBuilder {
     parameter_name: Option<String>,
+    r#type: Option<GetKnowledgeBaseSummaryTextResponseModelType>,
     text: Option<String>,
 }
 
 impl WhatsAppTemplateTextParamBuilder {
     pub fn parameter_name(mut self, value: impl Into<String>) -> Self {
         self.parameter_name = Some(value.into());
+        self
+    }
+
+    pub fn r#type(mut self, value: GetKnowledgeBaseSummaryTextResponseModelType) -> Self {
+        self.r#type = Some(value);
         self
     }
 
@@ -38,6 +45,7 @@ impl WhatsAppTemplateTextParamBuilder {
     pub fn build(self) -> Result<WhatsAppTemplateTextParam, BuildError> {
         Ok(WhatsAppTemplateTextParam {
             parameter_name: self.parameter_name,
+            r#type: self.r#type,
             text: self.text.ok_or_else(|| BuildError::missing_field("text"))?,
         })
     }

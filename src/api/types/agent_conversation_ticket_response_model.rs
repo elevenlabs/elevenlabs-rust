@@ -1,6 +1,6 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct AgentConversationTicketResponseModel {
     #[serde(default)]
     pub agentqa_ticket_id: String,
@@ -12,10 +12,12 @@ pub struct AgentConversationTicketResponseModel {
     pub agent_id: String,
     #[serde(default)]
     pub needs_clustering: bool,
-    /// One-line headline for the ticket. None only on tickets created before titles existed.
+    /// One-line headline for the agent issue. None only on issues created before titles existed.
     #[serde(default)]
     pub title: Option<String>,
-    pub issue_type: Option<AgentConversationTicketIssueType>,
+    /// Always null. Issue types are labels, written as `issue_type:<value>`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issue_type: Option<serde_json::Value>,
     #[serde(default)]
     pub labels: Vec<String>,
     #[serde(default)]
@@ -38,7 +40,7 @@ pub struct AgentConversationTicketResponseModel {
     pub priority_changes: Vec<TicketPriorityChangeResponseModel>,
     #[serde(default)]
     pub status_changes: Vec<TicketStatusChangeResponseModel>,
-    /// The ticket this one was merged into, set while its status is 'merged'.
+    /// The agent issue this one was merged into, set while its status is 'merged'.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub merged_into_ticket_id: Option<String>,
     pub source: AgentConversationTicketSource,
@@ -70,7 +72,7 @@ pub struct AgentConversationTicketResponseModelBuilder {
     agent_id: Option<String>,
     needs_clustering: Option<bool>,
     title: Option<String>,
-    issue_type: Option<AgentConversationTicketIssueType>,
+    issue_type: Option<serde_json::Value>,
     labels: Option<Vec<String>>,
     conversation_ids: Option<Vec<String>>,
     first_seen_unix_secs: Option<i64>,
@@ -121,7 +123,7 @@ impl AgentConversationTicketResponseModelBuilder {
         self
     }
 
-    pub fn issue_type(mut self, value: AgentConversationTicketIssueType) -> Self {
+    pub fn issue_type(mut self, value: serde_json::Value) -> Self {
         self.issue_type = Some(value);
         self
     }

@@ -14,7 +14,8 @@ pub struct PromptAgentApiModelInput {
     ///
     /// STANDARD: default price and throughput.
     /// FAST: pays a per-token price premium for higher throughput / lower latency.
-    /// See OpenAI's fast mode: https://openai.com/api-fast-mode/
+    /// See OpenAI's fast mode: https://openai.com/api-fast-mode/ and, for Gemini, Vertex
+    /// Priority PayGo: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/priority-paygo
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_tier: Option<LlmServiceTier>,
     /// Max number of tokens used for thinking. Use 0 to turn off if supported by the model.

@@ -33,6 +33,7 @@ pub enum PermissionType {
     ConvaiRead,
     ConvaiWrite,
     AgentsArchitect,
+    AgentsEnvironmentVariablesWrite,
     MusicGeneration,
     ImageVideoGeneration,
     Flows,
@@ -55,6 +56,7 @@ pub enum PermissionType {
     ConversationPrivacyManage,
     CopyResourcesCrossWorkspace,
     SynthidDetector,
+    Watermark,
     /// This variant is used for forward compatibility.
     /// If the server sends a value not recognized by the current SDK version,
     /// it will be captured here with the raw string value.
@@ -97,6 +99,9 @@ impl Serialize for PermissionType {
             Self::ConvaiRead => serializer.serialize_str("convai_read"),
             Self::ConvaiWrite => serializer.serialize_str("convai_write"),
             Self::AgentsArchitect => serializer.serialize_str("agents_architect"),
+            Self::AgentsEnvironmentVariablesWrite => {
+                serializer.serialize_str("agents_environment_variables_write")
+            }
             Self::MusicGeneration => serializer.serialize_str("music_generation"),
             Self::ImageVideoGeneration => serializer.serialize_str("image_video_generation"),
             Self::Flows => serializer.serialize_str("flows"),
@@ -131,6 +136,7 @@ impl Serialize for PermissionType {
                 serializer.serialize_str("copy_resources_cross_workspace")
             }
             Self::SynthidDetector => serializer.serialize_str("synthid_detector"),
+            Self::Watermark => serializer.serialize_str("watermark"),
             Self::__Unknown(val) => serializer.serialize_str(val),
         }
     }
@@ -170,6 +176,7 @@ impl<'de> Deserialize<'de> for PermissionType {
             "convai_read" => Ok(Self::ConvaiRead),
             "convai_write" => Ok(Self::ConvaiWrite),
             "agents_architect" => Ok(Self::AgentsArchitect),
+            "agents_environment_variables_write" => Ok(Self::AgentsEnvironmentVariablesWrite),
             "music_generation" => Ok(Self::MusicGeneration),
             "image_video_generation" => Ok(Self::ImageVideoGeneration),
             "flows" => Ok(Self::Flows),
@@ -192,6 +199,7 @@ impl<'de> Deserialize<'de> for PermissionType {
             "conversation_privacy_manage" => Ok(Self::ConversationPrivacyManage),
             "copy_resources_cross_workspace" => Ok(Self::CopyResourcesCrossWorkspace),
             "synthid_detector" => Ok(Self::SynthidDetector),
+            "watermark" => Ok(Self::Watermark),
             _ => Ok(Self::__Unknown(value)),
         }
     }
@@ -230,6 +238,9 @@ impl fmt::Display for PermissionType {
             Self::ConvaiRead => write!(f, "convai_read"),
             Self::ConvaiWrite => write!(f, "convai_write"),
             Self::AgentsArchitect => write!(f, "agents_architect"),
+            Self::AgentsEnvironmentVariablesWrite => {
+                write!(f, "agents_environment_variables_write")
+            }
             Self::MusicGeneration => write!(f, "music_generation"),
             Self::ImageVideoGeneration => write!(f, "image_video_generation"),
             Self::Flows => write!(f, "flows"),
@@ -252,6 +263,7 @@ impl fmt::Display for PermissionType {
             Self::ConversationPrivacyManage => write!(f, "conversation_privacy_manage"),
             Self::CopyResourcesCrossWorkspace => write!(f, "copy_resources_cross_workspace"),
             Self::SynthidDetector => write!(f, "synthid_detector"),
+            Self::Watermark => write!(f, "watermark"),
             Self::__Unknown(val) => write!(f, "{}", val),
         }
     }

@@ -2,13 +2,14 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UserDataCollectionAnalysisItemOutput {
-    #[serde(default)]
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<AttachedUserDataCollectionRefSource>,
     /// LLM to use for this item. If unset, the attaching agent's analysis_llm default is used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub llm: Option<Llm>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kind: Option<DashboardDataCollectionChartModelType>,
     /// Schema property for literal JSON types. IMPORTANT: Only ONE of the following fields can be set: description (LLM provides value), dynamic_variable (value from variable), is_system_provided (system provides value), constant_value (fixed value), or is_omitted (parameter is omitted). These are mutually exclusive.
     pub value_schema: DataCollectionValueSchema,
 }
@@ -25,6 +26,7 @@ pub struct UserDataCollectionAnalysisItemOutputBuilder {
     name: Option<String>,
     source: Option<AttachedUserDataCollectionRefSource>,
     llm: Option<Llm>,
+    kind: Option<DashboardDataCollectionChartModelType>,
     value_schema: Option<DataCollectionValueSchema>,
 }
 
@@ -44,6 +46,11 @@ impl UserDataCollectionAnalysisItemOutputBuilder {
         self
     }
 
+    pub fn kind(mut self, value: DashboardDataCollectionChartModelType) -> Self {
+        self.kind = Some(value);
+        self
+    }
+
     pub fn value_schema(mut self, value: DataCollectionValueSchema) -> Self {
         self.value_schema = Some(value);
         self
@@ -58,6 +65,7 @@ impl UserDataCollectionAnalysisItemOutputBuilder {
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             source: self.source,
             llm: self.llm,
+            kind: self.kind,
             value_schema: self
                 .value_schema
                 .ok_or_else(|| BuildError::missing_field("value_schema"))?,

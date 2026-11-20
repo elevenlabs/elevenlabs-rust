@@ -2,9 +2,9 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ConversationHistoryTranscriptToolCallWebhookDetails {
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<AlertingWebhookNotifierResponseType>,
     pub method: String,
-    #[serde(default)]
     pub url: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub headers: Option<std::collections::HashMap<String, String>>,
@@ -25,6 +25,7 @@ impl ConversationHistoryTranscriptToolCallWebhookDetails {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct ConversationHistoryTranscriptToolCallWebhookDetailsBuilder {
+    r#type: Option<AlertingWebhookNotifierResponseType>,
     method: Option<String>,
     url: Option<String>,
     headers: Option<std::collections::HashMap<String, String>>,
@@ -34,6 +35,11 @@ pub struct ConversationHistoryTranscriptToolCallWebhookDetailsBuilder {
 }
 
 impl ConversationHistoryTranscriptToolCallWebhookDetailsBuilder {
+    pub fn r#type(mut self, value: AlertingWebhookNotifierResponseType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn method(mut self, value: impl Into<String>) -> Self {
         self.method = Some(value.into());
         self
@@ -70,6 +76,7 @@ impl ConversationHistoryTranscriptToolCallWebhookDetailsBuilder {
     /// - [`url`](ConversationHistoryTranscriptToolCallWebhookDetailsBuilder::url)
     pub fn build(self) -> Result<ConversationHistoryTranscriptToolCallWebhookDetails, BuildError> {
         Ok(ConversationHistoryTranscriptToolCallWebhookDetails {
+            r#type: self.r#type,
             method: self
                 .method
                 .ok_or_else(|| BuildError::missing_field("method"))?,

@@ -18,14 +18,7 @@ impl ConversationsClient {
     /// configuration, so a later `set_access_token` reaches it; one built here
     /// owns its configuration outright and is unaffected by the root client.
     pub fn new(config: ClientConfig) -> Result<Self, crate::error::ApiError> {
-        let http_client = Arc::new(
-            HttpClient::new(
-                config.base_url.clone(),
-                config.timeout.as_millis() as u64,
-                config.max_retries,
-            )
-            .map_err(crate::error::ApiError::Network)?,
-        );
+        let http_client = Arc::new(HttpClient::new(config.clone())?);
         let config_manager = Arc::new(ConfigManager::new(config));
         Ok(Self::with_shared(http_client, config_manager))
     }
@@ -538,6 +531,86 @@ impl ConversationsClient {
         Ok(result)
     }
 
+    /// Create Conversation
+    ///
+    /// Create a text conversation with an agent. This does not run the agent, and the agent sends no first message. This endpoint is in alpha and may change.
+    ///
+    /// # Arguments
+    ///
+    /// * `body`
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn create(
+        &self,
+        body: &CreateAgentConversationRequest,
+        options: Option<RequestOptions>,
+    ) -> Result<CreateAgentConversationResponse, crate::error::ApiError> {
+        let url = "/v1/convai/conversations";
+
+        let mut request = self.http_client.post(url);
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        request = match options
+            .as_ref()
+            .and_then(|opts| opts.merge_into_body(&body))
+        {
+            Some(merged) => request.json(&merged),
+            None => request.json(&body),
+        };
+        let config = self.config.get_conversations_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: CreateAgentConversationResponse =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
+
     /// Resolve Conversation Reference
     ///
     /// Resolve a conversation URL (a Slack message URL or a Zendesk ticket URL) to the deterministic conversation ID for the given agent, then confirm the conversation exists.
@@ -928,5 +1001,319 @@ impl ConversationsClient {
                     message: format!("{err}"),
                 })?;
         Ok(result)
+    }
+
+    /// Send Conversation Message
+    ///
+    /// Send input to a conversation, and wait until the agent finishes or waits on client tool results. With `background` set to true, the endpoint returns 202 when the server admits the turn. Then stream the turn's events with `Last-Event-ID` set to the `stream_cursor`. This endpoint is in alpha and may change.
+    ///
+    /// # Arguments
+    ///
+    /// * `conversation_id` - The Conversation ID
+    /// * `body`
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn send_message(
+        &self,
+        conversation_id: &str,
+        body: &SendConversationMessageRequest,
+        options: Option<RequestOptions>,
+    ) -> Result<ConversationTurn, crate::error::ApiError> {
+        let url = format!("/v1/convai/conversations/{}/messages", conversation_id);
+
+        let mut request = self.http_client.post(url);
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        request = match options
+            .as_ref()
+            .and_then(|opts| opts.merge_into_body(&body))
+        {
+            Some(merged) => request.json(&merged),
+            None => request.json(&body),
+        };
+        let config = self.config.get_conversations_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: ConversationTurn =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
+
+    /// Send Conversation Message Stream
+    ///
+    /// Send input to a conversation, and stream the events of the request as server-sent events. The last event is `stream_ended`, which has the outcome of the turn. This endpoint is in alpha and may change.
+    ///
+    /// # Arguments
+    ///
+    /// * `conversation_id` - The Conversation ID
+    /// * `body`
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// A stream of server-sent events from the API.
+    pub async fn send_message_stream(
+        &self,
+        conversation_id: &str,
+        body: &SendConversationMessageStreamRequest,
+        options: Option<RequestOptions>,
+    ) -> Result<crate::SseStream<StreamEnvelope>, crate::error::ApiError> {
+        let url = format!(
+            "/v1/convai/conversations/{}/messages/stream",
+            conversation_id
+        );
+
+        let mut request = self.http_client.post(url);
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        request = match options
+            .as_ref()
+            .and_then(|opts| opts.merge_into_body(&body))
+        {
+            Some(merged) => request.json(&merged),
+            None => request.json(&body),
+        };
+        let config = self.config.get_conversations_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let stream =
+            crate::core::sse::open_sse_stream::<StreamEnvelope>(response, true, false, None, None);
+        Ok(stream)
+    }
+
+    /// Get Conversation Turn
+    ///
+    /// Get the status and output of a turn. The status comes from the stored transcript, so a turn that failed after the agent started can show as completed. Only the `stream_ended` event has the real outcome. This endpoint is in alpha and may change.
+    ///
+    /// # Arguments
+    ///
+    /// * `conversation_id` - The Conversation ID
+    /// * `turn_id` - The Turn ID
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn get_turn(
+        &self,
+        conversation_id: &str,
+        turn_id: &str,
+        options: Option<RequestOptions>,
+    ) -> Result<ConversationTurn, crate::error::ApiError> {
+        let url = format!(
+            "/v1/convai/conversations/{}/turns/{}",
+            conversation_id, turn_id
+        );
+
+        let mut request = self.http_client.get(url);
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        let config = self.config.get_conversations_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: ConversationTurn =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
+
+    /// Stream Conversation Turn Events
+    ///
+    /// Stream the events of a turn as server-sent events. Send `Last-Event-ID` to resume after an event. The server keeps events for about an hour. This endpoint is in alpha and may change.
+    ///
+    /// # Arguments
+    ///
+    /// * `conversation_id` - The Conversation ID
+    /// * `turn_id` - The Turn ID
+    /// * `last_event_id`
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// A stream of server-sent events from the API.
+    pub async fn stream_turn_events(
+        &self,
+        conversation_id: &str,
+        turn_id: &str,
+        last_event_id: Option<String>,
+        options: Option<RequestOptions>,
+    ) -> Result<crate::SseStream<StreamEnvelope>, crate::error::ApiError> {
+        let url = format!(
+            "/v1/convai/conversations/{}/turns/{}/events",
+            conversation_id, turn_id
+        );
+
+        let mut request = self.http_client.get(url);
+        if let Some(val) = &last_event_id {
+            request = request.header("Last-Event-ID", &val.to_string());
+        }
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        let config = self.config.get_conversations_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let stream =
+            crate::core::sse::open_sse_stream::<StreamEnvelope>(response, true, false, None, None);
+        Ok(stream)
     }
 }

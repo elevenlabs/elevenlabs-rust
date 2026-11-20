@@ -42,6 +42,7 @@ pub struct ConfigManager {
     transcripts: RwLock<ClientConfig>,
     models: RwLock<ClientConfig>,
     audio_native: RwLock<ClientConfig>,
+    content_provenance: RwLock<ClientConfig>,
     rules: RwLock<ClientConfig>,
     api_keys: RwLock<ClientConfig>,
     workspace: RwLock<ClientConfig>,
@@ -63,6 +64,7 @@ pub struct ConfigManager {
     whatsapp: RwLock<ClientConfig>,
     agents: RwLock<ClientConfig>,
     summaries: RwLock<ClientConfig>,
+    subagents: RwLock<ClientConfig>,
     widget: RwLock<ClientConfig>,
     link: RwLock<ClientConfig>,
     avatar: RwLock<ClientConfig>,
@@ -133,6 +135,20 @@ pub struct ConfigManager {
     assets: RwLock<ClientConfig>,
     usage: RwLock<ClientConfig>,
     requests: RwLock<ClientConfig>,
+    services: RwLock<ClientConfig>,
+    products: RwLock<ClientConfig>,
+    stock: RwLock<ClientConfig>,
+    staff: RwLock<ClientConfig>,
+    receptionists: RwLock<ClientConfig>,
+    transfer_rules: RwLock<ClientConfig>,
+    holidays: RwLock<ClientConfig>,
+    locations: RwLock<ClientConfig>,
+    business_profile: RwLock<ClientConfig>,
+    knowledge_sources: RwLock<ClientConfig>,
+    workspaces: RwLock<ClientConfig>,
+    subscriptions: RwLock<ClientConfig>,
+    tiers: RwLock<ClientConfig>,
+    billing: RwLock<ClientConfig>,
     v_1_text_to_dialogue_stream_input: RwLock<ClientConfig>,
     v_1_text_to_dialogue_multi_stream_input: RwLock<ClientConfig>,
     speech_engine_upstream: RwLock<ClientConfig>,
@@ -178,6 +194,7 @@ impl ConfigManager {
             transcripts: RwLock::new(config.clone()),
             models: RwLock::new(config.clone()),
             audio_native: RwLock::new(config.clone()),
+            content_provenance: RwLock::new(config.clone()),
             rules: RwLock::new(config.clone()),
             api_keys: RwLock::new(config.clone()),
             workspace: RwLock::new(config.clone()),
@@ -199,6 +216,7 @@ impl ConfigManager {
             whatsapp: RwLock::new(config.clone()),
             agents: RwLock::new(config.clone()),
             summaries: RwLock::new(config.clone()),
+            subagents: RwLock::new(config.clone()),
             widget: RwLock::new(config.clone()),
             link: RwLock::new(config.clone()),
             avatar: RwLock::new(config.clone()),
@@ -269,6 +287,20 @@ impl ConfigManager {
             assets: RwLock::new(config.clone()),
             usage: RwLock::new(config.clone()),
             requests: RwLock::new(config.clone()),
+            services: RwLock::new(config.clone()),
+            products: RwLock::new(config.clone()),
+            stock: RwLock::new(config.clone()),
+            staff: RwLock::new(config.clone()),
+            receptionists: RwLock::new(config.clone()),
+            transfer_rules: RwLock::new(config.clone()),
+            holidays: RwLock::new(config.clone()),
+            locations: RwLock::new(config.clone()),
+            business_profile: RwLock::new(config.clone()),
+            knowledge_sources: RwLock::new(config.clone()),
+            workspaces: RwLock::new(config.clone()),
+            subscriptions: RwLock::new(config.clone()),
+            tiers: RwLock::new(config.clone()),
+            billing: RwLock::new(config.clone()),
             v_1_text_to_dialogue_stream_input: RwLock::new(config.clone()),
             v_1_text_to_dialogue_multi_stream_input: RwLock::new(config.clone()),
             speech_engine_upstream: RwLock::new(config.clone()),
@@ -404,6 +436,10 @@ impl ConfigManager {
         read_or_recover(&self.audio_native).clone()
     }
 
+    pub fn get_content_provenance_config(&self) -> ClientConfig {
+        read_or_recover(&self.content_provenance).clone()
+    }
+
     pub fn get_rules_config(&self) -> ClientConfig {
         read_or_recover(&self.rules).clone()
     }
@@ -486,6 +522,10 @@ impl ConfigManager {
 
     pub fn get_summaries_config(&self) -> ClientConfig {
         read_or_recover(&self.summaries).clone()
+    }
+
+    pub fn get_subagents_config(&self) -> ClientConfig {
+        read_or_recover(&self.subagents).clone()
     }
 
     pub fn get_widget_config(&self) -> ClientConfig {
@@ -768,6 +808,62 @@ impl ConfigManager {
         read_or_recover(&self.requests).clone()
     }
 
+    pub fn get_services_config(&self) -> ClientConfig {
+        read_or_recover(&self.services).clone()
+    }
+
+    pub fn get_products_config(&self) -> ClientConfig {
+        read_or_recover(&self.products).clone()
+    }
+
+    pub fn get_stock_config(&self) -> ClientConfig {
+        read_or_recover(&self.stock).clone()
+    }
+
+    pub fn get_staff_config(&self) -> ClientConfig {
+        read_or_recover(&self.staff).clone()
+    }
+
+    pub fn get_receptionists_config(&self) -> ClientConfig {
+        read_or_recover(&self.receptionists).clone()
+    }
+
+    pub fn get_transfer_rules_config(&self) -> ClientConfig {
+        read_or_recover(&self.transfer_rules).clone()
+    }
+
+    pub fn get_holidays_config(&self) -> ClientConfig {
+        read_or_recover(&self.holidays).clone()
+    }
+
+    pub fn get_locations_config(&self) -> ClientConfig {
+        read_or_recover(&self.locations).clone()
+    }
+
+    pub fn get_business_profile_config(&self) -> ClientConfig {
+        read_or_recover(&self.business_profile).clone()
+    }
+
+    pub fn get_knowledge_sources_config(&self) -> ClientConfig {
+        read_or_recover(&self.knowledge_sources).clone()
+    }
+
+    pub fn get_workspaces_config(&self) -> ClientConfig {
+        read_or_recover(&self.workspaces).clone()
+    }
+
+    pub fn get_subscriptions_config(&self) -> ClientConfig {
+        read_or_recover(&self.subscriptions).clone()
+    }
+
+    pub fn get_tiers_config(&self) -> ClientConfig {
+        read_or_recover(&self.tiers).clone()
+    }
+
+    pub fn get_billing_config(&self) -> ClientConfig {
+        read_or_recover(&self.billing).clone()
+    }
+
     pub fn get_v_1_text_to_dialogue_stream_input_config(&self) -> ClientConfig {
         read_or_recover(&self.v_1_text_to_dialogue_stream_input).clone()
     }
@@ -833,6 +929,7 @@ impl ConfigManager {
         write_or_recover(&self.transcripts).base_url = val.clone();
         write_or_recover(&self.models).base_url = val.clone();
         write_or_recover(&self.audio_native).base_url = val.clone();
+        write_or_recover(&self.content_provenance).base_url = val.clone();
         write_or_recover(&self.rules).base_url = val.clone();
         write_or_recover(&self.api_keys).base_url = val.clone();
         write_or_recover(&self.workspace).base_url = val.clone();
@@ -854,6 +951,7 @@ impl ConfigManager {
         write_or_recover(&self.whatsapp).base_url = val.clone();
         write_or_recover(&self.agents).base_url = val.clone();
         write_or_recover(&self.summaries).base_url = val.clone();
+        write_or_recover(&self.subagents).base_url = val.clone();
         write_or_recover(&self.widget).base_url = val.clone();
         write_or_recover(&self.link).base_url = val.clone();
         write_or_recover(&self.avatar).base_url = val.clone();
@@ -924,6 +1022,20 @@ impl ConfigManager {
         write_or_recover(&self.assets).base_url = val.clone();
         write_or_recover(&self.usage).base_url = val.clone();
         write_or_recover(&self.requests).base_url = val.clone();
+        write_or_recover(&self.services).base_url = val.clone();
+        write_or_recover(&self.products).base_url = val.clone();
+        write_or_recover(&self.stock).base_url = val.clone();
+        write_or_recover(&self.staff).base_url = val.clone();
+        write_or_recover(&self.receptionists).base_url = val.clone();
+        write_or_recover(&self.transfer_rules).base_url = val.clone();
+        write_or_recover(&self.holidays).base_url = val.clone();
+        write_or_recover(&self.locations).base_url = val.clone();
+        write_or_recover(&self.business_profile).base_url = val.clone();
+        write_or_recover(&self.knowledge_sources).base_url = val.clone();
+        write_or_recover(&self.workspaces).base_url = val.clone();
+        write_or_recover(&self.subscriptions).base_url = val.clone();
+        write_or_recover(&self.tiers).base_url = val.clone();
+        write_or_recover(&self.billing).base_url = val.clone();
         write_or_recover(&self.v_1_text_to_dialogue_stream_input).base_url = val.clone();
         write_or_recover(&self.v_1_text_to_dialogue_multi_stream_input).base_url = val.clone();
         write_or_recover(&self.speech_engine_upstream).base_url = val.clone();
@@ -968,6 +1080,7 @@ impl ConfigManager {
         write_or_recover(&self.transcripts).timeout = val.clone();
         write_or_recover(&self.models).timeout = val.clone();
         write_or_recover(&self.audio_native).timeout = val.clone();
+        write_or_recover(&self.content_provenance).timeout = val.clone();
         write_or_recover(&self.rules).timeout = val.clone();
         write_or_recover(&self.api_keys).timeout = val.clone();
         write_or_recover(&self.workspace).timeout = val.clone();
@@ -989,6 +1102,7 @@ impl ConfigManager {
         write_or_recover(&self.whatsapp).timeout = val.clone();
         write_or_recover(&self.agents).timeout = val.clone();
         write_or_recover(&self.summaries).timeout = val.clone();
+        write_or_recover(&self.subagents).timeout = val.clone();
         write_or_recover(&self.widget).timeout = val.clone();
         write_or_recover(&self.link).timeout = val.clone();
         write_or_recover(&self.avatar).timeout = val.clone();
@@ -1059,6 +1173,20 @@ impl ConfigManager {
         write_or_recover(&self.assets).timeout = val.clone();
         write_or_recover(&self.usage).timeout = val.clone();
         write_or_recover(&self.requests).timeout = val.clone();
+        write_or_recover(&self.services).timeout = val.clone();
+        write_or_recover(&self.products).timeout = val.clone();
+        write_or_recover(&self.stock).timeout = val.clone();
+        write_or_recover(&self.staff).timeout = val.clone();
+        write_or_recover(&self.receptionists).timeout = val.clone();
+        write_or_recover(&self.transfer_rules).timeout = val.clone();
+        write_or_recover(&self.holidays).timeout = val.clone();
+        write_or_recover(&self.locations).timeout = val.clone();
+        write_or_recover(&self.business_profile).timeout = val.clone();
+        write_or_recover(&self.knowledge_sources).timeout = val.clone();
+        write_or_recover(&self.workspaces).timeout = val.clone();
+        write_or_recover(&self.subscriptions).timeout = val.clone();
+        write_or_recover(&self.tiers).timeout = val.clone();
+        write_or_recover(&self.billing).timeout = val.clone();
         write_or_recover(&self.v_1_text_to_dialogue_stream_input).timeout = val.clone();
         write_or_recover(&self.v_1_text_to_dialogue_multi_stream_input).timeout = val.clone();
         write_or_recover(&self.speech_engine_upstream).timeout = val.clone();
@@ -1103,6 +1231,7 @@ impl ConfigManager {
         write_or_recover(&self.transcripts).api_key = val.clone();
         write_or_recover(&self.models).api_key = val.clone();
         write_or_recover(&self.audio_native).api_key = val.clone();
+        write_or_recover(&self.content_provenance).api_key = val.clone();
         write_or_recover(&self.rules).api_key = val.clone();
         write_or_recover(&self.api_keys).api_key = val.clone();
         write_or_recover(&self.workspace).api_key = val.clone();
@@ -1124,6 +1253,7 @@ impl ConfigManager {
         write_or_recover(&self.whatsapp).api_key = val.clone();
         write_or_recover(&self.agents).api_key = val.clone();
         write_or_recover(&self.summaries).api_key = val.clone();
+        write_or_recover(&self.subagents).api_key = val.clone();
         write_or_recover(&self.widget).api_key = val.clone();
         write_or_recover(&self.link).api_key = val.clone();
         write_or_recover(&self.avatar).api_key = val.clone();
@@ -1194,6 +1324,20 @@ impl ConfigManager {
         write_or_recover(&self.assets).api_key = val.clone();
         write_or_recover(&self.usage).api_key = val.clone();
         write_or_recover(&self.requests).api_key = val.clone();
+        write_or_recover(&self.services).api_key = val.clone();
+        write_or_recover(&self.products).api_key = val.clone();
+        write_or_recover(&self.stock).api_key = val.clone();
+        write_or_recover(&self.staff).api_key = val.clone();
+        write_or_recover(&self.receptionists).api_key = val.clone();
+        write_or_recover(&self.transfer_rules).api_key = val.clone();
+        write_or_recover(&self.holidays).api_key = val.clone();
+        write_or_recover(&self.locations).api_key = val.clone();
+        write_or_recover(&self.business_profile).api_key = val.clone();
+        write_or_recover(&self.knowledge_sources).api_key = val.clone();
+        write_or_recover(&self.workspaces).api_key = val.clone();
+        write_or_recover(&self.subscriptions).api_key = val.clone();
+        write_or_recover(&self.tiers).api_key = val.clone();
+        write_or_recover(&self.billing).api_key = val.clone();
         write_or_recover(&self.v_1_text_to_dialogue_stream_input).api_key = val.clone();
         write_or_recover(&self.v_1_text_to_dialogue_multi_stream_input).api_key = val.clone();
         write_or_recover(&self.speech_engine_upstream).api_key = val.clone();
@@ -1577,6 +1721,18 @@ impl ConfigManager {
         write_or_recover(&self.audio_native).api_key = Some(api_key.into());
     }
 
+    pub(crate) fn set_content_provenance_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.content_provenance).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_content_provenance_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.content_provenance).timeout = timeout;
+    }
+
+    pub(crate) fn set_content_provenance_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.content_provenance).api_key = Some(api_key.into());
+    }
+
     pub(crate) fn set_rules_base_url(&self, base_url: impl Into<String>) {
         write_or_recover(&self.rules).base_url = base_url.into();
     }
@@ -1827,6 +1983,18 @@ impl ConfigManager {
 
     pub(crate) fn set_summaries_api_key(&self, api_key: impl Into<String>) {
         write_or_recover(&self.summaries).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_subagents_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.subagents).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_subagents_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.subagents).timeout = timeout;
+    }
+
+    pub(crate) fn set_subagents_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.subagents).api_key = Some(api_key.into());
     }
 
     pub(crate) fn set_widget_base_url(&self, base_url: impl Into<String>) {
@@ -2667,6 +2835,174 @@ impl ConfigManager {
 
     pub(crate) fn set_requests_api_key(&self, api_key: impl Into<String>) {
         write_or_recover(&self.requests).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_services_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.services).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_services_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.services).timeout = timeout;
+    }
+
+    pub(crate) fn set_services_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.services).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_products_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.products).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_products_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.products).timeout = timeout;
+    }
+
+    pub(crate) fn set_products_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.products).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_stock_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.stock).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_stock_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.stock).timeout = timeout;
+    }
+
+    pub(crate) fn set_stock_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.stock).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_staff_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.staff).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_staff_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.staff).timeout = timeout;
+    }
+
+    pub(crate) fn set_staff_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.staff).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_receptionists_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.receptionists).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_receptionists_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.receptionists).timeout = timeout;
+    }
+
+    pub(crate) fn set_receptionists_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.receptionists).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_transfer_rules_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.transfer_rules).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_transfer_rules_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.transfer_rules).timeout = timeout;
+    }
+
+    pub(crate) fn set_transfer_rules_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.transfer_rules).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_holidays_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.holidays).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_holidays_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.holidays).timeout = timeout;
+    }
+
+    pub(crate) fn set_holidays_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.holidays).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_locations_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.locations).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_locations_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.locations).timeout = timeout;
+    }
+
+    pub(crate) fn set_locations_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.locations).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_business_profile_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.business_profile).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_business_profile_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.business_profile).timeout = timeout;
+    }
+
+    pub(crate) fn set_business_profile_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.business_profile).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_knowledge_sources_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.knowledge_sources).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_knowledge_sources_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.knowledge_sources).timeout = timeout;
+    }
+
+    pub(crate) fn set_knowledge_sources_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.knowledge_sources).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_workspaces_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.workspaces).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_workspaces_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.workspaces).timeout = timeout;
+    }
+
+    pub(crate) fn set_workspaces_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.workspaces).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_subscriptions_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.subscriptions).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_subscriptions_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.subscriptions).timeout = timeout;
+    }
+
+    pub(crate) fn set_subscriptions_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.subscriptions).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_tiers_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.tiers).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_tiers_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.tiers).timeout = timeout;
+    }
+
+    pub(crate) fn set_tiers_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.tiers).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_billing_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.billing).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_billing_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.billing).timeout = timeout;
+    }
+
+    pub(crate) fn set_billing_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.billing).api_key = Some(api_key.into());
     }
 
     pub(crate) fn set_v_1_text_to_dialogue_stream_input_base_url(

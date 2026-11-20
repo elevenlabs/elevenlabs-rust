@@ -16,7 +16,7 @@ async fn create_manual_sends_the_real_wire_request() {
         "agent_id": "value",
         "needs_clustering": true,
         "title": "value",
-        "issue_type": "knowledge_gap",
+        "issue_type": {},
         "labels": [
             "value"
         ],
@@ -207,7 +207,7 @@ async fn create_sends_the_real_wire_request() {
         "agent_id": "value",
         "needs_clustering": true,
         "title": "value",
-        "issue_type": "knowledge_gap",
+        "issue_type": {},
         "labels": [
             "value"
         ],
@@ -527,7 +527,7 @@ async fn get_sends_the_real_wire_request() {
         "agent_id": "value",
         "needs_clustering": true,
         "title": "value",
-        "issue_type": "knowledge_gap",
+        "issue_type": {},
         "labels": [
             "value"
         ],
@@ -690,7 +690,7 @@ async fn update_sends_the_real_wire_request() {
         "agent_id": "value",
         "needs_clustering": true,
         "title": "value",
-        "issue_type": "knowledge_gap",
+        "issue_type": {},
         "labels": [
             "value"
         ],
@@ -974,7 +974,7 @@ async fn add_comment_sends_the_real_wire_request() {
         "agent_id": "value",
         "needs_clustering": true,
         "title": "value",
-        "issue_type": "knowledge_gap",
+        "issue_type": {},
         "labels": [
             "value"
         ],
@@ -1161,7 +1161,7 @@ async fn merge_sends_the_real_wire_request() {
         "agent_id": "value",
         "needs_clustering": true,
         "title": "value",
-        "issue_type": "knowledge_gap",
+        "issue_type": {},
         "labels": [
             "value"
         ],
@@ -1346,7 +1346,7 @@ async fn add_turn_comment_sends_the_real_wire_request() {
         "agent_id": "value",
         "needs_clustering": true,
         "title": "value",
-        "issue_type": "knowledge_gap",
+        "issue_type": {},
         "labels": [
             "value"
         ],

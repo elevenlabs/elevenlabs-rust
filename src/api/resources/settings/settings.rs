@@ -18,14 +18,7 @@ impl SettingsClient {
     /// configuration, so a later `set_access_token` reaches it; one built here
     /// owns its configuration outright and is unaffected by the root client.
     pub fn new(config: ClientConfig) -> Result<Self, crate::error::ApiError> {
-        let http_client = Arc::new(
-            HttpClient::new(
-                config.base_url.clone(),
-                config.timeout.as_millis() as u64,
-                config.max_retries,
-            )
-            .map_err(crate::error::ApiError::Network)?,
-        );
+        let http_client = Arc::new(HttpClient::new(config.clone())?);
         let config_manager = Arc::new(ConfigManager::new(config));
         Ok(Self::with_shared(http_client, config_manager))
     }
@@ -51,7 +44,7 @@ impl SettingsClient {
     pub async fn get_default(
         &self,
         options: Option<RequestOptions>,
-    ) -> Result<BodyTextToSpeechFullVoiceSettings, crate::error::ApiError> {
+    ) -> Result<VoiceSettings, crate::error::ApiError> {
         let url = "/v1/voices/settings/default";
 
         let mut request = self.http_client.get(url);
@@ -98,7 +91,7 @@ impl SettingsClient {
 
         let status = response.status().as_u16();
         let bytes = response.bytes().await?;
-        let result: BodyTextToSpeechFullVoiceSettings = if bytes.is_empty() {
+        let result: VoiceSettings = if bytes.is_empty() {
             Default::default()
         } else {
             serde_json::from_slice(&bytes).map_err(|err| crate::error::ApiError::DecodeError {
@@ -125,7 +118,7 @@ impl SettingsClient {
         &self,
         voice_id: &str,
         options: Option<RequestOptions>,
-    ) -> Result<BodyTextToSpeechFullVoiceSettings, crate::error::ApiError> {
+    ) -> Result<VoiceSettings, crate::error::ApiError> {
         let url = format!("/v1/voices/{}/settings", voice_id);
 
         let mut request = self.http_client.get(url);
@@ -172,7 +165,7 @@ impl SettingsClient {
 
         let status = response.status().as_u16();
         let bytes = response.bytes().await?;
-        let result: BodyTextToSpeechFullVoiceSettings = if bytes.is_empty() {
+        let result: VoiceSettings = if bytes.is_empty() {
             Default::default()
         } else {
             serde_json::from_slice(&bytes).map_err(|err| crate::error::ApiError::DecodeError {
@@ -199,7 +192,7 @@ impl SettingsClient {
     pub async fn update(
         &self,
         voice_id: &str,
-        body: &BodyTextToSpeechFullVoiceSettings,
+        body: &VoiceSettings,
         options: Option<RequestOptions>,
     ) -> Result<EditVoiceSettingsResponseModel, crate::error::ApiError> {
         let url = format!("/v1/voices/{}/settings/edit", voice_id);

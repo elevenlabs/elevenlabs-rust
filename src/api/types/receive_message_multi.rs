@@ -19,13 +19,40 @@ impl<'de> serde::Deserialize<'de> for ReceiveMessageMulti {
                 .map(|object| keys.iter().any(|key| object.contains_key(*key)))
                 .unwrap_or(false)
         };
+        let matching_keys = |keys: &[&str]| {
+            value
+                .as_object()
+                .map(|object| {
+                    object
+                        .keys()
+                        .filter(|key| keys.contains(&key.as_str()))
+                        .count()
+                })
+                .unwrap_or(0)
+        };
 
         let mut matched_literal = false;
 
         if value.get("is_final").and_then(serde_json::Value::as_bool) == Some(true) {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<FinalOutputMulti>(value.clone()) {
-                return Ok(Self::FinalOutputMulti(parsed));
+                let best = matching_keys(&["is_final", "context_id"]);
+                let mut chosen = None;
+                let score = matching_keys(&[
+                    "audio",
+                    "is_final",
+                    "normalized_alignment",
+                    "alignment",
+                    "context_id",
+                ]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<AudioOutputMulti>(value.clone())
+                    {
+                        chosen = Some(Self::AudioOutputMulti(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::FinalOutputMulti(parsed)));
             }
         }
 

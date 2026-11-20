@@ -1,62 +1,116 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "kind")]
-#[non_exhaustive]
+#[derive(Debug, Clone, Serialize, PartialEq)]
+#[serde(untagged)]
 pub enum AnalysisItemResponseModelDefinition {
-    #[serde(rename = "data_collection")]
-    DataCollection {
-        #[serde(flatten)]
-        data: UserDataCollectionAnalysisItemOutput,
-    },
+    UserEvaluationAnalysisItem(UserEvaluationAnalysisItem),
+    UserDataCollectionAnalysisItemOutput(UserDataCollectionAnalysisItemOutput),
+}
 
-    #[serde(rename = "evaluation")]
-    Evaluation {
-        #[serde(flatten)]
-        data: UserEvaluationAnalysisItem,
-    },
+impl<'de> serde::Deserialize<'de> for AnalysisItemResponseModelDefinition {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <serde_json::Value as serde::Deserialize>::deserialize(deserializer)?;
 
-    /// Catch-all variant for unrecognized discriminant values.
-    /// If the server sends a discriminant not recognized by the current SDK
-    /// version, the raw payload is captured here so callers can still inspect it.
-    #[serde(untagged)]
-    __Unknown(serde_json::Value),
+        let mut matched_literal = false;
+
+        if value.get("source").and_then(serde_json::Value::as_str) == Some("user")
+            && value.get("kind").and_then(serde_json::Value::as_str) == Some("evaluation")
+        {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<UserEvaluationAnalysisItem>(value.clone())
+            {
+                return Ok(Self::UserEvaluationAnalysisItem(parsed));
+            }
+        }
+
+        if value.get("source").and_then(serde_json::Value::as_str) == Some("user")
+            && value.get("kind").and_then(serde_json::Value::as_str) == Some("data_collection")
+        {
+            matched_literal = true;
+            if let Ok(parsed) =
+                serde_json::from_value::<UserDataCollectionAnalysisItemOutput>(value.clone())
+            {
+                return Ok(Self::UserDataCollectionAnalysisItemOutput(parsed));
+            }
+        }
+
+        if !matched_literal {
+            if let Ok(parsed) = serde_json::from_value::<UserEvaluationAnalysisItem>(value.clone())
+            {
+                return Ok(Self::UserEvaluationAnalysisItem(parsed));
+            }
+
+            if let Ok(parsed) =
+                serde_json::from_value::<UserDataCollectionAnalysisItemOutput>(value.clone())
+            {
+                return Ok(Self::UserDataCollectionAnalysisItemOutput(parsed));
+            }
+        }
+
+        Err(serde::de::Error::custom(
+            "data did not match any variant of untagged enum AnalysisItemResponseModelDefinition",
+        ))
+    }
 }
 
 impl AnalysisItemResponseModelDefinition {
-    pub fn is_data_collection(&self) -> bool {
-        matches!(self, Self::DataCollection { .. })
+    pub fn is_user_evaluation_analysis_item(&self) -> bool {
+        matches!(self, Self::UserEvaluationAnalysisItem(_))
     }
 
-    pub fn as_data_collection(&self) -> Option<&UserDataCollectionAnalysisItemOutput> {
+    pub fn as_user_evaluation_analysis_item(&self) -> Option<&UserEvaluationAnalysisItem> {
         match self {
-            Self::DataCollection { data } => Some(data),
+            Self::UserEvaluationAnalysisItem(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_data_collection(self) -> Option<UserDataCollectionAnalysisItemOutput> {
+    pub fn into_user_evaluation_analysis_item(self) -> Option<UserEvaluationAnalysisItem> {
         match self {
-            Self::DataCollection { data } => Some(data),
+            Self::UserEvaluationAnalysisItem(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_evaluation(&self) -> bool {
-        matches!(self, Self::Evaluation { .. })
+    pub fn is_user_data_collection_analysis_item_output(&self) -> bool {
+        matches!(self, Self::UserDataCollectionAnalysisItemOutput(_))
     }
 
-    pub fn as_evaluation(&self) -> Option<&UserEvaluationAnalysisItem> {
+    pub fn as_user_data_collection_analysis_item_output(
+        &self,
+    ) -> Option<&UserDataCollectionAnalysisItemOutput> {
         match self {
-            Self::Evaluation { data } => Some(data),
+            Self::UserDataCollectionAnalysisItemOutput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_evaluation(self) -> Option<UserEvaluationAnalysisItem> {
+    pub fn into_user_data_collection_analysis_item_output(
+        self,
+    ) -> Option<UserDataCollectionAnalysisItemOutput> {
         match self {
-            Self::Evaluation { data } => Some(data),
+            Self::UserDataCollectionAnalysisItemOutput(value) => Some(value),
             _ => None,
+        }
+    }
+}
+
+impl fmt::Display for AnalysisItemResponseModelDefinition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::UserEvaluationAnalysisItem(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::UserDataCollectionAnalysisItemOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
         }
     }
 }

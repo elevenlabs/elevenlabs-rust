@@ -2,15 +2,13 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ConversationHistoryTranscriptToolCallMcpDetails {
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<ConversationHistoryTranscriptToolCallMcpDetailsType>,
     pub mcp_server_id: String,
-    #[serde(default)]
     pub mcp_server_name: String,
-    #[serde(default)]
     pub integration_type: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<std::collections::HashMap<String, String>>,
-    #[serde(default)]
     pub approval_policy: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requires_approval: Option<bool>,
@@ -29,6 +27,7 @@ impl ConversationHistoryTranscriptToolCallMcpDetails {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct ConversationHistoryTranscriptToolCallMcpDetailsBuilder {
+    r#type: Option<ConversationHistoryTranscriptToolCallMcpDetailsType>,
     mcp_server_id: Option<String>,
     mcp_server_name: Option<String>,
     integration_type: Option<String>,
@@ -40,6 +39,11 @@ pub struct ConversationHistoryTranscriptToolCallMcpDetailsBuilder {
 }
 
 impl ConversationHistoryTranscriptToolCallMcpDetailsBuilder {
+    pub fn r#type(mut self, value: ConversationHistoryTranscriptToolCallMcpDetailsType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn mcp_server_id(mut self, value: impl Into<String>) -> Self {
         self.mcp_server_id = Some(value.into());
         self
@@ -88,6 +92,7 @@ impl ConversationHistoryTranscriptToolCallMcpDetailsBuilder {
     /// - [`approval_policy`](ConversationHistoryTranscriptToolCallMcpDetailsBuilder::approval_policy)
     pub fn build(self) -> Result<ConversationHistoryTranscriptToolCallMcpDetails, BuildError> {
         Ok(ConversationHistoryTranscriptToolCallMcpDetails {
+            r#type: self.r#type,
             mcp_server_id: self
                 .mcp_server_id
                 .ok_or_else(|| BuildError::missing_field("mcp_server_id"))?,

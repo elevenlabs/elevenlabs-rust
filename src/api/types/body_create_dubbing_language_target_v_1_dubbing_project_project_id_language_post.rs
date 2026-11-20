@@ -7,7 +7,7 @@ pub struct BodyCreateDubbingLanguageTargetV1DubbingProjectProjectIdLanguagePost 
     pub target_language: String,
     /// Voice settings applied to every speaker in this language. Omit to use the defaults.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub voice_settings: Option<DubbingLanguageResponseVoiceSettings>,
+    pub voice_settings: Option<DubbingVoiceSettings>,
     /// Enterprise only. Optional translations to use instead of machine translation. A map from each source segment's `external_id` (or its `id`, if you supplied none) to the translated text; every source segment must be covered exactly once. At most 20,000 entries, totaling at most 4 MiB of text. See [Bring your own transcript](https://elevenlabs.io/docs/eleven-api/guides/how-to/dubbing/bring-your-own-transcript).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub translations: Option<std::collections::HashMap<String, String>>,
@@ -24,7 +24,7 @@ impl BodyCreateDubbingLanguageTargetV1DubbingProjectProjectIdLanguagePost {
 #[non_exhaustive]
 pub struct BodyCreateDubbingLanguageTargetV1DubbingProjectProjectIdLanguagePostBuilder {
     target_language: Option<String>,
-    voice_settings: Option<DubbingLanguageResponseVoiceSettings>,
+    voice_settings: Option<DubbingVoiceSettings>,
     translations: Option<std::collections::HashMap<String, String>>,
 }
 
@@ -34,7 +34,7 @@ impl BodyCreateDubbingLanguageTargetV1DubbingProjectProjectIdLanguagePostBuilder
         self
     }
 
-    pub fn voice_settings(mut self, value: DubbingLanguageResponseVoiceSettings) -> Self {
+    pub fn voice_settings(mut self, value: DubbingVoiceSettings) -> Self {
         self.voice_settings = Some(value);
         self
     }

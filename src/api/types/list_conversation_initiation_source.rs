@@ -26,10 +26,12 @@ pub enum ListConversationInitiationSource {
     TelegramIntegration,
     IntercomIntegration,
     FreshdeskIntegration,
+    PlainIntegration,
     SalesforceIntegration,
     TemplatePreview,
     GenesysBotConnector,
     SubagentTool,
+    AgentMessagesApi,
     /// This variant is used for forward compatibility.
     /// If the server sends a value not recognized by the current SDK version,
     /// it will be captured here with the raw string value.
@@ -61,10 +63,12 @@ impl Serialize for ListConversationInitiationSource {
             Self::TelegramIntegration => serializer.serialize_str("telegram_integration"),
             Self::IntercomIntegration => serializer.serialize_str("intercom_integration"),
             Self::FreshdeskIntegration => serializer.serialize_str("freshdesk_integration"),
+            Self::PlainIntegration => serializer.serialize_str("plain_integration"),
             Self::SalesforceIntegration => serializer.serialize_str("salesforce_integration"),
             Self::TemplatePreview => serializer.serialize_str("template_preview"),
             Self::GenesysBotConnector => serializer.serialize_str("genesys_bot_connector"),
             Self::SubagentTool => serializer.serialize_str("subagent_tool"),
+            Self::AgentMessagesApi => serializer.serialize_str("agent_messages_api"),
             Self::__Unknown(val) => serializer.serialize_str(val),
         }
     }
@@ -97,10 +101,12 @@ impl<'de> Deserialize<'de> for ListConversationInitiationSource {
             "telegram_integration" => Ok(Self::TelegramIntegration),
             "intercom_integration" => Ok(Self::IntercomIntegration),
             "freshdesk_integration" => Ok(Self::FreshdeskIntegration),
+            "plain_integration" => Ok(Self::PlainIntegration),
             "salesforce_integration" => Ok(Self::SalesforceIntegration),
             "template_preview" => Ok(Self::TemplatePreview),
             "genesys_bot_connector" => Ok(Self::GenesysBotConnector),
             "subagent_tool" => Ok(Self::SubagentTool),
+            "agent_messages_api" => Ok(Self::AgentMessagesApi),
             _ => Ok(Self::__Unknown(value)),
         }
     }
@@ -132,10 +138,12 @@ impl fmt::Display for ListConversationInitiationSource {
             Self::TelegramIntegration => write!(f, "telegram_integration"),
             Self::IntercomIntegration => write!(f, "intercom_integration"),
             Self::FreshdeskIntegration => write!(f, "freshdesk_integration"),
+            Self::PlainIntegration => write!(f, "plain_integration"),
             Self::SalesforceIntegration => write!(f, "salesforce_integration"),
             Self::TemplatePreview => write!(f, "template_preview"),
             Self::GenesysBotConnector => write!(f, "genesys_bot_connector"),
             Self::SubagentTool => write!(f, "subagent_tool"),
+            Self::AgentMessagesApi => write!(f, "agent_messages_api"),
             Self::__Unknown(val) => write!(f, "{}", val),
         }
     }

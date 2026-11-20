@@ -18,14 +18,7 @@ impl SingleUseClient {
     /// configuration, so a later `set_access_token` reaches it; one built here
     /// owns its configuration outright and is unaffected by the root client.
     pub fn new(config: ClientConfig) -> Result<Self, crate::error::ApiError> {
-        let http_client = Arc::new(
-            HttpClient::new(
-                config.base_url.clone(),
-                config.timeout.as_millis() as u64,
-                config.max_retries,
-            )
-            .map_err(crate::error::ApiError::Network)?,
-        );
+        let http_client = Arc::new(HttpClient::new(config.clone())?);
         let config_manager = Arc::new(ConfigManager::new(config));
         Ok(Self::with_shared(http_client, config_manager))
     }
@@ -44,6 +37,7 @@ impl SingleUseClient {
     /// # Arguments
     ///
     /// * `token_type`
+    /// * `request` - Query parameters for this request
     /// * `options` - Per-call overrides
     ///
     /// # Returns
@@ -52,11 +46,16 @@ impl SingleUseClient {
     pub async fn create(
         &self,
         token_type: &SingleUseTokenType,
+        request: &CreateQueryRequest,
         options: Option<RequestOptions>,
     ) -> Result<SingleUseTokenResponseModel, crate::error::ApiError> {
+        let max_session_duration_seconds = request.max_session_duration_seconds.clone();
         let url = format!("/v1/single-use-token/{}", token_type);
 
         let mut request = self.http_client.post(url);
+        if let Some(val) = &max_session_duration_seconds {
+            request = request.query(&[("max_session_duration_seconds", &val.to_string())]);
+        }
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

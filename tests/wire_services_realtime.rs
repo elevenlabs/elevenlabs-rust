@@ -906,7 +906,10 @@ async fn create_client_secret_sends_the_real_wire_request() {
     let client = ApiClient::new(config).expect("client should construct");
     let body = serde_json::from_value(request_body.clone()).unwrap();
 
-    let result = client.realtime.create_client_secret(&body, None).await;
+    let result = client
+        .realtime
+        .create_client_secret(Some(&body), None)
+        .await;
     assert!(result.is_ok(), "call failed: {:?}", result.as_ref().err());
 
     let received = server.received_requests().await.expect("requests recorded");
@@ -1050,7 +1053,10 @@ async fn create_client_secret_surfaces_the_declared_422() {
     let client = ApiClient::new(config).expect("client should construct");
     let body = serde_json::from_value(request_body.clone()).unwrap();
 
-    let result = client.realtime.create_client_secret(&body, None).await;
+    let result = client
+        .realtime
+        .create_client_secret(Some(&body), None)
+        .await;
 
     match result {
         Ok(_) => panic!("expected the declared 422 to surface as an error"),

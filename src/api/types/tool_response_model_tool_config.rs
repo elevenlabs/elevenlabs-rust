@@ -1,110 +1,172 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "type")]
-#[non_exhaustive]
+#[derive(Debug, Clone, Serialize, PartialEq)]
+#[serde(untagged)]
 pub enum ToolResponseModelToolConfig {
-    #[serde(rename = "client")]
-    Client {
-        #[serde(flatten)]
-        data: ClientToolConfigOutput,
-    },
+    WebhookToolConfigOutput(WebhookToolConfigOutput),
+    ClientToolConfigOutput(ClientToolConfigOutput),
+    SystemToolConfigOutput(SystemToolConfigOutput),
+    McpToolConfigOutput(McpToolConfigOutput),
+}
 
-    #[serde(rename = "mcp")]
-    Mcp {
-        #[serde(flatten)]
-        data: McpToolConfigOutput,
-    },
+impl<'de> serde::Deserialize<'de> for ToolResponseModelToolConfig {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <serde_json::Value as serde::Deserialize>::deserialize(deserializer)?;
 
-    #[serde(rename = "system")]
-    System {
-        #[serde(flatten)]
-        data: SystemToolConfigOutput,
-    },
+        let mut matched_literal = false;
 
-    #[serde(rename = "webhook")]
-    Webhook {
-        #[serde(flatten)]
-        data: WebhookToolConfigOutput,
-    },
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("webhook") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<WebhookToolConfigOutput>(value.clone()) {
+                return Ok(Self::WebhookToolConfigOutput(parsed));
+            }
+        }
 
-    /// Catch-all variant for unrecognized discriminant values.
-    /// If the server sends a discriminant not recognized by the current SDK
-    /// version, the raw payload is captured here so callers can still inspect it.
-    #[serde(untagged)]
-    __Unknown(serde_json::Value),
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("client") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<ClientToolConfigOutput>(value.clone()) {
+                return Ok(Self::ClientToolConfigOutput(parsed));
+            }
+        }
+
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("system") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<SystemToolConfigOutput>(value.clone()) {
+                return Ok(Self::SystemToolConfigOutput(parsed));
+            }
+        }
+
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("mcp") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<McpToolConfigOutput>(value.clone()) {
+                return Ok(Self::McpToolConfigOutput(parsed));
+            }
+        }
+
+        if !matched_literal {
+            if let Ok(parsed) = serde_json::from_value::<WebhookToolConfigOutput>(value.clone()) {
+                return Ok(Self::WebhookToolConfigOutput(parsed));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<ClientToolConfigOutput>(value.clone()) {
+                return Ok(Self::ClientToolConfigOutput(parsed));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<SystemToolConfigOutput>(value.clone()) {
+                return Ok(Self::SystemToolConfigOutput(parsed));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<McpToolConfigOutput>(value.clone()) {
+                return Ok(Self::McpToolConfigOutput(parsed));
+            }
+        }
+
+        Err(serde::de::Error::custom(
+            "data did not match any variant of untagged enum ToolResponseModelToolConfig",
+        ))
+    }
 }
 
 impl ToolResponseModelToolConfig {
-    pub fn is_client(&self) -> bool {
-        matches!(self, Self::Client { .. })
+    pub fn is_webhook_tool_config_output(&self) -> bool {
+        matches!(self, Self::WebhookToolConfigOutput(_))
     }
 
-    pub fn as_client(&self) -> Option<&ClientToolConfigOutput> {
+    pub fn as_webhook_tool_config_output(&self) -> Option<&WebhookToolConfigOutput> {
         match self {
-            Self::Client { data } => Some(data),
+            Self::WebhookToolConfigOutput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_client(self) -> Option<ClientToolConfigOutput> {
+    pub fn into_webhook_tool_config_output(self) -> Option<WebhookToolConfigOutput> {
         match self {
-            Self::Client { data } => Some(data),
+            Self::WebhookToolConfigOutput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_mcp(&self) -> bool {
-        matches!(self, Self::Mcp { .. })
+    pub fn is_client_tool_config_output(&self) -> bool {
+        matches!(self, Self::ClientToolConfigOutput(_))
     }
 
-    pub fn as_mcp(&self) -> Option<&McpToolConfigOutput> {
+    pub fn as_client_tool_config_output(&self) -> Option<&ClientToolConfigOutput> {
         match self {
-            Self::Mcp { data } => Some(data),
+            Self::ClientToolConfigOutput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_mcp(self) -> Option<McpToolConfigOutput> {
+    pub fn into_client_tool_config_output(self) -> Option<ClientToolConfigOutput> {
         match self {
-            Self::Mcp { data } => Some(data),
+            Self::ClientToolConfigOutput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_system(&self) -> bool {
-        matches!(self, Self::System { .. })
+    pub fn is_system_tool_config_output(&self) -> bool {
+        matches!(self, Self::SystemToolConfigOutput(_))
     }
 
-    pub fn as_system(&self) -> Option<&SystemToolConfigOutput> {
+    pub fn as_system_tool_config_output(&self) -> Option<&SystemToolConfigOutput> {
         match self {
-            Self::System { data } => Some(data),
+            Self::SystemToolConfigOutput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_system(self) -> Option<SystemToolConfigOutput> {
+    pub fn into_system_tool_config_output(self) -> Option<SystemToolConfigOutput> {
         match self {
-            Self::System { data } => Some(data),
+            Self::SystemToolConfigOutput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_webhook(&self) -> bool {
-        matches!(self, Self::Webhook { .. })
+    pub fn is_mcp_tool_config_output(&self) -> bool {
+        matches!(self, Self::McpToolConfigOutput(_))
     }
 
-    pub fn as_webhook(&self) -> Option<&WebhookToolConfigOutput> {
+    pub fn as_mcp_tool_config_output(&self) -> Option<&McpToolConfigOutput> {
         match self {
-            Self::Webhook { data } => Some(data),
+            Self::McpToolConfigOutput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_webhook(self) -> Option<WebhookToolConfigOutput> {
+    pub fn into_mcp_tool_config_output(self) -> Option<McpToolConfigOutput> {
         match self {
-            Self::Webhook { data } => Some(data),
+            Self::McpToolConfigOutput(value) => Some(value),
             _ => None,
+        }
+    }
+}
+
+impl fmt::Display for ToolResponseModelToolConfig {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::WebhookToolConfigOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::ClientToolConfigOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::SystemToolConfigOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::McpToolConfigOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
         }
     }
 }

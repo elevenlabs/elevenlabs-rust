@@ -1898,6 +1898,66 @@ async fn resubmit_sends_the_real_wire_request() {
                             "interaction_budget": "realtime"
                         }
                     },
+                    "subagent_config": {
+                        "agents": [
+                            {
+                                "execution_mode": "immediate",
+                                "timeout_secs": 123,
+                                "agent_id": "value",
+                                "branch_id": "value",
+                                "description": "value",
+                                "parameters": {
+                                    "property_kind": "array",
+                                    "description": "value",
+                                    "dynamic_variable": "value",
+                                    "constant_value": {},
+                                    "is_omitted": true,
+                                    "type": "object",
+                                    "required": [
+                                        "value"
+                                    ],
+                                    "properties": {
+                                        "key": {
+                                            "type": "boolean",
+                                            "description": "value",
+                                            "enum": [
+                                                "value"
+                                            ],
+                                            "is_system_provided": true,
+                                            "dynamic_variable": "value",
+                                            "allowed_values": {
+                                                "dynamic_variable": "value"
+                                            },
+                                            "allowed_values_dynamic_variable": "value",
+                                            "constant_value": "value",
+                                            "is_omitted": true
+                                        }
+                                    },
+                                    "required_constraints": {
+                                        "any_of": [
+                                            {
+                                                "required": [
+                                                    "value"
+                                                ]
+                                            }
+                                        ],
+                                        "all_of": [
+                                            {
+                                                "required": [
+                                                    "value"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ],
+                        "self_subagent": {
+                            "execution_mode": "immediate",
+                            "timeout_secs": 123,
+                            "description": "value"
+                        }
+                    },
                     "prompt": {
                         "prompt": "value",
                         "llm": "gpt-4o-mini",
@@ -2721,6 +2781,7 @@ async fn resubmit_sends_the_real_wire_request() {
                                     "prompt": "value",
                                     "execution_mode": "streaming",
                                     "model": "gemini-2.5-flash-lite",
+                                    "service_tier": "standard",
                                     "history_message_count": 100,
                                     "trigger_action": {
                                         "type": "end_call"
@@ -2794,6 +2855,9 @@ async fn resubmit_sends_the_real_wire_request() {
                         }
                     },
                     "auto_resolve_after_inactive_minutes": 123,
+                    "environments": [
+                        "value"
+                    ],
                     "notifiers": [
                         {
                             "type": "webhook",
@@ -3138,6 +3202,66 @@ async fn resubmit_surfaces_the_declared_422() {
                             "interaction_budget": "realtime"
                         }
                     },
+                    "subagent_config": {
+                        "agents": [
+                            {
+                                "execution_mode": "immediate",
+                                "timeout_secs": 123,
+                                "agent_id": "value",
+                                "branch_id": "value",
+                                "description": "value",
+                                "parameters": {
+                                    "property_kind": "array",
+                                    "description": "value",
+                                    "dynamic_variable": "value",
+                                    "constant_value": {},
+                                    "is_omitted": true,
+                                    "type": "object",
+                                    "required": [
+                                        "value"
+                                    ],
+                                    "properties": {
+                                        "key": {
+                                            "type": "boolean",
+                                            "description": "value",
+                                            "enum": [
+                                                "value"
+                                            ],
+                                            "is_system_provided": true,
+                                            "dynamic_variable": "value",
+                                            "allowed_values": {
+                                                "dynamic_variable": "value"
+                                            },
+                                            "allowed_values_dynamic_variable": "value",
+                                            "constant_value": "value",
+                                            "is_omitted": true
+                                        }
+                                    },
+                                    "required_constraints": {
+                                        "any_of": [
+                                            {
+                                                "required": [
+                                                    "value"
+                                                ]
+                                            }
+                                        ],
+                                        "all_of": [
+                                            {
+                                                "required": [
+                                                    "value"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ],
+                        "self_subagent": {
+                            "execution_mode": "immediate",
+                            "timeout_secs": 123,
+                            "description": "value"
+                        }
+                    },
                     "prompt": {
                         "prompt": "value",
                         "llm": "gpt-4o-mini",
@@ -3961,6 +4085,7 @@ async fn resubmit_surfaces_the_declared_422() {
                                     "prompt": "value",
                                     "execution_mode": "streaming",
                                     "model": "gemini-2.5-flash-lite",
+                                    "service_tier": "standard",
                                     "history_message_count": 100,
                                     "trigger_action": {
                                         "type": "end_call"
@@ -4034,6 +4159,9 @@ async fn resubmit_surfaces_the_declared_422() {
                         }
                     },
                     "auto_resolve_after_inactive_minutes": 123,
+                    "environments": [
+                        "value"
+                    ],
                     "notifiers": [
                         {
                             "type": "webhook",

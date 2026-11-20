@@ -13,7 +13,7 @@ pub struct BodyTextToSpeechFull {
     pub language_code: Option<String>,
     /// Voice settings overriding stored settings for the given voice. They are applied only on the given request.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub voice_settings: Option<BodyTextToSpeechFullVoiceSettings>,
+    pub voice_settings: Option<VoiceSettings>,
     /// A list of pronunciation dictionary locators (id, version_id) to be applied to the text. They will be applied in order. You may have up to 3 locators per request
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pronunciation_dictionary_locators:
@@ -62,7 +62,7 @@ pub struct BodyTextToSpeechFullBuilder {
     text: Option<String>,
     model_id: Option<String>,
     language_code: Option<String>,
-    voice_settings: Option<BodyTextToSpeechFullVoiceSettings>,
+    voice_settings: Option<VoiceSettings>,
     pronunciation_dictionary_locators:
         Option<Vec<BodyTextToSpeechFullPronunciationDictionaryLocators>>,
     seed: Option<i64>,
@@ -92,7 +92,7 @@ impl BodyTextToSpeechFullBuilder {
         self
     }
 
-    pub fn voice_settings(mut self, value: BodyTextToSpeechFullVoiceSettings) -> Self {
+    pub fn voice_settings(mut self, value: VoiceSettings) -> Self {
         self.voice_settings = Some(value);
         self
     }

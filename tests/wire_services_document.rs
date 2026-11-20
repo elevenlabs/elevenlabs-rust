@@ -29,6 +29,13 @@ async fn refresh_sends_the_real_wire_request() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value",
