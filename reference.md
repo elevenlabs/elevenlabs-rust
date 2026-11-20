@@ -1176,8 +1176,8 @@ async fn main() {
             Some(&BodyUpdatePvcVoiceSampleV1VoicesPvcVoiceIdSamplesSampleIdPost {
                 remove_background_noise: Some(true),
                 selected_speaker_ids: Some(vec!["selected_speaker_ids".to_string()]),
-                trim_start_time: Some(2),
-                trim_end_time: Some(4),
+                trim_start_time: Some(6),
+                trim_end_time: Some(10),
                 file_name: Some("file_name".to_string()),
                 ..Default::default()
             }),
@@ -1793,7 +1793,7 @@ async fn main() {
                         .text("The first move is what sets everything in motion.")
                         .model_id("eleven_multilingual_v2")
                         .language_code("language_code")
-                        .voice_settings(BodyTextToSpeechFullVoiceSettings {
+                        .voice_settings(VoiceSettings {
                             stability: Some(0.62),
                             use_speaker_boost: Some(true),
                             similarity_boost: Some(0.18),
@@ -1966,7 +1966,7 @@ async fn main() {
                         .text("This is a test for the API of ElevenLabs.")
                         .model_id("eleven_multilingual_v2")
                         .language_code("language_code")
-                        .voice_settings(BodyTextToSpeechFullVoiceSettings {
+                        .voice_settings(VoiceSettings {
                             stability: Some(0.62),
                             use_speaker_boost: Some(true),
                             similarity_boost: Some(0.18),
@@ -2139,7 +2139,7 @@ async fn main() {
                         .text("The first move is what sets everything in motion.")
                         .model_id("eleven_multilingual_v2")
                         .language_code("language_code")
-                        .voice_settings(BodyTextToSpeechFullVoiceSettings {
+                        .voice_settings(VoiceSettings {
                             stability: Some(0.62),
                             use_speaker_boost: Some(true),
                             similarity_boost: Some(0.18),
@@ -2313,7 +2313,7 @@ async fn main() {
                         .text("The first move is what sets everything in motion.")
                         .model_id("eleven_multilingual_v2")
                         .language_code("language_code")
-                        .voice_settings(BodyTextToSpeechFullVoiceSettings {
+                        .voice_settings(VoiceSettings {
                             stability: Some(0.62),
                             use_speaker_boost: Some(true),
                             similarity_boost: Some(0.18),
@@ -2611,9 +2611,9 @@ async fn main() {
                     ])
                     .language_code("language_code")
                     .voice_settings(ElevenFlashV2_5VoiceSettings {
-                        stability: Some(0.79),
-                        similarity_boost: Some(0.5),
-                        speed: Some(0.75),
+                        stability: Some(0.17),
+                        similarity_boost: Some(0.76),
+                        speed: Some(1_f64),
                         ..Default::default()
                     })
                     .build()
@@ -4674,7 +4674,7 @@ async fn main() {
 </details>
 
 ## Settings
-<details><summary><code>client.settings.<a href="/src/api/resources/settings/settings.rs">get_default</a>(options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;BodyTextToSpeechFullVoiceSettings, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.settings.<a href="/src/api/resources/settings/settings.rs">get_default</a>(options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;VoiceSettings, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -4736,7 +4736,7 @@ async fn main() {
 </dl>
 </details>
 
-<details><summary><code>client.settings.<a href="/src/api/resources/settings/settings.rs">get</a>(voice_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;BodyTextToSpeechFullVoiceSettings, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.settings.<a href="/src/api/resources/settings/settings.rs">get</a>(voice_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;VoiceSettings, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -4806,7 +4806,7 @@ async fn main() {
 </dl>
 </details>
 
-<details><summary><code>client.settings.<a href="/src/api/resources/settings/settings.rs">update</a>(voice_id: &amp;str, body: &amp;BodyTextToSpeechFullVoiceSettings, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;EditVoiceSettingsResponseModel, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.settings.<a href="/src/api/resources/settings/settings.rs">update</a>(voice_id: &amp;str, body: &amp;VoiceSettings, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;EditVoiceSettingsResponseModel, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -4843,7 +4843,7 @@ async fn main() {
         .settings
         .update(
             "21m00Tcm4TlvDq8ikWAM",
-            &BodyTextToSpeechFullVoiceSettings {
+            &VoiceSettings {
                 stability: Some(0.62),
                 use_speaker_boost: Some(true),
                 similarity_boost: Some(0.18),
@@ -4878,7 +4878,7 @@ async fn main() {
 <dl>
 <dd>
 
-**body:** `&BodyTextToSpeechFullVoiceSettings`
+**body:** `&VoiceSettings`
     
 </dd>
 </dl>
@@ -5012,9 +5012,9 @@ async fn main() {
                     exclude_transcript: Some(true),
                     ..Default::default()
                 }),
-                can_use_mcp_servers: Some(false),
+                can_use_mcp_servers: Some(true),
                 rag_retention_period_days: Some(10),
-                conversation_embedding_retention_days: Some(203),
+                conversation_embedding_retention_days: Some(126),
                 default_livekit_stack: Some(LivekitStackType::Standard),
                 ..Default::default()
             },
@@ -6042,8 +6042,8 @@ async fn main() {
         .find_similar_voices(
             Some(&ListSimilarVoicesRequest {
                 audio_file: Some(vec![]),
-                similarity_threshold: Some(3.74),
-                top_k: Some(1),
+                similarity_threshold: Some(1.25),
+                top_k: Some(4),
                 ..Default::default()
             }),
             None,
@@ -6133,13 +6133,13 @@ async fn main() {
                 use_cases: Some(vec![]),
                 descriptives: Some(vec![]),
                 featured: Some(true),
-                min_notice_period_days: Some(7),
-                include_custom_rates: Some(true),
-                include_live_moderated: Some(false),
+                min_notice_period_days: Some(6),
+                include_custom_rates: Some(false),
+                include_live_moderated: Some(true),
                 reader_app_enabled: Some(true),
                 owner_id: Some("owner_id".to_string()),
                 sort: Some(GetSharedSort::CreatedDate),
-                page: Some(9),
+                page: Some(10),
                 ..Default::default()
             },
             None,
@@ -9438,7 +9438,7 @@ async fn main() {
             "proj_1601kwkyxp0hfzvtmyxwqxx6mcy3",
             &BodyCreateDubbingLanguageTargetV1DubbingProjectProjectIdLanguagePost::builder()
                 .target_language("es")
-                .voice_settings(DubbingLanguageResponseVoiceSettings {
+                .voice_settings(DubbingVoiceSettings {
                     cloning_strength: Some(7),
                     ..Default::default()
                 })
@@ -11553,8 +11553,89 @@ async fn main() {
 </dl>
 </details>
 
+## ContentProvenance
+<details><summary><code>client.content_provenance.<a href="/src/api/resources/content_provenance/content_provenance.rs">watermark</a>(body: &amp;BodyCheckWatermarkV1ContentProvenanceWatermarkPost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;WatermarkCheck, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Check an audio file for an embedded ElevenLabs watermark. This endpoint is in beta and may change.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .content_provenance
+        .watermark(
+            &BodyCheckWatermarkV1ContentProvenanceWatermarkPost::builder()
+                .file(vec![])
+                .version("version")
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&BodyCheckWatermarkV1ContentProvenanceWatermarkPost`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Rules
-<details><summary><code>client.rules.<a href="/src/api/resources/rules/rules.rs">set</a>(pronunciation_dictionary_id: &amp;str, body: &amp;PronunciationDictionaryV1PronunciationDictionariesPronunciationDictionaryIdSetRulesPost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PronunciationDictionaryRuleItemsResponseModel, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.rules.<a href="/src/api/resources/rules/rules.rs">set</a>(pronunciation_dictionary_id: &amp;str, body: &amp;PronunciationDictionaryV1PronunciationDictionariesPronunciationDictionaryIdSetRulesPost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PronunciationDictionaryRulesResponseModel, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -11650,7 +11731,7 @@ async fn main() {
 </dl>
 </details>
 
-<details><summary><code>client.rules.<a href="/src/api/resources/rules/rules.rs">add</a>(pronunciation_dictionary_id: &amp;str, body: &amp;PronunciationDictionary, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PronunciationDictionaryRuleItemsResponseModel, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.rules.<a href="/src/api/resources/rules/rules.rs">add</a>(pronunciation_dictionary_id: &amp;str, body: &amp;PronunciationDictionary, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PronunciationDictionaryRulesResponseModel, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -11746,7 +11827,7 @@ async fn main() {
 </dl>
 </details>
 
-<details><summary><code>client.rules.<a href="/src/api/resources/rules/rules.rs">remove</a>(pronunciation_dictionary_id: &amp;str, body: &amp;RemovePronunciationDictionaryRulesRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PronunciationDictionaryRuleItemsResponseModel, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.rules.<a href="/src/api/resources/rules/rules.rs">remove</a>(pronunciation_dictionary_id: &amp;str, body: &amp;RemovePronunciationDictionaryRulesRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PronunciationDictionaryRulesResponseModel, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -11814,6 +11895,307 @@ async fn main() {
 <dd>
 
 **body:** `&RemovePronunciationDictionaryRulesRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.rules.<a href="/src/api/resources/rules/rules.rs">create</a>(agent_id: &amp;str, body: &amp;ReceptionCreateAgentRuleRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;AgentRule, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add a behavioral rule to the named receptionist.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .rules
+        .create(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionCreateAgentRuleRequest::builder()
+                .title(StrippedStr("ea volupta".to_string()))
+                .description(StrippedStr("anim ut".to_string()))
+                .priority(RulePriority::Strict)
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionCreateAgentRuleRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.rules.<a href="/src/api/resources/rules/rules.rs">update</a>(agent_id: &amp;str, rule_id: &amp;str, body: &amp;ReceptionUpdateAgentRuleRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;AgentRule, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replace an existing rule on the named receptionist. Send every field: an omitted `priority` resets to `strict`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .rules
+        .update(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "rule_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateAgentRuleRequest::builder()
+                .title(StrippedStr("elit velit ips".to_string()))
+                .description(StrippedStr("ut ullamco".to_string()))
+                .priority(RulePriority::Strict)
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rule_id:** `&str` — ID of the rule. Returned when you add one, and listed in the receptionist's `config.agent_rules`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateAgentRuleRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.rules.<a href="/src/api/resources/rules/rules.rs">delete</a>(agent_id: &amp;str, rule_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a rule from the named receptionist.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .rules
+        .delete(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "rule_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rule_id:** `&str` — ID of the rule. Returned when you add one, and listed in the receptionist's `config.agent_rules`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
     
 </dd>
 </dl>
@@ -12371,7 +12753,7 @@ async fn main() {
         .workspace
         .set_third_party_disabling_policy(
             Some(&BodySetWorkspaceThirdPartyDisablingPolicyV1WorkspacesApiKeysThirdPartyDisablingPost {
-                third_party_disable_allowed: Some(false),
+                third_party_disable_allowed: Some(true),
                 ..Default::default()
             }),
             None,
@@ -12453,8 +12835,8 @@ async fn main() {
             &AuditLogsListQueryRequest {
                 limit: Some(50),
                 cursor: Some("cursor".to_string()),
-                time_from_unix_ms: Some(2),
-                time_to_unix_ms: Some(8),
+                time_from_unix_ms: Some(8),
+                time_to_unix_ms: Some(9),
                 actor_uid: Some("actor_uid".to_string()),
                 class_name: Some(AuditClassName::AccountChange),
                 activity_name: Some(AuditActivityName::AccountSecurityChange),
@@ -12618,7 +13000,7 @@ async fn main() {
 </dl>
 </details>
 
-<details><summary><code>client.auth_connections.<a href="/src/api/resources/auth_connections/auth_connections.rs">create</a>(body: &amp;AuthConnectionsItemCreateRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResponseCreateWorkspaceAuthConnectionV1WorkspaceAuthConnectionsPost, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.auth_connections.<a href="/src/api/resources/auth_connections/auth_connections.rs">create</a>(body: &amp;AuthConnectionsCreateRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResponseCreateWorkspaceAuthConnectionV1WorkspaceAuthConnectionsPost, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -12654,7 +13036,7 @@ async fn main() {
     client
         .auth_connections
         .create(
-            &AuthConnectionsItemCreateRequest::Oauth2ClientCredentials {
+            &AuthConnectionsCreateRequest::Oauth2ClientCredentials {
                 data: CreateOAuth2ClientCredsRequest::builder()
                     .name("name")
                     .provider("provider")
@@ -12662,7 +13044,7 @@ async fn main() {
                     .token_url("token_url")
                     .scopes(vec!["scopes".to_string()])
                     .extra_params(HashMap::from([("key".to_string(), "extra_params".to_string())]))
-                    .basic_auth_in_header(true)
+                    .basic_auth_in_header(false)
                     .client_secret("client_secret")
                     .custom_headers(HashMap::from([(
                         "key".to_string(),
@@ -12689,7 +13071,7 @@ async fn main() {
 <dl>
 <dd>
 
-**body:** `&AuthConnectionsItemCreateRequest`
+**body:** `&AuthConnectionsCreateRequest`
     
 </dd>
 </dl>
@@ -12710,7 +13092,7 @@ async fn main() {
 </dl>
 </details>
 
-<details><summary><code>client.auth_connections.<a href="/src/api/resources/auth_connections/auth_connections.rs">update</a>(auth_connection_id: &amp;str, body: &amp;AuthConnectionsItemUpdateRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResponseUpdateWorkspaceAuthConnectionV1WorkspaceAuthConnectionsAuthConnectionIdPatch, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.auth_connections.<a href="/src/api/resources/auth_connections/auth_connections.rs">update</a>(auth_connection_id: &amp;str, body: &amp;AuthConnectionsUpdateRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResponseUpdateWorkspaceAuthConnectionV1WorkspaceAuthConnectionsAuthConnectionIdPatch, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -12747,7 +13129,7 @@ async fn main() {
         .auth_connections
         .update(
             "auth_connection_id",
-            &AuthConnectionsItemUpdateRequest::Oauth2ClientCredentials {
+            &AuthConnectionsUpdateRequest::Oauth2ClientCredentials {
                 data: UpdateOAuth2ClientCredsRequest {
                     provider: Some("provider".to_string()),
                     client_id: Some("client_id".to_string()),
@@ -12791,7 +13173,7 @@ async fn main() {
 <dl>
 <dd>
 
-**body:** `&AuthConnectionsItemUpdateRequest`
+**body:** `&AuthConnectionsUpdateRequest`
     
 </dd>
 </dl>
@@ -13458,9 +13840,9 @@ async fn main() {
         .update(
             &UpdateMemberRequest::builder()
                 .email("email")
-                .is_locked(false)
+                .is_locked(true)
                 .workspace_seat_type(SeatType::WorkspaceAdmin)
-                .allow_downgrade_to_basic_seat(true)
+                .allow_downgrade_to_basic_seat(false)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -13540,7 +13922,7 @@ async fn main() {
         .update_usage_limit(
             "user_id",
             &UpdateMemberUsageLimitRequestModel::builder()
-                .usage_limit(4)
+                .usage_limit(10)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -13570,6 +13952,254 @@ async fn main() {
 <dd>
 
 **body:** `&UpdateMemberUsageLimitRequestModel`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.members.<a href="/src/api/resources/members/members.rs">list_2</a>(xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionTeamMemberResponse&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the workspace's members, suspended members last.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.members.list_2("xi-workspace-id".to_string(), None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.members.<a href="/src/api/resources/members/members.rs">update_role</a>(user_id: &amp;str, body: &amp;BodySmbUpdateTeamMemberRole, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Promote a member to admin or demote an admin to member.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .members
+        .update_role(
+            "user_id",
+            &BodySmbUpdateTeamMemberRole::builder()
+                .role(BodySmbUpdateTeamMemberRoleRole::WorkspaceAdmin)
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**user_id:** `&str` — User ID of the member to update
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&BodySmbUpdateTeamMemberRole`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.members.<a href="/src/api/resources/members/members.rs">remove_2</a>(user_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove a member from the workspace. Their seat goes to a suspended member, if any.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .members
+        .remove_2("user_id", "xi-workspace-id".to_string(), None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**user_id:** `&str` — User ID of the member to remove
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
     
 </dd>
 </dl>
@@ -13631,7 +14261,7 @@ async fn main() {
                 .email("john.doe@testmail.com")
                 .seat_type(SeatType::WorkspaceAdmin)
                 .group_ids(vec!["group_ids".to_string()])
-                .usage_limit(9)
+                .usage_limit(0)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -13713,7 +14343,7 @@ async fn main() {
                 .emails(vec!["emails".to_string()])
                 .seat_type(SeatType::WorkspaceAdmin)
                 .group_ids(vec!["group_ids".to_string()])
-                .usage_limit(0)
+                .usage_limit(4)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -13814,6 +14444,253 @@ async fn main() {
 <dd>
 
 **body:** `&BodyDeleteExistingInvitationV1WorkspaceInvitesDelete`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.invites.<a href="/src/api/resources/invites/invites.rs">list</a>(xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionTeamInviteResponse&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the workspace's pending invites.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.invites.list("xi-workspace-id".to_string(), None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.invites.<a href="/src/api/resources/invites/invites.rs">create_2</a>(body: &amp;CreateTeamInviteRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Email an invite to join the workspace. A pending invite takes a seat, so this is refused once members and invites reach the plan's team limit.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .invites
+        .create_2(
+            &CreateTeamInviteRequest::builder()
+                .email("sam@example.com")
+                .role(CreateTeamInviteRequestRole::WorkspaceAdmin)
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&CreateTeamInviteRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.invites.<a href="/src/api/resources/invites/invites.rs">cancel</a>(body: &amp;BodySmbCancelTeamInvite, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Cancel a pending invite, freeing its seat.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .invites
+        .cancel(
+            &BodySmbCancelTeamInvite::builder()
+                .email("jane@example.com")
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&BodySmbCancelTeamInvite`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
     
 </dd>
 </dl>
@@ -14248,6 +15125,7 @@ async fn main() {
                             "key".to_string(),
                             "request_headers".to_string(),
                         )]))
+                        .log_redacted_fields(vec!["log_redacted_fields".to_string()])
                         .build()
                         .expect("Failed to build request"),
                 )
@@ -14338,6 +15216,7 @@ async fn main() {
                     "request_headers".to_string(),
                 )]))
                 .events(vec![WorkspaceWebhookEventType::VoiceLibraryRemovalNotice])
+                .log_redacted_fields(vec!["log_redacted_fields".to_string()])
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -14460,6 +15339,175 @@ async fn main() {
 </dl>
 </details>
 
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/webhooks.rs">test</a>(webhook_id: &amp;str, body: &amp;BodySendTestWebhookEventV1WorkspaceWebhooksWebhookIdTestPost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;WebhookSendResultResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Sends a sample event of the given type to the webhook once and returns the endpoint's status code, response time, content type and response size. Test events are signed like real ones, are never retried, and share a limit of 10 per webhook per minute with redeliveries.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .webhooks
+        .test(
+            "webhook_id",
+            &BodySendTestWebhookEventV1WorkspaceWebhooksWebhookIdTestPost::builder()
+                .webhook_type(WebhookTypes::ProjectConversionStatus)
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**webhook_id:** `&str` — The ID of the webhook.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&BodySendTestWebhookEventV1WorkspaceWebhooksWebhookIdTestPost`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/webhooks.rs">redeliver</a>(webhook_id: &amp;str, delivery_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;WebhookSendResultResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Sends a stored delivery again, once, with the same delivery ID, a new signature and an ElevenLabs-Webhook-Redelivery header. A retry that is already scheduled is still sent. Redelivering needs permission to manage webhooks and a web session, and the delivery's payload must be stored. Redeliveries and test events share a limit of 10 per webhook per minute.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .webhooks
+        .redeliver("webhook_id", "delivery_id", None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**webhook_id:** `&str` — The ID of the webhook.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**delivery_id:** `&str` — The ID of the delivery to send again.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Music
 <details><summary><code>client.music.<a href="/src/api/resources/music/music.rs">video_to_music</a>(body: &amp;BodyVideoToMusicV1MusicVideoToMusicPost, request: &amp;VideoToMusicQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;crate::core::ByteStream, crate::error::ApiError&gt;</code></summary>
 <dl>
@@ -14502,10 +15550,10 @@ async fn main() {
                 .description("description")
                 .tags(vec!["tags".to_string()])
                 .model_id(MusicModelId::MusicV1)
-                .add_sfx(false)
+                .add_sfx(true)
                 .separate_tracks(true)
-                .use_audio_as_reference(true)
-                .sign_with_c_2_pa(false)
+                .use_audio_as_reference(false)
+                .sign_with_c_2_pa(true)
                 .build()
                 .expect("Failed to build request"),
             &VideoToMusicQueryRequest {
@@ -14617,10 +15665,10 @@ async fn main() {
                 enable_logging: Some(true),
                 body: Some(BodyComposeMusicV1MusicPost {
                     prompt: Some("prompt".to_string()),
-                    music_length_ms: Some(363519),
+                    music_length_ms: Some(531345),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(1780423079),
-                    force_instrumental: Some(false),
+                    seed: Some(1781324345),
+                    force_instrumental: Some(true),
                     finetune_id: Some("finetune_id".to_string()),
                     respect_sections_durations: Some(true),
                     store_for_inpainting: Some(false),
@@ -14735,12 +15783,12 @@ async fn main() {
                     prompt: Some("A prompt for music generation".to_string()),
                     music_length_ms: Some(10000),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(1865186515),
-                    force_instrumental: Some(true),
+                    seed: Some(1833397780),
+                    force_instrumental: Some(false),
                     finetune_id: Some("finetune_id".to_string()),
                     respect_sections_durations: Some(true),
-                    store_for_inpainting: Some(false),
-                    with_timestamps: Some(false),
+                    store_for_inpainting: Some(true),
+                    with_timestamps: Some(true),
                     with_waveform_visual: Some(true),
                     sign_with_c_2_pa: Some(false),
                     ..Default::default()
@@ -14852,14 +15900,14 @@ async fn main() {
                 enable_logging: Some(true),
                 body: Some(BodyStreamComposedMusicWithADetailedResponseV1MusicDetailedStreamPost {
                     prompt: Some("prompt".to_string()),
-                    music_length_ms: Some(512586),
+                    music_length_ms: Some(449782),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(1289422274),
-                    force_instrumental: Some(true),
+                    seed: Some(401661069),
+                    force_instrumental: Some(false),
                     finetune_id: Some("finetune_id".to_string()),
                     store_for_inpainting: Some(true),
-                    with_timestamps: Some(true),
-                    with_waveform_visual: Some(false),
+                    with_timestamps: Some(false),
+                    with_waveform_visual: Some(true),
                     ..Default::default()
                 }),
                 ..Default::default()
@@ -14972,10 +16020,10 @@ async fn main() {
                 enable_logging: Some(true),
                 body: Some(BodyStreamComposedMusicV1MusicStreamPost {
                     prompt: Some("prompt".to_string()),
-                    music_length_ms: Some(124611),
+                    music_length_ms: Some(64550),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(1357397699),
-                    force_instrumental: Some(false),
+                    seed: Some(1107124270),
+                    force_instrumental: Some(true),
                     finetune_id: Some("finetune_id".to_string()),
                     store_for_inpainting: Some(true),
                     ..Default::default()
@@ -15083,8 +16131,8 @@ async fn main() {
         .upload(
             &BodyUploadMusicV1MusicUploadPost::builder()
                 .file(vec![])
-                .with_timestamps(false)
-                .with_waveform_visual(false)
+                .with_timestamps(true)
+                .with_waveform_visual(true)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -15165,7 +16213,7 @@ async fn main() {
             &BodyStemSeparationV1MusicStemSeparationPost::builder()
                 .file(vec![])
                 .stem_variation_id(StemVariationId::TwoStemsV1)
-                .sign_with_c_2_pa(true)
+                .sign_with_c_2_pa(false)
                 .build()
                 .expect("Failed to build request"),
             &SeparateStemsQueryRequest {
@@ -15281,29 +16329,29 @@ async fn main() {
                 .numbers_format(NumbersFormat::Digits)
                 .transcript_edit("transcript_edit")
                 .tag_audio_events(true)
-                .num_speakers(17)
+                .num_speakers(6)
                 .timestamps_granularity(
                     BodySpeechToTextV1SpeechToTextPostTimestampsGranularity::None,
                 )
                 .diarize(false)
-                .diarization_threshold(0.16)
+                .diarization_threshold(0.17)
                 .additional_formats(AdditionalFormats(vec![ExportOptions::Docx {
                     data: DocxExportOptions::builder()
                         .include_speakers(true)
                         .include_timestamps(true)
-                        .segment_on_silence_longer_than_s(1.6)
-                        .max_segment_duration_s(4.35)
-                        .max_segment_chars(7)
+                        .segment_on_silence_longer_than_s(4.35)
+                        .max_segment_duration_s(7.21)
+                        .max_segment_chars(1)
                         .build()
                         .expect("Failed to build request"),
                 }]))
                 .file_format(FileFormat::PcmS16Le16)
                 .source_url("source_url")
-                .webhook(false)
+                .webhook(true)
                 .webhook_id("webhook_id")
-                .temperature(1.08)
-                .seed(1786060596)
-                .use_multi_channel(true)
+                .temperature(1.66)
+                .seed(1876947786)
+                .use_multi_channel(false)
                 .multichannel_output_style(MultichannelOutputStyle::Separate)
                 .no_verbatim(true)
                 .use_speaker_library(false)
@@ -15381,7 +16429,7 @@ async fn main() {
 </details>
 
 ## SingleUse
-<details><summary><code>client.single_use.<a href="/src/api/resources/single_use/single_use.rs">create</a>(token_type: &amp;SingleUseTokenType, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;SingleUseTokenResponseModel, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.single_use.<a href="/src/api/resources/single_use/single_use.rs">create</a>(token_type: &amp;SingleUseTokenType, request: &amp;CreateQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;SingleUseTokenResponseModel, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -15416,7 +16464,14 @@ async fn main() {
     let client = ApiClient::new(config).expect("Failed to build client");
     client
         .single_use
-        .create(&SingleUseTokenType::RealtimeScribe, None)
+        .create(
+            &SingleUseTokenType::RealtimeScribe,
+            &CreateQueryRequest {
+                max_session_duration_seconds: Some(9),
+                ..Default::default()
+            },
+            None,
+        )
         .await;
 }
 ```
@@ -15434,6 +16489,22 @@ async fn main() {
 <dd>
 
 **token_type:** `&SingleUseTokenType`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `&CreateQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.max_session_duration_seconds:** `Option<i64>` — Closes the realtime transcription session opened with this token after this many seconds. Only for realtime_scribe tokens.
     
 </dd>
 </dl>
@@ -15843,12 +16914,12 @@ async fn main() {
                 visited_agent_branch_ids: Some(vec![]),
                 triggered_procedure_ids: Some(vec![]),
                 call_successful: Some(EvaluationResultFilter::Success),
-                call_start_before_unix: Some(5),
-                call_start_after_unix: Some(10),
-                call_duration_min_secs: Some(4),
-                call_duration_max_secs: Some(9),
-                rating_max: Some(1),
-                rating_min: Some(1),
+                call_start_before_unix: Some(6),
+                call_start_after_unix: Some(2),
+                call_duration_min_secs: Some(5),
+                call_duration_max_secs: Some(10),
+                rating_max: Some(2),
+                rating_min: Some(2),
                 has_feedback_comment: Some(false),
                 user_id: Some("user_id".to_string()),
                 evaluation_params: Some(vec![]),
@@ -16290,6 +17361,106 @@ async fn main() {
 <dd>
 
 **request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — The direction to sort conversations by call start time. Defaults to descending (newest first).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.conversations.<a href="/src/api/resources/conversations/conversations.rs">create</a>(body: &amp;CreateAgentConversationRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;CreateAgentConversationResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a text conversation with an agent. This does not run the agent, and the agent sends no first message. This endpoint is in alpha and may change.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .conversations
+        .create(
+            &CreateAgentConversationRequest::builder()
+                .agent(
+                    AgentMessagesPersistedAgent::builder()
+                        .r#type(AgentMessagesPersistedAgentType::Persisted)
+                        .agent_id("agent_id")
+                        .branch_id("branch_id")
+                        .overrides(AgentMessagesOverrides {
+                            prompt: Some("prompt".to_string()),
+                            llm: Some(Llm::Gpt4OMini),
+                            language: Some("language".to_string()),
+                            tool_ids: Some(vec!["tool_ids".to_string()]),
+                            native_mcp_server_ids: Some(vec!["native_mcp_server_ids".to_string()]),
+                            knowledge_base_ids: Some(vec!["knowledge_base_ids".to_string()]),
+                            procedure_ids: Some(vec!["procedure_ids".to_string()]),
+                            custom_llm_extra_body: Some(elevenlabs_rust_sdk::serde_json::json!({})),
+                            ..Default::default()
+                        })
+                        .build()
+                        .expect("Failed to build request"),
+                )
+                .environment("environment")
+                .user_id("user_id")
+                .dynamic_variables(elevenlabs_rust_sdk::serde_json::json!({}))
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&CreateAgentConversationRequest`
     
 </dd>
 </dl>
@@ -16773,6 +17944,384 @@ async fn main() {
 </dl>
 </details>
 
+<details><summary><code>client.conversations.<a href="/src/api/resources/conversations/conversations.rs">send_message</a>(conversation_id: &amp;str, body: &amp;SendConversationMessageRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ConversationTurn, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Send input to a conversation, and wait until the agent finishes or waits on client tool results. With `background` set to true, the endpoint returns 202 when the server admits the turn. Then stream the turn's events with `Last-Event-ID` set to the `stream_cursor`. This endpoint is in alpha and may change.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .conversations
+        .send_message(
+            "conversation_id",
+            &SendConversationMessageRequest::builder()
+                .input(vec![SendConversationMessageRequestInputItem::ClientToolResult {
+                    data: ClientToolResultItem::builder()
+                        .tool_call_id("tool_call_id")
+                        .result("result")
+                        .is_error(true)
+                        .error_type(ClientToolResultItemErrorType::UserRejected)
+                        .build()
+                        .expect("Failed to build request"),
+                }])
+                .background(true)
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**conversation_id:** `&str` — The Conversation ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&SendConversationMessageRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.conversations.<a href="/src/api/resources/conversations/conversations.rs">send_message_stream</a>(conversation_id: &amp;str, body: &amp;SendConversationMessageStreamRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;crate::SseStream&lt;StreamEnvelope&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Send input to a conversation, and stream the events of the request as server-sent events. The last event is `stream_ended`, which has the outcome of the turn. This endpoint is in alpha and may change.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    let mut stream = client
+        .conversations
+        .send_message_stream(
+            "conversation_id",
+            &SendConversationMessageStreamRequest::builder()
+                .input(vec![SendConversationMessageStreamRequestInputItem::ClientToolResult {
+                    data: ClientToolResultItem::builder()
+                        .tool_call_id("tool_call_id")
+                        .result("result")
+                        .is_error(true)
+                        .error_type(ClientToolResultItemErrorType::UserRejected)
+                        .build()
+                        .expect("Failed to build request"),
+                }])
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await
+        .expect("Request failed");
+    while let Some(item) = stream.next().await {
+        println!("{:?}", item.expect("Failed to read stream item"));
+    }
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**conversation_id:** `&str` — The Conversation ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&SendConversationMessageStreamRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.conversations.<a href="/src/api/resources/conversations/conversations.rs">get_turn</a>(conversation_id: &amp;str, turn_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ConversationTurn, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the status and output of a turn. The status comes from the stored transcript, so a turn that failed after the agent started can show as completed. Only the `stream_ended` event has the real outcome. This endpoint is in alpha and may change.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .conversations
+        .get_turn("conversation_id", "3247", None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**conversation_id:** `&str` — The Conversation ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**turn_id:** `&str` — The Turn ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.conversations.<a href="/src/api/resources/conversations/conversations.rs">stream_turn_events</a>(conversation_id: &amp;str, turn_id: &amp;str, last_event_id: Option&lt;String&gt;, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;crate::SseStream&lt;StreamEnvelope&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Stream the events of a turn as server-sent events. Send `Last-Event-ID` to resume after an event. The server keeps events for about an hour. This endpoint is in alpha and may change.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    let mut stream = client
+        .conversations
+        .stream_turn_events(
+            "conversation_id",
+            "34",
+            Some("Last-Event-ID".to_string()),
+            None,
+        )
+        .await
+        .expect("Request failed");
+    while let Some(item) = stream.next().await {
+        println!("{:?}", item.expect("Failed to read stream item"));
+    }
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**conversation_id:** `&str` — The Conversation ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**turn_id:** `&str` — The Turn ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**last_event_id:** `Option<String>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Twilio
 <details><summary><code>client.twilio.<a href="/src/api/resources/twilio/twilio.rs">outbound_call</a>(body: &amp;BodyHandleAnOutboundCallViaTwilioV1ConvaiTwilioOutboundCallPost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;TwilioOutboundCallResponse, crate::error::ApiError&gt;</code></summary>
 <dl>
@@ -16844,17 +18393,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(TtsModelFamily::Turbo)
                                     .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
-                                    .stability(0.1)
-                                    .speed(0.85)
-                                    .similarity_boost(0.42)
-                                    .clone_strength(0.25)
+                                    .stability(0.42)
+                                    .speed(0.78)
+                                    .similarity_boost(0.33)
+                                    .clone_strength(0.41)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(7.21),
-                            speed: Some(6.83),
-                            similarity_boost: Some(4.75),
-                            clone_strength: Some(4.99),
+                            stability: Some(6.57),
+                            speed: Some(1.8),
+                            similarity_boost: Some(6.48),
+                            clone_strength: Some(1.49),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -16865,8 +18414,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(true),
-                            max_duration_seconds: Some(6),
+                            text_only: Some(false),
+                            max_duration_seconds: Some(5),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -16880,7 +18429,7 @@ async fn main() {
                                 llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(true),
+                                tool_ids_strict: Some(false),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -16906,7 +18455,7 @@ async fn main() {
                     dynamic_variables: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     ..Default::default()
                 })
-                .call_recording_enabled(false)
+                .call_recording_enabled(true)
                 .telephony_call_config(TelephonyCallConfigInput {
                     ringing_timeout_secs: Some(60),
                     twilio_call_recording_enabled: Some(false),
@@ -17035,17 +18584,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(TtsModelFamily::Turbo)
                                     .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
-                                    .stability(0.1)
-                                    .speed(0.85)
-                                    .similarity_boost(0.42)
-                                    .clone_strength(0.25)
+                                    .stability(0.42)
+                                    .speed(0.78)
+                                    .similarity_boost(0.33)
+                                    .clone_strength(0.41)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(7.21),
-                            speed: Some(6.83),
-                            similarity_boost: Some(4.75),
-                            clone_strength: Some(4.99),
+                            stability: Some(6.57),
+                            speed: Some(1.8),
+                            similarity_boost: Some(6.48),
+                            clone_strength: Some(1.49),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -17056,8 +18605,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(true),
-                            max_duration_seconds: Some(6),
+                            text_only: Some(false),
+                            max_duration_seconds: Some(5),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -17071,7 +18620,7 @@ async fn main() {
                                 llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(true),
+                                tool_ids_strict: Some(false),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -17209,17 +18758,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(TtsModelFamily::Turbo)
                                     .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
-                                    .stability(0.1)
-                                    .speed(0.85)
-                                    .similarity_boost(0.42)
-                                    .clone_strength(0.25)
+                                    .stability(0.42)
+                                    .speed(0.78)
+                                    .similarity_boost(0.33)
+                                    .clone_strength(0.41)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(7.21),
-                            speed: Some(6.83),
-                            similarity_boost: Some(4.75),
-                            clone_strength: Some(4.99),
+                            stability: Some(6.57),
+                            speed: Some(1.8),
+                            similarity_boost: Some(6.48),
+                            clone_strength: Some(1.49),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -17230,8 +18779,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(true),
-                            max_duration_seconds: Some(6),
+                            text_only: Some(false),
+                            max_duration_seconds: Some(5),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -17245,7 +18794,7 @@ async fn main() {
                                 llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(true),
+                                tool_ids_strict: Some(false),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -17405,17 +18954,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(TtsModelFamily::Turbo)
                                     .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
-                                    .stability(0.1)
-                                    .speed(0.85)
-                                    .similarity_boost(0.42)
-                                    .clone_strength(0.25)
+                                    .stability(0.42)
+                                    .speed(0.78)
+                                    .similarity_boost(0.33)
+                                    .clone_strength(0.41)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(7.21),
-                            speed: Some(6.83),
-                            similarity_boost: Some(4.75),
-                            clone_strength: Some(4.99),
+                            stability: Some(6.57),
+                            speed: Some(1.8),
+                            similarity_boost: Some(6.48),
+                            clone_strength: Some(1.49),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -17426,8 +18975,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(true),
-                            max_duration_seconds: Some(6),
+                            text_only: Some(false),
+                            max_duration_seconds: Some(5),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -17441,7 +18990,7 @@ async fn main() {
                                 llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(true),
+                                tool_ids_strict: Some(false),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -17554,6 +19103,7 @@ async fn main() {
                         .parameters(vec![
                             WhatsAppTemplateTextParam::builder()
                                 .parameter_name("parameter_name")
+                                .r#type(GetKnowledgeBaseSummaryTextResponseModelType::Text)
                                 .text("text")
                                 .build()
                                 .expect("Failed to build request"),
@@ -17592,17 +19142,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(TtsModelFamily::Turbo)
                                     .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
-                                    .stability(0.1)
-                                    .speed(0.85)
-                                    .similarity_boost(0.42)
-                                    .clone_strength(0.25)
+                                    .stability(0.42)
+                                    .speed(0.78)
+                                    .similarity_boost(0.33)
+                                    .clone_strength(0.41)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(7.21),
-                            speed: Some(6.83),
-                            similarity_boost: Some(4.75),
-                            clone_strength: Some(4.99),
+                            stability: Some(6.57),
+                            speed: Some(1.8),
+                            similarity_boost: Some(6.48),
+                            clone_strength: Some(1.49),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -17613,8 +19163,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(true),
-                            max_duration_seconds: Some(6),
+                            text_only: Some(false),
+                            max_duration_seconds: Some(5),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -17628,7 +19178,7 @@ async fn main() {
                                 llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(true),
+                                tool_ids_strict: Some(false),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -17746,12 +19296,12 @@ async fn main() {
                             }),
                             turn: Some(TurnConfig {
                                 turn_timeout: Some(7_f64),
-                                initial_wait_time: Some(8.95),
+                                initial_wait_time: Some(0.63),
                                 silence_end_call_timeout: Some(-1_f64),
                                 turn_eagerness: Some(TurnEagerness::Patient),
                                 spelling_patience: Some(SpellingPatience::Auto),
                                 speculative_turn: Some(false),
-                                retranscribe_on_turn_timeout: Some(false),
+                                retranscribe_on_turn_timeout: Some(true),
                                 turn_model: Some(TurnModel::TurnV2),
                                 interruption_ignore_terms: Some(vec![
                                     "interruption_ignore_terms".to_string(),
@@ -17759,8 +19309,8 @@ async fn main() {
                                 interruption_ignore_term_languages: Some(vec![
                                     "interruption_ignore_term_languages".to_string(),
                                 ]),
-                                merge_with_default_ignore_terms: Some(true),
-                                transcribe_on_disabled_interruptions: Some(false),
+                                merge_with_default_ignore_terms: Some(false),
+                                transcribe_on_disabled_interruptions: Some(true),
                                 soft_timeout_config: Some(SoftTimeoutConfig {
                                     timeout_seconds: Some(-1_f64),
                                     message: Some("Hhmmmm...yeah.".to_string()),
@@ -17773,7 +19323,7 @@ async fn main() {
                                     llm_generated_message_prompt_override: Some(
                                         "llm_generated_message_prompt_override".to_string(),
                                     ),
-                                    disable_until_first_user_message: Some(true),
+                                    disable_until_first_user_message: Some(false),
                                     ..Default::default()
                                 }),
                                 noisy_environment_detection: Some(true),
@@ -17795,10 +19345,10 @@ async fn main() {
                                         .optimize_streaming_latency(
                                             TtsOptimizeStreamingLatency::Num0,
                                         )
-                                        .stability(0.1)
-                                        .speed(0.85)
-                                        .similarity_boost(0.42)
-                                        .clone_strength(0.25)
+                                        .stability(0.42)
+                                        .speed(0.78)
+                                        .similarity_boost(0.33)
+                                        .clone_strength(0.41)
                                         .build()
                                         .expect("Failed to build request"),
                                 ]),
@@ -17815,7 +19365,7 @@ async fn main() {
                                 stability: Some(0.5),
                                 speed: Some(1_f64),
                                 similarity_boost: Some(0.8),
-                                clone_strength: Some(0.01),
+                                clone_strength: Some(0.91),
                                 text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                                 pronunciation_dictionary_locators: Some(vec![
                                     PydanticPronunciationDictionaryVersionLocator::builder()
@@ -17865,7 +19415,7 @@ async fn main() {
                                     crossfade_loop: Some(true),
                                     ..Default::default()
                                 }),
-                                source_attribution: Some(false),
+                                source_attribution: Some(true),
                                 ..Default::default()
                             }),
                             language_presets: Some(HashMap::from([(
@@ -17886,16 +19436,16 @@ async fn main() {
                                             model_id: Some(TtsConversationalModel::ElevenTurboV2),
                                             voice_id: Some("voice_id".to_string()),
                                             supported_voices: Some(vec![]),
-                                            stability: Some(7.21),
-                                            speed: Some(6.83),
-                                            similarity_boost: Some(4.75),
-                                            clone_strength: Some(4.99),
+                                            stability: Some(6.57),
+                                            speed: Some(1.8),
+                                            similarity_boost: Some(6.48),
+                                            clone_strength: Some(1.49),
                                             pronunciation_dictionary_locators: Some(vec![]),
                                             ..Default::default()
                                         }),
                                         conversation: Some(ConversationConfigOverride {
-                                            text_only: Some(true),
-                                            max_duration_seconds: Some(6),
+                                            text_only: Some(false),
+                                            max_duration_seconds: Some(5),
                                             ..Default::default()
                                         }),
                                         agent: Some(AgentConfigOverrideInput {
@@ -17936,11 +19486,11 @@ async fn main() {
                             agent: Some(AgentConfig {
                                 first_message: Some("first_message".to_string()),
                                 language: Some("en".to_string()),
-                                hinglish_mode: Some(true),
+                                hinglish_mode: Some(false),
                                 dynamic_variables: Some(DynamicVariablesConfigInput(
                                     elevenlabs_rust_sdk::serde_json::json!({}),
                                 )),
-                                disable_first_message_interruptions: Some(true),
+                                disable_first_message_interruptions: Some(false),
                                 max_conversation_duration_message: Some(
                                     "max_conversation_duration_message".to_string(),
                                 ),
@@ -17955,17 +19505,36 @@ async fn main() {
                                         ..Default::default()
                                     },
                                 )])),
+                                subagent_config: Some(SubagentConfigInput {
+                                    agents: Some(vec![
+                                        SubAgentInput::builder()
+                                            .execution_mode(SelfSubagentExecutionMode::Immediate)
+                                            .timeout_secs(60)
+                                            .agent_id("agent_id")
+                                            .branch_id("branch_id")
+                                            .description("description")
+                                            .build()
+                                            .expect("Failed to build request"),
+                                    ]),
+                                    self_subagent: Some(SelfSubagent {
+                                        execution_mode: Some(SelfSubagentExecutionMode::Immediate),
+                                        timeout_secs: Some(60),
+                                        description: Some("description".to_string()),
+                                        ..Default::default()
+                                    }),
+                                    ..Default::default()
+                                }),
                                 prompt: Some(PromptAgentApiModelInput {
                                     prompt: Some("prompt".to_string()),
                                     llm: Some(Llm::Gpt4OMini),
                                     reasoning_effort: Some(LlmReasoningEffort::None),
                                     service_tier: Some(LlmServiceTier::Standard),
-                                    thinking_budget: Some(0),
+                                    thinking_budget: Some(1),
                                     enable_reasoning_summary: Some(true),
-                                    temperature: Some(7.03),
+                                    temperature: Some(6.94),
                                     max_tokens: Some(-1),
                                     tool_ids: Some(vec!["tool_ids".to_string()]),
-                                    tool_ids_strict: Some(true),
+                                    tool_ids_strict: Some(false),
                                     built_in_tools: Some(BuiltInToolsInput::default()),
                                     enable_parallel_tool_calls: Some(true),
                                     mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
@@ -17993,14 +19562,14 @@ async fn main() {
                                     ),
                                     ignore_default_personality: Some(true),
                                     rag: Some(RagConfigInput {
-                                        enabled: Some(true),
+                                        enabled: Some(false),
                                         embedding_model: Some(
                                             EmbeddingModelEnum::E5Mistral7BInstruct,
                                         ),
                                         max_vector_distance: Some(0.5),
                                         max_documents_length: Some(50000),
                                         max_retrieved_rag_chunks_count: Some(5),
-                                        num_candidates: Some(6321),
+                                        num_candidates: Some(1200),
                                         query_rewrite_prompt_override: Some(
                                             "query_rewrite_prompt_override".to_string(),
                                         ),
@@ -18025,7 +19594,7 @@ async fn main() {
                                         .name("name")
                                         .r#type(PromptEvaluationCriteriaType::Prompt)
                                         .conversation_goal_prompt("conversation_goal_prompt")
-                                        .use_knowledge_base(false)
+                                        .use_knowledge_base(true)
                                         .scope(AnalysisScope::Conversation)
                                         .llm(Llm::Gpt4OMini)
                                         .scoring_mode(CriteriaScoringMode::Binary)
@@ -18058,8 +19627,8 @@ async fn main() {
                                 btn_text_color: Some("#ffffff".to_string()),
                                 border_color: Some("#e1e1e1".to_string()),
                                 focus_color: Some("#000000".to_string()),
-                                border_radius: Some(10),
-                                btn_radius: Some(0),
+                                border_radius: Some(4),
+                                btn_radius: Some(6),
                                 action_text: Some("action_text".to_string()),
                                 start_call_text: Some("start_call_text".to_string()),
                                 end_call_text: Some("end_call_text".to_string()),
@@ -18087,7 +19656,7 @@ async fn main() {
                                 text_input_enabled: Some(true),
                                 conversation_mode_toggle_enabled: Some(true),
                                 default_expanded: Some(true),
-                                always_expanded: Some(false),
+                                always_expanded: Some(true),
                                 dismissible: Some(true),
                                 show_agent_status: Some(true),
                                 show_conversation_id: Some(true),
@@ -18188,20 +19757,20 @@ async fn main() {
                                     accent_border: Some("accent_border".to_string()),
                                     accent_subtle: Some("accent_subtle".to_string()),
                                     accent_primary: Some("accent_primary".to_string()),
-                                    overlay_padding: Some(3.33),
-                                    button_radius: Some(7.36),
-                                    input_radius: Some(9.19),
-                                    bubble_radius: Some(0.84),
-                                    sheet_radius: Some(2.21),
-                                    compact_sheet_radius: Some(0.2),
-                                    dropdown_sheet_radius: Some(9.69),
+                                    overlay_padding: Some(4.09),
+                                    button_radius: Some(8.35),
+                                    input_radius: Some(7.58),
+                                    bubble_radius: Some(7.16),
+                                    sheet_radius: Some(7_f64),
+                                    compact_sheet_radius: Some(6.75),
+                                    dropdown_sheet_radius: Some(2.4),
                                     ..Default::default()
                                 }),
                                 show_resize_button: Some(true),
-                                end_confirmation_enabled: Some(false),
+                                end_confirmation_enabled: Some(true),
                                 mobile_fullscreen: Some(true),
                                 transcript_speech_sync_enabled: Some(true),
-                                language_selector: Some(true),
+                                language_selector: Some(false),
                                 supports_text_only: Some(true),
                                 custom_avatar_path: Some("custom_avatar_path".to_string()),
                                 language_presets: Some(HashMap::from([(
@@ -18334,7 +19903,7 @@ async fn main() {
                                     .r#type(AnalysisPropertyType::Boolean)
                                     .description("description")
                                     .r#enum(vec!["enum".to_string()])
-                                    .is_system_provided(false)
+                                    .is_system_provided(true)
                                     .dynamic_variable("dynamic_variable")
                                     .allowed_values(
                                         AllowedValues::builder()
@@ -18342,7 +19911,7 @@ async fn main() {
                                             .build()
                                             .expect("Failed to build request"),
                                     )
-                                    .is_omitted(false)
+                                    .is_omitted(true)
                                     .name("name")
                                     .llm(Llm::Gpt4OMini)
                                     .build()
@@ -18359,7 +19928,7 @@ async fn main() {
                                             SystemEvaluationId::SystemEvalCriteriaSentiment,
                                         )
                                         .scope(AnalysisScope::Conversation)
-                                        .weight(5.24)
+                                        .weight(2.45)
                                         .build()
                                         .expect("Failed to build request"),
                                 }]),
@@ -18377,7 +19946,7 @@ async fn main() {
                             overrides: Some(ConversationInitiationClientDataConfigInput {
                                 conversation_config_override: Some(ConversationConfigClientOverrideConfigInput {
                                     asr: Some(AsrConversationalConfigOverrideConfig {
-                                        keywords: Some(true),
+                                        keywords: Some(false),
                                         ..Default::default()
                                     }),
                                     turn: Some(TurnConfigOverrideConfig {
@@ -18387,30 +19956,30 @@ async fn main() {
                                     tts: Some(TtsConversationalConfigOverrideConfig {
                                         model_id: Some(true),
                                         voice_id: Some(false),
-                                        supported_voices: Some(true),
-                                        stability: Some(false),
-                                        speed: Some(false),
-                                        similarity_boost: Some(true),
-                                        clone_strength: Some(true),
+                                        supported_voices: Some(false),
+                                        stability: Some(true),
+                                        speed: Some(true),
+                                        similarity_boost: Some(false),
+                                        clone_strength: Some(false),
                                         pronunciation_dictionary_locators: Some(false),
                                         ..Default::default()
                                     }),
                                     conversation: Some(ConversationConfigOverrideConfig {
                                         text_only: Some(true),
-                                        max_duration_seconds: Some(true),
+                                        max_duration_seconds: Some(false),
                                         ..Default::default()
                                     }),
                                     agent: Some(AgentConfigOverrideConfig {
                                         first_message: Some(false),
-                                        language: Some(true),
-                                        max_conversation_duration_message: Some(false),
+                                        language: Some(false),
+                                        max_conversation_duration_message: Some(true),
                                         ..Default::default()
                                     }),
                                     ..Default::default()
                                 }),
                                 custom_llm_extra_body: Some(false),
                                 enable_conversation_initiation_client_data_from_webhook: Some(true),
-                                enable_starting_workflow_node_id_from_client: Some(true),
+                                enable_starting_workflow_node_id_from_client: Some(false),
                                 enable_procedure_ids_from_client: Some(false),
                                 ..Default::default()
                             }),
@@ -18470,7 +20039,7 @@ async fn main() {
                                 ..Default::default()
                             }),
                             summary_language: Some("summary_language".to_string()),
-                            auto_translate_transcript_to_app_language: Some(false),
+                            auto_translate_transcript_to_app_language: Some(true),
                             auth: Some(AuthSettings {
                                 enable_auth: Some(false),
                                 allowlist: Some(vec![
@@ -18490,15 +20059,15 @@ async fn main() {
                                 ..Default::default()
                             }),
                             queueing_config: Some(AgentQueueingConfig {
-                                enabled: Some(true),
+                                enabled: Some(false),
                                 wait_timeout_seconds: Some(180),
                                 hold_audio: Some(
                                     AgentHoldAudioConfig::builder()
                                         .audio_path("audio_path")
                                         .audio_url("audio_url")
                                         .original_filename("original_filename")
-                                        .duration_secs(3.08)
-                                        .size_bytes(0)
+                                        .duration_secs(2.19)
+                                        .size_bytes(2)
                                         .build()
                                         .expect("Failed to build request"),
                                 ),
@@ -18510,7 +20079,7 @@ async fn main() {
                                 delete_transcript_and_pii: Some(true),
                                 delete_audio: Some(false),
                                 apply_to_existing_conversations: Some(false),
-                                zero_retention_mode: Some(true),
+                                zero_retention_mode: Some(false),
                                 conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                                     enabled: Some(true),
                                     entities: Some(vec![ConfigEntityType::Name]),
@@ -18529,18 +20098,19 @@ async fn main() {
                                 monitor_configs: Some(HashMap::from([(
                                     "key".to_string(),
                                     AlertingMonitorConfig {
-                                        enabled: Some(false),
-                                        threshold: Some(0.68),
-                                        relative_increase_threshold: Some(1.4),
-                                        min_failure_count: Some(4),
-                                        min_history_bucket_count: Some(5),
-                                        min_sample_count: Some(8),
-                                        suspect_trigger_threshold: Some(5),
-                                        auto_resolve_after_inactive_minutes: Some(10),
+                                        enabled: Some(true),
+                                        threshold: Some(0.31),
+                                        relative_increase_threshold: Some(4.56),
+                                        min_failure_count: Some(7),
+                                        min_history_bucket_count: Some(9),
+                                        min_sample_count: Some(5),
+                                        suspect_trigger_threshold: Some(8),
+                                        auto_resolve_after_inactive_minutes: Some(7),
                                         ..Default::default()
                                     },
                                 )])),
-                                auto_resolve_after_inactive_minutes: Some(9),
+                                auto_resolve_after_inactive_minutes: Some(2),
+                                environments: Some(vec!["environments".to_string()]),
                                 notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
                                     data: AlertingWebhookNotifier::builder()
                                         .webhook_id("webhook_id")
@@ -18558,8 +20128,8 @@ async fn main() {
                                     .source("source")
                                     .target("target")
                                     .reroutes(vec![PositionInput {
-                                        x: Some(5.17),
-                                        y: Some(1.81),
+                                        x: Some(1.15),
+                                        y: Some(5.14),
                                         ..Default::default()
                                     }])
                                     .build()
@@ -18570,8 +20140,8 @@ async fn main() {
                                 AgentWorkflowRequestModelNodes::End {
                                     data: WorkflowEndNodeModelInput {
                                         position: Some(PositionInput {
-                                            x: Some(5.17),
-                                            y: Some(1.81),
+                                            x: Some(1.15),
+                                            y: Some(5.14),
                                             ..Default::default()
                                         }),
                                         edge_order: Some(vec!["edge_order".to_string()]),
@@ -18580,7 +20150,7 @@ async fn main() {
                                     },
                                 },
                             )])),
-                            prevent_subagent_loops: Some(false),
+                            prevent_subagent_loops: Some(true),
                             ..Default::default()
                         })
                         .name("name")
@@ -18811,12 +20381,12 @@ async fn main() {
                         }),
                         turn: Some(TurnConfig {
                             turn_timeout: Some(7_f64),
-                            initial_wait_time: Some(8.95),
+                            initial_wait_time: Some(0.63),
                             silence_end_call_timeout: Some(-1_f64),
                             turn_eagerness: Some(TurnEagerness::Patient),
                             spelling_patience: Some(SpellingPatience::Auto),
                             speculative_turn: Some(false),
-                            retranscribe_on_turn_timeout: Some(false),
+                            retranscribe_on_turn_timeout: Some(true),
                             turn_model: Some(TurnModel::TurnV2),
                             interruption_ignore_terms: Some(vec![
                                 "interruption_ignore_terms".to_string(),
@@ -18824,8 +20394,8 @@ async fn main() {
                             interruption_ignore_term_languages: Some(vec![
                                 "interruption_ignore_term_languages".to_string(),
                             ]),
-                            merge_with_default_ignore_terms: Some(true),
-                            transcribe_on_disabled_interruptions: Some(false),
+                            merge_with_default_ignore_terms: Some(false),
+                            transcribe_on_disabled_interruptions: Some(true),
                             soft_timeout_config: Some(SoftTimeoutConfig {
                                 timeout_seconds: Some(-1_f64),
                                 message: Some("Hhmmmm...yeah.".to_string()),
@@ -18838,7 +20408,7 @@ async fn main() {
                                 llm_generated_message_prompt_override: Some(
                                     "llm_generated_message_prompt_override".to_string(),
                                 ),
-                                disable_until_first_user_message: Some(true),
+                                disable_until_first_user_message: Some(false),
                                 ..Default::default()
                             }),
                             noisy_environment_detection: Some(true),
@@ -18858,10 +20428,10 @@ async fn main() {
                                     .language("language")
                                     .model_family(TtsModelFamily::Turbo)
                                     .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
-                                    .stability(0.1)
-                                    .speed(0.85)
-                                    .similarity_boost(0.42)
-                                    .clone_strength(0.25)
+                                    .stability(0.42)
+                                    .speed(0.78)
+                                    .similarity_boost(0.33)
+                                    .clone_strength(0.41)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
@@ -18878,7 +20448,7 @@ async fn main() {
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
-                            clone_strength: Some(0.01),
+                            clone_strength: Some(0.91),
                             text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
@@ -18926,7 +20496,7 @@ async fn main() {
                                 crossfade_loop: Some(true),
                                 ..Default::default()
                             }),
-                            source_attribution: Some(false),
+                            source_attribution: Some(true),
                             ..Default::default()
                         }),
                         language_presets: Some(HashMap::from([(
@@ -18947,16 +20517,16 @@ async fn main() {
                                         model_id: Some(TtsConversationalModel::ElevenTurboV2),
                                         voice_id: Some("voice_id".to_string()),
                                         supported_voices: Some(vec![]),
-                                        stability: Some(7.21),
-                                        speed: Some(6.83),
-                                        similarity_boost: Some(4.75),
-                                        clone_strength: Some(4.99),
+                                        stability: Some(6.57),
+                                        speed: Some(1.8),
+                                        similarity_boost: Some(6.48),
+                                        clone_strength: Some(1.49),
                                         pronunciation_dictionary_locators: Some(vec![]),
                                         ..Default::default()
                                     }),
                                     conversation: Some(ConversationConfigOverride {
-                                        text_only: Some(true),
-                                        max_duration_seconds: Some(6),
+                                        text_only: Some(false),
+                                        max_duration_seconds: Some(5),
                                         ..Default::default()
                                     }),
                                     agent: Some(AgentConfigOverrideInput {
@@ -18997,11 +20567,11 @@ async fn main() {
                         agent: Some(AgentConfig {
                             first_message: Some("first_message".to_string()),
                             language: Some("en".to_string()),
-                            hinglish_mode: Some(true),
+                            hinglish_mode: Some(false),
                             dynamic_variables: Some(DynamicVariablesConfigInput(
                                 elevenlabs_rust_sdk::serde_json::json!({}),
                             )),
-                            disable_first_message_interruptions: Some(true),
+                            disable_first_message_interruptions: Some(false),
                             max_conversation_duration_message: Some(
                                 "max_conversation_duration_message".to_string(),
                             ),
@@ -19014,17 +20584,36 @@ async fn main() {
                                     ..Default::default()
                                 },
                             )])),
+                            subagent_config: Some(SubagentConfigInput {
+                                agents: Some(vec![
+                                    SubAgentInput::builder()
+                                        .execution_mode(SelfSubagentExecutionMode::Immediate)
+                                        .timeout_secs(60)
+                                        .agent_id("agent_id")
+                                        .branch_id("branch_id")
+                                        .description("description")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                ]),
+                                self_subagent: Some(SelfSubagent {
+                                    execution_mode: Some(SelfSubagentExecutionMode::Immediate),
+                                    timeout_secs: Some(60),
+                                    description: Some("description".to_string()),
+                                    ..Default::default()
+                                }),
+                                ..Default::default()
+                            }),
                             prompt: Some(PromptAgentApiModelInput {
                                 prompt: Some("prompt".to_string()),
                                 llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
-                                thinking_budget: Some(0),
+                                thinking_budget: Some(1),
                                 enable_reasoning_summary: Some(true),
-                                temperature: Some(7.03),
+                                temperature: Some(6.94),
                                 max_tokens: Some(-1),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(true),
+                                tool_ids_strict: Some(false),
                                 built_in_tools: Some(BuiltInToolsInput::default()),
                                 enable_parallel_tool_calls: Some(true),
                                 mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
@@ -19052,12 +20641,12 @@ async fn main() {
                                 ),
                                 ignore_default_personality: Some(true),
                                 rag: Some(RagConfigInput {
-                                    enabled: Some(true),
+                                    enabled: Some(false),
                                     embedding_model: Some(EmbeddingModelEnum::E5Mistral7BInstruct),
                                     max_vector_distance: Some(0.5),
                                     max_documents_length: Some(50000),
                                     max_retrieved_rag_chunks_count: Some(5),
-                                    num_candidates: Some(6321),
+                                    num_candidates: Some(1200),
                                     query_rewrite_prompt_override: Some(
                                         "query_rewrite_prompt_override".to_string(),
                                     ),
@@ -19082,7 +20671,7 @@ async fn main() {
                                     .name("name")
                                     .r#type(PromptEvaluationCriteriaType::Prompt)
                                     .conversation_goal_prompt("conversation_goal_prompt")
-                                    .use_knowledge_base(false)
+                                    .use_knowledge_base(true)
                                     .scope(AnalysisScope::Conversation)
                                     .llm(Llm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
@@ -19115,8 +20704,8 @@ async fn main() {
                             btn_text_color: Some("#ffffff".to_string()),
                             border_color: Some("#e1e1e1".to_string()),
                             focus_color: Some("#000000".to_string()),
-                            border_radius: Some(10),
-                            btn_radius: Some(0),
+                            border_radius: Some(4),
+                            btn_radius: Some(6),
                             action_text: Some("action_text".to_string()),
                             start_call_text: Some("start_call_text".to_string()),
                             end_call_text: Some("end_call_text".to_string()),
@@ -19144,7 +20733,7 @@ async fn main() {
                             text_input_enabled: Some(true),
                             conversation_mode_toggle_enabled: Some(true),
                             default_expanded: Some(true),
-                            always_expanded: Some(false),
+                            always_expanded: Some(true),
                             dismissible: Some(true),
                             show_agent_status: Some(true),
                             show_conversation_id: Some(true),
@@ -19239,20 +20828,20 @@ async fn main() {
                                 accent_border: Some("accent_border".to_string()),
                                 accent_subtle: Some("accent_subtle".to_string()),
                                 accent_primary: Some("accent_primary".to_string()),
-                                overlay_padding: Some(3.33),
-                                button_radius: Some(7.36),
-                                input_radius: Some(9.19),
-                                bubble_radius: Some(0.84),
-                                sheet_radius: Some(2.21),
-                                compact_sheet_radius: Some(0.2),
-                                dropdown_sheet_radius: Some(9.69),
+                                overlay_padding: Some(4.09),
+                                button_radius: Some(8.35),
+                                input_radius: Some(7.58),
+                                bubble_radius: Some(7.16),
+                                sheet_radius: Some(7_f64),
+                                compact_sheet_radius: Some(6.75),
+                                dropdown_sheet_radius: Some(2.4),
                                 ..Default::default()
                             }),
                             show_resize_button: Some(true),
-                            end_confirmation_enabled: Some(false),
+                            end_confirmation_enabled: Some(true),
                             mobile_fullscreen: Some(true),
                             transcript_speech_sync_enabled: Some(true),
-                            language_selector: Some(true),
+                            language_selector: Some(false),
                             supports_text_only: Some(true),
                             custom_avatar_path: Some("custom_avatar_path".to_string()),
                             language_presets: Some(HashMap::from([(
@@ -19375,7 +20964,7 @@ async fn main() {
                                 .r#type(AnalysisPropertyType::Boolean)
                                 .description("description")
                                 .r#enum(vec!["enum".to_string()])
-                                .is_system_provided(false)
+                                .is_system_provided(true)
                                 .dynamic_variable("dynamic_variable")
                                 .allowed_values(
                                     AllowedValues::builder()
@@ -19383,7 +20972,7 @@ async fn main() {
                                         .build()
                                         .expect("Failed to build request"),
                                 )
-                                .is_omitted(false)
+                                .is_omitted(true)
                                 .name("name")
                                 .llm(Llm::Gpt4OMini)
                                 .build()
@@ -19400,7 +20989,7 @@ async fn main() {
                                         SystemEvaluationId::SystemEvalCriteriaSentiment,
                                     )
                                     .scope(AnalysisScope::Conversation)
-                                    .weight(5.24)
+                                    .weight(2.45)
                                     .build()
                                     .expect("Failed to build request"),
                             }]),
@@ -19418,7 +21007,7 @@ async fn main() {
                         overrides: Some(ConversationInitiationClientDataConfigInput {
                             conversation_config_override: Some(ConversationConfigClientOverrideConfigInput {
                                 asr: Some(AsrConversationalConfigOverrideConfig {
-                                    keywords: Some(true),
+                                    keywords: Some(false),
                                     ..Default::default()
                                 }),
                                 turn: Some(TurnConfigOverrideConfig {
@@ -19428,30 +21017,30 @@ async fn main() {
                                 tts: Some(TtsConversationalConfigOverrideConfig {
                                     model_id: Some(true),
                                     voice_id: Some(false),
-                                    supported_voices: Some(true),
-                                    stability: Some(false),
-                                    speed: Some(false),
-                                    similarity_boost: Some(true),
-                                    clone_strength: Some(true),
+                                    supported_voices: Some(false),
+                                    stability: Some(true),
+                                    speed: Some(true),
+                                    similarity_boost: Some(false),
+                                    clone_strength: Some(false),
                                     pronunciation_dictionary_locators: Some(false),
                                     ..Default::default()
                                 }),
                                 conversation: Some(ConversationConfigOverrideConfig {
                                     text_only: Some(true),
-                                    max_duration_seconds: Some(true),
+                                    max_duration_seconds: Some(false),
                                     ..Default::default()
                                 }),
                                 agent: Some(AgentConfigOverrideConfig {
                                     first_message: Some(false),
-                                    language: Some(true),
-                                    max_conversation_duration_message: Some(false),
+                                    language: Some(false),
+                                    max_conversation_duration_message: Some(true),
                                     ..Default::default()
                                 }),
                                 ..Default::default()
                             }),
                             custom_llm_extra_body: Some(false),
                             enable_conversation_initiation_client_data_from_webhook: Some(true),
-                            enable_starting_workflow_node_id_from_client: Some(true),
+                            enable_starting_workflow_node_id_from_client: Some(false),
                             enable_procedure_ids_from_client: Some(false),
                             ..Default::default()
                         }),
@@ -19511,7 +21100,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         summary_language: Some("summary_language".to_string()),
-                        auto_translate_transcript_to_app_language: Some(false),
+                        auto_translate_transcript_to_app_language: Some(true),
                         auth: Some(AuthSettings {
                             enable_auth: Some(false),
                             allowlist: Some(vec![
@@ -19531,15 +21120,15 @@ async fn main() {
                             ..Default::default()
                         }),
                         queueing_config: Some(AgentQueueingConfig {
-                            enabled: Some(true),
+                            enabled: Some(false),
                             wait_timeout_seconds: Some(180),
                             hold_audio: Some(
                                 AgentHoldAudioConfig::builder()
                                     .audio_path("audio_path")
                                     .audio_url("audio_url")
                                     .original_filename("original_filename")
-                                    .duration_secs(3.08)
-                                    .size_bytes(0)
+                                    .duration_secs(2.19)
+                                    .size_bytes(2)
                                     .build()
                                     .expect("Failed to build request"),
                             ),
@@ -19551,7 +21140,7 @@ async fn main() {
                             delete_transcript_and_pii: Some(true),
                             delete_audio: Some(false),
                             apply_to_existing_conversations: Some(false),
-                            zero_retention_mode: Some(true),
+                            zero_retention_mode: Some(false),
                             conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                                 enabled: Some(true),
                                 entities: Some(vec![ConfigEntityType::Name]),
@@ -19570,18 +21159,19 @@ async fn main() {
                             monitor_configs: Some(HashMap::from([(
                                 "key".to_string(),
                                 AlertingMonitorConfig {
-                                    enabled: Some(false),
-                                    threshold: Some(0.68),
-                                    relative_increase_threshold: Some(1.4),
-                                    min_failure_count: Some(4),
-                                    min_history_bucket_count: Some(5),
-                                    min_sample_count: Some(8),
-                                    suspect_trigger_threshold: Some(5),
-                                    auto_resolve_after_inactive_minutes: Some(10),
+                                    enabled: Some(true),
+                                    threshold: Some(0.31),
+                                    relative_increase_threshold: Some(4.56),
+                                    min_failure_count: Some(7),
+                                    min_history_bucket_count: Some(9),
+                                    min_sample_count: Some(5),
+                                    suspect_trigger_threshold: Some(8),
+                                    auto_resolve_after_inactive_minutes: Some(7),
                                     ..Default::default()
                                 },
                             )])),
-                            auto_resolve_after_inactive_minutes: Some(9),
+                            auto_resolve_after_inactive_minutes: Some(2),
+                            environments: Some(vec!["environments".to_string()]),
                             notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
                                 data: AlertingWebhookNotifier::builder()
                                     .webhook_id("webhook_id")
@@ -19599,8 +21189,8 @@ async fn main() {
                                 .source("source")
                                 .target("target")
                                 .reroutes(vec![PositionInput {
-                                    x: Some(5.17),
-                                    y: Some(1.81),
+                                    x: Some(1.15),
+                                    y: Some(5.14),
                                     ..Default::default()
                                 }])
                                 .build()
@@ -19611,8 +21201,8 @@ async fn main() {
                             AgentWorkflowRequestModelNodes::End {
                                 data: WorkflowEndNodeModelInput {
                                     position: Some(PositionInput {
-                                        x: Some(5.17),
-                                        y: Some(1.81),
+                                        x: Some(1.15),
+                                        y: Some(5.14),
                                         ..Default::default()
                                     }),
                                     edge_order: Some(vec!["edge_order".to_string()]),
@@ -19621,7 +21211,7 @@ async fn main() {
                                 },
                             },
                         )])),
-                        prevent_subagent_loops: Some(false),
+                        prevent_subagent_loops: Some(true),
                         ..Default::default()
                     }),
                     name: Some("name".to_string()),
@@ -19853,7 +21443,7 @@ async fn main() {
             &AgentsListQueryRequest {
                 page_size: Some(30),
                 search: Some("search".to_string()),
-                archived: Some(false),
+                archived: Some(true),
                 show_only_owned_agents: Some(false),
                 created_by_user_id: Some("created_by_user_id".to_string()),
                 tags: Some(vec![]),
@@ -20109,633 +21699,624 @@ async fn main() {
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .agent_config_override(
-                    AdhocAgentConfigOverrideForTestRequestModel::builder()
-                        .conversation_config(ConversationalConfig {
-                            asr: Some(AsrConversationalConfig {
-                                quality: Some(AsrQuality::High),
-                                provider: Some(AsrProvider::Elevenlabs),
-                                user_input_audio_format: Some(AsrInputFormat::Pcm8000),
-                                keywords: Some(vec!["keywords".to_string()]),
-                                ..Default::default()
-                            }),
-                            turn: Some(TurnConfig {
-                                turn_timeout: Some(7_f64),
-                                initial_wait_time: Some(8.95),
-                                silence_end_call_timeout: Some(-1_f64),
-                                turn_eagerness: Some(TurnEagerness::Patient),
-                                spelling_patience: Some(SpellingPatience::Auto),
-                                speculative_turn: Some(false),
-                                retranscribe_on_turn_timeout: Some(false),
-                                turn_model: Some(TurnModel::TurnV2),
-                                interruption_ignore_terms: Some(vec![
-                                    "interruption_ignore_terms".to_string(),
-                                ]),
-                                interruption_ignore_term_languages: Some(vec![
-                                    "interruption_ignore_term_languages".to_string(),
-                                ]),
-                                merge_with_default_ignore_terms: Some(true),
-                                transcribe_on_disabled_interruptions: Some(false),
-                                soft_timeout_config: Some(SoftTimeoutConfig {
-                                    timeout_seconds: Some(-1_f64),
-                                    message: Some("Hhmmmm...yeah.".to_string()),
-                                    additional_soft_timeout_messages: Some(vec![
-                                        "additional_soft_timeout_messages".to_string(),
-                                    ]),
-                                    use_llm_generated_message: Some(true),
-                                    randomize_fillers: Some(false),
-                                    max_soft_timeouts_per_generation: Some(1),
-                                    llm_generated_message_prompt_override: Some(
-                                        "llm_generated_message_prompt_override".to_string(),
-                                    ),
-                                    disable_until_first_user_message: Some(true),
-                                    ..Default::default()
-                                }),
-                                noisy_environment_detection: Some(true),
-                                noisy_environment_message: Some(
-                                    "Uhh ... sorry, I\'m picking up some noise in the background. Could you move somewhere quieter?".to_string(),
-                                ),
-                                ..Default::default()
-                            }),
-                            tts: Some(TtsConversationalConfigInput {
-                                model_id: Some(TtsConversationalModel::ElevenTurboV2),
-                                voice_id: Some("cjVigY5qzO86Huf0OWal".to_string()),
-                                supported_voices: Some(vec![
-                                    SupportedVoice::builder()
-                                        .label("label")
-                                        .voice_id("voice_id")
-                                        .description("description")
-                                        .language("language")
-                                        .model_family(TtsModelFamily::Turbo)
-                                        .optimize_streaming_latency(
-                                            TtsOptimizeStreamingLatency::Num0,
-                                        )
-                                        .stability(0.1)
-                                        .speed(0.85)
-                                        .similarity_boost(0.42)
-                                        .clone_strength(0.25)
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                expressive_mode: Some(true),
-                                suggested_audio_tags: Some(vec![
-                                    SuggestedAudioTag::builder()
-                                        .tag("tag")
-                                        .description("description")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                                optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
-                                stability: Some(0.5),
-                                speed: Some(1_f64),
-                                similarity_boost: Some(0.8),
-                                clone_strength: Some(0.01),
-                                text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
-                                pronunciation_dictionary_locators: Some(vec![
-                                    PydanticPronunciationDictionaryVersionLocator::builder()
-                                        .pronunciation_dictionary_id("pronunciation_dictionary_id")
-                                        .version_id("version_id")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                enable_phoneme_tags: Some(true),
-                                audio_effects: Some(EffectsSpecInput {
-                                    filter_preset_id: Some("filter_preset_id".to_string()),
-                                    distance: Some(0.89),
-                                    environment_id: Some("environment_id".to_string()),
-                                    background_noise_id: Some("background_noise_id".to_string()),
-                                    send_level: Some(1_f64),
-                                    pan: Some(-0.33),
-                                    ..Default::default()
-                                }),
-                                ..Default::default()
-                            }),
-                            conversation: Some(ConversationConfigInput {
-                                text_only: Some(false),
-                                max_duration_seconds: Some(600),
-                                client_events: Some(vec![
-                                    ClientEvent::ConversationInitiationMetadata,
-                                ]),
-                                file_input: Some(FileInputConfig {
-                                    enabled: Some(true),
-                                    max_files_in_memory: Some(10),
-                                    max_files_per_conversation: Some(10),
-                                    ..Default::default()
-                                }),
-                                monitoring_enabled: Some(false),
-                                monitoring_events: Some(vec![
-                                    ClientEvent::ConversationInitiationMetadata,
-                                ]),
-                                dtmf_input_settings: Some(DtmfInputConfig {
-                                    dtmf_input_timeout: Some(2_f64),
-                                    hash_terminator: Some(true),
-                                    redact_input: Some(false),
-                                    ..Default::default()
-                                }),
-                                background_sound: Some(BackgroundSoundConfig {
-                                    source_type: Some(BackgroundSoundSourceType::Preset),
-                                    source_id: Some(BackgroundSoundPresetId::Office2),
-                                    volume: Some(0.15),
-                                    crossfade_loop: Some(true),
-                                    ..Default::default()
-                                }),
-                                source_attribution: Some(false),
-                                ..Default::default()
-                            }),
-                            language_presets: Some(HashMap::from([(
-                                "key".to_string(),
-                                LanguagePresetInput::builder()
-                                    .overrides(ConversationConfigClientOverrideInput::default())
-                                    .first_message_translation(
-                                        LanguagePresetTranslation::builder()
-                                            .source_hash("source_hash")
-                                            .text("text")
-                                            .build()
-                                            .expect("Failed to build request"),
-                                    )
-                                    .soft_timeout_translation(
-                                        LanguagePresetTranslation::builder()
-                                            .source_hash("source_hash")
-                                            .text("text")
-                                            .build()
-                                            .expect("Failed to build request"),
-                                    )
-                                    .noisy_environment_message_translation(
-                                        LanguagePresetTranslation::builder()
-                                            .source_hash("source_hash")
-                                            .text("text")
-                                            .build()
-                                            .expect("Failed to build request"),
-                                    )
-                                    .build()
-                                    .expect("Failed to build request"),
-                            )])),
-                            vad: Some(VadConfig::default()),
-                            agent: Some(AgentConfig {
-                                first_message: Some("first_message".to_string()),
-                                language: Some("en".to_string()),
-                                hinglish_mode: Some(true),
-                                dynamic_variables: Some(DynamicVariablesConfigInput(
-                                    elevenlabs_rust_sdk::serde_json::json!({}),
-                                )),
-                                disable_first_message_interruptions: Some(true),
-                                max_conversation_duration_message: Some(
-                                    "max_conversation_duration_message".to_string(),
-                                ),
-                                text_behavior_overrides: Some(HashMap::from([(
-                                    "key".to_string(),
-                                    BehaviorOverride {
-                                        verbosity: Some(Verbosity::Auto),
-                                        output_format: Some(
-                                            BehaviorOverrideOutputFormat::Mp3_22050_32,
-                                        ),
-                                        interaction_budget: Some(InteractionBudget::Realtime),
-                                        ..Default::default()
-                                    },
-                                )])),
-                                prompt: Some(PromptAgentApiModelInput {
-                                    prompt: Some("prompt".to_string()),
-                                    llm: Some(Llm::Gpt4OMini),
-                                    reasoning_effort: Some(LlmReasoningEffort::None),
-                                    service_tier: Some(LlmServiceTier::Standard),
-                                    thinking_budget: Some(0),
-                                    enable_reasoning_summary: Some(true),
-                                    temperature: Some(7.03),
-                                    max_tokens: Some(-1),
-                                    tool_ids: Some(vec!["tool_ids".to_string()]),
-                                    tool_ids_strict: Some(true),
-                                    enable_parallel_tool_calls: Some(true),
-                                    mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
-                                    native_mcp_server_ids: Some(vec![
-                                        "native_mcp_server_ids".to_string(),
-                                    ]),
-                                    knowledge_base: Some(vec![]),
-                                    ignore_default_personality: Some(true),
-                                    timezone: Some("timezone".to_string()),
-                                    cascade_timeout_seconds: Some(4_f64),
-                                    ..Default::default()
-                                }),
-                                ..Default::default()
-                            }),
+                .agent_config_override(AdhocAgentConfigOverrideForTestRequestModel {
+                    conversation_config: Some(ConversationalConfig {
+                        asr: Some(AsrConversationalConfig {
+                            quality: Some(AsrQuality::High),
+                            provider: Some(AsrProvider::Elevenlabs),
+                            user_input_audio_format: Some(AsrInputFormat::Pcm8000),
+                            keywords: Some(vec!["keywords".to_string()]),
                             ..Default::default()
-                        })
-                        .platform_settings(AgentPlatformSettingsRequestModel {
-                            evaluation: Some(EvaluationSettingsInput {
-                                criteria: Some(vec![
-                                    PromptEvaluationCriteria::builder()
-                                        .id("id")
-                                        .name("name")
-                                        .r#type(PromptEvaluationCriteriaType::Prompt)
-                                        .conversation_goal_prompt("conversation_goal_prompt")
-                                        .use_knowledge_base(false)
-                                        .scope(AnalysisScope::Conversation)
-                                        .llm(Llm::Gpt4OMini)
-                                        .scoring_mode(CriteriaScoringMode::Binary)
-                                        .max_score(100)
-                                        .score_instructions("score_instructions")
-                                        .build()
-                                        .expect("Failed to build request"),
+                        }),
+                        turn: Some(TurnConfig {
+                            turn_timeout: Some(7_f64),
+                            initial_wait_time: Some(0.63),
+                            silence_end_call_timeout: Some(-1_f64),
+                            turn_eagerness: Some(TurnEagerness::Patient),
+                            spelling_patience: Some(SpellingPatience::Auto),
+                            speculative_turn: Some(false),
+                            retranscribe_on_turn_timeout: Some(true),
+                            turn_model: Some(TurnModel::TurnV2),
+                            interruption_ignore_terms: Some(vec![
+                                "interruption_ignore_terms".to_string(),
+                            ]),
+                            interruption_ignore_term_languages: Some(vec![
+                                "interruption_ignore_term_languages".to_string(),
+                            ]),
+                            merge_with_default_ignore_terms: Some(false),
+                            transcribe_on_disabled_interruptions: Some(true),
+                            soft_timeout_config: Some(SoftTimeoutConfig {
+                                timeout_seconds: Some(-1_f64),
+                                message: Some("Hhmmmm...yeah.".to_string()),
+                                additional_soft_timeout_messages: Some(vec![
+                                    "additional_soft_timeout_messages".to_string(),
                                 ]),
+                                use_llm_generated_message: Some(true),
+                                randomize_fillers: Some(false),
+                                max_soft_timeouts_per_generation: Some(1),
+                                llm_generated_message_prompt_override: Some(
+                                    "llm_generated_message_prompt_override".to_string(),
+                                ),
+                                disable_until_first_user_message: Some(false),
                                 ..Default::default()
                             }),
-                            widget: Some(WidgetConfig {
-                                variant: Some(EmbedVariant::Tiny),
-                                placement: Some(WidgetPlacement::TopLeft),
-                                expandable: Some(WidgetExpandable::Never),
-                                avatar: Some(WidgetConfigAvatar::Orb {
-                                    data: OrbAvatar {
-                                        color_1: Some("#2792dc".to_string()),
-                                        color_2: Some("#9ce6e6".to_string()),
-                                        ..Default::default()
-                                    },
-                                }),
-                                feedback_mode: Some(WidgetFeedbackMode::None),
-                                end_feedback: Some(WidgetEndFeedbackConfig {
-                                    r#type: Some(WidgetEndFeedbackType::Rating),
-                                    ..Default::default()
-                                }),
-                                bg_color: Some("#ffffff".to_string()),
-                                text_color: Some("#000000".to_string()),
-                                btn_color: Some("#000000".to_string()),
-                                btn_text_color: Some("#ffffff".to_string()),
-                                border_color: Some("#e1e1e1".to_string()),
-                                focus_color: Some("#000000".to_string()),
-                                border_radius: Some(10),
-                                btn_radius: Some(0),
-                                action_text: Some("action_text".to_string()),
-                                start_call_text: Some("start_call_text".to_string()),
-                                end_call_text: Some("end_call_text".to_string()),
-                                expand_text: Some("expand_text".to_string()),
-                                listening_text: Some("listening_text".to_string()),
-                                speaking_text: Some("speaking_text".to_string()),
-                                shareable_page_text: Some("shareable_page_text".to_string()),
-                                shareable_page_show_terms: Some(true),
-                                terms_text: Some("terms_text".to_string()),
-                                terms_html: Some("terms_html".to_string()),
-                                terms_key: Some("terms_key".to_string()),
-                                show_avatar_when_collapsed: Some(true),
-                                disable_banner: Some(true),
-                                override_link: Some("override_link".to_string()),
-                                markdown_link_allowed_hosts: Some(vec![
-                                    AllowlistItem::builder()
-                                        .hostname("hostname")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                markdown_link_include_www: Some(true),
-                                markdown_link_allow_http: Some(true),
-                                mic_muting_enabled: Some(true),
-                                transcript_enabled: Some(true),
-                                text_input_enabled: Some(true),
-                                conversation_mode_toggle_enabled: Some(true),
-                                default_expanded: Some(true),
-                                always_expanded: Some(false),
-                                dismissible: Some(true),
-                                show_agent_status: Some(true),
-                                show_conversation_id: Some(true),
-                                strip_audio_tags: Some(true),
-                                syntax_highlight_theme: Some(Theme::Light),
-                                text_contents: Some(WidgetTextContents {
-                                    main_label: Some("main_label".to_string()),
-                                    start_call: Some("start_call".to_string()),
-                                    start_chat: Some("start_chat".to_string()),
-                                    new_call: Some("new_call".to_string()),
-                                    end_call: Some("end_call".to_string()),
-                                    mute_microphone: Some("mute_microphone".to_string()),
-                                    change_language: Some("change_language".to_string()),
-                                    collapse: Some("collapse".to_string()),
-                                    expand: Some("expand".to_string()),
-                                    copied: Some("copied".to_string()),
-                                    accept_terms: Some("accept_terms".to_string()),
-                                    dismiss_terms: Some("dismiss_terms".to_string()),
-                                    listening_status: Some("listening_status".to_string()),
-                                    speaking_status: Some("speaking_status".to_string()),
-                                    connecting_status: Some("connecting_status".to_string()),
-                                    chatting_status: Some("chatting_status".to_string()),
-                                    queue_waiting_status: Some("queue_waiting_status".to_string()),
-                                    queue_waiting_status_short: Some(
-                                        "queue_waiting_status_short".to_string(),
-                                    ),
-                                    input_label: Some("input_label".to_string()),
-                                    input_placeholder: Some("input_placeholder".to_string()),
-                                    input_placeholder_text_only: Some(
-                                        "input_placeholder_text_only".to_string(),
-                                    ),
-                                    input_placeholder_new_conversation: Some(
-                                        "input_placeholder_new_conversation".to_string(),
-                                    ),
-                                    user_ended_conversation: Some(
-                                        "user_ended_conversation".to_string(),
-                                    ),
-                                    agent_ended_conversation: Some(
-                                        "agent_ended_conversation".to_string(),
-                                    ),
-                                    conversation_id: Some("conversation_id".to_string()),
-                                    error_occurred: Some("error_occurred".to_string()),
-                                    queue_timed_out: Some("queue_timed_out".to_string()),
-                                    copy_id: Some("copy_id".to_string()),
-                                    initiate_feedback: Some("initiate_feedback".to_string()),
-                                    request_follow_up_feedback: Some(
-                                        "request_follow_up_feedback".to_string(),
-                                    ),
-                                    thanks_for_feedback: Some("thanks_for_feedback".to_string()),
-                                    thanks_for_feedback_details: Some(
-                                        "thanks_for_feedback_details".to_string(),
-                                    ),
-                                    follow_up_feedback_placeholder: Some(
-                                        "follow_up_feedback_placeholder".to_string(),
-                                    ),
-                                    submit: Some("submit".to_string()),
-                                    go_back: Some("go_back".to_string()),
-                                    send_message: Some("send_message".to_string()),
-                                    text_mode: Some("text_mode".to_string()),
-                                    voice_mode: Some("voice_mode".to_string()),
-                                    switched_to_text_mode: Some(
-                                        "switched_to_text_mode".to_string(),
-                                    ),
-                                    switched_to_voice_mode: Some(
-                                        "switched_to_voice_mode".to_string(),
-                                    ),
-                                    copy: Some("copy".to_string()),
-                                    download: Some("download".to_string()),
-                                    wrap: Some("wrap".to_string()),
-                                    agent_working: Some("agent_working".to_string()),
-                                    agent_done: Some("agent_done".to_string()),
-                                    agent_error: Some("agent_error".to_string()),
-                                    attach_file: Some("attach_file".to_string()),
-                                    remove_file: Some("remove_file".to_string()),
-                                    file_upload_error: Some("file_upload_error".to_string()),
-                                    file_type_unsupported: Some(
-                                        "file_type_unsupported".to_string(),
-                                    ),
-                                    file_too_large: Some("file_too_large".to_string()),
-                                    file_limit_reached: Some("file_limit_reached".to_string()),
-                                    typing_indicator: Some("typing_indicator".to_string()),
-                                    rich_content_unavailable: Some(
-                                        "rich_content_unavailable".to_string(),
-                                    ),
-                                    ..Default::default()
-                                }),
-                                styles: Some(WidgetStyles {
-                                    base: Some("base".to_string()),
-                                    base_hover: Some("base_hover".to_string()),
-                                    base_active: Some("base_active".to_string()),
-                                    base_border: Some("base_border".to_string()),
-                                    base_subtle: Some("base_subtle".to_string()),
-                                    base_primary: Some("base_primary".to_string()),
-                                    base_error: Some("base_error".to_string()),
-                                    accent: Some("accent".to_string()),
-                                    accent_hover: Some("accent_hover".to_string()),
-                                    accent_active: Some("accent_active".to_string()),
-                                    accent_border: Some("accent_border".to_string()),
-                                    accent_subtle: Some("accent_subtle".to_string()),
-                                    accent_primary: Some("accent_primary".to_string()),
-                                    overlay_padding: Some(3.33),
-                                    button_radius: Some(7.36),
-                                    input_radius: Some(9.19),
-                                    bubble_radius: Some(0.84),
-                                    sheet_radius: Some(2.21),
-                                    compact_sheet_radius: Some(0.2),
-                                    dropdown_sheet_radius: Some(9.69),
-                                    ..Default::default()
-                                }),
-                                show_resize_button: Some(true),
-                                end_confirmation_enabled: Some(false),
-                                mobile_fullscreen: Some(true),
-                                transcript_speech_sync_enabled: Some(true),
-                                language_selector: Some(true),
-                                supports_text_only: Some(true),
-                                custom_avatar_path: Some("custom_avatar_path".to_string()),
-                                language_presets: Some(HashMap::from([(
-                                    "key".to_string(),
-                                    WidgetLanguagePreset {
-                                        terms_text: Some("terms_text".to_string()),
-                                        terms_html: Some("terms_html".to_string()),
-                                        terms_key: Some("terms_key".to_string()),
-                                        ..Default::default()
-                                    },
-                                )])),
-                                ..Default::default()
-                            }),
-                            data_collection: Some(HashMap::from([(
-                                "key".to_string(),
-                                AnalysisProperty::builder()
-                                    .r#type(AnalysisPropertyType::Boolean)
+                            noisy_environment_detection: Some(true),
+                            noisy_environment_message: Some(
+                                "Uhh ... sorry, I\'m picking up some noise in the background. Could you move somewhere quieter?".to_string(),
+                            ),
+                            ..Default::default()
+                        }),
+                        tts: Some(TtsConversationalConfigInput {
+                            model_id: Some(TtsConversationalModel::ElevenTurboV2),
+                            voice_id: Some("cjVigY5qzO86Huf0OWal".to_string()),
+                            supported_voices: Some(vec![
+                                SupportedVoice::builder()
+                                    .label("label")
+                                    .voice_id("voice_id")
                                     .description("description")
-                                    .r#enum(vec!["enum".to_string()])
-                                    .is_system_provided(false)
-                                    .dynamic_variable("dynamic_variable")
-                                    .allowed_values(
-                                        AllowedValues::builder()
-                                            .dynamic_variable("dynamic_variable")
-                                            .build()
-                                            .expect("Failed to build request"),
-                                    )
-                                    .is_omitted(false)
-                                    .name("name")
-                                    .llm(Llm::Gpt4OMini)
+                                    .language("language")
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .stability(0.42)
+                                    .speed(0.78)
+                                    .similarity_boost(0.33)
+                                    .clone_strength(0.41)
                                     .build()
                                     .expect("Failed to build request"),
-                            )])),
-                            data_collection_scopes: Some(HashMap::from([(
-                                "key".to_string(),
-                                AnalysisScope::Conversation,
-                            )])),
-                            analysis_items: Some(AgentAnalysisItemsInput {
-                                evaluation_criteria: Some(vec![AgentAnalysisItemsInputEvaluationCriteriaItem::System {
-                                    data: AttachedSystemEvaluationRef::builder()
-                                        .analysis_item_id(
-                                            SystemEvaluationId::SystemEvalCriteriaSentiment,
-                                        )
-                                        .scope(AnalysisScope::Conversation)
-                                        .weight(5.24)
-                                        .build()
-                                        .expect("Failed to build request"),
-                                }]),
-                                data_collection: Some(vec![AgentAnalysisItemsInputDataCollectionItem::System {
-                                    data: AttachedSystemDataCollectionRef::builder()
-                                        .analysis_item_id(
-                                            SystemDataCollectionId::SystemDataCollectionTopic,
-                                        )
-                                        .scope(AnalysisScope::Conversation)
-                                        .build()
-                                        .expect("Failed to build request"),
-                                }]),
-                                ..Default::default()
-                            }),
-                            overrides: Some(ConversationInitiationClientDataConfigInput {
-                                conversation_config_override: Some(
-                                    ConversationConfigClientOverrideConfigInput::default(),
-                                ),
-                                custom_llm_extra_body: Some(false),
-                                enable_conversation_initiation_client_data_from_webhook: Some(true),
-                                enable_starting_workflow_node_id_from_client: Some(true),
-                                enable_procedure_ids_from_client: Some(false),
-                                ..Default::default()
-                            }),
-                            workspace_overrides: Some(AgentWorkspaceOverridesInput {
-                                conversation_initiation_client_data_webhook: Some(
-                                    ConversationInitiationClientDataWebhook::builder()
-                                        .url("url")
-                                        .request_headers(HashMap::new())
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ),
-                                webhooks: Some(ConvAiWebhooks {
-                                    post_call_webhook_id: Some("post_call_webhook_id".to_string()),
-                                    events: Some(vec![WebhookEventType::Transcript]),
-                                    transcript_format: Some(WebhookTranscriptFormat::Json),
-                                    exclude_transcript: Some(true),
-                                    ..Default::default()
-                                }),
-                                ..Default::default()
-                            }),
-                            testing: Some(AgentTestingSettings {
-                                attached_tests: Some(vec![
-                                    AttachedTestModel::builder()
-                                        .test_id("test_id")
-                                        .workflow_node_id("workflow_node_id")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                ..Default::default()
-                            }),
-                            archived: Some(false),
-                            guardrails: Some(GuardrailsV1Input {
-                                version: Some(GuardrailsV1InputVersion::Num1),
-                                focus: Some(FocusGuardrail {
-                                    is_enabled: Some(true),
-                                    ..Default::default()
-                                }),
-                                prompt_injection: Some(PromptInjectionGuardrail {
-                                    is_enabled: Some(false),
-                                    ..Default::default()
-                                }),
-                                content: Some(ContentGuardrailInput {
-                                    execution_mode: Some(GuardrailExecutionMode::Streaming),
-                                    ..Default::default()
-                                }),
-                                custom: Some(CustomGuardrailInput::default()),
-                                ..Default::default()
-                            }),
-                            summary_language: Some("summary_language".to_string()),
-                            auto_translate_transcript_to_app_language: Some(false),
-                            auth: Some(AuthSettings {
-                                enable_auth: Some(false),
-                                allowlist: Some(vec![
-                                    AllowlistItem::builder()
-                                        .hostname("hostname")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                require_origin_header: Some(false),
-                                shareable_token: Some("shareable_token".to_string()),
-                                ..Default::default()
-                            }),
-                            call_limits: Some(AgentCallLimits {
-                                agent_concurrency_limit: Some(-1),
-                                daily_limit: Some(100000),
-                                bursting_enabled: Some(true),
-                                ..Default::default()
-                            }),
-                            queueing_config: Some(AgentQueueingConfig {
-                                enabled: Some(true),
-                                wait_timeout_seconds: Some(180),
-                                hold_audio: Some(
-                                    AgentHoldAudioConfig::builder()
-                                        .audio_path("audio_path")
-                                        .audio_url("audio_url")
-                                        .original_filename("original_filename")
-                                        .duration_secs(3.08)
-                                        .size_bytes(0)
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ),
-                                ..Default::default()
-                            }),
-                            privacy: Some(PrivacyConfigInput {
-                                record_voice: Some(true),
-                                retention_days: Some(-1),
-                                delete_transcript_and_pii: Some(true),
-                                delete_audio: Some(false),
-                                apply_to_existing_conversations: Some(false),
-                                zero_retention_mode: Some(true),
-                                conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
-                                    enabled: Some(true),
-                                    entities: Some(vec![ConfigEntityType::Name]),
-                                    excluded_data_collection_ids: Some(vec![
-                                        "excluded_data_collection_ids".to_string(),
-                                    ]),
-                                    ..Default::default()
-                                }),
-                                ..Default::default()
-                            }),
-                            trust_context: Some(AgentTrustContext::Unknown),
-                            analysis_llm: Some(Llm::Gpt4OMini),
-                            topic_discovery: Some(TopicDiscoverySettings::default()),
-                            sentiment_analysis: Some(SentimentAnalysisSettings::default()),
-                            alerting: Some(AlertingSettings {
-                                monitor_configs: Some(HashMap::from([(
-                                    "key".to_string(),
-                                    AlertingMonitorConfig {
-                                        enabled: Some(false),
-                                        threshold: Some(0.68),
-                                        relative_increase_threshold: Some(1.4),
-                                        min_failure_count: Some(4),
-                                        min_history_bucket_count: Some(5),
-                                        min_sample_count: Some(8),
-                                        suspect_trigger_threshold: Some(5),
-                                        auto_resolve_after_inactive_minutes: Some(10),
-                                        ..Default::default()
-                                    },
-                                )])),
-                                auto_resolve_after_inactive_minutes: Some(9),
-                                notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
-                                    data: AlertingWebhookNotifier::builder()
-                                        .webhook_id("webhook_id")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                }]),
+                            ]),
+                            expressive_mode: Some(true),
+                            suggested_audio_tags: Some(vec![
+                                SuggestedAudioTag::builder()
+                                    .tag("tag")
+                                    .description("description")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
+                            optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
+                            stability: Some(0.5),
+                            speed: Some(1_f64),
+                            similarity_boost: Some(0.8),
+                            clone_strength: Some(0.91),
+                            text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
+                            pronunciation_dictionary_locators: Some(vec![
+                                PydanticPronunciationDictionaryVersionLocator::builder()
+                                    .pronunciation_dictionary_id("pronunciation_dictionary_id")
+                                    .version_id("version_id")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            enable_phoneme_tags: Some(true),
+                            audio_effects: Some(EffectsSpecInput {
+                                filter_preset_id: Some("filter_preset_id".to_string()),
+                                distance: Some(0.89),
+                                environment_id: Some("environment_id".to_string()),
+                                background_noise_id: Some("background_noise_id".to_string()),
+                                send_level: Some(1_f64),
+                                pan: Some(-0.33),
                                 ..Default::default()
                             }),
                             ..Default::default()
-                        })
-                        .workflow(AgentWorkflowRequestModel {
-                            edges: Some(HashMap::from([(
+                        }),
+                        conversation: Some(ConversationConfigInput {
+                            text_only: Some(false),
+                            max_duration_seconds: Some(600),
+                            client_events: Some(vec![ClientEvent::ConversationInitiationMetadata]),
+                            file_input: Some(FileInputConfig {
+                                enabled: Some(true),
+                                max_files_in_memory: Some(10),
+                                max_files_per_conversation: Some(10),
+                                ..Default::default()
+                            }),
+                            monitoring_enabled: Some(false),
+                            monitoring_events: Some(vec![
+                                ClientEvent::ConversationInitiationMetadata,
+                            ]),
+                            dtmf_input_settings: Some(DtmfInputConfig {
+                                dtmf_input_timeout: Some(2_f64),
+                                hash_terminator: Some(true),
+                                redact_input: Some(false),
+                                ..Default::default()
+                            }),
+                            background_sound: Some(BackgroundSoundConfig {
+                                source_type: Some(BackgroundSoundSourceType::Preset),
+                                source_id: Some(BackgroundSoundPresetId::Office2),
+                                volume: Some(0.15),
+                                crossfade_loop: Some(true),
+                                ..Default::default()
+                            }),
+                            source_attribution: Some(true),
+                            ..Default::default()
+                        }),
+                        language_presets: Some(HashMap::from([(
+                            "key".to_string(),
+                            LanguagePresetInput::builder()
+                                .overrides(ConversationConfigClientOverrideInput::default())
+                                .first_message_translation(
+                                    LanguagePresetTranslation::builder()
+                                        .source_hash("source_hash")
+                                        .text("text")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                )
+                                .soft_timeout_translation(
+                                    LanguagePresetTranslation::builder()
+                                        .source_hash("source_hash")
+                                        .text("text")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                )
+                                .noisy_environment_message_translation(
+                                    LanguagePresetTranslation::builder()
+                                        .source_hash("source_hash")
+                                        .text("text")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                )
+                                .build()
+                                .expect("Failed to build request"),
+                        )])),
+                        vad: Some(VadConfig::default()),
+                        agent: Some(AgentConfig {
+                            first_message: Some("first_message".to_string()),
+                            language: Some("en".to_string()),
+                            hinglish_mode: Some(false),
+                            dynamic_variables: Some(DynamicVariablesConfigInput(
+                                elevenlabs_rust_sdk::serde_json::json!({}),
+                            )),
+                            disable_first_message_interruptions: Some(false),
+                            max_conversation_duration_message: Some(
+                                "max_conversation_duration_message".to_string(),
+                            ),
+                            text_behavior_overrides: Some(HashMap::from([(
                                 "key".to_string(),
-                                WorkflowEdgeModelInput::builder()
-                                    .source("source")
-                                    .target("target")
-                                    .reroutes(vec![PositionInput {
-                                        x: Some(5.17),
-                                        y: Some(1.81),
-                                        ..Default::default()
-                                    }])
-                                    .build()
-                                    .expect("Failed to build request"),
-                            )])),
-                            nodes: Some(HashMap::from([(
-                                "key".to_string(),
-                                AgentWorkflowRequestModelNodes::End {
-                                    data: WorkflowEndNodeModelInput {
-                                        position: Some(PositionInput {
-                                            x: Some(5.17),
-                                            y: Some(1.81),
-                                            ..Default::default()
-                                        }),
-                                        edge_order: Some(vec!["edge_order".to_string()]),
-                                        outcome: Some(WorkflowEndNodeOutcome::Success),
-                                        ..Default::default()
-                                    },
+                                BehaviorOverride {
+                                    verbosity: Some(Verbosity::Auto),
+                                    output_format: Some(BehaviorOverrideOutputFormat::Mp3_22050_32),
+                                    interaction_budget: Some(InteractionBudget::Realtime),
+                                    ..Default::default()
                                 },
                             )])),
-                            prevent_subagent_loops: Some(false),
+                            subagent_config: Some(SubagentConfigInput {
+                                agents: Some(vec![]),
+                                ..Default::default()
+                            }),
+                            prompt: Some(PromptAgentApiModelInput {
+                                prompt: Some("prompt".to_string()),
+                                llm: Some(Llm::Gpt4OMini),
+                                reasoning_effort: Some(LlmReasoningEffort::None),
+                                service_tier: Some(LlmServiceTier::Standard),
+                                thinking_budget: Some(1),
+                                enable_reasoning_summary: Some(true),
+                                temperature: Some(6.94),
+                                max_tokens: Some(-1),
+                                tool_ids: Some(vec!["tool_ids".to_string()]),
+                                tool_ids_strict: Some(false),
+                                enable_parallel_tool_calls: Some(true),
+                                mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
+                                native_mcp_server_ids: Some(vec![
+                                    "native_mcp_server_ids".to_string(),
+                                ]),
+                                knowledge_base: Some(vec![]),
+                                ignore_default_personality: Some(true),
+                                timezone: Some("timezone".to_string()),
+                                cascade_timeout_seconds: Some(4_f64),
+                                ..Default::default()
+                            }),
                             ..Default::default()
-                        })
-                        .build()
-                        .expect("Failed to build request"),
-                )
+                        }),
+                        ..Default::default()
+                    }),
+                    platform_settings: Some(AgentPlatformSettingsRequestModel {
+                        evaluation: Some(EvaluationSettingsInput {
+                            criteria: Some(vec![
+                                PromptEvaluationCriteria::builder()
+                                    .id("id")
+                                    .name("name")
+                                    .r#type(PromptEvaluationCriteriaType::Prompt)
+                                    .conversation_goal_prompt("conversation_goal_prompt")
+                                    .use_knowledge_base(true)
+                                    .scope(AnalysisScope::Conversation)
+                                    .llm(Llm::Gpt4OMini)
+                                    .scoring_mode(CriteriaScoringMode::Binary)
+                                    .max_score(100)
+                                    .score_instructions("score_instructions")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            ..Default::default()
+                        }),
+                        widget: Some(WidgetConfig {
+                            variant: Some(EmbedVariant::Tiny),
+                            placement: Some(WidgetPlacement::TopLeft),
+                            expandable: Some(WidgetExpandable::Never),
+                            avatar: Some(WidgetConfigAvatar::Orb {
+                                data: OrbAvatar {
+                                    color_1: Some("#2792dc".to_string()),
+                                    color_2: Some("#9ce6e6".to_string()),
+                                    ..Default::default()
+                                },
+                            }),
+                            feedback_mode: Some(WidgetFeedbackMode::None),
+                            end_feedback: Some(WidgetEndFeedbackConfig {
+                                r#type: Some(WidgetEndFeedbackType::Rating),
+                                ..Default::default()
+                            }),
+                            bg_color: Some("#ffffff".to_string()),
+                            text_color: Some("#000000".to_string()),
+                            btn_color: Some("#000000".to_string()),
+                            btn_text_color: Some("#ffffff".to_string()),
+                            border_color: Some("#e1e1e1".to_string()),
+                            focus_color: Some("#000000".to_string()),
+                            border_radius: Some(4),
+                            btn_radius: Some(6),
+                            action_text: Some("action_text".to_string()),
+                            start_call_text: Some("start_call_text".to_string()),
+                            end_call_text: Some("end_call_text".to_string()),
+                            expand_text: Some("expand_text".to_string()),
+                            listening_text: Some("listening_text".to_string()),
+                            speaking_text: Some("speaking_text".to_string()),
+                            shareable_page_text: Some("shareable_page_text".to_string()),
+                            shareable_page_show_terms: Some(true),
+                            terms_text: Some("terms_text".to_string()),
+                            terms_html: Some("terms_html".to_string()),
+                            terms_key: Some("terms_key".to_string()),
+                            show_avatar_when_collapsed: Some(true),
+                            disable_banner: Some(true),
+                            override_link: Some("override_link".to_string()),
+                            markdown_link_allowed_hosts: Some(vec![
+                                AllowlistItem::builder()
+                                    .hostname("hostname")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            markdown_link_include_www: Some(true),
+                            markdown_link_allow_http: Some(true),
+                            mic_muting_enabled: Some(true),
+                            transcript_enabled: Some(true),
+                            text_input_enabled: Some(true),
+                            conversation_mode_toggle_enabled: Some(true),
+                            default_expanded: Some(true),
+                            always_expanded: Some(true),
+                            dismissible: Some(true),
+                            show_agent_status: Some(true),
+                            show_conversation_id: Some(true),
+                            strip_audio_tags: Some(true),
+                            syntax_highlight_theme: Some(Theme::Light),
+                            text_contents: Some(WidgetTextContents {
+                                main_label: Some("main_label".to_string()),
+                                start_call: Some("start_call".to_string()),
+                                start_chat: Some("start_chat".to_string()),
+                                new_call: Some("new_call".to_string()),
+                                end_call: Some("end_call".to_string()),
+                                mute_microphone: Some("mute_microphone".to_string()),
+                                change_language: Some("change_language".to_string()),
+                                collapse: Some("collapse".to_string()),
+                                expand: Some("expand".to_string()),
+                                copied: Some("copied".to_string()),
+                                accept_terms: Some("accept_terms".to_string()),
+                                dismiss_terms: Some("dismiss_terms".to_string()),
+                                listening_status: Some("listening_status".to_string()),
+                                speaking_status: Some("speaking_status".to_string()),
+                                connecting_status: Some("connecting_status".to_string()),
+                                chatting_status: Some("chatting_status".to_string()),
+                                queue_waiting_status: Some("queue_waiting_status".to_string()),
+                                queue_waiting_status_short: Some(
+                                    "queue_waiting_status_short".to_string(),
+                                ),
+                                input_label: Some("input_label".to_string()),
+                                input_placeholder: Some("input_placeholder".to_string()),
+                                input_placeholder_text_only: Some(
+                                    "input_placeholder_text_only".to_string(),
+                                ),
+                                input_placeholder_new_conversation: Some(
+                                    "input_placeholder_new_conversation".to_string(),
+                                ),
+                                user_ended_conversation: Some(
+                                    "user_ended_conversation".to_string(),
+                                ),
+                                agent_ended_conversation: Some(
+                                    "agent_ended_conversation".to_string(),
+                                ),
+                                conversation_id: Some("conversation_id".to_string()),
+                                error_occurred: Some("error_occurred".to_string()),
+                                queue_timed_out: Some("queue_timed_out".to_string()),
+                                copy_id: Some("copy_id".to_string()),
+                                initiate_feedback: Some("initiate_feedback".to_string()),
+                                request_follow_up_feedback: Some(
+                                    "request_follow_up_feedback".to_string(),
+                                ),
+                                thanks_for_feedback: Some("thanks_for_feedback".to_string()),
+                                thanks_for_feedback_details: Some(
+                                    "thanks_for_feedback_details".to_string(),
+                                ),
+                                follow_up_feedback_placeholder: Some(
+                                    "follow_up_feedback_placeholder".to_string(),
+                                ),
+                                submit: Some("submit".to_string()),
+                                go_back: Some("go_back".to_string()),
+                                send_message: Some("send_message".to_string()),
+                                text_mode: Some("text_mode".to_string()),
+                                voice_mode: Some("voice_mode".to_string()),
+                                switched_to_text_mode: Some("switched_to_text_mode".to_string()),
+                                switched_to_voice_mode: Some("switched_to_voice_mode".to_string()),
+                                copy: Some("copy".to_string()),
+                                download: Some("download".to_string()),
+                                wrap: Some("wrap".to_string()),
+                                agent_working: Some("agent_working".to_string()),
+                                agent_done: Some("agent_done".to_string()),
+                                agent_error: Some("agent_error".to_string()),
+                                attach_file: Some("attach_file".to_string()),
+                                remove_file: Some("remove_file".to_string()),
+                                file_upload_error: Some("file_upload_error".to_string()),
+                                file_type_unsupported: Some("file_type_unsupported".to_string()),
+                                file_too_large: Some("file_too_large".to_string()),
+                                file_limit_reached: Some("file_limit_reached".to_string()),
+                                typing_indicator: Some("typing_indicator".to_string()),
+                                rich_content_unavailable: Some(
+                                    "rich_content_unavailable".to_string(),
+                                ),
+                                ..Default::default()
+                            }),
+                            styles: Some(WidgetStyles {
+                                base: Some("base".to_string()),
+                                base_hover: Some("base_hover".to_string()),
+                                base_active: Some("base_active".to_string()),
+                                base_border: Some("base_border".to_string()),
+                                base_subtle: Some("base_subtle".to_string()),
+                                base_primary: Some("base_primary".to_string()),
+                                base_error: Some("base_error".to_string()),
+                                accent: Some("accent".to_string()),
+                                accent_hover: Some("accent_hover".to_string()),
+                                accent_active: Some("accent_active".to_string()),
+                                accent_border: Some("accent_border".to_string()),
+                                accent_subtle: Some("accent_subtle".to_string()),
+                                accent_primary: Some("accent_primary".to_string()),
+                                overlay_padding: Some(4.09),
+                                button_radius: Some(8.35),
+                                input_radius: Some(7.58),
+                                bubble_radius: Some(7.16),
+                                sheet_radius: Some(7_f64),
+                                compact_sheet_radius: Some(6.75),
+                                dropdown_sheet_radius: Some(2.4),
+                                ..Default::default()
+                            }),
+                            show_resize_button: Some(true),
+                            end_confirmation_enabled: Some(true),
+                            mobile_fullscreen: Some(true),
+                            transcript_speech_sync_enabled: Some(true),
+                            language_selector: Some(false),
+                            supports_text_only: Some(true),
+                            custom_avatar_path: Some("custom_avatar_path".to_string()),
+                            language_presets: Some(HashMap::from([(
+                                "key".to_string(),
+                                WidgetLanguagePreset {
+                                    terms_text: Some("terms_text".to_string()),
+                                    terms_html: Some("terms_html".to_string()),
+                                    terms_key: Some("terms_key".to_string()),
+                                    ..Default::default()
+                                },
+                            )])),
+                            ..Default::default()
+                        }),
+                        data_collection: Some(HashMap::from([(
+                            "key".to_string(),
+                            AnalysisProperty::builder()
+                                .r#type(AnalysisPropertyType::Boolean)
+                                .description("description")
+                                .r#enum(vec!["enum".to_string()])
+                                .is_system_provided(true)
+                                .dynamic_variable("dynamic_variable")
+                                .allowed_values(
+                                    AllowedValues::builder()
+                                        .dynamic_variable("dynamic_variable")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                )
+                                .is_omitted(true)
+                                .name("name")
+                                .llm(Llm::Gpt4OMini)
+                                .build()
+                                .expect("Failed to build request"),
+                        )])),
+                        data_collection_scopes: Some(HashMap::from([(
+                            "key".to_string(),
+                            AnalysisScope::Conversation,
+                        )])),
+                        analysis_items: Some(AgentAnalysisItemsInput {
+                            evaluation_criteria: Some(vec![AgentAnalysisItemsInputEvaluationCriteriaItem::System {
+                                data: AttachedSystemEvaluationRef::builder()
+                                    .analysis_item_id(
+                                        SystemEvaluationId::SystemEvalCriteriaSentiment,
+                                    )
+                                    .scope(AnalysisScope::Conversation)
+                                    .weight(2.45)
+                                    .build()
+                                    .expect("Failed to build request"),
+                            }]),
+                            data_collection: Some(vec![AgentAnalysisItemsInputDataCollectionItem::System {
+                                data: AttachedSystemDataCollectionRef::builder()
+                                    .analysis_item_id(
+                                        SystemDataCollectionId::SystemDataCollectionTopic,
+                                    )
+                                    .scope(AnalysisScope::Conversation)
+                                    .build()
+                                    .expect("Failed to build request"),
+                            }]),
+                            ..Default::default()
+                        }),
+                        overrides: Some(ConversationInitiationClientDataConfigInput {
+                            conversation_config_override: Some(
+                                ConversationConfigClientOverrideConfigInput::default(),
+                            ),
+                            custom_llm_extra_body: Some(false),
+                            enable_conversation_initiation_client_data_from_webhook: Some(true),
+                            enable_starting_workflow_node_id_from_client: Some(false),
+                            enable_procedure_ids_from_client: Some(false),
+                            ..Default::default()
+                        }),
+                        workspace_overrides: Some(AgentWorkspaceOverridesInput {
+                            conversation_initiation_client_data_webhook: Some(
+                                ConversationInitiationClientDataWebhook::builder()
+                                    .url("url")
+                                    .request_headers(HashMap::new())
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ),
+                            webhooks: Some(ConvAiWebhooks {
+                                post_call_webhook_id: Some("post_call_webhook_id".to_string()),
+                                events: Some(vec![WebhookEventType::Transcript]),
+                                transcript_format: Some(WebhookTranscriptFormat::Json),
+                                exclude_transcript: Some(true),
+                                ..Default::default()
+                            }),
+                            ..Default::default()
+                        }),
+                        testing: Some(AgentTestingSettings {
+                            attached_tests: Some(vec![
+                                AttachedTestModel::builder()
+                                    .test_id("test_id")
+                                    .workflow_node_id("workflow_node_id")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            ..Default::default()
+                        }),
+                        archived: Some(false),
+                        guardrails: Some(GuardrailsV1Input {
+                            version: Some(GuardrailsV1InputVersion::Num1),
+                            focus: Some(FocusGuardrail {
+                                is_enabled: Some(true),
+                                ..Default::default()
+                            }),
+                            prompt_injection: Some(PromptInjectionGuardrail {
+                                is_enabled: Some(false),
+                                ..Default::default()
+                            }),
+                            content: Some(ContentGuardrailInput {
+                                execution_mode: Some(GuardrailExecutionMode::Streaming),
+                                ..Default::default()
+                            }),
+                            custom: Some(CustomGuardrailInput::default()),
+                            ..Default::default()
+                        }),
+                        summary_language: Some("summary_language".to_string()),
+                        auto_translate_transcript_to_app_language: Some(true),
+                        auth: Some(AuthSettings {
+                            enable_auth: Some(false),
+                            allowlist: Some(vec![
+                                AllowlistItem::builder()
+                                    .hostname("hostname")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            require_origin_header: Some(false),
+                            shareable_token: Some("shareable_token".to_string()),
+                            ..Default::default()
+                        }),
+                        call_limits: Some(AgentCallLimits {
+                            agent_concurrency_limit: Some(-1),
+                            daily_limit: Some(100000),
+                            bursting_enabled: Some(true),
+                            ..Default::default()
+                        }),
+                        queueing_config: Some(AgentQueueingConfig {
+                            enabled: Some(false),
+                            wait_timeout_seconds: Some(180),
+                            hold_audio: Some(
+                                AgentHoldAudioConfig::builder()
+                                    .audio_path("audio_path")
+                                    .audio_url("audio_url")
+                                    .original_filename("original_filename")
+                                    .duration_secs(2.19)
+                                    .size_bytes(2)
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ),
+                            ..Default::default()
+                        }),
+                        privacy: Some(PrivacyConfigInput {
+                            record_voice: Some(true),
+                            retention_days: Some(-1),
+                            delete_transcript_and_pii: Some(true),
+                            delete_audio: Some(false),
+                            apply_to_existing_conversations: Some(false),
+                            zero_retention_mode: Some(false),
+                            conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
+                                enabled: Some(true),
+                                entities: Some(vec![ConfigEntityType::Name]),
+                                excluded_data_collection_ids: Some(vec![
+                                    "excluded_data_collection_ids".to_string(),
+                                ]),
+                                ..Default::default()
+                            }),
+                            ..Default::default()
+                        }),
+                        trust_context: Some(AgentTrustContext::Unknown),
+                        analysis_llm: Some(Llm::Gpt4OMini),
+                        topic_discovery: Some(TopicDiscoverySettings::default()),
+                        sentiment_analysis: Some(SentimentAnalysisSettings::default()),
+                        alerting: Some(AlertingSettings {
+                            monitor_configs: Some(HashMap::from([(
+                                "key".to_string(),
+                                AlertingMonitorConfig {
+                                    enabled: Some(true),
+                                    threshold: Some(0.31),
+                                    relative_increase_threshold: Some(4.56),
+                                    min_failure_count: Some(7),
+                                    min_history_bucket_count: Some(9),
+                                    min_sample_count: Some(5),
+                                    suspect_trigger_threshold: Some(8),
+                                    auto_resolve_after_inactive_minutes: Some(7),
+                                    ..Default::default()
+                                },
+                            )])),
+                            auto_resolve_after_inactive_minutes: Some(2),
+                            environments: Some(vec!["environments".to_string()]),
+                            notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
+                                data: AlertingWebhookNotifier::builder()
+                                    .webhook_id("webhook_id")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            }]),
+                            ..Default::default()
+                        }),
+                        ..Default::default()
+                    }),
+                    workflow: Some(AgentWorkflowRequestModel {
+                        edges: Some(HashMap::from([(
+                            "key".to_string(),
+                            WorkflowEdgeModelInput::builder()
+                                .source("source")
+                                .target("target")
+                                .reroutes(vec![PositionInput {
+                                    x: Some(1.15),
+                                    y: Some(5.14),
+                                    ..Default::default()
+                                }])
+                                .build()
+                                .expect("Failed to build request"),
+                        )])),
+                        nodes: Some(HashMap::from([(
+                            "key".to_string(),
+                            AgentWorkflowRequestModelNodes::End {
+                                data: WorkflowEndNodeModelInput {
+                                    position: Some(PositionInput {
+                                        x: Some(1.15),
+                                        y: Some(5.14),
+                                        ..Default::default()
+                                    }),
+                                    edge_order: Some(vec!["edge_order".to_string()]),
+                                    outcome: Some(WorkflowEndNodeOutcome::Success),
+                                    ..Default::default()
+                                },
+                            },
+                        )])),
+                        prevent_subagent_loops: Some(true),
+                        ..Default::default()
+                    }),
+                    ..Default::default()
+                })
                 .branch_id("branch_id")
                 .repeat_count(1)
                 .build()
@@ -21158,6 +22739,112 @@ async fn main() {
 <dd>
 
 **request.document_ids:** `Vec<String>` — The ids of knowledge base documents.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Subagents
+<details><summary><code>client.subagents.<a href="/src/api/resources/subagents/subagents.rs">get_dependents</a>(agent_id: &amp;str, request: &amp;GetDependentsQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetAgentSubagentDependentsResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a list of agents that use this agent as a subagent.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .subagents
+        .get_dependents(
+            "agent_3701k3ttaq12ewp8b7qv5rfyszkz",
+            &GetDependentsQueryRequest {
+                page_size: Some(30),
+                cursor: Some("cursor".to_string()),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — The id of an agent. This is returned on agent creation.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `&GetDependentsQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.page_size:** `Option<i64>` — How many Agents to return at maximum. Can not exceed 100, defaults to 30.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.cursor:** `Option<String>` — Used for fetching next page. Cursor is returned in the response.
     
 </dd>
 </dl>
@@ -21707,7 +23394,7 @@ async fn main() {
             &KnowledgeBaseListQueryRequest {
                 page_size: Some(30),
                 search: Some("search".to_string()),
-                show_only_owned_documents: Some(false),
+                show_only_owned_documents: Some(true),
                 created_by_user_id: Some("created_by_user_id".to_string()),
                 types: Some(vec![]),
                 parent_folder_id: Some("parent_folder_id".to_string()),
@@ -22084,9 +23771,9 @@ async fn main() {
         .calculate_for_agent(
             "agent_id",
             &LlmUsageCalculatorRequestModel {
-                prompt_length: Some(4),
+                prompt_length: Some(7),
                 number_of_pages: Some(10),
-                rag_enabled: Some(true),
+                rag_enabled: Some(false),
                 service_tier: Some(LlmServiceTier::Standard),
                 ..Default::default()
             },
@@ -22174,8 +23861,8 @@ async fn main() {
         .llm_usage
         .calculate(
             &LlmUsageCalculatorPublicRequestModel::builder()
-                .prompt_length(6)
-                .number_of_pages(3)
+                .prompt_length(3)
+                .number_of_pages(8)
                 .rag_enabled(true)
                 .service_tier(LlmServiceTier::Standard)
                 .build()
@@ -22283,7 +23970,7 @@ async fn main() {
                                                 ConversationHistoryMultivoiceMessagePartModel::builder()
                                                     .text("text")
                                                     .voice_label("voice_label")
-                                                    .time_in_call_secs(9)
+                                                    .time_in_call_secs(6)
                                                     .build()
                                                     .expect("Failed to build request"),
                                             ])
@@ -22305,18 +23992,18 @@ async fn main() {
                                     .feedback(
                                         UserFeedback::builder()
                                             .score(UserFeedbackScore::Like)
-                                            .time_in_call_secs(8)
+                                            .time_in_call_secs(0)
                                             .build()
                                             .expect("Failed to build request"),
                                     )
                                     .llm_override("llm_override")
                                     .producing_llm("producing_llm")
-                                    .time_in_call_secs(4)
+                                    .time_in_call_secs(7)
                                     .conversation_turn_metrics(ConversationTurnMetrics {
                                         metrics: Some(HashMap::from([(
                                             "key".to_string(),
                                             MetricRecord::builder()
-                                                .elapsed_time(9.11)
+                                                .elapsed_time(3.08)
                                                 .build()
                                                 .expect("Failed to build request"),
                                         )])),
@@ -22334,7 +24021,7 @@ async fn main() {
                                                 RagChunkMetadata::builder()
                                                     .document_id("document_id")
                                                     .chunk_id("chunk_id")
-                                                    .vector_distance(3.68)
+                                                    .vector_distance(9.64)
                                                     .build()
                                                     .expect("Failed to build request"),
                                             ])
@@ -22342,7 +24029,7 @@ async fn main() {
                                                 EmbeddingModelEnum::E5Mistral7BInstruct,
                                             )
                                             .retrieval_query("retrieval_query")
-                                            .rag_latency_secs(1.31)
+                                            .rag_latency_secs(2.02)
                                             .used_chunk_ids(vec!["used_chunk_ids".to_string()])
                                             .build()
                                             .expect("Failed to build request"),
@@ -22354,7 +24041,7 @@ async fn main() {
                                         )])),
                                         ..Default::default()
                                     })
-                                    .interrupted(true)
+                                    .interrupted(false)
                                     .ignored_as_backchannel(false)
                                     .platform_event(TranscriptPlatformEvent::UserTurnTimeout)
                                     .original_message("original_message")
@@ -22364,13 +24051,13 @@ async fn main() {
                                         ..Default::default()
                                     }])
                                     .source_medium(ChatSourceMedium::Audio)
-                                    .source_event_id(3)
+                                    .source_event_id(9)
                                     .used_static_kb_document_ids(vec![
                                         "used_static_kb_document_ids".to_string(),
                                     ])
                                     .user_identifier("user_identifier")
                                     .id("id")
-                                    .created_at_unix_ms(8)
+                                    .created_at_unix_ms(3)
                                     .triggered_guardrails(vec![
                                         TriggeredGuardrailCommonModel::builder()
                                             .guardrail_type(GuardrailType::Custom)
@@ -22411,7 +24098,7 @@ async fn main() {
                                         ConversationHistoryMultivoiceMessagePartModel::builder()
                                             .text("text")
                                             .voice_label("voice_label")
-                                            .time_in_call_secs(9)
+                                            .time_in_call_secs(6)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
@@ -22426,13 +24113,19 @@ async fn main() {
                                     .tool_id("tool_id")
                                     .params_as_json("params_as_json")
                                     .tool_has_been_called(true)
-                                    .tool_details(ConversationHistoryTranscriptToolCallCommonModelInputToolDetails::ApiIntegrationWebhook {
-                                        data: ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput::builder()
+                                    .tool_details(ConversationHistoryTranscriptToolCallCommonModelInputToolDetails::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput(
+                                        ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput::builder()
+                                            .r#type(
+                                                ApiIntegrationWebhookToolConfigInputType::ApiIntegrationWebhook,
+                                            )
                                             .integration_id("integration_id")
                                             .credential_id("credential_id")
                                             .integration_connection_id("integration_connection_id")
                                             .webhook_details(
                                                 ConversationHistoryTranscriptToolCallWebhookDetails::builder()
+                                                    .r#type(
+                                                        AlertingWebhookNotifierResponseType::Webhook,
+                                                    )
                                                     .method("method")
                                                     .url("url")
                                                     .headers(HashMap::from([(
@@ -22451,9 +24144,18 @@ async fn main() {
                                                     .build()
                                                     .expect("Failed to build request"),
                                             )
+                                            .function_details(
+                                                ConversationHistoryTranscriptToolCallIntegrationFunctionDetails::builder()
+                                                    .resolved_parameters(HashMap::from([(
+                                                        "key".to_string(),
+                                                        "resolved_parameters".to_string(),
+                                                    )]))
+                                                    .build()
+                                                    .expect("Failed to build request"),
+                                            )
                                             .build()
                                             .expect("Failed to build request"),
-                                    })
+                                    ))
                                     .build()
                                     .expect("Failed to build request"),
                             ])
@@ -22461,18 +24163,18 @@ async fn main() {
                             .feedback(
                                 UserFeedback::builder()
                                     .score(UserFeedbackScore::Like)
-                                    .time_in_call_secs(8)
+                                    .time_in_call_secs(0)
                                     .build()
                                     .expect("Failed to build request"),
                             )
                             .llm_override("llm_override")
                             .producing_llm("producing_llm")
-                            .time_in_call_secs(4)
+                            .time_in_call_secs(7)
                             .conversation_turn_metrics(ConversationTurnMetrics {
                                 metrics: Some(HashMap::from([(
                                     "key".to_string(),
                                     MetricRecord::builder()
-                                        .elapsed_time(9.11)
+                                        .elapsed_time(3.08)
                                         .build()
                                         .expect("Failed to build request"),
                                 )])),
@@ -22488,13 +24190,13 @@ async fn main() {
                                         RagChunkMetadata::builder()
                                             .document_id("document_id")
                                             .chunk_id("chunk_id")
-                                            .vector_distance(3.68)
+                                            .vector_distance(9.64)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
                                     .embedding_model(EmbeddingModelEnum::E5Mistral7BInstruct)
                                     .retrieval_query("retrieval_query")
-                                    .rag_latency_secs(1.31)
+                                    .rag_latency_secs(2.02)
                                     .used_chunk_ids(vec!["used_chunk_ids".to_string()])
                                     .build()
                                     .expect("Failed to build request"),
@@ -22504,23 +24206,23 @@ async fn main() {
                                     "key".to_string(),
                                     LlmInputOutputTokensUsage {
                                         input: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(8),
-                                            price: Some(3.59),
+                                            tokens: Some(4),
+                                            price: Some(0.91),
                                             ..Default::default()
                                         }),
                                         input_cache_read: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(8),
-                                            price: Some(3.59),
+                                            tokens: Some(4),
+                                            price: Some(0.91),
                                             ..Default::default()
                                         }),
                                         input_cache_write: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(8),
-                                            price: Some(3.59),
+                                            tokens: Some(4),
+                                            price: Some(0.91),
                                             ..Default::default()
                                         }),
                                         output_total: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(8),
-                                            price: Some(3.59),
+                                            tokens: Some(4),
+                                            price: Some(0.91),
                                             ..Default::default()
                                         }),
                                         ..Default::default()
@@ -22528,7 +24230,7 @@ async fn main() {
                                 )])),
                                 ..Default::default()
                             })
-                            .interrupted(true)
+                            .interrupted(false)
                             .ignored_as_backchannel(false)
                             .platform_event(TranscriptPlatformEvent::UserTurnTimeout)
                             .original_message("original_message")
@@ -22538,13 +24240,13 @@ async fn main() {
                                 ..Default::default()
                             }])
                             .source_medium(ChatSourceMedium::Audio)
-                            .source_event_id(3)
+                            .source_event_id(9)
                             .used_static_kb_document_ids(vec![
                                 "used_static_kb_document_ids".to_string(),
                             ])
                             .user_identifier("user_identifier")
                             .id("id")
-                            .created_at_unix_ms(8)
+                            .created_at_unix_ms(3)
                             .triggered_guardrails(vec![
                                 TriggeredGuardrailCommonModel::builder()
                                     .guardrail_type(GuardrailType::Custom)
@@ -22837,7 +24539,7 @@ async fn main() {
                                                 ConversationHistoryMultivoiceMessagePartModel::builder()
                                                     .text("text")
                                                     .voice_label("voice_label")
-                                                    .time_in_call_secs(9)
+                                                    .time_in_call_secs(6)
                                                     .build()
                                                     .expect("Failed to build request"),
                                             ])
@@ -22859,18 +24561,18 @@ async fn main() {
                                     .feedback(
                                         UserFeedback::builder()
                                             .score(UserFeedbackScore::Like)
-                                            .time_in_call_secs(8)
+                                            .time_in_call_secs(0)
                                             .build()
                                             .expect("Failed to build request"),
                                     )
                                     .llm_override("llm_override")
                                     .producing_llm("producing_llm")
-                                    .time_in_call_secs(4)
+                                    .time_in_call_secs(7)
                                     .conversation_turn_metrics(ConversationTurnMetrics {
                                         metrics: Some(HashMap::from([(
                                             "key".to_string(),
                                             MetricRecord::builder()
-                                                .elapsed_time(9.11)
+                                                .elapsed_time(3.08)
                                                 .build()
                                                 .expect("Failed to build request"),
                                         )])),
@@ -22888,7 +24590,7 @@ async fn main() {
                                                 RagChunkMetadata::builder()
                                                     .document_id("document_id")
                                                     .chunk_id("chunk_id")
-                                                    .vector_distance(3.68)
+                                                    .vector_distance(9.64)
                                                     .build()
                                                     .expect("Failed to build request"),
                                             ])
@@ -22896,7 +24598,7 @@ async fn main() {
                                                 EmbeddingModelEnum::E5Mistral7BInstruct,
                                             )
                                             .retrieval_query("retrieval_query")
-                                            .rag_latency_secs(1.31)
+                                            .rag_latency_secs(2.02)
                                             .used_chunk_ids(vec!["used_chunk_ids".to_string()])
                                             .build()
                                             .expect("Failed to build request"),
@@ -22908,7 +24610,7 @@ async fn main() {
                                         )])),
                                         ..Default::default()
                                     })
-                                    .interrupted(true)
+                                    .interrupted(false)
                                     .ignored_as_backchannel(false)
                                     .platform_event(TranscriptPlatformEvent::UserTurnTimeout)
                                     .original_message("original_message")
@@ -22918,13 +24620,13 @@ async fn main() {
                                         ..Default::default()
                                     }])
                                     .source_medium(ChatSourceMedium::Audio)
-                                    .source_event_id(3)
+                                    .source_event_id(9)
                                     .used_static_kb_document_ids(vec![
                                         "used_static_kb_document_ids".to_string(),
                                     ])
                                     .user_identifier("user_identifier")
                                     .id("id")
-                                    .created_at_unix_ms(8)
+                                    .created_at_unix_ms(3)
                                     .triggered_guardrails(vec![
                                         TriggeredGuardrailCommonModel::builder()
                                             .guardrail_type(GuardrailType::Custom)
@@ -22965,7 +24667,7 @@ async fn main() {
                                         ConversationHistoryMultivoiceMessagePartModel::builder()
                                             .text("text")
                                             .voice_label("voice_label")
-                                            .time_in_call_secs(9)
+                                            .time_in_call_secs(6)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
@@ -22980,13 +24682,19 @@ async fn main() {
                                     .tool_id("tool_id")
                                     .params_as_json("params_as_json")
                                     .tool_has_been_called(true)
-                                    .tool_details(ConversationHistoryTranscriptToolCallCommonModelInputToolDetails::ApiIntegrationWebhook {
-                                        data: ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput::builder()
+                                    .tool_details(ConversationHistoryTranscriptToolCallCommonModelInputToolDetails::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput(
+                                        ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput::builder()
+                                            .r#type(
+                                                ApiIntegrationWebhookToolConfigInputType::ApiIntegrationWebhook,
+                                            )
                                             .integration_id("integration_id")
                                             .credential_id("credential_id")
                                             .integration_connection_id("integration_connection_id")
                                             .webhook_details(
                                                 ConversationHistoryTranscriptToolCallWebhookDetails::builder()
+                                                    .r#type(
+                                                        AlertingWebhookNotifierResponseType::Webhook,
+                                                    )
                                                     .method("method")
                                                     .url("url")
                                                     .headers(HashMap::from([(
@@ -23005,9 +24713,18 @@ async fn main() {
                                                     .build()
                                                     .expect("Failed to build request"),
                                             )
+                                            .function_details(
+                                                ConversationHistoryTranscriptToolCallIntegrationFunctionDetails::builder()
+                                                    .resolved_parameters(HashMap::from([(
+                                                        "key".to_string(),
+                                                        "resolved_parameters".to_string(),
+                                                    )]))
+                                                    .build()
+                                                    .expect("Failed to build request"),
+                                            )
                                             .build()
                                             .expect("Failed to build request"),
-                                    })
+                                    ))
                                     .build()
                                     .expect("Failed to build request"),
                             ])
@@ -23015,18 +24732,18 @@ async fn main() {
                             .feedback(
                                 UserFeedback::builder()
                                     .score(UserFeedbackScore::Like)
-                                    .time_in_call_secs(8)
+                                    .time_in_call_secs(0)
                                     .build()
                                     .expect("Failed to build request"),
                             )
                             .llm_override("llm_override")
                             .producing_llm("producing_llm")
-                            .time_in_call_secs(4)
+                            .time_in_call_secs(7)
                             .conversation_turn_metrics(ConversationTurnMetrics {
                                 metrics: Some(HashMap::from([(
                                     "key".to_string(),
                                     MetricRecord::builder()
-                                        .elapsed_time(9.11)
+                                        .elapsed_time(3.08)
                                         .build()
                                         .expect("Failed to build request"),
                                 )])),
@@ -23042,13 +24759,13 @@ async fn main() {
                                         RagChunkMetadata::builder()
                                             .document_id("document_id")
                                             .chunk_id("chunk_id")
-                                            .vector_distance(3.68)
+                                            .vector_distance(9.64)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
                                     .embedding_model(EmbeddingModelEnum::E5Mistral7BInstruct)
                                     .retrieval_query("retrieval_query")
-                                    .rag_latency_secs(1.31)
+                                    .rag_latency_secs(2.02)
                                     .used_chunk_ids(vec!["used_chunk_ids".to_string()])
                                     .build()
                                     .expect("Failed to build request"),
@@ -23058,23 +24775,23 @@ async fn main() {
                                     "key".to_string(),
                                     LlmInputOutputTokensUsage {
                                         input: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(8),
-                                            price: Some(3.59),
+                                            tokens: Some(4),
+                                            price: Some(0.91),
                                             ..Default::default()
                                         }),
                                         input_cache_read: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(8),
-                                            price: Some(3.59),
+                                            tokens: Some(4),
+                                            price: Some(0.91),
                                             ..Default::default()
                                         }),
                                         input_cache_write: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(8),
-                                            price: Some(3.59),
+                                            tokens: Some(4),
+                                            price: Some(0.91),
                                             ..Default::default()
                                         }),
                                         output_total: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(8),
-                                            price: Some(3.59),
+                                            tokens: Some(4),
+                                            price: Some(0.91),
                                             ..Default::default()
                                         }),
                                         ..Default::default()
@@ -23082,7 +24799,7 @@ async fn main() {
                                 )])),
                                 ..Default::default()
                             })
-                            .interrupted(true)
+                            .interrupted(false)
                             .ignored_as_backchannel(false)
                             .platform_event(TranscriptPlatformEvent::UserTurnTimeout)
                             .original_message("original_message")
@@ -23092,13 +24809,13 @@ async fn main() {
                                 ..Default::default()
                             }])
                             .source_medium(ChatSourceMedium::Audio)
-                            .source_event_id(3)
+                            .source_event_id(9)
                             .used_static_kb_document_ids(vec![
                                 "used_static_kb_document_ids".to_string(),
                             ])
                             .user_identifier("user_identifier")
                             .id("id")
-                            .created_at_unix_ms(8)
+                            .created_at_unix_ms(3)
                             .triggered_guardrails(vec![
                                 TriggeredGuardrailCommonModel::builder()
                                     .guardrail_type(GuardrailType::Custom)
@@ -23376,7 +25093,7 @@ async fn main() {
                 search: Some("search".to_string()),
                 parent_folder_id: Some("parent_folder_id".to_string()),
                 types: Some(vec![]),
-                include_folders: Some(true),
+                include_folders: Some(false),
                 sort_mode: Some(SortMode::Default),
                 sharing_mode: Some(TestSharingMode::All),
                 created_by_user_id: Some("created_by_user_id".to_string()),
@@ -23873,8 +25590,8 @@ async fn main() {
                 branch_id: Some("branch_id".to_string()),
                 created_by_user_id: Some("created_by_user_id".to_string()),
                 test_id: Some("test_id".to_string()),
-                start_time: Some(5),
-                end_time: Some(3),
+                start_time: Some(0),
+                end_time: Some(8),
                 version_id: Some("version_id".to_string()),
                 page_size: Some(30),
                 search: Some("search".to_string()),
@@ -24267,633 +25984,624 @@ async fn main() {
             "test_invocation_id",
             &ResubmitTestsRequestModel::builder()
                 .test_run_ids(vec!["test_run_ids".to_string()])
-                .agent_config_override(
-                    AdhocAgentConfigOverrideForTestRequestModel::builder()
-                        .conversation_config(ConversationalConfig {
-                            asr: Some(AsrConversationalConfig {
-                                quality: Some(AsrQuality::High),
-                                provider: Some(AsrProvider::Elevenlabs),
-                                user_input_audio_format: Some(AsrInputFormat::Pcm8000),
-                                keywords: Some(vec!["keywords".to_string()]),
-                                ..Default::default()
-                            }),
-                            turn: Some(TurnConfig {
-                                turn_timeout: Some(7_f64),
-                                initial_wait_time: Some(8.95),
-                                silence_end_call_timeout: Some(-1_f64),
-                                turn_eagerness: Some(TurnEagerness::Patient),
-                                spelling_patience: Some(SpellingPatience::Auto),
-                                speculative_turn: Some(false),
-                                retranscribe_on_turn_timeout: Some(false),
-                                turn_model: Some(TurnModel::TurnV2),
-                                interruption_ignore_terms: Some(vec![
-                                    "interruption_ignore_terms".to_string(),
-                                ]),
-                                interruption_ignore_term_languages: Some(vec![
-                                    "interruption_ignore_term_languages".to_string(),
-                                ]),
-                                merge_with_default_ignore_terms: Some(true),
-                                transcribe_on_disabled_interruptions: Some(false),
-                                soft_timeout_config: Some(SoftTimeoutConfig {
-                                    timeout_seconds: Some(-1_f64),
-                                    message: Some("Hhmmmm...yeah.".to_string()),
-                                    additional_soft_timeout_messages: Some(vec![
-                                        "additional_soft_timeout_messages".to_string(),
-                                    ]),
-                                    use_llm_generated_message: Some(true),
-                                    randomize_fillers: Some(false),
-                                    max_soft_timeouts_per_generation: Some(1),
-                                    llm_generated_message_prompt_override: Some(
-                                        "llm_generated_message_prompt_override".to_string(),
-                                    ),
-                                    disable_until_first_user_message: Some(true),
-                                    ..Default::default()
-                                }),
-                                noisy_environment_detection: Some(true),
-                                noisy_environment_message: Some(
-                                    "Uhh ... sorry, I\'m picking up some noise in the background. Could you move somewhere quieter?".to_string(),
-                                ),
-                                ..Default::default()
-                            }),
-                            tts: Some(TtsConversationalConfigInput {
-                                model_id: Some(TtsConversationalModel::ElevenTurboV2),
-                                voice_id: Some("cjVigY5qzO86Huf0OWal".to_string()),
-                                supported_voices: Some(vec![
-                                    SupportedVoice::builder()
-                                        .label("label")
-                                        .voice_id("voice_id")
-                                        .description("description")
-                                        .language("language")
-                                        .model_family(TtsModelFamily::Turbo)
-                                        .optimize_streaming_latency(
-                                            TtsOptimizeStreamingLatency::Num0,
-                                        )
-                                        .stability(0.1)
-                                        .speed(0.85)
-                                        .similarity_boost(0.42)
-                                        .clone_strength(0.25)
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                expressive_mode: Some(true),
-                                suggested_audio_tags: Some(vec![
-                                    SuggestedAudioTag::builder()
-                                        .tag("tag")
-                                        .description("description")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                                optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
-                                stability: Some(0.5),
-                                speed: Some(1_f64),
-                                similarity_boost: Some(0.8),
-                                clone_strength: Some(0.01),
-                                text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
-                                pronunciation_dictionary_locators: Some(vec![
-                                    PydanticPronunciationDictionaryVersionLocator::builder()
-                                        .pronunciation_dictionary_id("pronunciation_dictionary_id")
-                                        .version_id("version_id")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                enable_phoneme_tags: Some(true),
-                                audio_effects: Some(EffectsSpecInput {
-                                    filter_preset_id: Some("filter_preset_id".to_string()),
-                                    distance: Some(0.89),
-                                    environment_id: Some("environment_id".to_string()),
-                                    background_noise_id: Some("background_noise_id".to_string()),
-                                    send_level: Some(1_f64),
-                                    pan: Some(-0.33),
-                                    ..Default::default()
-                                }),
-                                ..Default::default()
-                            }),
-                            conversation: Some(ConversationConfigInput {
-                                text_only: Some(false),
-                                max_duration_seconds: Some(600),
-                                client_events: Some(vec![
-                                    ClientEvent::ConversationInitiationMetadata,
-                                ]),
-                                file_input: Some(FileInputConfig {
-                                    enabled: Some(true),
-                                    max_files_in_memory: Some(10),
-                                    max_files_per_conversation: Some(10),
-                                    ..Default::default()
-                                }),
-                                monitoring_enabled: Some(false),
-                                monitoring_events: Some(vec![
-                                    ClientEvent::ConversationInitiationMetadata,
-                                ]),
-                                dtmf_input_settings: Some(DtmfInputConfig {
-                                    dtmf_input_timeout: Some(2_f64),
-                                    hash_terminator: Some(true),
-                                    redact_input: Some(false),
-                                    ..Default::default()
-                                }),
-                                background_sound: Some(BackgroundSoundConfig {
-                                    source_type: Some(BackgroundSoundSourceType::Preset),
-                                    source_id: Some(BackgroundSoundPresetId::Office2),
-                                    volume: Some(0.15),
-                                    crossfade_loop: Some(true),
-                                    ..Default::default()
-                                }),
-                                source_attribution: Some(false),
-                                ..Default::default()
-                            }),
-                            language_presets: Some(HashMap::from([(
-                                "key".to_string(),
-                                LanguagePresetInput::builder()
-                                    .overrides(ConversationConfigClientOverrideInput::default())
-                                    .first_message_translation(
-                                        LanguagePresetTranslation::builder()
-                                            .source_hash("source_hash")
-                                            .text("text")
-                                            .build()
-                                            .expect("Failed to build request"),
-                                    )
-                                    .soft_timeout_translation(
-                                        LanguagePresetTranslation::builder()
-                                            .source_hash("source_hash")
-                                            .text("text")
-                                            .build()
-                                            .expect("Failed to build request"),
-                                    )
-                                    .noisy_environment_message_translation(
-                                        LanguagePresetTranslation::builder()
-                                            .source_hash("source_hash")
-                                            .text("text")
-                                            .build()
-                                            .expect("Failed to build request"),
-                                    )
-                                    .build()
-                                    .expect("Failed to build request"),
-                            )])),
-                            vad: Some(VadConfig::default()),
-                            agent: Some(AgentConfig {
-                                first_message: Some("first_message".to_string()),
-                                language: Some("en".to_string()),
-                                hinglish_mode: Some(true),
-                                dynamic_variables: Some(DynamicVariablesConfigInput(
-                                    elevenlabs_rust_sdk::serde_json::json!({}),
-                                )),
-                                disable_first_message_interruptions: Some(true),
-                                max_conversation_duration_message: Some(
-                                    "max_conversation_duration_message".to_string(),
-                                ),
-                                text_behavior_overrides: Some(HashMap::from([(
-                                    "key".to_string(),
-                                    BehaviorOverride {
-                                        verbosity: Some(Verbosity::Auto),
-                                        output_format: Some(
-                                            BehaviorOverrideOutputFormat::Mp3_22050_32,
-                                        ),
-                                        interaction_budget: Some(InteractionBudget::Realtime),
-                                        ..Default::default()
-                                    },
-                                )])),
-                                prompt: Some(PromptAgentApiModelInput {
-                                    prompt: Some("prompt".to_string()),
-                                    llm: Some(Llm::Gpt4OMini),
-                                    reasoning_effort: Some(LlmReasoningEffort::None),
-                                    service_tier: Some(LlmServiceTier::Standard),
-                                    thinking_budget: Some(0),
-                                    enable_reasoning_summary: Some(true),
-                                    temperature: Some(7.03),
-                                    max_tokens: Some(-1),
-                                    tool_ids: Some(vec!["tool_ids".to_string()]),
-                                    tool_ids_strict: Some(true),
-                                    enable_parallel_tool_calls: Some(true),
-                                    mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
-                                    native_mcp_server_ids: Some(vec![
-                                        "native_mcp_server_ids".to_string(),
-                                    ]),
-                                    knowledge_base: Some(vec![]),
-                                    ignore_default_personality: Some(true),
-                                    timezone: Some("timezone".to_string()),
-                                    cascade_timeout_seconds: Some(4_f64),
-                                    ..Default::default()
-                                }),
-                                ..Default::default()
-                            }),
+                .agent_config_override(AdhocAgentConfigOverrideForTestRequestModel {
+                    conversation_config: Some(ConversationalConfig {
+                        asr: Some(AsrConversationalConfig {
+                            quality: Some(AsrQuality::High),
+                            provider: Some(AsrProvider::Elevenlabs),
+                            user_input_audio_format: Some(AsrInputFormat::Pcm8000),
+                            keywords: Some(vec!["keywords".to_string()]),
                             ..Default::default()
-                        })
-                        .platform_settings(AgentPlatformSettingsRequestModel {
-                            evaluation: Some(EvaluationSettingsInput {
-                                criteria: Some(vec![
-                                    PromptEvaluationCriteria::builder()
-                                        .id("id")
-                                        .name("name")
-                                        .r#type(PromptEvaluationCriteriaType::Prompt)
-                                        .conversation_goal_prompt("conversation_goal_prompt")
-                                        .use_knowledge_base(false)
-                                        .scope(AnalysisScope::Conversation)
-                                        .llm(Llm::Gpt4OMini)
-                                        .scoring_mode(CriteriaScoringMode::Binary)
-                                        .max_score(100)
-                                        .score_instructions("score_instructions")
-                                        .build()
-                                        .expect("Failed to build request"),
+                        }),
+                        turn: Some(TurnConfig {
+                            turn_timeout: Some(7_f64),
+                            initial_wait_time: Some(0.63),
+                            silence_end_call_timeout: Some(-1_f64),
+                            turn_eagerness: Some(TurnEagerness::Patient),
+                            spelling_patience: Some(SpellingPatience::Auto),
+                            speculative_turn: Some(false),
+                            retranscribe_on_turn_timeout: Some(true),
+                            turn_model: Some(TurnModel::TurnV2),
+                            interruption_ignore_terms: Some(vec![
+                                "interruption_ignore_terms".to_string(),
+                            ]),
+                            interruption_ignore_term_languages: Some(vec![
+                                "interruption_ignore_term_languages".to_string(),
+                            ]),
+                            merge_with_default_ignore_terms: Some(false),
+                            transcribe_on_disabled_interruptions: Some(true),
+                            soft_timeout_config: Some(SoftTimeoutConfig {
+                                timeout_seconds: Some(-1_f64),
+                                message: Some("Hhmmmm...yeah.".to_string()),
+                                additional_soft_timeout_messages: Some(vec![
+                                    "additional_soft_timeout_messages".to_string(),
                                 ]),
+                                use_llm_generated_message: Some(true),
+                                randomize_fillers: Some(false),
+                                max_soft_timeouts_per_generation: Some(1),
+                                llm_generated_message_prompt_override: Some(
+                                    "llm_generated_message_prompt_override".to_string(),
+                                ),
+                                disable_until_first_user_message: Some(false),
                                 ..Default::default()
                             }),
-                            widget: Some(WidgetConfig {
-                                variant: Some(EmbedVariant::Tiny),
-                                placement: Some(WidgetPlacement::TopLeft),
-                                expandable: Some(WidgetExpandable::Never),
-                                avatar: Some(WidgetConfigAvatar::Orb {
-                                    data: OrbAvatar {
-                                        color_1: Some("#2792dc".to_string()),
-                                        color_2: Some("#9ce6e6".to_string()),
-                                        ..Default::default()
-                                    },
-                                }),
-                                feedback_mode: Some(WidgetFeedbackMode::None),
-                                end_feedback: Some(WidgetEndFeedbackConfig {
-                                    r#type: Some(WidgetEndFeedbackType::Rating),
-                                    ..Default::default()
-                                }),
-                                bg_color: Some("#ffffff".to_string()),
-                                text_color: Some("#000000".to_string()),
-                                btn_color: Some("#000000".to_string()),
-                                btn_text_color: Some("#ffffff".to_string()),
-                                border_color: Some("#e1e1e1".to_string()),
-                                focus_color: Some("#000000".to_string()),
-                                border_radius: Some(10),
-                                btn_radius: Some(0),
-                                action_text: Some("action_text".to_string()),
-                                start_call_text: Some("start_call_text".to_string()),
-                                end_call_text: Some("end_call_text".to_string()),
-                                expand_text: Some("expand_text".to_string()),
-                                listening_text: Some("listening_text".to_string()),
-                                speaking_text: Some("speaking_text".to_string()),
-                                shareable_page_text: Some("shareable_page_text".to_string()),
-                                shareable_page_show_terms: Some(true),
-                                terms_text: Some("terms_text".to_string()),
-                                terms_html: Some("terms_html".to_string()),
-                                terms_key: Some("terms_key".to_string()),
-                                show_avatar_when_collapsed: Some(true),
-                                disable_banner: Some(true),
-                                override_link: Some("override_link".to_string()),
-                                markdown_link_allowed_hosts: Some(vec![
-                                    AllowlistItem::builder()
-                                        .hostname("hostname")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                markdown_link_include_www: Some(true),
-                                markdown_link_allow_http: Some(true),
-                                mic_muting_enabled: Some(true),
-                                transcript_enabled: Some(true),
-                                text_input_enabled: Some(true),
-                                conversation_mode_toggle_enabled: Some(true),
-                                default_expanded: Some(true),
-                                always_expanded: Some(false),
-                                dismissible: Some(true),
-                                show_agent_status: Some(true),
-                                show_conversation_id: Some(true),
-                                strip_audio_tags: Some(true),
-                                syntax_highlight_theme: Some(Theme::Light),
-                                text_contents: Some(WidgetTextContents {
-                                    main_label: Some("main_label".to_string()),
-                                    start_call: Some("start_call".to_string()),
-                                    start_chat: Some("start_chat".to_string()),
-                                    new_call: Some("new_call".to_string()),
-                                    end_call: Some("end_call".to_string()),
-                                    mute_microphone: Some("mute_microphone".to_string()),
-                                    change_language: Some("change_language".to_string()),
-                                    collapse: Some("collapse".to_string()),
-                                    expand: Some("expand".to_string()),
-                                    copied: Some("copied".to_string()),
-                                    accept_terms: Some("accept_terms".to_string()),
-                                    dismiss_terms: Some("dismiss_terms".to_string()),
-                                    listening_status: Some("listening_status".to_string()),
-                                    speaking_status: Some("speaking_status".to_string()),
-                                    connecting_status: Some("connecting_status".to_string()),
-                                    chatting_status: Some("chatting_status".to_string()),
-                                    queue_waiting_status: Some("queue_waiting_status".to_string()),
-                                    queue_waiting_status_short: Some(
-                                        "queue_waiting_status_short".to_string(),
-                                    ),
-                                    input_label: Some("input_label".to_string()),
-                                    input_placeholder: Some("input_placeholder".to_string()),
-                                    input_placeholder_text_only: Some(
-                                        "input_placeholder_text_only".to_string(),
-                                    ),
-                                    input_placeholder_new_conversation: Some(
-                                        "input_placeholder_new_conversation".to_string(),
-                                    ),
-                                    user_ended_conversation: Some(
-                                        "user_ended_conversation".to_string(),
-                                    ),
-                                    agent_ended_conversation: Some(
-                                        "agent_ended_conversation".to_string(),
-                                    ),
-                                    conversation_id: Some("conversation_id".to_string()),
-                                    error_occurred: Some("error_occurred".to_string()),
-                                    queue_timed_out: Some("queue_timed_out".to_string()),
-                                    copy_id: Some("copy_id".to_string()),
-                                    initiate_feedback: Some("initiate_feedback".to_string()),
-                                    request_follow_up_feedback: Some(
-                                        "request_follow_up_feedback".to_string(),
-                                    ),
-                                    thanks_for_feedback: Some("thanks_for_feedback".to_string()),
-                                    thanks_for_feedback_details: Some(
-                                        "thanks_for_feedback_details".to_string(),
-                                    ),
-                                    follow_up_feedback_placeholder: Some(
-                                        "follow_up_feedback_placeholder".to_string(),
-                                    ),
-                                    submit: Some("submit".to_string()),
-                                    go_back: Some("go_back".to_string()),
-                                    send_message: Some("send_message".to_string()),
-                                    text_mode: Some("text_mode".to_string()),
-                                    voice_mode: Some("voice_mode".to_string()),
-                                    switched_to_text_mode: Some(
-                                        "switched_to_text_mode".to_string(),
-                                    ),
-                                    switched_to_voice_mode: Some(
-                                        "switched_to_voice_mode".to_string(),
-                                    ),
-                                    copy: Some("copy".to_string()),
-                                    download: Some("download".to_string()),
-                                    wrap: Some("wrap".to_string()),
-                                    agent_working: Some("agent_working".to_string()),
-                                    agent_done: Some("agent_done".to_string()),
-                                    agent_error: Some("agent_error".to_string()),
-                                    attach_file: Some("attach_file".to_string()),
-                                    remove_file: Some("remove_file".to_string()),
-                                    file_upload_error: Some("file_upload_error".to_string()),
-                                    file_type_unsupported: Some(
-                                        "file_type_unsupported".to_string(),
-                                    ),
-                                    file_too_large: Some("file_too_large".to_string()),
-                                    file_limit_reached: Some("file_limit_reached".to_string()),
-                                    typing_indicator: Some("typing_indicator".to_string()),
-                                    rich_content_unavailable: Some(
-                                        "rich_content_unavailable".to_string(),
-                                    ),
-                                    ..Default::default()
-                                }),
-                                styles: Some(WidgetStyles {
-                                    base: Some("base".to_string()),
-                                    base_hover: Some("base_hover".to_string()),
-                                    base_active: Some("base_active".to_string()),
-                                    base_border: Some("base_border".to_string()),
-                                    base_subtle: Some("base_subtle".to_string()),
-                                    base_primary: Some("base_primary".to_string()),
-                                    base_error: Some("base_error".to_string()),
-                                    accent: Some("accent".to_string()),
-                                    accent_hover: Some("accent_hover".to_string()),
-                                    accent_active: Some("accent_active".to_string()),
-                                    accent_border: Some("accent_border".to_string()),
-                                    accent_subtle: Some("accent_subtle".to_string()),
-                                    accent_primary: Some("accent_primary".to_string()),
-                                    overlay_padding: Some(3.33),
-                                    button_radius: Some(7.36),
-                                    input_radius: Some(9.19),
-                                    bubble_radius: Some(0.84),
-                                    sheet_radius: Some(2.21),
-                                    compact_sheet_radius: Some(0.2),
-                                    dropdown_sheet_radius: Some(9.69),
-                                    ..Default::default()
-                                }),
-                                show_resize_button: Some(true),
-                                end_confirmation_enabled: Some(false),
-                                mobile_fullscreen: Some(true),
-                                transcript_speech_sync_enabled: Some(true),
-                                language_selector: Some(true),
-                                supports_text_only: Some(true),
-                                custom_avatar_path: Some("custom_avatar_path".to_string()),
-                                language_presets: Some(HashMap::from([(
-                                    "key".to_string(),
-                                    WidgetLanguagePreset {
-                                        terms_text: Some("terms_text".to_string()),
-                                        terms_html: Some("terms_html".to_string()),
-                                        terms_key: Some("terms_key".to_string()),
-                                        ..Default::default()
-                                    },
-                                )])),
-                                ..Default::default()
-                            }),
-                            data_collection: Some(HashMap::from([(
-                                "key".to_string(),
-                                AnalysisProperty::builder()
-                                    .r#type(AnalysisPropertyType::Boolean)
+                            noisy_environment_detection: Some(true),
+                            noisy_environment_message: Some(
+                                "Uhh ... sorry, I\'m picking up some noise in the background. Could you move somewhere quieter?".to_string(),
+                            ),
+                            ..Default::default()
+                        }),
+                        tts: Some(TtsConversationalConfigInput {
+                            model_id: Some(TtsConversationalModel::ElevenTurboV2),
+                            voice_id: Some("cjVigY5qzO86Huf0OWal".to_string()),
+                            supported_voices: Some(vec![
+                                SupportedVoice::builder()
+                                    .label("label")
+                                    .voice_id("voice_id")
                                     .description("description")
-                                    .r#enum(vec!["enum".to_string()])
-                                    .is_system_provided(false)
-                                    .dynamic_variable("dynamic_variable")
-                                    .allowed_values(
-                                        AllowedValues::builder()
-                                            .dynamic_variable("dynamic_variable")
-                                            .build()
-                                            .expect("Failed to build request"),
-                                    )
-                                    .is_omitted(false)
-                                    .name("name")
-                                    .llm(Llm::Gpt4OMini)
+                                    .language("language")
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .stability(0.42)
+                                    .speed(0.78)
+                                    .similarity_boost(0.33)
+                                    .clone_strength(0.41)
                                     .build()
                                     .expect("Failed to build request"),
-                            )])),
-                            data_collection_scopes: Some(HashMap::from([(
-                                "key".to_string(),
-                                AnalysisScope::Conversation,
-                            )])),
-                            analysis_items: Some(AgentAnalysisItemsInput {
-                                evaluation_criteria: Some(vec![AgentAnalysisItemsInputEvaluationCriteriaItem::System {
-                                    data: AttachedSystemEvaluationRef::builder()
-                                        .analysis_item_id(
-                                            SystemEvaluationId::SystemEvalCriteriaSentiment,
-                                        )
-                                        .scope(AnalysisScope::Conversation)
-                                        .weight(5.24)
-                                        .build()
-                                        .expect("Failed to build request"),
-                                }]),
-                                data_collection: Some(vec![AgentAnalysisItemsInputDataCollectionItem::System {
-                                    data: AttachedSystemDataCollectionRef::builder()
-                                        .analysis_item_id(
-                                            SystemDataCollectionId::SystemDataCollectionTopic,
-                                        )
-                                        .scope(AnalysisScope::Conversation)
-                                        .build()
-                                        .expect("Failed to build request"),
-                                }]),
-                                ..Default::default()
-                            }),
-                            overrides: Some(ConversationInitiationClientDataConfigInput {
-                                conversation_config_override: Some(
-                                    ConversationConfigClientOverrideConfigInput::default(),
-                                ),
-                                custom_llm_extra_body: Some(false),
-                                enable_conversation_initiation_client_data_from_webhook: Some(true),
-                                enable_starting_workflow_node_id_from_client: Some(true),
-                                enable_procedure_ids_from_client: Some(false),
-                                ..Default::default()
-                            }),
-                            workspace_overrides: Some(AgentWorkspaceOverridesInput {
-                                conversation_initiation_client_data_webhook: Some(
-                                    ConversationInitiationClientDataWebhook::builder()
-                                        .url("url")
-                                        .request_headers(HashMap::new())
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ),
-                                webhooks: Some(ConvAiWebhooks {
-                                    post_call_webhook_id: Some("post_call_webhook_id".to_string()),
-                                    events: Some(vec![WebhookEventType::Transcript]),
-                                    transcript_format: Some(WebhookTranscriptFormat::Json),
-                                    exclude_transcript: Some(true),
-                                    ..Default::default()
-                                }),
-                                ..Default::default()
-                            }),
-                            testing: Some(AgentTestingSettings {
-                                attached_tests: Some(vec![
-                                    AttachedTestModel::builder()
-                                        .test_id("test_id")
-                                        .workflow_node_id("workflow_node_id")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                ..Default::default()
-                            }),
-                            archived: Some(false),
-                            guardrails: Some(GuardrailsV1Input {
-                                version: Some(GuardrailsV1InputVersion::Num1),
-                                focus: Some(FocusGuardrail {
-                                    is_enabled: Some(true),
-                                    ..Default::default()
-                                }),
-                                prompt_injection: Some(PromptInjectionGuardrail {
-                                    is_enabled: Some(false),
-                                    ..Default::default()
-                                }),
-                                content: Some(ContentGuardrailInput {
-                                    execution_mode: Some(GuardrailExecutionMode::Streaming),
-                                    ..Default::default()
-                                }),
-                                custom: Some(CustomGuardrailInput::default()),
-                                ..Default::default()
-                            }),
-                            summary_language: Some("summary_language".to_string()),
-                            auto_translate_transcript_to_app_language: Some(false),
-                            auth: Some(AuthSettings {
-                                enable_auth: Some(false),
-                                allowlist: Some(vec![
-                                    AllowlistItem::builder()
-                                        .hostname("hostname")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ]),
-                                require_origin_header: Some(false),
-                                shareable_token: Some("shareable_token".to_string()),
-                                ..Default::default()
-                            }),
-                            call_limits: Some(AgentCallLimits {
-                                agent_concurrency_limit: Some(-1),
-                                daily_limit: Some(100000),
-                                bursting_enabled: Some(true),
-                                ..Default::default()
-                            }),
-                            queueing_config: Some(AgentQueueingConfig {
-                                enabled: Some(true),
-                                wait_timeout_seconds: Some(180),
-                                hold_audio: Some(
-                                    AgentHoldAudioConfig::builder()
-                                        .audio_path("audio_path")
-                                        .audio_url("audio_url")
-                                        .original_filename("original_filename")
-                                        .duration_secs(3.08)
-                                        .size_bytes(0)
-                                        .build()
-                                        .expect("Failed to build request"),
-                                ),
-                                ..Default::default()
-                            }),
-                            privacy: Some(PrivacyConfigInput {
-                                record_voice: Some(true),
-                                retention_days: Some(-1),
-                                delete_transcript_and_pii: Some(true),
-                                delete_audio: Some(false),
-                                apply_to_existing_conversations: Some(false),
-                                zero_retention_mode: Some(true),
-                                conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
-                                    enabled: Some(true),
-                                    entities: Some(vec![ConfigEntityType::Name]),
-                                    excluded_data_collection_ids: Some(vec![
-                                        "excluded_data_collection_ids".to_string(),
-                                    ]),
-                                    ..Default::default()
-                                }),
-                                ..Default::default()
-                            }),
-                            trust_context: Some(AgentTrustContext::Unknown),
-                            analysis_llm: Some(Llm::Gpt4OMini),
-                            topic_discovery: Some(TopicDiscoverySettings::default()),
-                            sentiment_analysis: Some(SentimentAnalysisSettings::default()),
-                            alerting: Some(AlertingSettings {
-                                monitor_configs: Some(HashMap::from([(
-                                    "key".to_string(),
-                                    AlertingMonitorConfig {
-                                        enabled: Some(false),
-                                        threshold: Some(0.68),
-                                        relative_increase_threshold: Some(1.4),
-                                        min_failure_count: Some(4),
-                                        min_history_bucket_count: Some(5),
-                                        min_sample_count: Some(8),
-                                        suspect_trigger_threshold: Some(5),
-                                        auto_resolve_after_inactive_minutes: Some(10),
-                                        ..Default::default()
-                                    },
-                                )])),
-                                auto_resolve_after_inactive_minutes: Some(9),
-                                notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
-                                    data: AlertingWebhookNotifier::builder()
-                                        .webhook_id("webhook_id")
-                                        .build()
-                                        .expect("Failed to build request"),
-                                }]),
+                            ]),
+                            expressive_mode: Some(true),
+                            suggested_audio_tags: Some(vec![
+                                SuggestedAudioTag::builder()
+                                    .tag("tag")
+                                    .description("description")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
+                            optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
+                            stability: Some(0.5),
+                            speed: Some(1_f64),
+                            similarity_boost: Some(0.8),
+                            clone_strength: Some(0.91),
+                            text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
+                            pronunciation_dictionary_locators: Some(vec![
+                                PydanticPronunciationDictionaryVersionLocator::builder()
+                                    .pronunciation_dictionary_id("pronunciation_dictionary_id")
+                                    .version_id("version_id")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            enable_phoneme_tags: Some(true),
+                            audio_effects: Some(EffectsSpecInput {
+                                filter_preset_id: Some("filter_preset_id".to_string()),
+                                distance: Some(0.89),
+                                environment_id: Some("environment_id".to_string()),
+                                background_noise_id: Some("background_noise_id".to_string()),
+                                send_level: Some(1_f64),
+                                pan: Some(-0.33),
                                 ..Default::default()
                             }),
                             ..Default::default()
-                        })
-                        .workflow(AgentWorkflowRequestModel {
-                            edges: Some(HashMap::from([(
+                        }),
+                        conversation: Some(ConversationConfigInput {
+                            text_only: Some(false),
+                            max_duration_seconds: Some(600),
+                            client_events: Some(vec![ClientEvent::ConversationInitiationMetadata]),
+                            file_input: Some(FileInputConfig {
+                                enabled: Some(true),
+                                max_files_in_memory: Some(10),
+                                max_files_per_conversation: Some(10),
+                                ..Default::default()
+                            }),
+                            monitoring_enabled: Some(false),
+                            monitoring_events: Some(vec![
+                                ClientEvent::ConversationInitiationMetadata,
+                            ]),
+                            dtmf_input_settings: Some(DtmfInputConfig {
+                                dtmf_input_timeout: Some(2_f64),
+                                hash_terminator: Some(true),
+                                redact_input: Some(false),
+                                ..Default::default()
+                            }),
+                            background_sound: Some(BackgroundSoundConfig {
+                                source_type: Some(BackgroundSoundSourceType::Preset),
+                                source_id: Some(BackgroundSoundPresetId::Office2),
+                                volume: Some(0.15),
+                                crossfade_loop: Some(true),
+                                ..Default::default()
+                            }),
+                            source_attribution: Some(true),
+                            ..Default::default()
+                        }),
+                        language_presets: Some(HashMap::from([(
+                            "key".to_string(),
+                            LanguagePresetInput::builder()
+                                .overrides(ConversationConfigClientOverrideInput::default())
+                                .first_message_translation(
+                                    LanguagePresetTranslation::builder()
+                                        .source_hash("source_hash")
+                                        .text("text")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                )
+                                .soft_timeout_translation(
+                                    LanguagePresetTranslation::builder()
+                                        .source_hash("source_hash")
+                                        .text("text")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                )
+                                .noisy_environment_message_translation(
+                                    LanguagePresetTranslation::builder()
+                                        .source_hash("source_hash")
+                                        .text("text")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                )
+                                .build()
+                                .expect("Failed to build request"),
+                        )])),
+                        vad: Some(VadConfig::default()),
+                        agent: Some(AgentConfig {
+                            first_message: Some("first_message".to_string()),
+                            language: Some("en".to_string()),
+                            hinglish_mode: Some(false),
+                            dynamic_variables: Some(DynamicVariablesConfigInput(
+                                elevenlabs_rust_sdk::serde_json::json!({}),
+                            )),
+                            disable_first_message_interruptions: Some(false),
+                            max_conversation_duration_message: Some(
+                                "max_conversation_duration_message".to_string(),
+                            ),
+                            text_behavior_overrides: Some(HashMap::from([(
                                 "key".to_string(),
-                                WorkflowEdgeModelInput::builder()
-                                    .source("source")
-                                    .target("target")
-                                    .reroutes(vec![PositionInput {
-                                        x: Some(5.17),
-                                        y: Some(1.81),
-                                        ..Default::default()
-                                    }])
-                                    .build()
-                                    .expect("Failed to build request"),
-                            )])),
-                            nodes: Some(HashMap::from([(
-                                "key".to_string(),
-                                AgentWorkflowRequestModelNodes::End {
-                                    data: WorkflowEndNodeModelInput {
-                                        position: Some(PositionInput {
-                                            x: Some(5.17),
-                                            y: Some(1.81),
-                                            ..Default::default()
-                                        }),
-                                        edge_order: Some(vec!["edge_order".to_string()]),
-                                        outcome: Some(WorkflowEndNodeOutcome::Success),
-                                        ..Default::default()
-                                    },
+                                BehaviorOverride {
+                                    verbosity: Some(Verbosity::Auto),
+                                    output_format: Some(BehaviorOverrideOutputFormat::Mp3_22050_32),
+                                    interaction_budget: Some(InteractionBudget::Realtime),
+                                    ..Default::default()
                                 },
                             )])),
-                            prevent_subagent_loops: Some(false),
+                            subagent_config: Some(SubagentConfigInput {
+                                agents: Some(vec![]),
+                                ..Default::default()
+                            }),
+                            prompt: Some(PromptAgentApiModelInput {
+                                prompt: Some("prompt".to_string()),
+                                llm: Some(Llm::Gpt4OMini),
+                                reasoning_effort: Some(LlmReasoningEffort::None),
+                                service_tier: Some(LlmServiceTier::Standard),
+                                thinking_budget: Some(1),
+                                enable_reasoning_summary: Some(true),
+                                temperature: Some(6.94),
+                                max_tokens: Some(-1),
+                                tool_ids: Some(vec!["tool_ids".to_string()]),
+                                tool_ids_strict: Some(false),
+                                enable_parallel_tool_calls: Some(true),
+                                mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
+                                native_mcp_server_ids: Some(vec![
+                                    "native_mcp_server_ids".to_string(),
+                                ]),
+                                knowledge_base: Some(vec![]),
+                                ignore_default_personality: Some(true),
+                                timezone: Some("timezone".to_string()),
+                                cascade_timeout_seconds: Some(4_f64),
+                                ..Default::default()
+                            }),
                             ..Default::default()
-                        })
-                        .build()
-                        .expect("Failed to build request"),
-                )
+                        }),
+                        ..Default::default()
+                    }),
+                    platform_settings: Some(AgentPlatformSettingsRequestModel {
+                        evaluation: Some(EvaluationSettingsInput {
+                            criteria: Some(vec![
+                                PromptEvaluationCriteria::builder()
+                                    .id("id")
+                                    .name("name")
+                                    .r#type(PromptEvaluationCriteriaType::Prompt)
+                                    .conversation_goal_prompt("conversation_goal_prompt")
+                                    .use_knowledge_base(true)
+                                    .scope(AnalysisScope::Conversation)
+                                    .llm(Llm::Gpt4OMini)
+                                    .scoring_mode(CriteriaScoringMode::Binary)
+                                    .max_score(100)
+                                    .score_instructions("score_instructions")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            ..Default::default()
+                        }),
+                        widget: Some(WidgetConfig {
+                            variant: Some(EmbedVariant::Tiny),
+                            placement: Some(WidgetPlacement::TopLeft),
+                            expandable: Some(WidgetExpandable::Never),
+                            avatar: Some(WidgetConfigAvatar::Orb {
+                                data: OrbAvatar {
+                                    color_1: Some("#2792dc".to_string()),
+                                    color_2: Some("#9ce6e6".to_string()),
+                                    ..Default::default()
+                                },
+                            }),
+                            feedback_mode: Some(WidgetFeedbackMode::None),
+                            end_feedback: Some(WidgetEndFeedbackConfig {
+                                r#type: Some(WidgetEndFeedbackType::Rating),
+                                ..Default::default()
+                            }),
+                            bg_color: Some("#ffffff".to_string()),
+                            text_color: Some("#000000".to_string()),
+                            btn_color: Some("#000000".to_string()),
+                            btn_text_color: Some("#ffffff".to_string()),
+                            border_color: Some("#e1e1e1".to_string()),
+                            focus_color: Some("#000000".to_string()),
+                            border_radius: Some(4),
+                            btn_radius: Some(6),
+                            action_text: Some("action_text".to_string()),
+                            start_call_text: Some("start_call_text".to_string()),
+                            end_call_text: Some("end_call_text".to_string()),
+                            expand_text: Some("expand_text".to_string()),
+                            listening_text: Some("listening_text".to_string()),
+                            speaking_text: Some("speaking_text".to_string()),
+                            shareable_page_text: Some("shareable_page_text".to_string()),
+                            shareable_page_show_terms: Some(true),
+                            terms_text: Some("terms_text".to_string()),
+                            terms_html: Some("terms_html".to_string()),
+                            terms_key: Some("terms_key".to_string()),
+                            show_avatar_when_collapsed: Some(true),
+                            disable_banner: Some(true),
+                            override_link: Some("override_link".to_string()),
+                            markdown_link_allowed_hosts: Some(vec![
+                                AllowlistItem::builder()
+                                    .hostname("hostname")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            markdown_link_include_www: Some(true),
+                            markdown_link_allow_http: Some(true),
+                            mic_muting_enabled: Some(true),
+                            transcript_enabled: Some(true),
+                            text_input_enabled: Some(true),
+                            conversation_mode_toggle_enabled: Some(true),
+                            default_expanded: Some(true),
+                            always_expanded: Some(true),
+                            dismissible: Some(true),
+                            show_agent_status: Some(true),
+                            show_conversation_id: Some(true),
+                            strip_audio_tags: Some(true),
+                            syntax_highlight_theme: Some(Theme::Light),
+                            text_contents: Some(WidgetTextContents {
+                                main_label: Some("main_label".to_string()),
+                                start_call: Some("start_call".to_string()),
+                                start_chat: Some("start_chat".to_string()),
+                                new_call: Some("new_call".to_string()),
+                                end_call: Some("end_call".to_string()),
+                                mute_microphone: Some("mute_microphone".to_string()),
+                                change_language: Some("change_language".to_string()),
+                                collapse: Some("collapse".to_string()),
+                                expand: Some("expand".to_string()),
+                                copied: Some("copied".to_string()),
+                                accept_terms: Some("accept_terms".to_string()),
+                                dismiss_terms: Some("dismiss_terms".to_string()),
+                                listening_status: Some("listening_status".to_string()),
+                                speaking_status: Some("speaking_status".to_string()),
+                                connecting_status: Some("connecting_status".to_string()),
+                                chatting_status: Some("chatting_status".to_string()),
+                                queue_waiting_status: Some("queue_waiting_status".to_string()),
+                                queue_waiting_status_short: Some(
+                                    "queue_waiting_status_short".to_string(),
+                                ),
+                                input_label: Some("input_label".to_string()),
+                                input_placeholder: Some("input_placeholder".to_string()),
+                                input_placeholder_text_only: Some(
+                                    "input_placeholder_text_only".to_string(),
+                                ),
+                                input_placeholder_new_conversation: Some(
+                                    "input_placeholder_new_conversation".to_string(),
+                                ),
+                                user_ended_conversation: Some(
+                                    "user_ended_conversation".to_string(),
+                                ),
+                                agent_ended_conversation: Some(
+                                    "agent_ended_conversation".to_string(),
+                                ),
+                                conversation_id: Some("conversation_id".to_string()),
+                                error_occurred: Some("error_occurred".to_string()),
+                                queue_timed_out: Some("queue_timed_out".to_string()),
+                                copy_id: Some("copy_id".to_string()),
+                                initiate_feedback: Some("initiate_feedback".to_string()),
+                                request_follow_up_feedback: Some(
+                                    "request_follow_up_feedback".to_string(),
+                                ),
+                                thanks_for_feedback: Some("thanks_for_feedback".to_string()),
+                                thanks_for_feedback_details: Some(
+                                    "thanks_for_feedback_details".to_string(),
+                                ),
+                                follow_up_feedback_placeholder: Some(
+                                    "follow_up_feedback_placeholder".to_string(),
+                                ),
+                                submit: Some("submit".to_string()),
+                                go_back: Some("go_back".to_string()),
+                                send_message: Some("send_message".to_string()),
+                                text_mode: Some("text_mode".to_string()),
+                                voice_mode: Some("voice_mode".to_string()),
+                                switched_to_text_mode: Some("switched_to_text_mode".to_string()),
+                                switched_to_voice_mode: Some("switched_to_voice_mode".to_string()),
+                                copy: Some("copy".to_string()),
+                                download: Some("download".to_string()),
+                                wrap: Some("wrap".to_string()),
+                                agent_working: Some("agent_working".to_string()),
+                                agent_done: Some("agent_done".to_string()),
+                                agent_error: Some("agent_error".to_string()),
+                                attach_file: Some("attach_file".to_string()),
+                                remove_file: Some("remove_file".to_string()),
+                                file_upload_error: Some("file_upload_error".to_string()),
+                                file_type_unsupported: Some("file_type_unsupported".to_string()),
+                                file_too_large: Some("file_too_large".to_string()),
+                                file_limit_reached: Some("file_limit_reached".to_string()),
+                                typing_indicator: Some("typing_indicator".to_string()),
+                                rich_content_unavailable: Some(
+                                    "rich_content_unavailable".to_string(),
+                                ),
+                                ..Default::default()
+                            }),
+                            styles: Some(WidgetStyles {
+                                base: Some("base".to_string()),
+                                base_hover: Some("base_hover".to_string()),
+                                base_active: Some("base_active".to_string()),
+                                base_border: Some("base_border".to_string()),
+                                base_subtle: Some("base_subtle".to_string()),
+                                base_primary: Some("base_primary".to_string()),
+                                base_error: Some("base_error".to_string()),
+                                accent: Some("accent".to_string()),
+                                accent_hover: Some("accent_hover".to_string()),
+                                accent_active: Some("accent_active".to_string()),
+                                accent_border: Some("accent_border".to_string()),
+                                accent_subtle: Some("accent_subtle".to_string()),
+                                accent_primary: Some("accent_primary".to_string()),
+                                overlay_padding: Some(4.09),
+                                button_radius: Some(8.35),
+                                input_radius: Some(7.58),
+                                bubble_radius: Some(7.16),
+                                sheet_radius: Some(7_f64),
+                                compact_sheet_radius: Some(6.75),
+                                dropdown_sheet_radius: Some(2.4),
+                                ..Default::default()
+                            }),
+                            show_resize_button: Some(true),
+                            end_confirmation_enabled: Some(true),
+                            mobile_fullscreen: Some(true),
+                            transcript_speech_sync_enabled: Some(true),
+                            language_selector: Some(false),
+                            supports_text_only: Some(true),
+                            custom_avatar_path: Some("custom_avatar_path".to_string()),
+                            language_presets: Some(HashMap::from([(
+                                "key".to_string(),
+                                WidgetLanguagePreset {
+                                    terms_text: Some("terms_text".to_string()),
+                                    terms_html: Some("terms_html".to_string()),
+                                    terms_key: Some("terms_key".to_string()),
+                                    ..Default::default()
+                                },
+                            )])),
+                            ..Default::default()
+                        }),
+                        data_collection: Some(HashMap::from([(
+                            "key".to_string(),
+                            AnalysisProperty::builder()
+                                .r#type(AnalysisPropertyType::Boolean)
+                                .description("description")
+                                .r#enum(vec!["enum".to_string()])
+                                .is_system_provided(true)
+                                .dynamic_variable("dynamic_variable")
+                                .allowed_values(
+                                    AllowedValues::builder()
+                                        .dynamic_variable("dynamic_variable")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                )
+                                .is_omitted(true)
+                                .name("name")
+                                .llm(Llm::Gpt4OMini)
+                                .build()
+                                .expect("Failed to build request"),
+                        )])),
+                        data_collection_scopes: Some(HashMap::from([(
+                            "key".to_string(),
+                            AnalysisScope::Conversation,
+                        )])),
+                        analysis_items: Some(AgentAnalysisItemsInput {
+                            evaluation_criteria: Some(vec![AgentAnalysisItemsInputEvaluationCriteriaItem::System {
+                                data: AttachedSystemEvaluationRef::builder()
+                                    .analysis_item_id(
+                                        SystemEvaluationId::SystemEvalCriteriaSentiment,
+                                    )
+                                    .scope(AnalysisScope::Conversation)
+                                    .weight(2.45)
+                                    .build()
+                                    .expect("Failed to build request"),
+                            }]),
+                            data_collection: Some(vec![AgentAnalysisItemsInputDataCollectionItem::System {
+                                data: AttachedSystemDataCollectionRef::builder()
+                                    .analysis_item_id(
+                                        SystemDataCollectionId::SystemDataCollectionTopic,
+                                    )
+                                    .scope(AnalysisScope::Conversation)
+                                    .build()
+                                    .expect("Failed to build request"),
+                            }]),
+                            ..Default::default()
+                        }),
+                        overrides: Some(ConversationInitiationClientDataConfigInput {
+                            conversation_config_override: Some(
+                                ConversationConfigClientOverrideConfigInput::default(),
+                            ),
+                            custom_llm_extra_body: Some(false),
+                            enable_conversation_initiation_client_data_from_webhook: Some(true),
+                            enable_starting_workflow_node_id_from_client: Some(false),
+                            enable_procedure_ids_from_client: Some(false),
+                            ..Default::default()
+                        }),
+                        workspace_overrides: Some(AgentWorkspaceOverridesInput {
+                            conversation_initiation_client_data_webhook: Some(
+                                ConversationInitiationClientDataWebhook::builder()
+                                    .url("url")
+                                    .request_headers(HashMap::new())
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ),
+                            webhooks: Some(ConvAiWebhooks {
+                                post_call_webhook_id: Some("post_call_webhook_id".to_string()),
+                                events: Some(vec![WebhookEventType::Transcript]),
+                                transcript_format: Some(WebhookTranscriptFormat::Json),
+                                exclude_transcript: Some(true),
+                                ..Default::default()
+                            }),
+                            ..Default::default()
+                        }),
+                        testing: Some(AgentTestingSettings {
+                            attached_tests: Some(vec![
+                                AttachedTestModel::builder()
+                                    .test_id("test_id")
+                                    .workflow_node_id("workflow_node_id")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            ..Default::default()
+                        }),
+                        archived: Some(false),
+                        guardrails: Some(GuardrailsV1Input {
+                            version: Some(GuardrailsV1InputVersion::Num1),
+                            focus: Some(FocusGuardrail {
+                                is_enabled: Some(true),
+                                ..Default::default()
+                            }),
+                            prompt_injection: Some(PromptInjectionGuardrail {
+                                is_enabled: Some(false),
+                                ..Default::default()
+                            }),
+                            content: Some(ContentGuardrailInput {
+                                execution_mode: Some(GuardrailExecutionMode::Streaming),
+                                ..Default::default()
+                            }),
+                            custom: Some(CustomGuardrailInput::default()),
+                            ..Default::default()
+                        }),
+                        summary_language: Some("summary_language".to_string()),
+                        auto_translate_transcript_to_app_language: Some(true),
+                        auth: Some(AuthSettings {
+                            enable_auth: Some(false),
+                            allowlist: Some(vec![
+                                AllowlistItem::builder()
+                                    .hostname("hostname")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            require_origin_header: Some(false),
+                            shareable_token: Some("shareable_token".to_string()),
+                            ..Default::default()
+                        }),
+                        call_limits: Some(AgentCallLimits {
+                            agent_concurrency_limit: Some(-1),
+                            daily_limit: Some(100000),
+                            bursting_enabled: Some(true),
+                            ..Default::default()
+                        }),
+                        queueing_config: Some(AgentQueueingConfig {
+                            enabled: Some(false),
+                            wait_timeout_seconds: Some(180),
+                            hold_audio: Some(
+                                AgentHoldAudioConfig::builder()
+                                    .audio_path("audio_path")
+                                    .audio_url("audio_url")
+                                    .original_filename("original_filename")
+                                    .duration_secs(2.19)
+                                    .size_bytes(2)
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ),
+                            ..Default::default()
+                        }),
+                        privacy: Some(PrivacyConfigInput {
+                            record_voice: Some(true),
+                            retention_days: Some(-1),
+                            delete_transcript_and_pii: Some(true),
+                            delete_audio: Some(false),
+                            apply_to_existing_conversations: Some(false),
+                            zero_retention_mode: Some(false),
+                            conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
+                                enabled: Some(true),
+                                entities: Some(vec![ConfigEntityType::Name]),
+                                excluded_data_collection_ids: Some(vec![
+                                    "excluded_data_collection_ids".to_string(),
+                                ]),
+                                ..Default::default()
+                            }),
+                            ..Default::default()
+                        }),
+                        trust_context: Some(AgentTrustContext::Unknown),
+                        analysis_llm: Some(Llm::Gpt4OMini),
+                        topic_discovery: Some(TopicDiscoverySettings::default()),
+                        sentiment_analysis: Some(SentimentAnalysisSettings::default()),
+                        alerting: Some(AlertingSettings {
+                            monitor_configs: Some(HashMap::from([(
+                                "key".to_string(),
+                                AlertingMonitorConfig {
+                                    enabled: Some(true),
+                                    threshold: Some(0.31),
+                                    relative_increase_threshold: Some(4.56),
+                                    min_failure_count: Some(7),
+                                    min_history_bucket_count: Some(9),
+                                    min_sample_count: Some(5),
+                                    suspect_trigger_threshold: Some(8),
+                                    auto_resolve_after_inactive_minutes: Some(7),
+                                    ..Default::default()
+                                },
+                            )])),
+                            auto_resolve_after_inactive_minutes: Some(2),
+                            environments: Some(vec!["environments".to_string()]),
+                            notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
+                                data: AlertingWebhookNotifier::builder()
+                                    .webhook_id("webhook_id")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            }]),
+                            ..Default::default()
+                        }),
+                        ..Default::default()
+                    }),
+                    workflow: Some(AgentWorkflowRequestModel {
+                        edges: Some(HashMap::from([(
+                            "key".to_string(),
+                            WorkflowEdgeModelInput::builder()
+                                .source("source")
+                                .target("target")
+                                .reroutes(vec![PositionInput {
+                                    x: Some(1.15),
+                                    y: Some(5.14),
+                                    ..Default::default()
+                                }])
+                                .build()
+                                .expect("Failed to build request"),
+                        )])),
+                        nodes: Some(HashMap::from([(
+                            "key".to_string(),
+                            AgentWorkflowRequestModelNodes::End {
+                                data: WorkflowEndNodeModelInput {
+                                    position: Some(PositionInput {
+                                        x: Some(1.15),
+                                        y: Some(5.14),
+                                        ..Default::default()
+                                    }),
+                                    edge_order: Some(vec!["edge_order".to_string()]),
+                                    outcome: Some(WorkflowEndNodeOutcome::Success),
+                                    ..Default::default()
+                                },
+                            },
+                        )])),
+                        prevent_subagent_loops: Some(true),
+                        ..Default::default()
+                    }),
+                    ..Default::default()
+                })
                 .agent_id("agent_id")
                 .branch_id("branch_id")
                 .build()
@@ -25483,12 +27191,12 @@ async fn main() {
                 .visited_agent_branch_ids(vec![])
                 .triggered_procedure_ids(vec![])
                 .call_successful(EvaluationResultFilter::Success)
-                .call_start_before_unix(3)
-                .call_start_after_unix(10)
-                .call_duration_min_secs(2)
-                .call_duration_max_secs(4)
-                .rating_max(1)
-                .rating_min(1)
+                .call_start_before_unix(1)
+                .call_start_after_unix(0)
+                .call_duration_min_secs(8)
+                .call_duration_max_secs(6)
+                .rating_max(5)
+                .rating_min(5)
                 .has_feedback_comment(false)
                 .user_id("user_id")
                 .evaluation_params(vec![])
@@ -25500,7 +27208,7 @@ async fn main() {
                 .tool_ids(vec![])
                 .tool_ids_successful(vec![])
                 .tool_ids_errored(vec![])
-                .include_invalid_tool_calls(true)
+                .include_invalid_tool_calls(false)
                 .main_languages(vec![])
                 .phone_number_ids(vec![])
                 .whatsapp_phone_number_ids(vec![])
@@ -25509,7 +27217,7 @@ async fn main() {
                 .page_size(20)
                 .summary_mode(ListSummaryMode::Exclude)
                 .conversation_initiation_source(ListConversationInitiationSource::Unknown)
-                .text_only(true)
+                .text_only(false)
                 .conversation_product_type(ConversationProduct::Agents)
                 .branch_id("branch_id")
                 .version_id("version_id")
@@ -26577,7 +28285,7 @@ async fn main() {
 <dl>
 <dd>
 
-List an agent's conversation triage tickets, ordered by most recently created first unless sorted by priority. These are tickets about the agent's own performance on a conversation (for triage with Architect), not tickets an agent opens for end users.
+List an agent's issues, ordered by most recently created first unless sorted by priority. These are issues about the agent's own performance on a conversation (to work on with Architect), not tickets an agent opens for end users.
 </dd>
 </dl>
 </dd>
@@ -26611,7 +28319,6 @@ async fn main() {
                 sort_by: Some(AgentConversationTicketSortBy::CreatedAt),
                 owner_user_id: Some("owner_user_id".to_string()),
                 assignee_user_id: Some("assignee_user_id".to_string()),
-                issue_type: Some(AgentConversationTicketIssueType::KnowledgeGap),
                 label: Some("label".to_string()),
                 merged_into_ticket_id: Some("merged_into_ticket_id".to_string()),
                 search: Some("search".to_string()),
@@ -26652,7 +28359,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.page_size:** `Option<i64>` — How many agent conversation tickets to return. Can not exceed 100.
+**request.page_size:** `Option<i64>` — How many agent issues to return. Can not exceed 100.
     
 </dd>
 </dl>
@@ -26660,7 +28367,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.conversation_id:** `Option<String>` — Filter tickets by conversation id.
+**request.conversation_id:** `Option<String>` — Filter agent issues by conversation id.
     
 </dd>
 </dl>
@@ -26668,7 +28375,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.status:** `Option<AgentConversationTicketStatus>` — Filter tickets by status.
+**request.status:** `Option<AgentConversationTicketStatus>` — Filter agent issues by status.
     
 </dd>
 </dl>
@@ -26676,7 +28383,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sources:** `Option<Vec<AgentConversationTicketSource>>` — Filter tickets by how they were raised (qa, agent, manual). Repeat the parameter to filter by multiple sources.
+**request.sources:** `Option<Vec<AgentConversationTicketSource>>` — Filter agent issues by how they were raised (qa, agent, manual). Repeat the parameter to filter by multiple sources.
     
 </dd>
 </dl>
@@ -26684,7 +28391,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.priorities:** `Option<Vec<AgentConversationTicketPriority>>` — Filter tickets by priority. Repeat the parameter to filter by multiple priorities.
+**request.priorities:** `Option<Vec<AgentConversationTicketPriority>>` — Filter agent issues by priority. Repeat the parameter to filter by multiple priorities.
     
 </dd>
 </dl>
@@ -26692,7 +28399,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_by:** `Option<AgentConversationTicketSortBy>` — Order by most recently created, by priority (most urgent first, then most recently created), or by most recently reported (the newest report merged into the issue, else its creation).
+**request.sort_by:** `Option<AgentConversationTicketSortBy>` — Order by most recently created, by priority (most urgent first, then most recently created), by most recently reported (the newest report merged into the agent issue, else its creation), or by report count (most reports merged into the agent issue first, then most recently created).
     
 </dd>
 </dl>
@@ -26700,7 +28407,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.owner_user_id:** `Option<String>` — Filter tickets by creator. Use 'agent' for agent-raised tickets.
+**request.owner_user_id:** `Option<String>` — Filter agent issues by creator. Use 'agent' for agent-raised issues.
     
 </dd>
 </dl>
@@ -26708,7 +28415,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.assignee_user_id:** `Option<String>` — Filter tickets by assignee. Use 'unassigned' for tickets with no assignee.
+**request.assignee_user_id:** `Option<String>` — Filter agent issues by assignee. Use 'unassigned' for issues with no assignee.
     
 </dd>
 </dl>
@@ -26716,7 +28423,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.issue_type:** `Option<AgentConversationTicketIssueType>` — Filter clusters by issue type.
+**request.label:** `Option<String>` — Filter agent issues by an exact label.
     
 </dd>
 </dl>
@@ -26724,7 +28431,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.label:** `Option<String>` — Filter tickets by an exact label.
+**request.merged_into_ticket_id:** `Option<String>` — Filter agent issues merged into this issue.
     
 </dd>
 </dl>
@@ -26732,15 +28439,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.merged_into_ticket_id:** `Option<String>` — Filter tickets merged into this ticket.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request.search:** `Option<String>` — Case-insensitive free-text search across the ticket's title, description, comments, and turn comments.
+**request.search:** `Option<String>` — Case-insensitive free-text search across the agent issue's title, description, comments, and turn comments.
     
 </dd>
 </dl>
@@ -26781,7 +28480,7 @@ async fn main() {
 <dl>
 <dd>
 
-Manually raise a follow-up ticket against an agent, not tied to any conversation (for example a task like 'add the KB about X'). Without a title, one is derived from the comment. Requires viewer access to the agent.
+Manually raise a follow-up issue against an agent, not tied to any conversation (for example a task like 'add the KB about X'). Without a title, one is derived from the comment. Requires viewer access to the agent.
 </dd>
 </dl>
 </dd>
@@ -26871,7 +28570,7 @@ async fn main() {
 <dl>
 <dd>
 
-List conversation triage tickets across every agent in the workspace, ordered by most recently created first. Use this to build a workspace-wide view (for example, tickets assigned to the caller). Supports the same filters, sorting and search as the per-agent endpoint. Tickets for agents the caller cannot access are omitted.
+List agent issues across every agent in the workspace, ordered by most recently created first. Use this to build a workspace-wide view (for example, issues assigned to the caller). Supports the same filters, sorting and search as the per-agent endpoint. Issues for agents the caller cannot access are omitted.
 </dd>
 </dl>
 </dd>
@@ -26904,7 +28603,6 @@ async fn main() {
                 sort_by: Some(AgentConversationTicketSortBy::CreatedAt),
                 owner_user_id: Some("owner_user_id".to_string()),
                 assignee_user_id: Some("assignee_user_id".to_string()),
-                issue_type: Some(AgentConversationTicketIssueType::KnowledgeGap),
                 label: Some("label".to_string()),
                 merged_into_ticket_id: Some("merged_into_ticket_id".to_string()),
                 search: Some("search".to_string()),
@@ -26937,7 +28635,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.page_size:** `Option<i64>` — How many agent conversation tickets to return. Can not exceed 100.
+**request.page_size:** `Option<i64>` — How many agent issues to return. Can not exceed 100.
     
 </dd>
 </dl>
@@ -26945,7 +28643,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.agent_id:** `Option<String>` — Only tickets for this agent.
+**request.agent_id:** `Option<String>` — Only issues for this agent.
     
 </dd>
 </dl>
@@ -26953,7 +28651,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.status:** `Option<AgentConversationTicketStatus>` — Filter tickets by status.
+**request.status:** `Option<AgentConversationTicketStatus>` — Filter agent issues by status.
     
 </dd>
 </dl>
@@ -26961,7 +28659,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sources:** `Option<Vec<AgentConversationTicketSource>>` — Filter tickets by how they were raised (qa, agent, manual). Repeat the parameter to filter by multiple sources.
+**request.sources:** `Option<Vec<AgentConversationTicketSource>>` — Filter agent issues by how they were raised (qa, agent, manual). Repeat the parameter to filter by multiple sources.
     
 </dd>
 </dl>
@@ -26969,7 +28667,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.priorities:** `Option<Vec<AgentConversationTicketPriority>>` — Filter tickets by priority. Repeat the parameter to filter by multiple priorities.
+**request.priorities:** `Option<Vec<AgentConversationTicketPriority>>` — Filter agent issues by priority. Repeat the parameter to filter by multiple priorities.
     
 </dd>
 </dl>
@@ -26977,7 +28675,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_by:** `Option<AgentConversationTicketSortBy>` — Order by most recently created, by priority (most urgent first, then most recently created), or by most recently reported (the newest report merged into the issue, else its creation).
+**request.sort_by:** `Option<AgentConversationTicketSortBy>` — Order by most recently created, by priority (most urgent first, then most recently created), by most recently reported (the newest report merged into the agent issue, else its creation), or by report count (most reports merged into the agent issue first, then most recently created).
     
 </dd>
 </dl>
@@ -26985,7 +28683,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.owner_user_id:** `Option<String>` — Filter tickets by creator. Use 'agent' for agent-raised tickets.
+**request.owner_user_id:** `Option<String>` — Filter agent issues by creator. Use 'agent' for agent-raised issues.
     
 </dd>
 </dl>
@@ -26993,7 +28691,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.assignee_user_id:** `Option<String>` — Filter tickets by assignee. Use 'unassigned' for tickets with no assignee.
+**request.assignee_user_id:** `Option<String>` — Filter agent issues by assignee. Use 'unassigned' for issues with no assignee.
     
 </dd>
 </dl>
@@ -27001,7 +28699,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.issue_type:** `Option<AgentConversationTicketIssueType>` — Filter clusters by issue type.
+**request.label:** `Option<String>` — Filter agent issues by an exact label.
     
 </dd>
 </dl>
@@ -27009,7 +28707,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.label:** `Option<String>` — Filter tickets by an exact label.
+**request.merged_into_ticket_id:** `Option<String>` — Filter agent issues merged into this issue.
     
 </dd>
 </dl>
@@ -27017,15 +28715,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.merged_into_ticket_id:** `Option<String>` — Filter tickets merged into this ticket.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request.search:** `Option<String>` — Case-insensitive free-text search across the ticket's title, description, comments, and turn comments.
+**request.search:** `Option<String>` — Case-insensitive free-text search across the agent issue's title, description, comments, and turn comments.
     
 </dd>
 </dl>
@@ -27066,7 +28756,7 @@ async fn main() {
 <dl>
 <dd>
 
-Raise a ticket about an agent's performance on a conversation, for triage with Architect. Provide an overall comment and/or turn-level comments describing what went wrong.
+Raise an issue about an agent's performance on a conversation, to work on with Architect. Provide an overall comment and/or turn-level comments describing what went wrong.
 </dd>
 </dl>
 </dd>
@@ -27096,7 +28786,7 @@ async fn main() {
                 .qa_comment("qa_comment")
                 .turn_comments(vec![
                     TurnCommentRequestModel::builder()
-                        .turn_index(0)
+                        .turn_index(3)
                         .comment("comment")
                         .build()
                         .expect("Failed to build request"),
@@ -27228,7 +28918,7 @@ async fn main() {
 <dl>
 <dd>
 
-Get an agent conversation ticket by ID.
+Get an agent issue by ID.
 </dd>
 </dl>
 </dd>
@@ -27298,7 +28988,7 @@ async fn main() {
 <dl>
 <dd>
 
-Update a ticket's title, comment, status, priority, and/or assignee. Requires viewer access to the ticket's agent.
+Update an agent issue's title, comment, status, priority, and/or assignee. Requires viewer access to the issue's agent.
 </dd>
 </dl>
 </dd>
@@ -27390,7 +29080,7 @@ async fn main() {
 <dl>
 <dd>
 
-Delete an agent conversation ticket. Restricted to the ticket creator or a workspace admin.
+Delete an agent issue. Restricted to the issue creator or a workspace admin.
 </dd>
 </dl>
 </dd>
@@ -27460,7 +29150,7 @@ async fn main() {
 <dl>
 <dd>
 
-Append a comment discussing how to resolve the ticket. Requires viewer access to the ticket's agent.
+Append a comment discussing how to resolve the agent issue. Requires viewer access to the issue's agent.
 </dd>
 </dl>
 </dd>
@@ -27548,7 +29238,7 @@ async fn main() {
 <dl>
 <dd>
 
-Merge other open tickets of the same agent into this pending, in-progress, or resolved one. Their conversations move onto this ticket, its priority is raised to the highest among them, and they are kept with status 'merged'. Requires viewer access to the ticket's agent.
+Merge other open issues of the same agent into this pending, in-progress, or resolved one. Their conversations move onto this issue, its priority is raised to the highest among them, and they are kept with status 'merged'. Requires viewer access to the issue's agent.
 </dd>
 </dl>
 </dd>
@@ -27636,7 +29326,7 @@ async fn main() {
 <dl>
 <dd>
 
-Append a turn-level comment to a ticket. Requires viewer access to the ticket's agent.
+Append a turn-level comment to an agent issue. Requires viewer access to the issue's agent.
 </dd>
 </dl>
 </dd>
@@ -27662,7 +29352,7 @@ async fn main() {
         .add_turn_comment(
             "agentqa_ticket_id",
             &AddTurnCommentRequestModel::builder()
-                .turn_index(3)
+                .turn_index(1)
                 .comment("comment")
                 .build()
                 .expect("Failed to build request"),
@@ -28468,6 +30158,352 @@ async fn main() {
 </dl>
 </details>
 
+<details><summary><code>client.phone_numbers.<a href="/src/api/resources/phone_numbers/phone_numbers.rs">list_2</a>(xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionPhoneAssignment&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the workspace's phone numbers and the receptionist each one rings. A number with no `customer_facing_agent_id` is held by the workspace but not attached to a receptionist yet.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .phone_numbers
+        .list_2("xi-workspace-id".to_string(), None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.phone_numbers.<a href="/src/api/resources/phone_numbers/phone_numbers.rs">create_2</a>(body: &amp;CreatePhoneAssignmentRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionPhoneAssignment, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Give a receptionist a phone number. A number the workspace already holds but has not attached is used first. Otherwise, in the US and Canada, a number with one of the requested `area_codes` is taken from the pool or bought, falling back to any number in the business's country. In countries that require paperwork, the number is issued right away but takes public calls only once the workspace's own registration is approved (see `accepts_public_calls`). Counts toward the plan's phone number limit, and free plans can take only a few new numbers a day. Returns 404 when no number is available and 403 `telephony_managed_by_reseller` when the reseller supplies the workspace's numbers from its own Twilio account or SIP trunk and none is free.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .phone_numbers
+        .create_2(
+            &CreatePhoneAssignmentRequest::builder()
+                .customer_facing_agent_id("agent_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                .area_codes(vec!["area_codes".to_string()])
+                .number_type(ApplicationNumberType::Local)
+                .idempotency_key("idempotency_key")
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&CreatePhoneAssignmentRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.phone_numbers.<a href="/src/api/resources/phone_numbers/phone_numbers.rs">update_2</a>(phone_assignment_id: &amp;str, body: &amp;ReassignPhoneRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionPhoneAssignment, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Move a phone number to a different receptionist in the same workspace, which answers its calls from then on. Returns 409 `phone_number_not_attached` for a number no receptionist answers yet (attach it with `POST /v1/reception/phone-numbers/assignments`).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .phone_numbers
+        .update_2(
+            "phone_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReassignPhoneRequest::builder()
+                .customer_facing_agent_id("agent_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**phone_assignment_id:** `&str` — ID of the phone number assignment. Returned when you assign a number; list them with `GET /v1/reception/phone-numbers/assignments`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReassignPhoneRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.phone_numbers.<a href="/src/api/resources/phone_numbers/phone_numbers.rs">delete_2</a>(phone_assignment_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;(), crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove a phone number from the workspace. A pool number goes back to the pool it came from. A number the business brought from its own Twilio account, or one issued in a country that requires paperwork, is released at Twilio and cannot be recovered. Returns 403 `telephony_managed_by_reseller` when the reseller supplies the workspace's numbers from its own Twilio account or SIP trunk.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .phone_numbers
+        .delete_2(
+            "phone_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**phone_assignment_id:** `&str` — ID of the phone number assignment. Returned when you assign a number; list them with `GET /v1/reception/phone-numbers/assignments`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Llm
 <details><summary><code>client.llm.<a href="/src/api/resources/llm/llm.rs">list</a>(options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;LlmListResponseModel, crate::error::ApiError&gt;</code></summary>
 <dl>
@@ -28671,7 +30707,7 @@ async fn main() {
                 .parent_folder_id("parent_folder_id")
                 .enable_auto_sync(false)
                 .auto_remove(true)
-                .minimum_frequency_days(14)
+                .minimum_frequency_days(151)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -28916,7 +30952,7 @@ async fn main() {
                 .parent_folder_id("parent_folder_id")
                 .enable_auto_sync(true)
                 .auto_remove(true)
-                .minimum_frequency_days(175)
+                .minimum_frequency_days(166)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -29095,8 +31131,8 @@ async fn main() {
                 name: Some("name".to_string()),
                 content: Some("content".to_string()),
                 enable_auto_sync: Some(false),
-                auto_remove: Some(false),
-                minimum_frequency_days: Some(87),
+                auto_remove: Some(true),
+                minimum_frequency_days: Some(102),
                 tighten_only: Some(false),
                 ..Default::default()
             }),
@@ -29223,6 +31259,172 @@ async fn main() {
 <dd>
 
 **request.force:** `Option<bool>` — If set to true, the document or folder will be deleted regardless of whether it is used by any agents and it will be removed from the dependent agents. For non-empty folders, this will also delete all child documents and folders.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/documents.rs">get_chunking_override</a>(documentation_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetDocumentChunkingOverrideResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the stored and effective RAG chunking overrides for a document or folder.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .documents
+        .get_chunking_override("21m00Tcm4TlvDq8ikWAM", None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**documentation_id:** `&str` — The id of a document from the knowledge base. This is returned on document addition.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/documents.rs">update_chunking_override</a>(documentation_id: &amp;str, body: &amp;UpdateDocumentChunkingOverrideRequestModel, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;UpdateDocumentChunkingOverrideResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Set or clear the RAG chunking override for a document or folder.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .documents
+        .update_chunking_override(
+            "21m00Tcm4TlvDq8ikWAM",
+            &UpdateDocumentChunkingOverrideRequestModel::builder()
+                .chunking_override(ChunkingOverrideRequestModel {
+                    max_chunk_size: Some(7073163792333902),
+                    overlap_percentage: Some(20),
+                    custom_separators: Some(vec!["custom_separators".to_string()]),
+                    ..Default::default()
+                })
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**documentation_id:** `&str` — The id of a document from the knowledge base. This is returned on document addition.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&UpdateDocumentChunkingOverrideRequestModel`
     
 </dd>
 </dl>
@@ -29825,7 +32027,7 @@ async fn main() {
         .bulk_delete(
             &BodyBulkDeleteKnowledgeBaseDocumentsV1ConvaiKnowledgeBaseBulkDeletePost::builder()
                 .document_ids(vec!["document_ids".to_string()])
-                .force(true)
+                .force(false)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -30016,10 +32218,10 @@ async fn main() {
                 .exclude_patterns(vec!["exclude_patterns".to_string()])
                 .sitemap_urls(vec!["sitemap_urls".to_string()])
                 .parent_folder_id("parent_folder_id")
-                .enable_auto_sync(false)
+                .enable_auto_sync(true)
                 .auto_remove(true)
                 .auto_discover(true)
-                .minimum_frequency_days(127)
+                .minimum_frequency_days(94)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -30708,11 +32910,11 @@ async fn main() {
         .get(
             "agent_id",
             &TopicsGetQueryRequest {
-                page_size: Some(79),
+                page_size: Some(78),
                 sort_by: Some(TopicSortBy::Conversations),
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
-                from_unix_secs: Some(3),
-                to_unix_secs: Some(6),
+                from_unix_secs: Some(9),
+                to_unix_secs: Some(1),
                 include_evaluation_criteria: Some(true),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -30859,8 +33061,8 @@ async fn main() {
         .list(
             &ToolsListQueryRequest {
                 search: Some("search".to_string()),
-                page_size: Some(17),
-                show_only_owned_documents: Some(false),
+                page_size: Some(80),
+                show_only_owned_documents: Some(true),
                 created_by_user_id: Some("created_by_user_id".to_string()),
                 types: Some(vec![]),
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
@@ -31017,8 +33219,9 @@ async fn main() {
         .tools
         .create(
             &ToolRequestModel::builder()
-                .tool_config(ToolRequestModelToolConfig::Client {
-                    data: ClientToolConfigInput::builder()
+                .tool_config(ToolRequestModelToolConfig::ClientToolConfigInput(
+                    ClientToolConfigInput::builder()
+                        .r#type(ClientToolConfigInputType::Client)
                         .name("name")
                         .description("description")
                         .response_timeout_secs(20)
@@ -31063,7 +33266,7 @@ async fn main() {
                             }),
                             ..Default::default()
                         })
-                        .expects_response(true)
+                        .expects_response(false)
                         .dynamic_variables(DynamicVariablesConfig {
                             dynamic_variable_placeholders: Some(
                                 elevenlabs_rust_sdk::serde_json::json!({}),
@@ -31073,7 +33276,7 @@ async fn main() {
                         .execution_mode(ToolExecutionMode::Immediate)
                         .build()
                         .expect("Failed to build request"),
-                })
+                ))
                 .response_mocks(vec![
                     ToolResponseMockConfigInput::builder()
                         .parameter_conditions(vec![
@@ -31088,7 +33291,7 @@ async fn main() {
                                 .expect("Failed to build request"),
                         ])
                         .mock_result("mock_result")
-                        .is_error(false)
+                        .is_error(true)
                         .build()
                         .expect("Failed to build request"),
                 ])
@@ -31267,8 +33470,9 @@ async fn main() {
         .update(
             "tool_id",
             &ToolRequestModel::builder()
-                .tool_config(ToolRequestModelToolConfig::Client {
-                    data: ClientToolConfigInput::builder()
+                .tool_config(ToolRequestModelToolConfig::ClientToolConfigInput(
+                    ClientToolConfigInput::builder()
+                        .r#type(ClientToolConfigInputType::Client)
                         .name("name")
                         .description("description")
                         .response_timeout_secs(20)
@@ -31313,7 +33517,7 @@ async fn main() {
                             }),
                             ..Default::default()
                         })
-                        .expects_response(true)
+                        .expects_response(false)
                         .dynamic_variables(DynamicVariablesConfig {
                             dynamic_variable_placeholders: Some(
                                 elevenlabs_rust_sdk::serde_json::json!({}),
@@ -31323,7 +33527,7 @@ async fn main() {
                         .execution_mode(ToolExecutionMode::Immediate)
                         .build()
                         .expect("Failed to build request"),
-                })
+                ))
                 .response_mocks(vec![
                     ToolResponseMockConfigInput::builder()
                         .parameter_conditions(vec![
@@ -31338,7 +33542,7 @@ async fn main() {
                                 .expect("Failed to build request"),
                         ])
                         .mock_result("mock_result")
-                        .is_error(false)
+                        .is_error(true)
                         .build()
                         .expect("Failed to build request"),
                 ])
@@ -31729,11 +33933,11 @@ async fn main() {
             &ExecutionsGetQueryRequest {
                 cursor: Some("cursor".to_string()),
                 page_size: Some(30),
-                is_error: Some(false),
+                is_error: Some(true),
                 agent_id: Some("agent_id".to_string()),
                 branch_id: Some("branch_id".to_string()),
-                start_time: Some(2.5),
-                end_time: Some(3.56),
+                start_time: Some(3.61),
+                end_time: Some(3.3),
                 ..Default::default()
             },
             None,
@@ -31878,7 +34082,7 @@ async fn main() {
         .list(
             &AnalysisItemsListQueryRequest {
                 search: Some("search".to_string()),
-                page_size: Some(5),
+                page_size: Some(13),
                 kind: Some(AnalysisItemKind::Evaluation),
                 analysis_item_ids: Some(vec![]),
                 created_by_user_id: Some("created_by_user_id".to_string()),
@@ -32724,8 +34928,8 @@ async fn main() {
         .secrets
         .list(
             &SecretsListQueryRequest {
-                page_size: Some(57),
-                dependency_limit: Some(94),
+                page_size: Some(2),
+                dependency_limit: Some(18),
                 search: Some("search".to_string()),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -33286,16 +35490,16 @@ async fn main() {
                                 model_id: Some(TtsConversationalModel::ElevenTurboV2),
                                 voice_id: Some("voice_id".to_string()),
                                 supported_voices: Some(vec![]),
-                                stability: Some(7.21),
-                                speed: Some(6.83),
-                                similarity_boost: Some(4.75),
-                                clone_strength: Some(4.99),
+                                stability: Some(6.57),
+                                speed: Some(1.8),
+                                similarity_boost: Some(6.48),
+                                clone_strength: Some(1.49),
                                 pronunciation_dictionary_locators: Some(vec![]),
                                 ..Default::default()
                             }),
                             conversation: Some(ConversationConfigOverride {
-                                text_only: Some(true),
-                                max_duration_seconds: Some(6),
+                                text_only: Some(false),
+                                max_duration_seconds: Some(5),
                                 ..Default::default()
                             }),
                             agent: Some(AgentConfigOverrideInput {
@@ -33325,7 +35529,7 @@ async fn main() {
                     }),
                     ..Default::default()
                 }])
-                .scheduled_time_unix(6)
+                .scheduled_time_unix(5)
                 .agent_phone_number_id("agent_phone_number_id")
                 .whatsapp_params(
                     BatchCallWhatsAppParams::builder()
@@ -33358,7 +35562,7 @@ async fn main() {
                     }),
                     ..Default::default()
                 })
-                .target_concurrency_limit(6)
+                .target_concurrency_limit(2)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -33823,7 +36027,7 @@ async fn main() {
         .export(
             "batch_id",
             &ExportQueryRequest {
-                limit: Some(3),
+                limit: Some(7),
                 ..Default::default()
             },
             None,
@@ -33952,17 +36156,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(TtsModelFamily::Turbo)
                                     .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
-                                    .stability(0.1)
-                                    .speed(0.85)
-                                    .similarity_boost(0.42)
-                                    .clone_strength(0.25)
+                                    .stability(0.42)
+                                    .speed(0.78)
+                                    .similarity_boost(0.33)
+                                    .clone_strength(0.41)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(7.21),
-                            speed: Some(6.83),
-                            similarity_boost: Some(4.75),
-                            clone_strength: Some(4.99),
+                            stability: Some(6.57),
+                            speed: Some(1.8),
+                            similarity_boost: Some(6.48),
+                            clone_strength: Some(1.49),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -33973,8 +36177,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(true),
-                            max_duration_seconds: Some(6),
+                            text_only: Some(false),
+                            max_duration_seconds: Some(5),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -33988,7 +36192,7 @@ async fn main() {
                                 llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(true),
+                                tool_ids_strict: Some(false),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -34322,10 +36526,10 @@ async fn main() {
                 tool_call_sound: Some(ToolCallSoundType::Typing),
                 tool_call_sound_behavior: Some(ToolCallSoundBehavior::Auto),
                 execution_mode: Some(ToolExecutionMode::Immediate),
-                response_timeout_secs: Some(223),
+                response_timeout_secs: Some(45),
                 request_headers: Some(HashMap::new()),
                 request_meta: Some(HashMap::new()),
-                disable_compression: Some(false),
+                disable_compression: Some(true),
                 secret_token: Some(
                     ConvAiSecretLocator::builder()
                         .secret_id("secret_id")
@@ -34670,7 +36874,7 @@ async fn main() {
                         .interruption_mode(ToolInterruptionMode::Allow)
                         .tool_call_sound_behavior(ToolCallSoundBehavior::Auto)
                         .execution_mode(ToolExecutionMode::Immediate)
-                        .response_timeout_secs(35)
+                        .response_timeout_secs(37)
                         .assignments(vec![
                             DynamicVariableAssignment::builder()
                                 .source(DynamicVariableAssignmentSource::Response)
@@ -34696,7 +36900,7 @@ async fn main() {
                                         .expect("Failed to build request"),
                                 ])
                                 .mock_result("mock_result")
-                                .is_error(false)
+                                .is_error(true)
                                 .build()
                                 .expect("Failed to build request"),
                         ])
@@ -34892,7 +37096,7 @@ async fn main() {
                     interruption_mode: Some(ToolInterruptionMode::Allow),
                     tool_call_sound_behavior: Some(ToolCallSoundBehavior::Auto),
                     execution_mode: Some(ToolExecutionMode::Immediate),
-                    response_timeout_secs: Some(29),
+                    response_timeout_secs: Some(215),
                     assignments: Some(vec![
                         DynamicVariableAssignment::builder()
                             .source(DynamicVariableAssignmentSource::Response)
@@ -34918,7 +37122,7 @@ async fn main() {
                                     .expect("Failed to build request"),
                             ])
                             .mock_result("mock_result")
-                            .is_error(false)
+                            .is_error(true)
                             .build()
                             .expect("Failed to build request"),
                     ]),
@@ -35188,8 +37392,8 @@ async fn main() {
             "phone_number_id",
             &UpdateWhatsAppAccountRequest {
                 assigned_agent_id: Some("assigned_agent_id".to_string()),
-                enable_messaging: Some(true),
-                enable_audio_message_response: Some(false),
+                enable_messaging: Some(false),
+                enable_audio_message_response: Some(true),
                 enable_typing_indicator: Some(false),
                 ..Default::default()
             },
@@ -35562,8 +37766,8 @@ async fn main() {
                             .source("source")
                             .target("target")
                             .reroutes(vec![PositionInput {
-                                x: Some(5.17),
-                                y: Some(1.81),
+                                x: Some(1.15),
+                                y: Some(5.14),
                                 ..Default::default()
                             }])
                             .build()
@@ -35574,8 +37778,8 @@ async fn main() {
                         AgentWorkflowRequestModelNodes::End {
                             data: WorkflowEndNodeModelInput {
                                 position: Some(PositionInput {
-                                    x: Some(5.17),
-                                    y: Some(1.81),
+                                    x: Some(1.15),
+                                    y: Some(5.14),
                                     ..Default::default()
                                 }),
                                 edge_order: Some(vec!["edge_order".to_string()]),
@@ -35584,7 +37788,7 @@ async fn main() {
                             },
                         },
                     )])),
-                    prevent_subagent_loops: Some(false),
+                    prevent_subagent_loops: Some(true),
                     ..Default::default()
                 })
                 .include_draft(true)
@@ -35763,9 +37967,9 @@ async fn main() {
             Some(&BodyUpdateAgentBranchV1ConvaiAgentsAgentIdBranchesBranchIdPatch {
                 name: Some("name".to_string()),
                 description: Some("description".to_string()),
-                is_archived: Some(false),
+                is_archived: Some(true),
                 protection_status: Some(BranchProtectionStatus::WriterPermsRequired),
-                auto_rebase: Some(true),
+                auto_rebase: Some(false),
                 ..Default::default()
             }),
             None,
@@ -35835,7 +38039,7 @@ async fn main() {
 <dl>
 <dd>
 
-Returns the result of merging the source branch into the target branch without performing the merge. Useful for showing an accurate diff before confirming.
+Returns the result of merging the source branch into the target branch without performing the merge. When `conflicts` is not empty, the merge itself is rejected unless `conflict_resolutions` settles every conflict or `force` is set; until then the returned configuration shows one side of each conflict only as a placeholder.
 </dd>
 </dl>
 </dd>
@@ -35863,7 +38067,7 @@ async fn main() {
             "agtbrch_8901k4t9z5defmb8vh3e9361y7nj",
             &PreviewMergeQueryRequest::builder()
                 .target_branch_id("agtbrch_8901k4t9z5defmb8vh3e9361y7nj")
-                .force(false)
+                .force(true)
                 .include_procedure_generated_workflow_elements(true)
                 .build()
                 .expect("Failed to build request"),
@@ -35917,7 +38121,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.force:** `Option<bool>` — When true, source branch changes always win conflicts regardless of timestamps
+**request.force:** `Option<bool>` — When true, the preview keeps the source branch's value for every conflict, as a merge with `force` does. Without it, a merge with conflicts needs `conflict_resolutions`.
     
 </dd>
 </dl>
@@ -35958,7 +38162,7 @@ async fn main() {
 <dl>
 <dd>
 
-Merge a branch into a target branch
+Merge a branch into a target branch. If both branches changed the same field, the merge returns 409 unless `conflict_resolutions` settles every conflict the merge preview reports, or `force` is set.
 </dd>
 </dl>
 </dd>
@@ -35989,6 +38193,16 @@ async fn main() {
                 .body(MergeABranchIntoATargetBranchV1ConvaiAgentsAgentIdBranchesSourceBranchIdMergePost {
                     archive_source_branch: Some(true),
                     force: Some(true),
+                    conflict_resolutions: Some(vec![
+                        ConflictResolution::builder()
+                            .conflict_id("conversation_config:agent.first_message")
+                            .choice(ConflictResolutionChoice::Source)
+                            .custom_value("custom_value")
+                            .build()
+                            .expect("Failed to build request"),
+                    ]),
+                    source_tip_id: Some("source_tip_id".to_string()),
+                    target_tip_id: Some("target_tip_id".to_string()),
                     ..Default::default()
                 })
                 .build()
@@ -36076,7 +38290,7 @@ async fn main() {
 <dl>
 <dd>
 
-Returns the result of pulling changes from a source branch (defaults to main) into the given branch without performing it, preserving the given branch's own changes. Useful for showing an accurate diff before confirming.
+Returns the result of pulling changes from a source branch (defaults to main) into the given branch without performing it. When `conflicts` is not empty, the rebase itself is rejected unless `conflict_resolutions` settles every conflict; until then the returned configuration keeps the given branch's side of each conflict.
 </dd>
 </dl>
 </dd>
@@ -36190,7 +38404,7 @@ async fn main() {
 <dl>
 <dd>
 
-Pull changes from a source branch (defaults to main) into this branch as a new version, preserving this branch's own changes on conflicts.
+Pull changes from a source branch (defaults to main) into this branch as a new version. If both branches changed the same field, the rebase returns 409 unless `conflict_resolutions` settles every conflict the rebase preview reports.
 </dd>
 </dl>
 </dd>
@@ -36218,9 +38432,19 @@ async fn main() {
             "agtbrch_8901k4t9z5defmb8vh3e9361y7nj",
             &RebaseRequest {
                 source_branch_id: Some("source_branch_id".to_string()),
-                body: Some(
-                    BodyRebaseABranchOntoMainV1ConvaiAgentsAgentIdBranchesBranchIdRebasePost::default(),
-                ),
+                body: Some(BodyRebaseABranchOntoMainV1ConvaiAgentsAgentIdBranchesBranchIdRebasePost {
+                    conflict_resolutions: Some(vec![
+                        ConflictResolution::builder()
+                            .conflict_id("conversation_config:agent.first_message")
+                            .choice(ConflictResolutionChoice::Source)
+                            .custom_value("custom_value")
+                            .build()
+                            .expect("Failed to build request"),
+                    ]),
+                    branch_tip_id: Some("branch_tip_id".to_string()),
+                    source_tip_id: Some("source_tip_id".to_string()),
+                    ..Default::default()
+                }),
                 ..Default::default()
             },
             None,
@@ -36642,8 +38866,8 @@ async fn main() {
                                     .source("source")
                                     .target("target")
                                     .reroutes(vec![PositionInput {
-                                        x: Some(5.17),
-                                        y: Some(1.81),
+                                        x: Some(1.15),
+                                        y: Some(5.14),
                                         ..Default::default()
                                     }])
                                     .build()
@@ -36654,8 +38878,8 @@ async fn main() {
                                 AgentWorkflowRequestModelNodes::End {
                                     data: WorkflowEndNodeModelInput {
                                         position: Some(PositionInput {
-                                            x: Some(5.17),
-                                            y: Some(1.81),
+                                            x: Some(1.15),
+                                            y: Some(5.14),
                                             ..Default::default()
                                         }),
                                         edge_order: Some(vec!["edge_order".to_string()]),
@@ -36664,7 +38888,7 @@ async fn main() {
                                     },
                                 },
                             )])),
-                            prevent_subagent_loops: Some(false),
+                            prevent_subagent_loops: Some(true),
                             ..Default::default()
                         })
                         .name("name")
@@ -37492,7 +39716,7 @@ async fn main() {
                 title: Some("title".to_string()),
                 description: Some("description".to_string()),
                 requested_reviewer_user_ids: Some(vec!["requested_reviewer_user_ids".to_string()]),
-                close: Some(true),
+                close: Some(false),
                 ..Default::default()
             }),
             None,
@@ -37785,7 +40009,7 @@ async fn main() {
             "agtmprop_8901k4t9z5defmb8vh3e9361y7nj",
             Some(&BodyMergeAMergeProposalV1ConvaiAgentsAgentIdMergeProposalsMergeProposalIdMergePost {
                 archive_source_branch: Some(true),
-                force: Some(true),
+                force: Some(false),
                 ..Default::default()
             }),
             None,
@@ -37943,7 +40167,7 @@ async fn main() {
         .config_param
         .update(
             &ReplaceWorkspaceConfigRequest::builder()
-                .expected_version(1)
+                .expected_version(10)
                 .config(CampaignConfigInput {
                     policy: Some(PolicyConfigInput {
                         timezone: Some("UTC".to_string()),
@@ -37955,19 +40179,38 @@ async fn main() {
                             max_redirects: Some(2),
                             interval_placement: Some(IntervalPlacement::Start),
                             rotate_step_seconds: Some(900),
-                            max_consecutive_failures_per_number: Some(24),
+                            max_consecutive_failures_per_number: Some(7),
                             ..Default::default()
                         }),
                         calling_periods: Some(vec![
                             CallingPeriod::builder()
-                                .weekdays(vec![1])
+                                .weekdays(vec![6])
                                 .intervals(vec![
                                     CallingIntervalPolicy::builder()
-                                        .start("22:26")
-                                        .end("20:37")
+                                        .start("23:47")
+                                        .end("24:00")
                                         .build()
                                         .expect("Failed to build request"),
                                 ])
+                                .build()
+                                .expect("Failed to build request"),
+                        ]),
+                        date_overrides: Some(vec![
+                            DateOverride::builder()
+                                .start_date(
+                                    NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap(),
+                                )
+                                .end_date(
+                                    NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap(),
+                                )
+                                .intervals(vec![
+                                    CallingIntervalPolicy::builder()
+                                        .start("23:47")
+                                        .end("24:00")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                ])
+                                .name("name")
                                 .build()
                                 .expect("Failed to build request"),
                         ]),
@@ -38002,19 +40245,38 @@ async fn main() {
                                 max_redirects: Some(2),
                                 interval_placement: Some(IntervalPlacement::Start),
                                 rotate_step_seconds: Some(900),
-                                max_consecutive_failures_per_number: Some(24),
+                                max_consecutive_failures_per_number: Some(7),
                                 ..Default::default()
                             }),
                             calling_periods: Some(vec![
                                 CallingPeriod::builder()
-                                    .weekdays(vec![1])
+                                    .weekdays(vec![6])
                                     .intervals(vec![
                                         CallingIntervalPolicy::builder()
-                                            .start("22:26")
-                                            .end("20:37")
+                                            .start("23:47")
+                                            .end("24:00")
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ]),
+                            date_overrides: Some(vec![
+                                DateOverride::builder()
+                                    .start_date(
+                                        NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap(),
+                                    )
+                                    .end_date(
+                                        NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap(),
+                                    )
+                                    .intervals(vec![
+                                        CallingIntervalPolicy::builder()
+                                            .start("23:47")
+                                            .end("24:00")
+                                            .build()
+                                            .expect("Failed to build request"),
+                                    ])
+                                    .name("name")
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
@@ -38048,19 +40310,38 @@ async fn main() {
                             max_redirects: Some(2),
                             interval_placement: Some(IntervalPlacement::Start),
                             rotate_step_seconds: Some(900),
-                            max_consecutive_failures_per_number: Some(24),
+                            max_consecutive_failures_per_number: Some(7),
                             ..Default::default()
                         }),
                         calling_periods: Some(vec![
                             CallingPeriod::builder()
-                                .weekdays(vec![1])
+                                .weekdays(vec![6])
                                 .intervals(vec![
                                     CallingIntervalPolicy::builder()
-                                        .start("22:26")
-                                        .end("20:37")
+                                        .start("23:47")
+                                        .end("24:00")
                                         .build()
                                         .expect("Failed to build request"),
                                 ])
+                                .build()
+                                .expect("Failed to build request"),
+                        ]),
+                        date_overrides: Some(vec![
+                            DateOverride::builder()
+                                .start_date(
+                                    NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap(),
+                                )
+                                .end_date(
+                                    NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap(),
+                                )
+                                .intervals(vec![
+                                    CallingIntervalPolicy::builder()
+                                        .start("23:47")
+                                        .end("24:00")
+                                        .build()
+                                        .expect("Failed to build request"),
+                                ])
+                                .name("name")
                                 .build()
                                 .expect("Failed to build request"),
                         ]),
@@ -38452,16 +40733,16 @@ async fn main() {
                                 model_id: Some(TtsConversationalModel::ElevenTurboV2),
                                 voice_id: Some("voice_id".to_string()),
                                 supported_voices: Some(vec![]),
-                                stability: Some(7.21),
-                                speed: Some(6.83),
-                                similarity_boost: Some(4.75),
-                                clone_strength: Some(4.99),
+                                stability: Some(6.57),
+                                speed: Some(1.8),
+                                similarity_boost: Some(6.48),
+                                clone_strength: Some(1.49),
                                 pronunciation_dictionary_locators: Some(vec![]),
                                 ..Default::default()
                             }),
                             conversation: Some(ConversationConfigOverride {
-                                text_only: Some(true),
-                                max_duration_seconds: Some(6),
+                                text_only: Some(false),
+                                max_duration_seconds: Some(5),
                                 ..Default::default()
                             }),
                             agent: Some(AgentConfigOverrideInput {
@@ -38507,19 +40788,36 @@ async fn main() {
                         max_redirects: Some(2),
                         interval_placement: Some(IntervalPlacement::Start),
                         rotate_step_seconds: Some(900),
-                        max_consecutive_failures_per_number: Some(24),
+                        max_consecutive_failures_per_number: Some(7),
                         ..Default::default()
                     }),
                     calling_periods: Some(vec![
                         CallingPeriod::builder()
-                            .weekdays(vec![1])
+                            .weekdays(vec![6])
                             .intervals(vec![
                                 CallingIntervalPolicy::builder()
-                                    .start("22:26")
-                                    .end("20:37")
+                                    .start("23:47")
+                                    .end("24:00")
                                     .build()
                                     .expect("Failed to build request"),
                             ])
+                            .build()
+                            .expect("Failed to build request"),
+                    ]),
+                    date_overrides: Some(vec![
+                        DateOverride::builder()
+                            .start_date(
+                                NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap(),
+                            )
+                            .end_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
+                            .intervals(vec![
+                                CallingIntervalPolicy::builder()
+                                    .start("23:47")
+                                    .end("24:00")
+                                    .build()
+                                    .expect("Failed to build request"),
+                            ])
+                            .name("name")
                             .build()
                             .expect("Failed to build request"),
                     ]),
@@ -38548,7 +40846,7 @@ async fn main() {
                         .agent_phone_number_id("agent_phone_number_id")
                         .mode_config(PhoneVoiceConfigInput {
                             ringing_timeout_secs: Some(60),
-                            twilio_call_recording_enabled: Some(false),
+                            twilio_call_recording_enabled: Some(true),
                             twilio_machine_detection: Some(TwilioMachineDetectionConfig {
                                 mode: Some(TwilioMachineDetectionMode::Enable),
                                 actions: Some(vec![
@@ -39499,7 +41797,7 @@ async fn main() {
         .export(
             "campaign_id",
             &CallsExportQueryRequest {
-                limit: Some(10),
+                limit: Some(9),
                 ..Default::default()
             },
             None,
@@ -39596,7 +41894,7 @@ async fn main() {
         .list(
             &AttentionListQueryRequest {
                 campaign_id: Some("campaign_id".to_string()),
-                include_resolved: Some(false),
+                include_resolved: Some(true),
                 page_size: Some(100),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -40017,10 +42315,10 @@ async fn main() {
                             .language("language")
                             .model_family(TtsModelFamily::Turbo)
                             .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
-                            .stability(0.1)
-                            .speed(0.85)
-                            .similarity_boost(0.42)
-                            .clone_strength(0.25)
+                            .stability(0.42)
+                            .speed(0.78)
+                            .similarity_boost(0.33)
+                            .clone_strength(0.41)
                             .build()
                             .expect("Failed to build request"),
                     ]),
@@ -40037,7 +42335,7 @@ async fn main() {
                     stability: Some(0.5),
                     speed: Some(1_f64),
                     similarity_boost: Some(0.8),
-                    clone_strength: Some(0.01),
+                    clone_strength: Some(0.91),
                     text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                     pronunciation_dictionary_locators: Some(vec![
                         PydanticPronunciationDictionaryVersionLocator::builder()
@@ -40060,18 +42358,18 @@ async fn main() {
                 })
                 .turn(BaseTurnConfig {
                     turn_timeout: Some(7_f64),
-                    initial_wait_time: Some(3.22),
+                    initial_wait_time: Some(5_f64),
                     silence_end_call_timeout: Some(-1_f64),
                     turn_eagerness: Some(TurnEagerness::Patient),
                     spelling_patience: Some(SpellingPatience::Auto),
-                    speculative_turn: Some(true),
-                    retranscribe_on_turn_timeout: Some(true),
+                    speculative_turn: Some(false),
+                    retranscribe_on_turn_timeout: Some(false),
                     turn_model: Some(TurnModel::TurnV2),
                     interruption_ignore_terms: Some(vec!["interruption_ignore_terms".to_string()]),
                     interruption_ignore_term_languages: Some(vec![
                         "interruption_ignore_term_languages".to_string(),
                     ]),
-                    merge_with_default_ignore_terms: Some(false),
+                    merge_with_default_ignore_terms: Some(true),
                     transcribe_on_disabled_interruptions: Some(true),
                     ..Default::default()
                 })
@@ -40101,7 +42399,7 @@ async fn main() {
                         crossfade_loop: Some(true),
                         ..Default::default()
                     }),
-                    source_attribution: Some(false),
+                    source_attribution: Some(true),
                     ..Default::default()
                 })
                 .privacy(PrivacyConfigInput {
@@ -40110,7 +42408,7 @@ async fn main() {
                     delete_transcript_and_pii: Some(true),
                     delete_audio: Some(false),
                     apply_to_existing_conversations: Some(false),
-                    zero_retention_mode: Some(true),
+                    zero_retention_mode: Some(false),
                     conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                         enabled: Some(true),
                         entities: Some(vec![ConfigEntityType::Name]),
@@ -40316,10 +42614,10 @@ async fn main() {
                             .language("language")
                             .model_family(TtsModelFamily::Turbo)
                             .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
-                            .stability(0.1)
-                            .speed(0.85)
-                            .similarity_boost(0.42)
-                            .clone_strength(0.25)
+                            .stability(0.42)
+                            .speed(0.78)
+                            .similarity_boost(0.33)
+                            .clone_strength(0.41)
                             .build()
                             .expect("Failed to build request"),
                     ]),
@@ -40336,7 +42634,7 @@ async fn main() {
                     stability: Some(0.5),
                     speed: Some(1_f64),
                     similarity_boost: Some(0.8),
-                    clone_strength: Some(0.01),
+                    clone_strength: Some(0.91),
                     text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                     pronunciation_dictionary_locators: Some(vec![
                         PydanticPronunciationDictionaryVersionLocator::builder()
@@ -40359,18 +42657,18 @@ async fn main() {
                 }),
                 turn: Some(BaseTurnConfig {
                     turn_timeout: Some(7_f64),
-                    initial_wait_time: Some(3.22),
+                    initial_wait_time: Some(5_f64),
                     silence_end_call_timeout: Some(-1_f64),
                     turn_eagerness: Some(TurnEagerness::Patient),
                     spelling_patience: Some(SpellingPatience::Auto),
-                    speculative_turn: Some(true),
-                    retranscribe_on_turn_timeout: Some(true),
+                    speculative_turn: Some(false),
+                    retranscribe_on_turn_timeout: Some(false),
                     turn_model: Some(TurnModel::TurnV2),
                     interruption_ignore_terms: Some(vec!["interruption_ignore_terms".to_string()]),
                     interruption_ignore_term_languages: Some(vec![
                         "interruption_ignore_term_languages".to_string(),
                     ]),
-                    merge_with_default_ignore_terms: Some(false),
+                    merge_with_default_ignore_terms: Some(true),
                     transcribe_on_disabled_interruptions: Some(true),
                     ..Default::default()
                 }),
@@ -40400,7 +42698,7 @@ async fn main() {
                         crossfade_loop: Some(true),
                         ..Default::default()
                     }),
-                    source_attribution: Some(false),
+                    source_attribution: Some(true),
                     ..Default::default()
                 }),
                 privacy: Some(PrivacyConfigInput {
@@ -40409,7 +42707,7 @@ async fn main() {
                     delete_transcript_and_pii: Some(true),
                     delete_audio: Some(false),
                     apply_to_existing_conversations: Some(false),
-                    zero_retention_mode: Some(true),
+                    zero_retention_mode: Some(false),
                     conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                         enabled: Some(true),
                         entities: Some(vec![ConfigEntityType::Name]),
@@ -40431,7 +42729,7 @@ async fn main() {
                     ..Default::default()
                 }),
                 language: Some("language".to_string()),
-                cascade_timeout_seconds: Some(12.39),
+                cascade_timeout_seconds: Some(5.8),
                 tags: Some(vec!["tags".to_string()]),
                 overrides: Some(SpeechEngineConversationInitiationClientDataConfig {
                     first_message: Some(false),
@@ -41156,6 +43454,396 @@ async fn main() {
 </dl>
 </details>
 
+<details><summary><code>client.procedures.<a href="/src/api/resources/procedures/procedures.rs">list_2</a>(agent_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionProcedureResponse&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the procedures (SOPs) on the named receptionist, with the tools each one is missing.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .procedures
+        .list_2(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.procedures.<a href="/src/api/resources/procedures/procedures.rs">create_2</a>(agent_id: &amp;str, body: &amp;ReceptionCreateProcedureRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionProcedure, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add a procedure (SOP) to the named receptionist.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .procedures
+        .create_2(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionCreateProcedureRequest::builder()
+                .name(StrippedStr("ametincididunt".to_string()))
+                .trigger(StrippedStr("sintnulla veni".to_string()))
+                .body(
+                    "1. Ask for the caller\'s name and order number.\n2. Look up the order and read back its status.",
+                )
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionCreateProcedureRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.procedures.<a href="/src/api/resources/procedures/procedures.rs">update</a>(agent_id: &amp;str, procedure_id: &amp;str, body: &amp;ReceptionUpdateProcedureRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionProcedure, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replace an existing procedure on the named receptionist. Send every field: an omitted `body` resets to empty.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .procedures
+        .update(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "agtprc_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateProcedureRequest::builder()
+                .name(StrippedStr("consectetu".to_string()))
+                .trigger(StrippedStr("pariat".to_string()))
+                .body(
+                    "1. Ask for the caller\'s name and order number.\n2. Look up the order and read back its status.",
+                )
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**procedure_id:** `&str` — ID of the procedure. Returned when you add one; list them with `GET /v1/reception/customer-facing-agents/{agent_id}/procedures`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateProcedureRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.procedures.<a href="/src/api/resources/procedures/procedures.rs">delete</a>(agent_id: &amp;str, procedure_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a procedure from the named receptionist.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .procedures
+        .delete(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "agtprc_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**procedure_id:** `&str` — ID of the procedure. Returned when you add one; list them with `GET /v1/reception/customer-facing-agents/{agent_id}/procedures`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Analysis
 <details><summary><code>client.analysis.<a href="/src/api/resources/analysis/analysis.rs">run</a>(conversation_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetConversationResponseModel, crate::error::ApiError&gt;</code></summary>
 <dl>
@@ -41694,7 +44382,7 @@ async fn main() {
 <dl>
 <dd>
 
-Delete an environment variable and its values in all environments. WARNING: Agents are not checked. A variable that an agent still uses (custom LLM, webhooks or cloud storage export, on any branch or version) is deleted anyway, and that agent's conversations then fail. The delete is only rejected while tools, MCP servers or the workspace conversation initiation webhook use the variable.
+Delete an environment variable and its values in all environments. The delete is rejected while the latest version of an unarchived agent branch, a tool, an MCP server or the workspace conversation initiation webhook uses the variable. Archived branches and earlier versions are not checked.
 </dd>
 </dl>
 </dd>
@@ -42604,9 +45292,9 @@ async fn main() {
                                 eagerness: Some(Eagerness::Low),
                                 create_response: Some(true),
                                 interrupt_response: Some(true),
-                                threshold: Some(5.99),
-                                prefix_padding_ms: Some(2),
-                                silence_duration_ms: Some(6),
+                                threshold: Some(5.31),
+                                prefix_padding_ms: Some(8),
+                                silence_duration_ms: Some(3),
                                 turn_timeout: Some(-1_f64),
                                 ..Default::default()
                             }),
@@ -42634,7 +45322,7 @@ async fn main() {
                     temperature: Some(0.7),
                     max_duration_seconds: Some(600),
                     include: Some(vec!["include".to_string()]),
-                    parallel_tool_calls: Some(true),
+                    parallel_tool_calls: Some(false),
                     reasoning: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     prompt: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     ..Default::default()
@@ -42642,7 +45330,7 @@ async fn main() {
                 expires_after: Some(
                     ExpiresAfter::builder()
                         .anchor(Anchor::CreatedAt)
-                        .seconds(4)
+                        .seconds(6)
                         .build()
                         .expect("Failed to build request"),
                 ),
@@ -42729,7 +45417,7 @@ async fn main() {
                 .body(
                     BodyGenerateCompositionPlanV1MusicPlanPost::builder()
                         .prompt("prompt")
-                        .music_length_ms(298699)
+                        .music_length_ms(389660)
                         .model_id(MusicModelId::MusicV1)
                         .build()
                         .expect("Failed to build request"),
@@ -42961,7 +45649,7 @@ async fn main() {
         .finetunes
         .create(
             &BodyCreateMusicFinetuneV1MusicFinetunesPost::builder()
-                .name("in quis mollit")
+                .name("ipsum aute anim laboris cillum")
                 .primary_genre("primary_genre")
                 .files(vec![vec![]])
                 .tags(vec!["tags".to_string()])
@@ -43116,7 +45804,7 @@ async fn main() {
         .update(
             "finetune_id",
             &UpdateMusicFinetuneRequestModel {
-                name: Some("aliqua occaecat reprehenderit".to_string()),
+                name: Some("in veniam".to_string()),
                 tags: Some(vec!["tags".to_string()]),
                 primary_genre: Some("primary_genre".to_string()),
                 visibility: Some(BodyCreateMusicFinetuneV1MusicFinetunesPostVisibility::Private),
@@ -43400,7 +46088,7 @@ async fn main() {
         .orders
         .create(
             Some(&Some(CreateOrderRequest {
-                sandbox: Some(true),
+                sandbox: Some(false),
                 ..Default::default()
             })),
             None,
@@ -43478,7 +46166,7 @@ async fn main() {
     client
         .orders
         .get(
-            &OrderId("prodorder_18dray9evy1eixs0e75b645t0d".to_string()),
+            &OrderId("prodorder_q8w2dbfa16xgtlvpoa0wum7qoh".to_string()),
             None,
         )
         .await;
@@ -43554,7 +46242,7 @@ async fn main() {
     client
         .orders
         .update(
-            &OrderId("prodorder_ouzwjdn1dn7qbr3gamncisgk6c".to_string()),
+            &OrderId("prodorder_tw8bnuc48f630g94hprtlwlnem".to_string()),
             &BodyUpdateOrderV1ProductionsOrdersOrderIdPatch::builder()
                 .request(
                     UpdateOrderRequest::builder()
@@ -43647,7 +46335,7 @@ async fn main() {
     client
         .orders
         .submit(
-            &OrderId("prodorder_jnzx94trynt2tmoo3iua9vgcda".to_string()),
+            &OrderId("prodorder_az733zm9ev09qlameu8iq1qrkh".to_string()),
             None,
         )
         .await;
@@ -43724,7 +46412,7 @@ async fn main() {
     client
         .media
         .register(
-            &OrderId("prodorder_dtw8bnuc48f630g94hprtlwlne".to_string()),
+            &OrderId("prodorder_uiip38fw6oaxf9gz3cnnuplz2m".to_string()),
             &BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPost::builder()
                 .declared_language("declared_language")
                 .media(vec![])
@@ -43816,8 +46504,8 @@ async fn main() {
     client
         .media
         .get(
-            &OrderId("prodorder_xa8iaw59m9abnacd1yjnvg5xlm".to_string()),
-            &MediaId("prodmedia_27mbbxwjo9h420zonqxj8zubn7".to_string()),
+            &OrderId("prodorder_7mbbxwjo9h420zonqxj8zubn7r".to_string()),
+            &MediaId("prodmedia_xrwpqq6wvf21lwlhim1dh7g4qh".to_string()),
             None,
         )
         .await;
@@ -43902,18 +46590,18 @@ async fn main() {
     client
         .items
         .upsert(
-            &OrderId("prodorder_a3j4sfqyd93pceng4xt3egvw2g".to_string()),
+            &OrderId("prodorder_bcluxwmxxkxpu9nsh2o0ihren6".to_string()),
             &BodyUpsertOrderItemV1ProductionsOrdersOrderIdItemsPost::builder()
                 .request(
                     UpsertOrderItemRequest::builder()
                         .item(OrderItemRequestInput::Dub {
                             data: DubOrderItemRequest::builder()
                                 .media_id(MediaId(
-                                    "prodmedia_14ey46ea22h7agqqmq0pyq2m4j".to_string(),
+                                    "prodmedia_h2101ek0y4z82n6ytjig82mvel".to_string(),
                                 ))
                                 .source_language("source_language")
                                 .destination_languages(vec!["destination_languages".to_string()])
-                                .include_captions(true)
+                                .include_captions(false)
                                 .include_source_captions(true)
                                 .instructions("instructions")
                                 .captions_sdh(false)
@@ -44008,8 +46696,8 @@ async fn main() {
     client
         .items
         .remove(
-            &OrderId("prodorder_m1tk2ia6vh8jlaex67t608gjcf".to_string()),
-            &ItemId("proditem_6ednllfuhozfltew590ksm7mw9".to_string()),
+            &OrderId("prodorder_ednllfuhozfltew590ksm7mw9a".to_string()),
+            &ItemId("proditem_jnzx94trynt2tmoo3iua9vgcda".to_string()),
             None,
         )
         .await;
@@ -44094,7 +46782,7 @@ async fn main() {
     client
         .deliverables
         .list(
-            &OrderId("prodorder_hppc0ii46w5xgt15ruu6zu0qec".to_string()),
+            &OrderId("prodorder_7q8apf4tz9uai2rdk14zoq9yw4".to_string()),
             None,
         )
         .await;
@@ -45122,7 +47810,7 @@ async fn main() {
                     )
                     .aspect_ratio(BytedanceSeedance2FastRequestAspectRatio::Auto)
                     .duration_secs(5)
-                    .seed(7)
+                    .seed(4)
                     .generate_audio(true)
                     .start_frame(ImageReference::Asset {
                         data: StaticAssetReference::builder()
@@ -45154,7 +47842,7 @@ async fn main() {
                             .build()
                             .expect("Failed to build request"),
                     }])
-                    .resolution(BytedanceSeedance2RequestResolution::Num480P)
+                    .resolution(BytedanceSeedance25RequestResolution::Num480P)
                     .build()
                     .expect("Failed to build request"),
             },
@@ -45433,7 +48121,7 @@ async fn main() {
                             .expect("Failed to build request"),
                     }])
                     .aspect_ratio(BytedanceSeedream5LiteRequestAspectRatio::Auto)
-                    .seed(0)
+                    .seed(5)
                     .resolution(BytedanceSeedream5LiteRequestResolution::Num2K)
                     .build()
                     .expect("Failed to build request"),
@@ -46369,6 +49057,489 @@ async fn main() {
 </dl>
 </details>
 
+<details><summary><code>client.assets.<a href="/src/api/resources/assets/assets.rs">list_2</a>(xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionAssetResource&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the workspace's bookable assets, such as rooms or equipment.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.assets.list_2("xi-workspace-id".to_string(), None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.assets.<a href="/src/api/resources/assets/assets.rs">create_2</a>(body: &amp;ReceptionCreateAssetRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionAssetResource, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a bookable asset, such as a room or a piece of equipment.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .assets
+        .create_2(
+            &ReceptionCreateAssetRequest::builder()
+                .groups(vec![
+                    ReceptionGroupMembership::builder()
+                        .label(StrippedStr("consectetur e".to_string()))
+                        .rank(4)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .ungrouped_rank(6)
+                .name(StrippedStr("velit".to_string()))
+                .description(StrippedStr("qui veniam ".to_string()))
+                .is_active(true)
+                .available_hours(WorkingHours {
+                    hours: Some(HashMap::from([(
+                        "key".to_string(),
+                        vec![
+                            TimeRangeModel::builder()
+                                .start_hour(9)
+                                .start_minute(6)
+                                .end_hour(17)
+                                .end_minute(30)
+                                .build()
+                                .expect("Failed to build request"),
+                        ],
+                    )])),
+                    timezone: Some("timezone".to_string()),
+                    ..Default::default()
+                })
+                .photo_url("https://male-coal.com/")
+                .location_id("location_id")
+                .customer_facing_name(StrippedStr("ut sed elit".to_string()))
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionCreateAssetRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.assets.<a href="/src/api/resources/assets/assets.rs">get_2</a>(asset_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionAssetResource, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get an asset by ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .assets
+        .get_2(
+            "asset_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**asset_id:** `&str` — ID of the asset. Returned when you create one; list them with `GET /v1/reception/assets`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.assets.<a href="/src/api/resources/assets/assets.rs">update</a>(asset_id: &amp;str, body: &amp;ReceptionUpdateAssetRequestPatch, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionAssetResource, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an asset. Only the fields sent are changed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .assets
+        .update(
+            "asset_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateAssetRequestPatch {
+                groups: Some(vec![
+                    ReceptionGroupMembership::builder()
+                        .label(StrippedStr("consectetur e".to_string()))
+                        .rank(4)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                ungrouped_rank: Some(3),
+                name: Some(StrippedStr("amete".to_string())),
+                description: Some(StrippedStr("pariat".to_string())),
+                is_active: Some(true),
+                available_hours: Some(WorkingHours {
+                    hours: Some(HashMap::from([(
+                        "key".to_string(),
+                        vec![
+                            TimeRangeModel::builder()
+                                .start_hour(9)
+                                .start_minute(6)
+                                .end_hour(17)
+                                .end_minute(30)
+                                .build()
+                                .expect("Failed to build request"),
+                        ],
+                    )])),
+                    timezone: Some("timezone".to_string()),
+                    ..Default::default()
+                }),
+                photo_url: Some("https://male-coal.com/".to_string()),
+                location_id: Some("location_id".to_string()),
+                customer_facing_name: Some(StrippedStr("do pa".to_string())),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**asset_id:** `&str` — ID of the asset. Returned when you create one; list them with `GET /v1/reception/assets`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateAssetRequestPatch`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.assets.<a href="/src/api/resources/assets/assets.rs">delete_2</a>(asset_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete an asset.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .assets
+        .delete_2(
+            "asset_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**asset_id:** `&str` — ID of the asset. Returned when you create one; list them with `GET /v1/reception/assets`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Usage
 <details><summary><code>client.usage.<a href="/src/api/resources/usage/usage.rs">get_usage_by_product_over_time</a>(body: &amp;BodyGetWorkspaceUsageV1WorkspaceAnalyticsQueryUsageByProductOverTimePost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;WorkspaceAnalyticsQueryResponseModel, crate::error::ApiError&gt;</code></summary>
 <dl>
@@ -46407,8 +49578,8 @@ async fn main() {
         .usage
         .get_usage_by_product_over_time(
             &BodyGetWorkspaceUsageV1WorkspaceAnalyticsQueryUsageByProductOverTimePost::builder()
-                .start_time(8037220951716727)
-                .end_time(5812684333956902)
+                .start_time(716590707768701)
+                .end_time(6591121939594520)
                 .interval_seconds(60)
                 .group_by(vec![
                     BodyGetWorkspaceUsageV1WorkspaceAnalyticsQueryUsageByProductOverTimePostGroupByItem::ProductType,
@@ -46500,9 +49671,9 @@ async fn main() {
         .usage
         .get_usage(
             &BodyGetWorkspaceCostUsageV1WorkspaceAnalyticsUsagePost::builder()
-                .start_time(6170929235327434)
-                .end_time(412967195721056.94)
-                .interval_seconds(282899197814400)
+                .start_time(298351135570565)
+                .end_time(7828834351137042)
+                .interval_seconds(6509554547760000)
                 .group_by(vec![
                     BodyGetWorkspaceCostUsageV1WorkspaceAnalyticsUsagePostGroupByItem::Model,
                 ])
@@ -46595,8 +49766,8 @@ async fn main() {
         .requests
         .get(
             Some(&BodyListApiRequestsV1WorkspaceAnalyticsRequestsPost {
-                start_time: Some(1116278011159287),
-                end_time: Some(1550763970224527),
+                start_time: Some(31362851225611),
+                end_time: Some(3841650168223277),
                 limit: Some(100),
                 sort: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 filters: Some(vec![
@@ -46632,6 +49803,5203 @@ async fn main() {
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Services
+<details><summary><code>client.services.<a href="/src/api/resources/services/services.rs">list</a>(request: &amp;ServicesListQueryRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionService&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get all services for the current workspace with optional filters
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .services
+        .list(
+            &ServicesListQueryRequest {
+                staff_id: Some("staff_id".to_string()),
+                asset_id: Some("asset_id".to_string()),
+                is_active: Some(false),
+                kind: Some(ReceptionServiceKind::Classic),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `&ServicesListQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.staff_id:** `Option<String>` — Only services this staff member performs.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.asset_id:** `Option<String>` — Only services that book this asset.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.is_active:** `Option<bool>` — Only active (`true`) or inactive (`false`) services.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.kind:** `Option<ReceptionServiceKind>` — Only services of this kind.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.services.<a href="/src/api/resources/services/services.rs">create</a>(body: &amp;ReceptionCreateServiceRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionService, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new service
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .services
+        .create(
+            &ReceptionCreateServiceRequest::builder()
+                .pricing_mode(PricingMode::Fixed)
+                .intake_questions(vec![
+                    ReceptionIntakeQuestion::builder()
+                        .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .label(StrippedStr("tempor id sint".to_string()))
+                        .kind(IntakeQuestionKind::Text)
+                        .options(vec![StrippedStr("conse".to_string())])
+                        .required(true)
+                        .is_active(true)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .groups(vec![
+                    ReceptionGroupMembership::builder()
+                        .label(StrippedStr("consectetur e".to_string()))
+                        .rank(4)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .ungrouped_rank(4)
+                .name(StrippedStr("dolor".to_string()))
+                .description(StrippedStr("laborum".to_string()))
+                .variants(vec![
+                    ReceptionServiceVariant::builder()
+                        .id("variant_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .duration_minutes(60)
+                        .price(4.08)
+                        .is_active(true)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .kind(ReceptionServiceKind::Classic)
+                .buffer_minutes(15)
+                .service_location(ServiceLocationType::Business)
+                .add_ons(vec![
+                    ReceptionAddOn::builder()
+                        .id("addon_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .name(StrippedStr("adipi".to_string()))
+                        .description(StrippedStr("culpa eu ir".to_string()))
+                        .add_duration_minutes(10)
+                        .add_price(5_f64)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .max_participants(88)
+                .capacity(2)
+                .is_active(true)
+                .any_staff_member(true)
+                .staff_ids(vec!["staff_ids".to_string()])
+                .asset_ids(vec!["asset_ids".to_string()])
+                .advance_booking_minutes(10080)
+                .location_ids(vec!["location_ids".to_string()])
+                .display_on_booking_page(true)
+                .travel_minutes(15)
+                .travel_before(true)
+                .travel_after(true)
+                .promotions(vec![
+                    ReceptionServicePromotion::builder()
+                        .id("promo_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .name(StrippedStr("nostrud id".to_string()))
+                        .target(PromotionTarget::Service)
+                        .variant_id("variant_id")
+                        .add_on_id("add_on_id")
+                        .promotional_price(35_f64)
+                        .days_of_week(vec![6])
+                        .start_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
+                        .end_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
+                        .is_active(true)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionCreateServiceRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.services.<a href="/src/api/resources/services/services.rs">get</a>(service_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionService, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a specific service by ID
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .services
+        .get(
+            "service_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**service_id:** `&str` — ID of the service. Returned when you create one; list them with `GET /v1/reception/services`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.services.<a href="/src/api/resources/services/services.rs">update</a>(service_id: &amp;str, body: &amp;ReceptionUpdateServiceRequestPatch, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionServiceUpdateResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an existing service. Only the fields sent are changed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .services
+        .update(
+            "service_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateServiceRequestPatch {
+                pricing_mode: Some(PricingMode::Fixed),
+                intake_questions: Some(vec![
+                    ReceptionIntakeQuestion::builder()
+                        .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .label(StrippedStr("tempor id sint".to_string()))
+                        .kind(IntakeQuestionKind::Text)
+                        .options(vec![StrippedStr("conse".to_string())])
+                        .required(true)
+                        .is_active(true)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                groups: Some(vec![
+                    ReceptionGroupMembership::builder()
+                        .label(StrippedStr("consectetur e".to_string()))
+                        .rank(4)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                ungrouped_rank: Some(5),
+                name: Some(StrippedStr("incidi".to_string())),
+                description: Some(StrippedStr("in aliqui".to_string())),
+                variants: Some(vec![
+                    ReceptionServiceVariant::builder()
+                        .id("variant_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .duration_minutes(60)
+                        .price(4.08)
+                        .is_active(true)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                kind: Some(ReceptionServiceKind::Classic),
+                buffer_minutes: Some(15),
+                service_location: Some(ServiceLocationType::Business),
+                add_ons: Some(vec![
+                    ReceptionAddOn::builder()
+                        .id("addon_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .name(StrippedStr("adipi".to_string()))
+                        .description(StrippedStr("culpa eu ir".to_string()))
+                        .add_duration_minutes(10)
+                        .add_price(5_f64)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                max_participants: Some(171),
+                capacity: Some(3),
+                is_active: Some(true),
+                any_staff_member: Some(true),
+                staff_ids: Some(vec!["staff_ids".to_string()]),
+                asset_ids: Some(vec!["asset_ids".to_string()]),
+                advance_booking_minutes: Some(10080),
+                location_ids: Some(vec!["location_ids".to_string()]),
+                display_on_booking_page: Some(true),
+                travel_minutes: Some(15),
+                travel_before: Some(false),
+                travel_after: Some(true),
+                promotions: Some(vec![
+                    ReceptionServicePromotion::builder()
+                        .id("promo_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .name(StrippedStr("nostrud id".to_string()))
+                        .target(PromotionTarget::Service)
+                        .variant_id("variant_id")
+                        .add_on_id("add_on_id")
+                        .promotional_price(35_f64)
+                        .days_of_week(vec![6])
+                        .start_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
+                        .end_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
+                        .is_active(true)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                duration_minutes: Some(9907),
+                price: Some(9.3),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**service_id:** `&str` — ID of the service. Returned when you create one; list them with `GET /v1/reception/services`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateServiceRequestPatch`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.services.<a href="/src/api/resources/services/services.rs">delete</a>(service_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a service
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .services
+        .delete(
+            "service_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**service_id:** `&str` — ID of the service. Returned when you create one; list them with `GET /v1/reception/services`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.services.<a href="/src/api/resources/services/services.rs">confirm_update</a>(service_id: &amp;str, request: &amp;ConfirmUpdateRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionServiceUpdateResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Save a service update that changes the price of existing bookings. Optionally reprice future bookings.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .services
+        .confirm_update(
+            "service_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ConfirmUpdateRequest::builder()
+                .reprice(false)
+                .body(ReceptionConfirmServiceUpdateRequest {
+                    pricing_mode: Some(PricingMode::Fixed),
+                    intake_questions: Some(vec![
+                        ReceptionIntakeQuestion::builder()
+                            .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                            .label(StrippedStr("tempor id sint".to_string()))
+                            .kind(IntakeQuestionKind::Text)
+                            .options(vec![StrippedStr("conse".to_string())])
+                            .required(true)
+                            .is_active(true)
+                            .build()
+                            .expect("Failed to build request"),
+                    ]),
+                    groups: Some(vec![
+                        ReceptionGroupMembership::builder()
+                            .label(StrippedStr("consectetur e".to_string()))
+                            .rank(4)
+                            .build()
+                            .expect("Failed to build request"),
+                    ]),
+                    ungrouped_rank: Some(2),
+                    name: Some(StrippedStr("dolore venia".to_string())),
+                    description: Some(StrippedStr("nisireprehen".to_string())),
+                    variants: Some(vec![
+                        ReceptionServiceVariant::builder()
+                            .id("variant_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                            .duration_minutes(60)
+                            .price(4.08)
+                            .is_active(true)
+                            .build()
+                            .expect("Failed to build request"),
+                    ]),
+                    kind: Some(ReceptionServiceKind::Classic),
+                    buffer_minutes: Some(15),
+                    service_location: Some(ServiceLocationType::Business),
+                    add_ons: Some(vec![
+                        ReceptionAddOn::builder()
+                            .id("addon_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                            .name(StrippedStr("adipi".to_string()))
+                            .description(StrippedStr("culpa eu ir".to_string()))
+                            .add_duration_minutes(10)
+                            .add_price(5_f64)
+                            .build()
+                            .expect("Failed to build request"),
+                    ]),
+                    max_participants: Some(103),
+                    capacity: Some(5),
+                    is_active: Some(false),
+                    any_staff_member: Some(true),
+                    staff_ids: Some(vec!["staff_ids".to_string()]),
+                    asset_ids: Some(vec!["asset_ids".to_string()]),
+                    advance_booking_minutes: Some(10080),
+                    location_ids: Some(vec!["location_ids".to_string()]),
+                    display_on_booking_page: Some(true),
+                    travel_minutes: Some(15),
+                    travel_before: Some(false),
+                    travel_after: Some(false),
+                    promotions: Some(vec![
+                        ReceptionServicePromotion::builder()
+                            .id("promo_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                            .name(StrippedStr("nostrud id".to_string()))
+                            .target(PromotionTarget::Service)
+                            .variant_id("variant_id")
+                            .add_on_id("add_on_id")
+                            .promotional_price(35_f64)
+                            .days_of_week(vec![6])
+                            .start_date(
+                                NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap(),
+                            )
+                            .end_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
+                            .is_active(true)
+                            .build()
+                            .expect("Failed to build request"),
+                    ]),
+                    duration_minutes: Some(35075),
+                    price: Some(8.34),
+                    ..Default::default()
+                })
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**service_id:** `&str` — ID of the service. Returned when you create one; list them with `GET /v1/reception/services`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `&ConfirmUpdateRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.reprice:** `Option<bool>` — Also update the price on the service's future bookings.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.body:** `ReceptionConfirmServiceUpdateRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Products
+<details><summary><code>client.products.<a href="/src/api/resources/products/products.rs">list</a>(request: &amp;ProductsListQueryRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionProduct&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the workspace's products, optionally filtered by group or active state.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .products
+        .list(
+            &ProductsListQueryRequest {
+                group: Some("group".to_string()),
+                is_active: Some(false),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `&ProductsListQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.group:** `Option<String>` — Only products filed under the group with this label.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.is_active:** `Option<bool>` — Only active (`true`) or inactive (`false`) products.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.products.<a href="/src/api/resources/products/products.rs">create</a>(body: &amp;ReceptionCreateProductRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionProduct, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a product the receptionist can quote and take orders for. A product created with `track_quantity` starts with nothing on hand; add stock with the stock endpoints.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .products
+        .create(
+            &ReceptionCreateProductRequest::builder()
+                .pricing_mode(PricingMode::Fixed)
+                .intake_questions(vec![
+                    ReceptionIntakeQuestion::builder()
+                        .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .label(StrippedStr("tempor id sint".to_string()))
+                        .kind(IntakeQuestionKind::Text)
+                        .options(vec![StrippedStr("conse".to_string())])
+                        .required(true)
+                        .is_active(true)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .groups(vec![
+                    ReceptionGroupMembership::builder()
+                        .label(StrippedStr("consectetur e".to_string()))
+                        .rank(4)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .ungrouped_rank(5)
+                .name(StrippedStr("invelit tem".to_string()))
+                .description(StrippedStr("non irure ad".to_string()))
+                .price(2.05)
+                .is_active(true)
+                .orderable(true)
+                .allowed_fulfillment_types(vec![OrderFulfillmentType::Pickup])
+                .location_ids(vec!["location_ids".to_string()])
+                .track_quantity(true)
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionCreateProductRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.products.<a href="/src/api/resources/products/products.rs">get</a>(product_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionProduct, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a product by ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .products
+        .get(
+            "product_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**product_id:** `&str` — ID of the product. Returned when you create one; list them with `GET /v1/reception/products`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.products.<a href="/src/api/resources/products/products.rs">update</a>(product_id: &amp;str, body: &amp;ReceptionUpdateProductRequestPatch, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionProduct, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a product's catalog fields. Only the fields sent are changed. On-hand quantities are not part of this call; use the stock endpoints.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .products
+        .update(
+            "product_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateProductRequestPatch {
+                pricing_mode: Some(PricingMode::Fixed),
+                intake_questions: Some(vec![
+                    ReceptionIntakeQuestion::builder()
+                        .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                        .label(StrippedStr("tempor id sint".to_string()))
+                        .kind(IntakeQuestionKind::Text)
+                        .options(vec![StrippedStr("conse".to_string())])
+                        .required(true)
+                        .is_active(true)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                groups: Some(vec![
+                    ReceptionGroupMembership::builder()
+                        .label(StrippedStr("consectetur e".to_string()))
+                        .rank(4)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                ungrouped_rank: Some(3),
+                name: Some(StrippedStr("sint ".to_string())),
+                description: Some(StrippedStr("non labo".to_string())),
+                price: Some(5.49),
+                is_active: Some(false),
+                orderable: Some(false),
+                allowed_fulfillment_types: Some(vec![OrderFulfillmentType::Pickup]),
+                location_ids: Some(vec!["location_ids".to_string()]),
+                track_quantity: Some(false),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**product_id:** `&str` — ID of the product. Returned when you create one; list them with `GET /v1/reception/products`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateProductRequestPatch`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.products.<a href="/src/api/resources/products/products.rs">delete</a>(product_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a product.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .products
+        .delete(
+            "product_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**product_id:** `&str` — ID of the product. Returned when you create one; list them with `GET /v1/reception/products`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Stock
+<details><summary><code>client.stock.<a href="/src/api/resources/stock/stock.rs">set</a>(product_id: &amp;str, body: &amp;ReceptionUpdateProductStockRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionProduct, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Set the on-hand quantity of a counted product at one location. Rejected with a 409 if it changed since `expected_on_hand` was read.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .stock
+        .set(
+            "product_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateProductStockRequest::builder()
+                .location_id("location_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                .on_hand(24)
+                .expected_on_hand(25)
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**product_id:** `&str` — ID of the product. Returned when you create one; list them with `GET /v1/reception/products`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateProductStockRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.stock.<a href="/src/api/resources/stock/stock.rs">adjust</a>(product_id: &amp;str, body: &amp;ReceptionAdjustProductStockRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionProduct, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add to or subtract from the on-hand quantity of a counted product at one location, without overwriting orders taken at the same time.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .stock
+        .adjust(
+            "product_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionAdjustProductStockRequest::builder()
+                .location_id("location_4801jx8k3m5n7p9q2r4s6t8v0w2y")
+                .delta(-2)
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**product_id:** `&str` — ID of the product. Returned when you create one; list them with `GET /v1/reception/products`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionAdjustProductStockRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Staff
+<details><summary><code>client.staff.<a href="/src/api/resources/staff/staff.rs">list</a>(xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionStaffResource&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get all staff for the current workspace
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.staff.list("xi-workspace-id".to_string(), None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.staff.<a href="/src/api/resources/staff/staff.rs">create</a>(body: &amp;ReceptionCreateStaffRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionStaffResource, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new staff member
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .staff
+        .create(
+            &ReceptionCreateStaffRequest::builder()
+                .groups(vec![
+                    ReceptionGroupMembership::builder()
+                        .label(StrippedStr("consectetur e".to_string()))
+                        .rank(4)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .ungrouped_rank(4)
+                .name(StrippedStr("proident".to_string()))
+                .description(StrippedStr("non proiden".to_string()))
+                .is_active(true)
+                .email("jane@example.com")
+                .phone(PhoneNumberOptional("dolore culpa".to_string()))
+                .sms_notifications_opted_in(false)
+                .photo_url("https://male-coal.com/")
+                .location_id("location_id")
+                .working_hours(WorkingHours {
+                    hours: Some(HashMap::from([(
+                        "key".to_string(),
+                        vec![
+                            TimeRangeModel::builder()
+                                .start_hour(9)
+                                .start_minute(6)
+                                .end_hour(17)
+                                .end_minute(30)
+                                .build()
+                                .expect("Failed to build request"),
+                        ],
+                    )])),
+                    timezone: Some("timezone".to_string()),
+                    ..Default::default()
+                })
+                .display_on_booking_page(true)
+                .customer_facing_name(StrippedStr("magna proident ".to_string()))
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionCreateStaffRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.staff.<a href="/src/api/resources/staff/staff.rs">get</a>(staff_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionStaffResource, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a specific staff member by ID
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .staff
+        .get(
+            "staff_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**staff_id:** `&str` — ID of the staff member. Returned when you create one; list them with `GET /v1/reception/staff`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.staff.<a href="/src/api/resources/staff/staff.rs">update</a>(staff_id: &amp;str, body: &amp;ReceptionUpdateStaffRequestPatch, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionStaffResource, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an existing staff member. Only the fields sent are changed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .staff
+        .update(
+            "staff_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateStaffRequestPatch {
+                groups: Some(vec![
+                    ReceptionGroupMembership::builder()
+                        .label(StrippedStr("consectetur e".to_string()))
+                        .rank(4)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                ungrouped_rank: Some(1),
+                name: Some(StrippedStr("enim in".to_string())),
+                description: Some(StrippedStr("incidi".to_string())),
+                is_active: Some(false),
+                email: Some("jane@example.com".to_string()),
+                phone: Some(PhoneNumberOptional("esse ut ".to_string())),
+                sms_notifications_opted_in: Some(true),
+                photo_url: Some("https://male-coal.com/".to_string()),
+                location_id: Some("location_id".to_string()),
+                working_hours: Some(WorkingHours {
+                    hours: Some(HashMap::from([(
+                        "key".to_string(),
+                        vec![
+                            TimeRangeModel::builder()
+                                .start_hour(9)
+                                .start_minute(6)
+                                .end_hour(17)
+                                .end_minute(30)
+                                .build()
+                                .expect("Failed to build request"),
+                        ],
+                    )])),
+                    timezone: Some("timezone".to_string()),
+                    ..Default::default()
+                }),
+                display_on_booking_page: Some(false),
+                customer_facing_name: Some(StrippedStr("minim ".to_string())),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**staff_id:** `&str` — ID of the staff member. Returned when you create one; list them with `GET /v1/reception/staff`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateStaffRequestPatch`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.staff.<a href="/src/api/resources/staff/staff.rs">delete</a>(staff_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a staff member
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .staff
+        .delete(
+            "staff_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**staff_id:** `&str` — ID of the staff member. Returned when you create one; list them with `GET /v1/reception/staff`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Receptionists
+<details><summary><code>client.receptionists.<a href="/src/api/resources/receptionists/receptionists.rs">list</a>(xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionCustomerFacingAgentResponse&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List every customer-facing receptionist for the workspace.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .receptionists
+        .list("xi-workspace-id".to_string(), None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.receptionists.<a href="/src/api/resources/receptionists/receptionists.rs">update</a>(agent_id: &amp;str, body: &amp;ReceptionUpdateCustomerFacingAgentRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionCustomerFacingAgentResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a receptionist's display name, config and/or widget appearance.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .receptionists
+        .update(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateCustomerFacingAgentRequest {
+                config: Some(ReceptionCustomerFacingConfigPatch {
+                    additional_instructions: Some(StrippedStr("sint aliqui".to_string())),
+                    tone_traits: Some(vec![StrippedStr("in velit nu".to_string())]),
+                    details_to_collect: Some(vec![StrippedStr("utdo velit".to_string())]),
+                    llm: Some(Llm::Gpt4OMini),
+                    reasoning_effort: Some(LlmReasoningEffort::None),
+                    disable_rag: Some(true),
+                    background_voice_detection: Some(true),
+                    turn_eagerness: Some(ReceptionTurnEagerness::Patient),
+                    voice_id: Some("21m00Tcm4TlvDq8ikWAM".to_string()),
+                    language: Some(SupportedLang("dolore eu ".to_string())),
+                    additional_languages: Some(vec![SupportedLang("indolor cil".to_string())]),
+                    first_message: Some(
+                        "Hi, thanks for calling Bloom Salon! How can I help you today?".to_string(),
+                    ),
+                    first_message_mode: Some(FirstMessageMode::Interruptible),
+                    enable_end_call_tool: Some(false),
+                    enable_skip_turn_tool: Some(false),
+                    enable_play_keypad_touch_tone_tool: Some(true),
+                    hide_caller_number_on_transfers: Some(true),
+                    record_after_transfers: Some(true),
+                    enable_secure_mode: Some(true),
+                    enable_spam_protection: Some(true),
+                    ..Default::default()
+                }),
+                name: Some("name".to_string()),
+                widget: Some(
+                    ReceptionWidgetAppearance::builder()
+                        .orb_color_1("#2792dc")
+                        .orb_color_2("#9ce6e6")
+                        .variant(Variant::Tiny)
+                        .placement(Placement::TopLeft)
+                        .dismissible(true)
+                        .main_label("main_label")
+                        .start_call("start_call")
+                        .build()
+                        .expect("Failed to build request"),
+                ),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateCustomerFacingAgentRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.receptionists.<a href="/src/api/resources/receptionists/receptionists.rs">activate</a>(agent_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionCustomerFacingAgentResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Re-activate a deactivated receptionist. Fails with `quota_exceeded` when the plan has no free receptionist slot.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .receptionists
+        .activate(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## TransferRules
+<details><summary><code>client.transfer_rules.<a href="/src/api/resources/transfer_rules/transfer_rules.rs">create</a>(agent_id: &amp;str, body: &amp;ReceptionCreateTransferRuleRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionTransferRule, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add a phone forwarding rule to the named receptionist.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .transfer_rules
+        .create(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionCreateTransferRuleRequest::builder()
+                .label(StrippedStr("veniam enim r".to_string()))
+                .phone_number(PhoneNumber("culpa".to_string()))
+                .condition(StrippedStr("nostrud".to_string()))
+                .post_dial_digits("2663")
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionCreateTransferRuleRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.transfer_rules.<a href="/src/api/resources/transfer_rules/transfer_rules.rs">update</a>(agent_id: &amp;str, rule_id: &amp;str, body: &amp;ReceptionUpdateTransferRuleRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionTransferRule, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replace an existing transfer rule on the named receptionist. Send every field: an omitted `post_dial_digits` clears it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .transfer_rules
+        .update(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "transferrule_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateTransferRuleRequest::builder()
+                .label(StrippedStr("minim velit fug".to_string()))
+                .phone_number(PhoneNumber("elit consequ".to_string()))
+                .condition(StrippedStr("anim in occa".to_string()))
+                .post_dial_digits("#0922")
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rule_id:** `&str` — ID of the transfer rule. Returned when you add one, and listed in the receptionist's `config.transfer_rules`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateTransferRuleRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.transfer_rules.<a href="/src/api/resources/transfer_rules/transfer_rules.rs">delete</a>(agent_id: &amp;str, rule_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a transfer rule from the named receptionist.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .transfer_rules
+        .delete(
+            "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "transferrule_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**agent_id:** `&str` — ID of the receptionist. List them with `GET /v1/reception/customer-facing-agents`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rule_id:** `&str` — ID of the transfer rule. Returned when you add one, and listed in the receptionist's `config.transfer_rules`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Holidays
+<details><summary><code>client.holidays.<a href="/src/api/resources/holidays/holidays.rs">list</a>(request: &amp;HolidaysListQueryRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;HolidayResponseModel&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get all holidays/time-off entries for the current workspace with optional filters
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .holidays
+        .list(
+            &HolidaysListQueryRequest {
+                start_unix: Some(4),
+                end_unix: Some(6),
+                time_off_type: Some(TimeOffType::Staff),
+                resource_id: Some("resource_id".to_string()),
+                location_id: Some("location_id".to_string()),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `&HolidaysListQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.start_unix:** `Option<i64>` — Filter entries overlapping from this timestamp
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.end_unix:** `Option<i64>` — Filter entries overlapping before this timestamp
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.time_off_type:** `Option<TimeOffType>` — Filter by type: location, staff, or asset
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.resource_id:** `Option<String>` — Filter by associated resource ID (staff/asset)
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.location_id:** `Option<String>` — Filter by location ID
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.holidays.<a href="/src/api/resources/holidays/holidays.rs">create</a>(body: &amp;ReceptionCreateHolidayRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;HolidayResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new holiday
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .holidays
+        .create(
+            &ReceptionCreateHolidayRequest::builder()
+                .name("Christmas Eve")
+                .start_date(
+                    DateModel::builder()
+                        .year(2026)
+                        .month(12)
+                        .day(25)
+                        .build()
+                        .expect("Failed to build request"),
+                )
+                .end_date(
+                    DateModel::builder()
+                        .year(2026)
+                        .month(12)
+                        .day(25)
+                        .build()
+                        .expect("Failed to build request"),
+                )
+                .holiday_type(HolidayType::Closed)
+                .override_hours(vec![
+                    TimeRangeModel::builder()
+                        .start_hour(9)
+                        .start_minute(6)
+                        .end_hour(17)
+                        .end_minute(30)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .time_off_type(TimeOffType::Staff)
+                .resource_id("resource_id")
+                .location_id("location_id")
+                .reason("reason")
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionCreateHolidayRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.holidays.<a href="/src/api/resources/holidays/holidays.rs">get</a>(holiday_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;HolidayResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a specific holiday by ID
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .holidays
+        .get(
+            "holiday_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**holiday_id:** `&str` — ID of the holiday or time-off entry. Returned when you create one; list them with `GET /v1/reception/holidays`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.holidays.<a href="/src/api/resources/holidays/holidays.rs">update</a>(holiday_id: &amp;str, body: &amp;ReceptionUpdateHolidayRequestPatch, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;HolidayResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an existing holiday. Only the fields sent are changed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .holidays
+        .update(
+            "holiday_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionUpdateHolidayRequestPatch {
+                name: Some("Christmas Eve".to_string()),
+                start_date: Some(
+                    DateModel::builder()
+                        .year(2026)
+                        .month(12)
+                        .day(25)
+                        .build()
+                        .expect("Failed to build request"),
+                ),
+                end_date: Some(
+                    DateModel::builder()
+                        .year(2026)
+                        .month(12)
+                        .day(25)
+                        .build()
+                        .expect("Failed to build request"),
+                ),
+                holiday_type: Some(HolidayType::Closed),
+                override_hours: Some(vec![
+                    TimeRangeModel::builder()
+                        .start_hour(9)
+                        .start_minute(6)
+                        .end_hour(17)
+                        .end_minute(30)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                time_off_type: Some(TimeOffType::Staff),
+                resource_id: Some("resource_id".to_string()),
+                location_id: Some("location_id".to_string()),
+                reason: Some("reason".to_string()),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**holiday_id:** `&str` — ID of the holiday or time-off entry. Returned when you create one; list them with `GET /v1/reception/holidays`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateHolidayRequestPatch`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.holidays.<a href="/src/api/resources/holidays/holidays.rs">delete</a>(holiday_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a holiday
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .holidays
+        .delete(
+            "holiday_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**holiday_id:** `&str` — ID of the holiday or time-off entry. Returned when you create one; list them with `GET /v1/reception/holidays`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Locations
+<details><summary><code>client.locations.<a href="/src/api/resources/locations/locations.rs">list</a>(xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionLocationResponse&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all business locations.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.locations.list("xi-workspace-id".to_string(), None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.locations.<a href="/src/api/resources/locations/locations.rs">create</a>(body: &amp;ReceptionLocationRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionLocationResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add a new business location.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .locations
+        .create(
+            &ReceptionLocationRequest::builder()
+                .name(StrippedStr("suntinci".to_string()))
+                .address(StrippedStr("tempor ".to_string()))
+                .notes(StrippedStr("sit off".to_string()))
+                .operating_hours(WorkingHours {
+                    hours: Some(HashMap::from([(
+                        "key".to_string(),
+                        vec![
+                            TimeRangeModel::builder()
+                                .start_hour(9)
+                                .start_minute(6)
+                                .end_hour(17)
+                                .end_minute(30)
+                                .build()
+                                .expect("Failed to build request"),
+                        ],
+                    )])),
+                    timezone: Some("timezone".to_string()),
+                    ..Default::default()
+                })
+                .customer_facing_name(StrippedStr("UtDuis".to_string()))
+                .max_concurrent_appointments(3)
+                .is_active(true)
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionLocationRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.locations.<a href="/src/api/resources/locations/locations.rs">get</a>(location_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionLocationResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a single location by ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .locations
+        .get(
+            "location_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**location_id:** `&str` — ID of the location. Returned when you create one; list them with `GET /v1/reception/locations`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.locations.<a href="/src/api/resources/locations/locations.rs">update</a>(location_id: &amp;str, body: &amp;ReceptionLocationRequestPatch, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionLocationResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an existing location. Only the fields sent are changed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .locations
+        .update(
+            "location_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            &ReceptionLocationRequestPatch {
+                name: Some(StrippedStr("culpa".to_string())),
+                address: Some(StrippedStr("incididunt".to_string())),
+                notes: Some(StrippedStr("repre".to_string())),
+                operating_hours: Some(WorkingHours {
+                    hours: Some(HashMap::from([(
+                        "key".to_string(),
+                        vec![
+                            TimeRangeModel::builder()
+                                .start_hour(9)
+                                .start_minute(6)
+                                .end_hour(17)
+                                .end_minute(30)
+                                .build()
+                                .expect("Failed to build request"),
+                        ],
+                    )])),
+                    timezone: Some("timezone".to_string()),
+                    ..Default::default()
+                }),
+                customer_facing_name: Some(StrippedStr("veniam elit nul".to_string())),
+                max_concurrent_appointments: Some(3),
+                is_active: Some(true),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**location_id:** `&str` — ID of the location. Returned when you create one; list them with `GET /v1/reception/locations`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionLocationRequestPatch`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.locations.<a href="/src/api/resources/locations/locations.rs">delete</a>(location_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a location.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .locations
+        .delete(
+            "location_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**location_id:** `&str` — ID of the location. Returned when you create one; list them with `GET /v1/reception/locations`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## BusinessProfile
+<details><summary><code>client.business_profile.<a href="/src/api/resources/business_profile/business_profile.rs">get</a>(xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionAgentInfoResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the business profile the receptionists answer from, with the current time in the business's timezone.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .business_profile
+        .get("xi-workspace-id".to_string(), None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.business_profile.<a href="/src/api/resources/business_profile/business_profile.rs">update</a>(body: &amp;ReceptionUpdateAgentInfoRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionAgentInfoResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the business profile. Every receptionist is updated to match.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .business_profile
+        .update(
+            &ReceptionUpdateAgentInfoRequest {
+                business_name: Some("Bloom Salon".to_string()),
+                business_description: Some(
+                    "A hair salon offering cuts, color and styling.".to_string(),
+                ),
+                timezone: Some("America/New_York".to_string()),
+                currency: Some(ReceptionAgentInfoResponseCurrency::Usd),
+                operating_hours: Some(WorkingHours {
+                    hours: Some(HashMap::from([(
+                        "key".to_string(),
+                        vec![
+                            TimeRangeModel::builder()
+                                .start_hour(9)
+                                .start_minute(6)
+                                .end_hour(17)
+                                .end_minute(30)
+                                .build()
+                                .expect("Failed to build request"),
+                        ],
+                    )])),
+                    timezone: Some("timezone".to_string()),
+                    ..Default::default()
+                }),
+                tool_call_sound: Some(ToolCallSoundType::Typing),
+                ..Default::default()
+            },
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionUpdateAgentInfoRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## KnowledgeSources
+<details><summary><code>client.knowledge_sources.<a href="/src/api/resources/knowledge_sources/knowledge_sources.rs">list</a>(xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ReceptionKnowledgeSource&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all knowledge sources for the current workspace
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .knowledge_sources
+        .list("xi-workspace-id".to_string(), None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.knowledge_sources.<a href="/src/api/resources/knowledge_sources/knowledge_sources.rs">upload</a>(body: &amp;BodySmbUploadKnowledgeSource, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionKnowledgeSource, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Upload a file as a knowledge source
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .knowledge_sources
+        .upload(
+            &BodySmbUploadKnowledgeSource::builder()
+                .file(vec![])
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&BodySmbUploadKnowledgeSource`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.knowledge_sources.<a href="/src/api/resources/knowledge_sources/knowledge_sources.rs">get</a>(source_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionKnowledgeSource, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a specific knowledge source by ID
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .knowledge_sources
+        .get(
+            "ksource_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**source_id:** `&str` — ID of the knowledge source. Returned when you add one; list them with `GET /v1/reception/knowledge-sources`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.knowledge_sources.<a href="/src/api/resources/knowledge_sources/knowledge_sources.rs">delete</a>(source_id: &amp;str, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a knowledge source
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .knowledge_sources
+        .delete(
+            "ksource_4801jx8k3m5n7p9q2r4s6t8v0w2y",
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**source_id:** `&str` — ID of the knowledge source. Returned when you add one; list them with `GET /v1/reception/knowledge-sources`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.knowledge_sources.<a href="/src/api/resources/knowledge_sources/knowledge_sources.rs">add_url</a>(body: &amp;AddUrlRequest, xi_workspace_id: String, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ReceptionKnowledgeSource, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add a URL as a knowledge source
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .knowledge_sources
+        .add_url(
+            &AddUrlRequest::builder()
+                .url("https://example.com")
+                .crawl_entire_site(false)
+                .build()
+                .expect("Failed to build request"),
+            "xi-workspace-id".to_string(),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&AddUrlRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**xi_workspace_id:** `String` — The customer workspace a reseller's API key acts on.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Workspaces
+<details><summary><code>client.workspaces.<a href="/src/api/resources/workspaces/workspaces.rs">list</a>(request: &amp;WorkspacesListQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResellerWorkspacesResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List workspaces attributed to the caller's reseller, with cursor-based pagination
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .workspaces
+        .list(
+            &WorkspacesListQueryRequest {
+                cursor: Some("cursor".to_string()),
+                page_size: Some(50),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `&WorkspacesListQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.cursor:** `Option<String>` — Pagination cursor from previous response
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.page_size:** `Option<i64>` — Number of workspaces per page
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.workspaces.<a href="/src/api/resources/workspaces/workspaces.rs">create</a>(body: &amp;ReceptionProvisionResellerWorkspaceRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ProvisionResellerWorkspaceResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a workspace for one of your customers, optionally with a tier, a phone number and team invites.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .workspaces
+        .create(
+            &ReceptionProvisionResellerWorkspaceRequest::builder()
+                .business_name("business_name")
+                .vertical(ReceptionVertical::SalonBarbershop)
+                .subscription(
+                    ProvisionResellerWorkspaceSubscription::builder()
+                        .tier_id("tier_id")
+                        .billing_period(AssignResellerTierRequestBillingPeriod::MonthlyPeriod)
+                        .build()
+                        .expect("Failed to build request"),
+                )
+                .phone_number("phone_number")
+                .members(vec![
+                    TeamInviteRequest::builder()
+                        .email("sam@example.com")
+                        .role(CreateTeamInviteRequestRole::WorkspaceAdmin)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .complete_onboarding(false)
+                .idempotency_key("idempotency_key")
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&ReceptionProvisionResellerWorkspaceRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.workspaces.<a href="/src/api/resources/workspaces/workspaces.rs">complete_onboarding</a>(workspace_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResellerWorkspaceOnboardingResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Finish setting up the workspace: create its receptionist and assistant from the business profile, reusing a receptionist from a setup already started, and connect your phone number, if you supply one. Safe to retry.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .workspaces
+        .complete_onboarding("3f2c9a7e1b4d4c8e9a6f0b2d5e7c1a93", None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workspace_id:** `&str` — ID of the customer workspace. Returned when you provision one; list them with `GET /v1/reception/reseller/workspaces`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Subscriptions
+<details><summary><code>client.subscriptions.<a href="/src/api/resources/subscriptions/subscriptions.rs">assign</a>(workspace_id: &amp;str, body: &amp;AssignResellerTierRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Subscribe a reseller-attributed workspace to one of the reseller's tiers
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .subscriptions
+        .assign(
+            "3f2c9a7e1b4d4c8e9a6f0b2d5e7c1a93",
+            &AssignResellerTierRequest::builder()
+                .tier_id("tier_id")
+                .billing_period(AssignResellerTierRequestBillingPeriod::MonthlyPeriod)
+                .idempotency_key("idempotency_key")
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workspace_id:** `&str` — ID of the customer workspace. Returned when you provision one; list them with `GET /v1/reception/reseller/workspaces`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&AssignResellerTierRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.subscriptions.<a href="/src/api/resources/subscriptions/subscriptions.rs">change</a>(workspace_id: &amp;str, body: &amp;ChangeResellerTierRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Move a reseller-attributed workspace between the reseller's tiers. Upgrades apply immediately; downgrades and lateral moves take effect at the end of the billing period.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .subscriptions
+        .change(
+            "3f2c9a7e1b4d4c8e9a6f0b2d5e7c1a93",
+            &ChangeResellerTierRequest::builder()
+                .tier_id("tier_id")
+                .billing_period(AssignResellerTierRequestBillingPeriod::MonthlyPeriod)
+                .idempotency_key("idempotency_key")
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workspace_id:** `&str` — ID of the customer workspace. Returned when you provision one; list them with `GET /v1/reception/reseller/workspaces`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&ChangeResellerTierRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.subscriptions.<a href="/src/api/resources/subscriptions/subscriptions.rs">unassign</a>(workspace_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+End a reseller-attributed workspace's subscription at the end of the current billing period
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .subscriptions
+        .unassign("3f2c9a7e1b4d4c8e9a6f0b2d5e7c1a93", None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workspace_id:** `&str` — ID of the customer workspace. Returned when you provision one; list them with `GET /v1/reception/reseller/workspaces`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.subscriptions.<a href="/src/api/resources/subscriptions/subscriptions.rs">restore</a>(workspace_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Undo a pending unassignment so the subscription renews normally
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .subscriptions
+        .restore("3f2c9a7e1b4d4c8e9a6f0b2d5e7c1a93", None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workspace_id:** `&str` — ID of the customer workspace. Returned when you provision one; list them with `GET /v1/reception/reseller/workspaces`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.subscriptions.<a href="/src/api/resources/subscriptions/subscriptions.rs">cancel_pending_downgrade</a>(workspace_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;std::collections::HashMap&lt;String, String&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Drop a scheduled downgrade, leaving the workspace on its current tier
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .subscriptions
+        .cancel_pending_downgrade("3f2c9a7e1b4d4c8e9a6f0b2d5e7c1a93", None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workspace_id:** `&str` — ID of the customer workspace. Returned when you provision one; list them with `GET /v1/reception/reseller/workspaces`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Tiers
+<details><summary><code>client.tiers.<a href="/src/api/resources/tiers/tiers.rs">list</a>(options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ResellerTierResponse&gt;, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+The tiers you can sell, cheapest first. The first is the trial. Retired tiers are left out.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.tiers.list(None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Billing
+<details><summary><code>client.billing.<a href="/src/api/resources/billing/billing.rs">list_invoices</a>(request: &amp;ListInvoicesQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResellerInvoicesResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the invoices charged to the reseller's card, newest first, one per workspace invoice
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .billing
+        .list_invoices(
+            &ListInvoicesQueryRequest {
+                cursor: Some("cursor".to_string()),
+                page_size: Some(25),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `&ListInvoicesQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.cursor:** `Option<String>` — Pagination cursor from previous response
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.page_size:** `Option<i64>` — Number of invoices per page
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.<a href="/src/api/resources/billing/billing.rs">get_invoice</a>(invoice_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResellerInvoiceDetail, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get one invoice charged to the reseller's card, broken down into the workspace invoice's lines
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .billing
+        .get_invoice("in_1QzX8vLkdIwHu7ix3Bv0Wy2d", None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**invoice_id:** `&str` — ID of the invoice. List them with `GET /v1/reception/reseller/billing/invoices`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.billing.<a href="/src/api/resources/billing/billing.rs">list_upcoming_payments</a>(options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResellerUpcomingPaymentsResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List the next workspace renewals the reseller's card will be charged for, soonest first
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.billing.list_upcoming_payments(None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
 
 <dl>
 <dd>

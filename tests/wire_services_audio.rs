@@ -6,7 +6,7 @@ use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
 #[tokio::test]
-async fn get_sends_the_real_wire_request() {
+async fn get_5_sends_the_real_wire_request() {
     let server = MockServer::start().await;
     let expected_response = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -67,7 +67,7 @@ async fn get_sends_the_real_wire_request() {
 }
 
 #[tokio::test]
-async fn get_surfaces_the_declared_422() {
+async fn get_5_surfaces_the_declared_422() {
     let server = MockServer::start().await;
     let error_body = serde_json::from_str::<serde_json::Value>(
         r#"{

@@ -1,6 +1,6 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, PartialEq, Eq, Hash)]
 #[serde(untagged)]
 pub enum BodyCreatePodcastV1StudioPodcastsPostSource {
     PodcastTextSource(PodcastTextSource),

@@ -12,6 +12,8 @@ pub struct AlertingSettingsResponse {
     #[serde(with = "crate::core::number_serializers::int::option")]
     pub auto_resolve_after_inactive_minutes: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub environments: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notifiers: Option<Vec<AlertingSettingsResponseNotifiersItem>>,
 }
 
@@ -26,6 +28,7 @@ impl AlertingSettingsResponse {
 pub struct AlertingSettingsResponseBuilder {
     monitor_configs: Option<std::collections::HashMap<String, AlertingMonitorConfig>>,
     auto_resolve_after_inactive_minutes: Option<i64>,
+    environments: Option<Vec<String>>,
     notifiers: Option<Vec<AlertingSettingsResponseNotifiersItem>>,
 }
 
@@ -43,6 +46,11 @@ impl AlertingSettingsResponseBuilder {
         self
     }
 
+    pub fn environments(mut self, value: Vec<String>) -> Self {
+        self.environments = Some(value);
+        self
+    }
+
     pub fn notifiers(mut self, value: Vec<AlertingSettingsResponseNotifiersItem>) -> Self {
         self.notifiers = Some(value);
         self
@@ -53,6 +61,7 @@ impl AlertingSettingsResponseBuilder {
         Ok(AlertingSettingsResponse {
             monitor_configs: self.monitor_configs,
             auto_resolve_after_inactive_minutes: self.auto_resolve_after_inactive_minutes,
+            environments: self.environments,
             notifiers: self.notifiers,
         })
     }

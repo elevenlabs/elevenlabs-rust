@@ -24,7 +24,7 @@ pub struct ConversationHistoryTranscriptWorkflowToolsResultCommonModelInput {
     pub dynamic_variable_updates: Option<Vec<DynamicVariableUpdateCommonModel>>,
     pub r#type: ConversationHistoryTranscriptWorkflowToolsResultCommonModelInputType,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub result: Option<WorkflowToolResponseModelInput>,
+    pub result: Option<Box<WorkflowToolResponseModelInput>>,
 }
 
 impl ConversationHistoryTranscriptWorkflowToolsResultCommonModelInput {
@@ -48,7 +48,7 @@ pub struct ConversationHistoryTranscriptWorkflowToolsResultCommonModelInputBuild
     raw_error_message: Option<String>,
     dynamic_variable_updates: Option<Vec<DynamicVariableUpdateCommonModel>>,
     r#type: Option<ConversationHistoryTranscriptWorkflowToolsResultCommonModelInputType>,
-    result: Option<WorkflowToolResponseModelInput>,
+    result: Option<Box<WorkflowToolResponseModelInput>>,
 }
 
 impl ConversationHistoryTranscriptWorkflowToolsResultCommonModelInputBuilder {
@@ -118,7 +118,7 @@ impl ConversationHistoryTranscriptWorkflowToolsResultCommonModelInputBuilder {
         self
     }
 
-    pub fn result(mut self, value: WorkflowToolResponseModelInput) -> Self {
+    pub fn result(mut self, value: Box<WorkflowToolResponseModelInput>) -> Self {
         self.result = Some(value);
         self
     }

@@ -454,6 +454,12 @@ pub enum SmbToolConfigParams {
         data: SetBookingSlugParams,
     },
 
+    #[serde(rename = "smb_confirm_change")]
+    SmbConfirmChange {
+        #[serde(flatten)]
+        data: ConfirmChangeParams,
+    },
+
     #[serde(rename = "submit_business_info")]
     SubmitBusinessInfo {
         #[serde(flatten)]
@@ -1940,6 +1946,24 @@ impl SmbToolConfigParams {
     pub fn into_set_booking_slug(self) -> Option<SetBookingSlugParams> {
         match self {
             Self::SetBookingSlug { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn is_smb_confirm_change(&self) -> bool {
+        matches!(self, Self::SmbConfirmChange { .. })
+    }
+
+    pub fn as_smb_confirm_change(&self) -> Option<&ConfirmChangeParams> {
+        match self {
+            Self::SmbConfirmChange { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn into_smb_confirm_change(self) -> Option<ConfirmChangeParams> {
+        match self {
+            Self::SmbConfirmChange { data } => Some(data),
             _ => None,
         }
     }

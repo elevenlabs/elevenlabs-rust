@@ -6,6 +6,7 @@ pub enum BytedanceSeedance25RequestResolution {
     Num480P,
     Num720P,
     Num1080P,
+    Num4K,
     /// This variant is used for forward compatibility.
     /// If the server sends a value not recognized by the current SDK version,
     /// it will be captured here with the raw string value.
@@ -17,6 +18,7 @@ impl Serialize for BytedanceSeedance25RequestResolution {
             Self::Num480P => serializer.serialize_str("480p"),
             Self::Num720P => serializer.serialize_str("720p"),
             Self::Num1080P => serializer.serialize_str("1080p"),
+            Self::Num4K => serializer.serialize_str("4k"),
             Self::__Unknown(val) => serializer.serialize_str(val),
         }
     }
@@ -29,6 +31,7 @@ impl<'de> Deserialize<'de> for BytedanceSeedance25RequestResolution {
             "480p" => Ok(Self::Num480P),
             "720p" => Ok(Self::Num720P),
             "1080p" => Ok(Self::Num1080P),
+            "4k" => Ok(Self::Num4K),
             _ => Ok(Self::__Unknown(value)),
         }
     }
@@ -40,6 +43,7 @@ impl fmt::Display for BytedanceSeedance25RequestResolution {
             Self::Num480P => write!(f, "480p"),
             Self::Num720P => write!(f, "720p"),
             Self::Num1080P => write!(f, "1080p"),
+            Self::Num4K => write!(f, "4k"),
             Self::__Unknown(val) => write!(f, "{}", val),
         }
     }

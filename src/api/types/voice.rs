@@ -31,7 +31,7 @@ pub struct Voice {
     pub available_for_tiers: Option<Vec<String>>,
     /// The settings of the voice.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub settings: Option<BodyTextToSpeechFullVoiceSettings>,
+    pub settings: Option<VoiceSettings>,
     /// The sharing information of the voice.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sharing: Option<VoiceSharingResponse>,
@@ -104,7 +104,7 @@ pub struct VoiceBuilder {
     description: Option<String>,
     preview_url: Option<String>,
     available_for_tiers: Option<Vec<String>>,
-    settings: Option<BodyTextToSpeechFullVoiceSettings>,
+    settings: Option<VoiceSettings>,
     sharing: Option<VoiceSharingResponse>,
     high_quality_base_model_ids: Option<Vec<String>>,
     verified_languages: Option<Vec<VerifiedVoiceLanguageResponseModel>>,
@@ -169,7 +169,7 @@ impl VoiceBuilder {
         self
     }
 
-    pub fn settings(mut self, value: BodyTextToSpeechFullVoiceSettings) -> Self {
+    pub fn settings(mut self, value: VoiceSettings) -> Self {
         self.settings = Some(value);
         self
     }

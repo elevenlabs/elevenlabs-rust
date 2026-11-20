@@ -2,25 +2,20 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ApiIntegrationWebhookToolConfigOutput {
-    #[serde(default)]
+    pub r#type: ApiIntegrationWebhookToolConfigInputType,
     pub name: String,
     /// Description of when the tool should be used and what it does.
-    #[serde(default)]
     pub description: String,
     /// The maximum time in seconds to wait for the tool call to complete. Must be between 5 and 300 seconds (inclusive).
-    #[serde(default)]
     #[serde(with = "crate::core::number_serializers::int")]
     pub response_timeout_secs: i64,
     /// DEPRECATED: use `interruption_mode` instead. If true, the user will not be able to interrupt the agent while this tool is running.
-    #[serde(default)]
     pub disable_interruptions: bool,
     pub interruption_mode: ToolInterruptionMode,
     /// DEPRECATED: use `pre_tool_speech` instead. If true, the agent will speak before the tool call.
-    #[serde(default)]
     pub force_pre_tool_speech: bool,
     pub pre_tool_speech: PreToolSpeechMode,
     /// Configuration for extracting values from tool responses and assigning them to dynamic variables
-    #[serde(default)]
     pub assignments: Vec<DynamicVariableAssignment>,
     /// Predefined tool call sound type to play during tool execution. If not specified, no tool call sound will be played.
     pub tool_call_sound: Option<ToolCallSoundType>,
@@ -28,18 +23,13 @@ pub struct ApiIntegrationWebhookToolConfigOutput {
     pub tool_call_sound_behavior: ToolCallSoundBehavior,
     /// Controls how tool errors are processed before being shared with the agent.
     pub tool_error_handling_mode: ToolErrorHandlingMode,
-    #[serde(default)]
     pub dynamic_variables: DynamicVariablesConfig,
     pub execution_mode: ToolExecutionMode,
     /// The version of the API integration tool
-    #[serde(default)]
     pub tool_version: String,
-    #[serde(default)]
     pub api_integration_id: String,
-    #[serde(default)]
     pub api_integration_connection_id: String,
     /// User overrides applied on top of the base api_schema
-    #[serde(default)]
     pub api_schema_overrides: Option<ApiIntegrationWebhookOverrides>,
 }
 
@@ -52,6 +42,7 @@ impl ApiIntegrationWebhookToolConfigOutput {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct ApiIntegrationWebhookToolConfigOutputBuilder {
+    r#type: Option<ApiIntegrationWebhookToolConfigInputType>,
     name: Option<String>,
     description: Option<String>,
     response_timeout_secs: Option<i64>,
@@ -72,6 +63,11 @@ pub struct ApiIntegrationWebhookToolConfigOutputBuilder {
 }
 
 impl ApiIntegrationWebhookToolConfigOutputBuilder {
+    pub fn r#type(mut self, value: ApiIntegrationWebhookToolConfigInputType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn name(mut self, value: impl Into<String>) -> Self {
         self.name = Some(value.into());
         self
@@ -159,6 +155,7 @@ impl ApiIntegrationWebhookToolConfigOutputBuilder {
 
     /// Consumes the builder and constructs a [`ApiIntegrationWebhookToolConfigOutput`].
     /// This method will fail if any of the following fields are not set:
+    /// - [`r#type`](ApiIntegrationWebhookToolConfigOutputBuilder::type)
     /// - [`name`](ApiIntegrationWebhookToolConfigOutputBuilder::name)
     /// - [`description`](ApiIntegrationWebhookToolConfigOutputBuilder::description)
     /// - [`response_timeout_secs`](ApiIntegrationWebhookToolConfigOutputBuilder::response_timeout_secs)
@@ -176,6 +173,9 @@ impl ApiIntegrationWebhookToolConfigOutputBuilder {
     /// - [`api_integration_connection_id`](ApiIntegrationWebhookToolConfigOutputBuilder::api_integration_connection_id)
     pub fn build(self) -> Result<ApiIntegrationWebhookToolConfigOutput, BuildError> {
         Ok(ApiIntegrationWebhookToolConfigOutput {
+            r#type: self
+                .r#type
+                .ok_or_else(|| BuildError::missing_field("r#type"))?,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             description: self
                 .description

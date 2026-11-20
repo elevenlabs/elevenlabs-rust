@@ -3,10 +3,10 @@ pub use crate::prelude::*;
 /// An MCP tool configuration that can be used to call MCP servers
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct McpToolConfigOutput {
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<ConversationHistoryTranscriptToolCallMcpDetailsType>,
     pub name: String,
     /// Description of when the tool should be used and what it does.
-    #[serde(default)]
     pub description: String,
     /// The maximum time in seconds to wait for the MCP tool call to complete. Must be between 5 and 300 seconds (inclusive).
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -43,16 +43,12 @@ pub struct McpToolConfigOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approval_policy: Option<McpApprovalPolicy>,
     /// The name of the MCP tool to call
-    #[serde(default)]
     pub mcp_tool_name: String,
     /// The description of the MCP tool to call
-    #[serde(default)]
     pub mcp_tool_description: String,
     /// The id of the MCP server to call
-    #[serde(default)]
     pub mcp_server_id: String,
     /// The name of the MCP server to call
-    #[serde(default)]
     pub mcp_server_name: String,
     /// Original inputSchema dict for consistent hashing
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -74,6 +70,7 @@ impl McpToolConfigOutput {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct McpToolConfigOutputBuilder {
+    r#type: Option<ConversationHistoryTranscriptToolCallMcpDetailsType>,
     name: Option<String>,
     description: Option<String>,
     response_timeout_secs: Option<i64>,
@@ -98,6 +95,11 @@ pub struct McpToolConfigOutputBuilder {
 }
 
 impl McpToolConfigOutputBuilder {
+    pub fn r#type(mut self, value: ConversationHistoryTranscriptToolCallMcpDetailsType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn name(mut self, value: impl Into<String>) -> Self {
         self.name = Some(value.into());
         self
@@ -217,6 +219,7 @@ impl McpToolConfigOutputBuilder {
     /// - [`mcp_server_name`](McpToolConfigOutputBuilder::mcp_server_name)
     pub fn build(self) -> Result<McpToolConfigOutput, BuildError> {
         Ok(McpToolConfigOutput {
+            r#type: self.r#type,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             description: self
                 .description

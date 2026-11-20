@@ -10,6 +10,9 @@ pub struct PolicyConfigInput {
     /// The weekly windows calls may be placed in.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub calling_periods: Option<Vec<CallingPeriod>>,
+    /// Local dates in `timezone` whose calling windows replace `calling_periods`. Date ranges may not overlap.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_overrides: Option<Vec<DateOverride>>,
     /// The agent's data collection items that steer follow-up calls. Each defaults
     /// to the built-in item for its purpose; `null` turns it off.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -31,6 +34,7 @@ pub struct PolicyConfigInputBuilder {
     timezone: Option<String>,
     retry: Option<RetryPolicy>,
     calling_periods: Option<Vec<CallingPeriod>>,
+    date_overrides: Option<Vec<DateOverride>>,
     data_collection: Option<DataCollectionConfig>,
     followup_context: Option<FollowupContextPolicy>,
 }
@@ -51,6 +55,11 @@ impl PolicyConfigInputBuilder {
         self
     }
 
+    pub fn date_overrides(mut self, value: Vec<DateOverride>) -> Self {
+        self.date_overrides = Some(value);
+        self
+    }
+
     pub fn data_collection(mut self, value: DataCollectionConfig) -> Self {
         self.data_collection = Some(value);
         self
@@ -67,6 +76,7 @@ impl PolicyConfigInputBuilder {
             timezone: self.timezone,
             retry: self.retry,
             calling_periods: self.calling_periods,
+            date_overrides: self.date_overrides,
             data_collection: self.data_collection,
             followup_context: self.followup_context,
         })

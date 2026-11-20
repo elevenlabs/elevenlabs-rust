@@ -21,6 +21,9 @@ pub struct WorkflowOverrideAgentNodeModelOutput {
     #[serde(default)]
     pub label: String,
     pub entry_behavior: EntryBehavior,
+    /// Lets the caller interrupt the response this node gives on entry. Ignored unless entry_behavior is "generate_immediately".
+    #[serde(default)]
+    pub allow_interruptions_on_entry: bool,
 }
 
 impl WorkflowOverrideAgentNodeModelOutput {
@@ -40,6 +43,7 @@ pub struct WorkflowOverrideAgentNodeModelOutputBuilder {
     additional_tool_ids: Option<Vec<String>>,
     label: Option<String>,
     entry_behavior: Option<EntryBehavior>,
+    allow_interruptions_on_entry: Option<bool>,
 }
 
 impl WorkflowOverrideAgentNodeModelOutputBuilder {
@@ -86,6 +90,11 @@ impl WorkflowOverrideAgentNodeModelOutputBuilder {
         self
     }
 
+    pub fn allow_interruptions_on_entry(mut self, value: bool) -> Self {
+        self.allow_interruptions_on_entry = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`WorkflowOverrideAgentNodeModelOutput`].
     /// This method will fail if any of the following fields are not set:
     /// - [`position`](WorkflowOverrideAgentNodeModelOutputBuilder::position)
@@ -96,6 +105,7 @@ impl WorkflowOverrideAgentNodeModelOutputBuilder {
     /// - [`additional_tool_ids`](WorkflowOverrideAgentNodeModelOutputBuilder::additional_tool_ids)
     /// - [`label`](WorkflowOverrideAgentNodeModelOutputBuilder::label)
     /// - [`entry_behavior`](WorkflowOverrideAgentNodeModelOutputBuilder::entry_behavior)
+    /// - [`allow_interruptions_on_entry`](WorkflowOverrideAgentNodeModelOutputBuilder::allow_interruptions_on_entry)
     pub fn build(self) -> Result<WorkflowOverrideAgentNodeModelOutput, BuildError> {
         Ok(WorkflowOverrideAgentNodeModelOutput {
             position: self
@@ -122,6 +132,9 @@ impl WorkflowOverrideAgentNodeModelOutputBuilder {
             entry_behavior: self
                 .entry_behavior
                 .ok_or_else(|| BuildError::missing_field("entry_behavior"))?,
+            allow_interruptions_on_entry: self
+                .allow_interruptions_on_entry
+                .ok_or_else(|| BuildError::missing_field("allow_interruptions_on_entry"))?,
         })
     }
 }

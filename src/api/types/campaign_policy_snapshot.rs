@@ -9,6 +9,8 @@ pub struct CampaignPolicySnapshot {
     pub retry: RetryPolicy,
     #[serde(default)]
     pub calling_periods: Vec<CallingPeriodPolicy>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_overrides: Option<Vec<DateOverridePolicy>>,
     #[serde(default)]
     pub data_collection: DataCollectionPolicy,
     /// Which `campaign__` dynamic variables follow-up calls get.
@@ -28,6 +30,7 @@ pub struct CampaignPolicySnapshotBuilder {
     timezone: Option<String>,
     retry: Option<RetryPolicy>,
     calling_periods: Option<Vec<CallingPeriodPolicy>>,
+    date_overrides: Option<Vec<DateOverridePolicy>>,
     data_collection: Option<DataCollectionPolicy>,
     followup_context: Option<FollowupContextPolicy>,
 }
@@ -45,6 +48,11 @@ impl CampaignPolicySnapshotBuilder {
 
     pub fn calling_periods(mut self, value: Vec<CallingPeriodPolicy>) -> Self {
         self.calling_periods = Some(value);
+        self
+    }
+
+    pub fn date_overrides(mut self, value: Vec<DateOverridePolicy>) -> Self {
+        self.date_overrides = Some(value);
         self
     }
 
@@ -76,6 +84,7 @@ impl CampaignPolicySnapshotBuilder {
             calling_periods: self
                 .calling_periods
                 .ok_or_else(|| BuildError::missing_field("calling_periods"))?,
+            date_overrides: self.date_overrides,
             data_collection: self
                 .data_collection
                 .ok_or_else(|| BuildError::missing_field("data_collection"))?,

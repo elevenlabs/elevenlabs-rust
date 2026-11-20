@@ -3,7 +3,9 @@ pub use crate::prelude::*;
 /// A system tool is a tool that is used to call a system method in the server
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SystemToolConfigOutput {
-    #[serde(default)]
+    /// The type of tool
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<SystemToolConfigInputType>,
     pub name: String,
     /// Description of when the tool should be used and what it does. Leave empty to use the default description that's optimized for the specific tool type.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -47,6 +49,7 @@ impl SystemToolConfigOutput {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct SystemToolConfigOutputBuilder {
+    r#type: Option<SystemToolConfigInputType>,
     name: Option<String>,
     description: Option<String>,
     response_timeout_secs: Option<i64>,
@@ -62,6 +65,11 @@ pub struct SystemToolConfigOutputBuilder {
 }
 
 impl SystemToolConfigOutputBuilder {
+    pub fn r#type(mut self, value: SystemToolConfigInputType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn name(mut self, value: impl Into<String>) -> Self {
         self.name = Some(value.into());
         self
@@ -128,6 +136,7 @@ impl SystemToolConfigOutputBuilder {
     /// - [`params`](SystemToolConfigOutputBuilder::params)
     pub fn build(self) -> Result<SystemToolConfigOutput, BuildError> {
         Ok(SystemToolConfigOutput {
+            r#type: self.r#type,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             description: self.description,
             response_timeout_secs: self.response_timeout_secs,

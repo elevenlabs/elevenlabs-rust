@@ -1,114 +1,261 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "type")]
-#[non_exhaustive]
+#[derive(Debug, Clone, Serialize, PartialEq)]
+#[serde(untagged)]
 pub enum ToolCallDetails {
-    #[serde(rename = "api_integration_webhook")]
-    ApiIntegrationWebhook {
-        #[serde(flatten)]
-        data: ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput,
-    },
+    ConversationHistoryTranscriptToolCallWebhookDetails(
+        ConversationHistoryTranscriptToolCallWebhookDetails,
+    ),
+    ConversationHistoryTranscriptToolCallClientDetails(
+        ConversationHistoryTranscriptToolCallClientDetails,
+    ),
+    ConversationHistoryTranscriptToolCallMcpDetails(
+        ConversationHistoryTranscriptToolCallMcpDetails,
+    ),
+    ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput(
+        ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput,
+    ),
+}
 
-    #[serde(rename = "client")]
-    Client {
-        #[serde(flatten)]
-        data: ConversationHistoryTranscriptToolCallClientDetails,
-    },
+impl<'de> serde::Deserialize<'de> for ToolCallDetails {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <serde_json::Value as serde::Deserialize>::deserialize(deserializer)?;
 
-    #[serde(rename = "mcp")]
-    Mcp {
-        #[serde(flatten)]
-        data: ConversationHistoryTranscriptToolCallMcpDetails,
-    },
+        let mut matched_literal = false;
 
-    #[serde(rename = "webhook")]
-    Webhook {
-        #[serde(flatten)]
-        data: ConversationHistoryTranscriptToolCallWebhookDetails,
-    },
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("webhook") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<
+                ConversationHistoryTranscriptToolCallWebhookDetails,
+            >(value.clone())
+            {
+                return Ok(Self::ConversationHistoryTranscriptToolCallWebhookDetails(
+                    parsed,
+                ));
+            }
+        }
 
-    /// Catch-all variant for unrecognized discriminant values.
-    /// If the server sends a discriminant not recognized by the current SDK
-    /// version, the raw payload is captured here so callers can still inspect it.
-    #[serde(untagged)]
-    __Unknown(serde_json::Value),
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("client") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<
+                ConversationHistoryTranscriptToolCallClientDetails,
+            >(value.clone())
+            {
+                return Ok(Self::ConversationHistoryTranscriptToolCallClientDetails(
+                    parsed,
+                ));
+            }
+        }
+
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("mcp") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<
+                ConversationHistoryTranscriptToolCallMcpDetails,
+            >(value.clone())
+            {
+                return Ok(Self::ConversationHistoryTranscriptToolCallMcpDetails(
+                    parsed,
+                ));
+            }
+        }
+
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("api_integration_webhook")
+        {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<
+                ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput,
+            >(value.clone())
+            {
+                return Ok(
+                    Self::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput(
+                        parsed,
+                    ),
+                );
+            }
+        }
+
+        if !matched_literal {
+            if let Ok(parsed) = serde_json::from_value::<
+                ConversationHistoryTranscriptToolCallWebhookDetails,
+            >(value.clone())
+            {
+                return Ok(Self::ConversationHistoryTranscriptToolCallWebhookDetails(
+                    parsed,
+                ));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<
+                ConversationHistoryTranscriptToolCallClientDetails,
+            >(value.clone())
+            {
+                return Ok(Self::ConversationHistoryTranscriptToolCallClientDetails(
+                    parsed,
+                ));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<
+                ConversationHistoryTranscriptToolCallMcpDetails,
+            >(value.clone())
+            {
+                return Ok(Self::ConversationHistoryTranscriptToolCallMcpDetails(
+                    parsed,
+                ));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<
+                ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput,
+            >(value.clone())
+            {
+                return Ok(
+                    Self::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput(
+                        parsed,
+                    ),
+                );
+            }
+        }
+
+        Err(serde::de::Error::custom(
+            "data did not match any variant of untagged enum ToolCallDetails",
+        ))
+    }
 }
 
 impl ToolCallDetails {
-    pub fn is_api_integration_webhook(&self) -> bool {
-        matches!(self, Self::ApiIntegrationWebhook { .. })
+    pub fn is_conversation_history_transcript_tool_call_webhook_details(&self) -> bool {
+        matches!(
+            self,
+            Self::ConversationHistoryTranscriptToolCallWebhookDetails(_)
+        )
     }
 
-    pub fn as_api_integration_webhook(
+    pub fn as_conversation_history_transcript_tool_call_webhook_details(
+        &self,
+    ) -> Option<&ConversationHistoryTranscriptToolCallWebhookDetails> {
+        match self {
+            Self::ConversationHistoryTranscriptToolCallWebhookDetails(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_conversation_history_transcript_tool_call_webhook_details(
+        self,
+    ) -> Option<ConversationHistoryTranscriptToolCallWebhookDetails> {
+        match self {
+            Self::ConversationHistoryTranscriptToolCallWebhookDetails(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn is_conversation_history_transcript_tool_call_client_details(&self) -> bool {
+        matches!(
+            self,
+            Self::ConversationHistoryTranscriptToolCallClientDetails(_)
+        )
+    }
+
+    pub fn as_conversation_history_transcript_tool_call_client_details(
+        &self,
+    ) -> Option<&ConversationHistoryTranscriptToolCallClientDetails> {
+        match self {
+            Self::ConversationHistoryTranscriptToolCallClientDetails(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_conversation_history_transcript_tool_call_client_details(
+        self,
+    ) -> Option<ConversationHistoryTranscriptToolCallClientDetails> {
+        match self {
+            Self::ConversationHistoryTranscriptToolCallClientDetails(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn is_conversation_history_transcript_tool_call_mcp_details(&self) -> bool {
+        matches!(
+            self,
+            Self::ConversationHistoryTranscriptToolCallMcpDetails(_)
+        )
+    }
+
+    pub fn as_conversation_history_transcript_tool_call_mcp_details(
+        &self,
+    ) -> Option<&ConversationHistoryTranscriptToolCallMcpDetails> {
+        match self {
+            Self::ConversationHistoryTranscriptToolCallMcpDetails(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_conversation_history_transcript_tool_call_mcp_details(
+        self,
+    ) -> Option<ConversationHistoryTranscriptToolCallMcpDetails> {
+        match self {
+            Self::ConversationHistoryTranscriptToolCallMcpDetails(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn is_conversation_history_transcript_tool_call_api_integration_webhook_details_output(
+        &self,
+    ) -> bool {
+        matches!(
+            self,
+            Self::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput(_)
+        )
+    }
+
+    pub fn as_conversation_history_transcript_tool_call_api_integration_webhook_details_output(
         &self,
     ) -> Option<&ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput> {
         match self {
-            Self::ApiIntegrationWebhook { data } => Some(data),
+            Self::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput(
+                value,
+            ) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_api_integration_webhook(
+    pub fn into_conversation_history_transcript_tool_call_api_integration_webhook_details_output(
         self,
     ) -> Option<ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput> {
         match self {
-            Self::ApiIntegrationWebhook { data } => Some(data),
+            Self::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput(
+                value,
+            ) => Some(value),
             _ => None,
         }
     }
+}
 
-    pub fn is_client(&self) -> bool {
-        matches!(self, Self::Client { .. })
-    }
-
-    pub fn as_client(&self) -> Option<&ConversationHistoryTranscriptToolCallClientDetails> {
+impl fmt::Display for ToolCallDetails {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Client { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn into_client(self) -> Option<ConversationHistoryTranscriptToolCallClientDetails> {
-        match self {
-            Self::Client { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn is_mcp(&self) -> bool {
-        matches!(self, Self::Mcp { .. })
-    }
-
-    pub fn as_mcp(&self) -> Option<&ConversationHistoryTranscriptToolCallMcpDetails> {
-        match self {
-            Self::Mcp { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn into_mcp(self) -> Option<ConversationHistoryTranscriptToolCallMcpDetails> {
-        match self {
-            Self::Mcp { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn is_webhook(&self) -> bool {
-        matches!(self, Self::Webhook { .. })
-    }
-
-    pub fn as_webhook(&self) -> Option<&ConversationHistoryTranscriptToolCallWebhookDetails> {
-        match self {
-            Self::Webhook { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn into_webhook(self) -> Option<ConversationHistoryTranscriptToolCallWebhookDetails> {
-        match self {
-            Self::Webhook { data } => Some(data),
-            _ => None,
+            Self::ConversationHistoryTranscriptToolCallWebhookDetails(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::ConversationHistoryTranscriptToolCallClientDetails(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::ConversationHistoryTranscriptToolCallMcpDetails(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput(
+                value,
+            ) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
         }
     }
 }

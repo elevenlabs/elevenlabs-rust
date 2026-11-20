@@ -469,7 +469,7 @@ async fn update_sends_the_real_wire_request() {
 
     let result = client
         .pronunciation_dictionaries
-        .update("value", &body, None)
+        .update("value", Some(&body), None)
         .await;
     assert!(result.is_ok(), "call failed: {:?}", result.as_ref().err());
 
@@ -548,7 +548,7 @@ async fn update_surfaces_the_declared_422() {
 
     let result = client
         .pronunciation_dictionaries
-        .update("value", &body, None)
+        .update("value", Some(&body), None)
         .await;
 
     match result {

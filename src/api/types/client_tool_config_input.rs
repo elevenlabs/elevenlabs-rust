@@ -3,10 +3,11 @@ pub use crate::prelude::*;
 /// A client tool is one that sends an event to the user's client to trigger something client side
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ClientToolConfigInput {
-    #[serde(default)]
+    /// The type of tool
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<ClientToolConfigInputType>,
     pub name: String,
     /// Description of when the tool should be used and what it does.
-    #[serde(default)]
     pub description: String,
     /// The maximum time in seconds to wait for the tool call to complete. Must be between 1 and 120 seconds (inclusive), or -1 to wait for the client's response indefinitely (requires expects_response).
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -56,6 +57,7 @@ impl ClientToolConfigInput {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct ClientToolConfigInputBuilder {
+    r#type: Option<ClientToolConfigInputType>,
     name: Option<String>,
     description: Option<String>,
     response_timeout_secs: Option<i64>,
@@ -74,6 +76,11 @@ pub struct ClientToolConfigInputBuilder {
 }
 
 impl ClientToolConfigInputBuilder {
+    pub fn r#type(mut self, value: ClientToolConfigInputType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn name(mut self, value: impl Into<String>) -> Self {
         self.name = Some(value.into());
         self
@@ -155,6 +162,7 @@ impl ClientToolConfigInputBuilder {
     /// - [`description`](ClientToolConfigInputBuilder::description)
     pub fn build(self) -> Result<ClientToolConfigInput, BuildError> {
         Ok(ClientToolConfigInput {
+            r#type: self.r#type,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             description: self
                 .description

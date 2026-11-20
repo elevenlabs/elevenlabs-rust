@@ -71,16 +71,16 @@ pub struct SubscriptionResponse {
     pub can_use_professional_voice_cloning: bool,
     /// The currency of the user's subscription.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub currency: Option<Currency>,
+    pub currency: Option<SubscriptionResponseCurrency>,
     /// Currency/amount pair.
     pub current_overage: Price,
     pub status: SubscriptionStatusType,
     /// The billing period of the user's subscription.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_period: Option<BillingPeriod>,
+    pub billing_period: Option<CharacterRefreshPeriod>,
     /// The character refresh period of the user's subscription.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub character_refresh_period: Option<BillingPeriod>,
+    pub character_refresh_period: Option<CharacterRefreshPeriod>,
 }
 
 impl SubscriptionResponse {
@@ -110,11 +110,11 @@ pub struct SubscriptionResponseBuilder {
     can_extend_voice_limit: Option<bool>,
     can_use_instant_voice_cloning: Option<bool>,
     can_use_professional_voice_cloning: Option<bool>,
-    currency: Option<Currency>,
+    currency: Option<SubscriptionResponseCurrency>,
     current_overage: Option<Price>,
     status: Option<SubscriptionStatusType>,
-    billing_period: Option<BillingPeriod>,
-    character_refresh_period: Option<BillingPeriod>,
+    billing_period: Option<CharacterRefreshPeriod>,
+    character_refresh_period: Option<CharacterRefreshPeriod>,
 }
 
 impl SubscriptionResponseBuilder {
@@ -211,7 +211,7 @@ impl SubscriptionResponseBuilder {
         self
     }
 
-    pub fn currency(mut self, value: Currency) -> Self {
+    pub fn currency(mut self, value: SubscriptionResponseCurrency) -> Self {
         self.currency = Some(value);
         self
     }
@@ -226,12 +226,12 @@ impl SubscriptionResponseBuilder {
         self
     }
 
-    pub fn billing_period(mut self, value: BillingPeriod) -> Self {
+    pub fn billing_period(mut self, value: CharacterRefreshPeriod) -> Self {
         self.billing_period = Some(value);
         self
     }
 
-    pub fn character_refresh_period(mut self, value: BillingPeriod) -> Self {
+    pub fn character_refresh_period(mut self, value: CharacterRefreshPeriod) -> Self {
         self.character_refresh_period = Some(value);
         self
     }

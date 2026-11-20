@@ -58,6 +58,11 @@ pub struct ClientConfig {
     pub oauth_token_endpoint: Option<String>,
     pub oauth_token_exchange: Option<OAuthTokenExchangeConfig>,
     pub user_agent: String,
+    /// Optional custom `reqwest` client, used as-is for every request.
+    /// When set, it owns all transport-level configuration (TLS, proxies, timeout,
+    /// user agent); when `None` the SDK builds its own client from `timeout` and
+    /// `user_agent`.
+    pub reqwest_client: Option<reqwest::Client>,
 }
 
 impl Default for ClientConfig {
@@ -75,7 +80,8 @@ impl Default for ClientConfig {
             custom_headers: Default::default(),
             oauth_token_endpoint: None,
             oauth_token_exchange: None,
-            user_agent: "postman-sdk".to_string(),
+            user_agent: "postman-codegen/3.29.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string(),
+            reqwest_client: None,
         }
     }
 }
@@ -98,6 +104,7 @@ pub struct ClientConfigBuilder {
     oauth_token_endpoint: Option<String>,
     oauth_token_exchange: Option<OAuthTokenExchangeConfig>,
     user_agent: Option<String>,
+    reqwest_client: Option<reqwest::Client>,
 }
 
 impl ClientConfig {
@@ -194,6 +201,11 @@ impl ClientConfigBuilder {
         self
     }
 
+    pub fn reqwest_client(mut self, reqwest_client: reqwest::Client) -> Self {
+        self.reqwest_client = Some(reqwest_client);
+        self
+    }
+
     pub fn build(self) -> Result<ClientConfig, String> {
         Ok(ClientConfig {
             base_url: self
@@ -212,7 +224,10 @@ impl ClientConfigBuilder {
             custom_headers: self.custom_headers.unwrap_or_default(),
             oauth_token_endpoint: self.oauth_token_endpoint,
             oauth_token_exchange: self.oauth_token_exchange,
-            user_agent: self.user_agent.unwrap_or_else(|| "postman-sdk".to_string()),
+            user_agent: self.user_agent.unwrap_or_else(|| {
+                "postman-codegen/3.29.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string()
+            }),
+            reqwest_client: self.reqwest_client,
         })
     }
 }

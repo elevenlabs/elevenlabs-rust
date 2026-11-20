@@ -24,20 +24,105 @@ impl<'de> serde::Deserialize<'de> for SendMessageMulti {
                 .map(|object| keys.iter().any(|key| object.contains_key(*key)))
                 .unwrap_or(false)
         };
+        let matching_keys = |keys: &[&str]| {
+            value
+                .as_object()
+                .map(|object| {
+                    object
+                        .keys()
+                        .filter(|key| keys.contains(&key.as_str()))
+                        .count()
+                })
+                .unwrap_or(0)
+        };
 
         let mut matched_literal = false;
 
         if value.get("text").and_then(serde_json::Value::as_str) == Some(" ") {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<InitializeConnectionMulti>(value.clone()) {
-                return Ok(Self::InitializeConnectionMulti(parsed));
+                let mut best = matching_keys(&[
+                    "text",
+                    "voice_settings",
+                    "generation_config",
+                    "pronunciation_dictionary_locators",
+                    "xi_api_key",
+                    "authorization",
+                    "context_id",
+                ]);
+                let mut chosen = None;
+                let score = matching_keys(&[
+                    "text",
+                    "voice_settings",
+                    "generation_config",
+                    "pronunciation_dictionary_locators",
+                    "xi_api_key",
+                    "authorization",
+                    "context_id",
+                ]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<InitialiseContext>(value.clone())
+                    {
+                        best = score;
+                        chosen = Some(Self::InitialiseContext(alternative));
+                    }
+                }
+                let score = matching_keys(&["text", "context_id", "flush"]);
+                if score > best {
+                    if let Ok(alternative) = serde_json::from_value::<SendTextMulti>(value.clone())
+                    {
+                        best = score;
+                        chosen = Some(Self::SendTextMulti(alternative));
+                    }
+                }
+                let score = matching_keys(&["context_id", "text", "flush"]);
+                if score > best {
+                    if let Ok(alternative) = serde_json::from_value::<FlushContext>(value.clone()) {
+                        chosen = Some(Self::FlushContext(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::InitializeConnectionMulti(parsed)));
             }
         }
 
         if value.get("text").and_then(serde_json::Value::as_str) == Some("") {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<KeepContextAlive>(value.clone()) {
-                return Ok(Self::KeepContextAlive(parsed));
+                let mut best = matching_keys(&["text", "context_id"]);
+                let mut chosen = None;
+                let score = matching_keys(&[
+                    "text",
+                    "voice_settings",
+                    "generation_config",
+                    "pronunciation_dictionary_locators",
+                    "xi_api_key",
+                    "authorization",
+                    "context_id",
+                ]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<InitialiseContext>(value.clone())
+                    {
+                        best = score;
+                        chosen = Some(Self::InitialiseContext(alternative));
+                    }
+                }
+                let score = matching_keys(&["text", "context_id", "flush"]);
+                if score > best {
+                    if let Ok(alternative) = serde_json::from_value::<SendTextMulti>(value.clone())
+                    {
+                        best = score;
+                        chosen = Some(Self::SendTextMulti(alternative));
+                    }
+                }
+                let score = matching_keys(&["context_id", "text", "flush"]);
+                if score > best {
+                    if let Ok(alternative) = serde_json::from_value::<FlushContext>(value.clone()) {
+                        chosen = Some(Self::FlushContext(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::KeepContextAlive(parsed)));
             }
         }
 

@@ -23,6 +23,17 @@ impl<'de> serde::Deserialize<'de> for WorkflowToolNestedToolsStepModelOutputResu
         D: serde::Deserializer<'de>,
     {
         let value = <serde_json::Value as serde::Deserialize>::deserialize(deserializer)?;
+        let matching_keys = |keys: &[&str]| {
+            value
+                .as_object()
+                .map(|object| {
+                    object
+                        .keys()
+                        .filter(|key| keys.contains(&key.as_str()))
+                        .count()
+                })
+                .unwrap_or(0)
+        };
 
         let mut matched_literal = false;
 
@@ -32,9 +43,51 @@ impl<'de> serde::Deserialize<'de> for WorkflowToolNestedToolsStepModelOutputResu
                 ConversationHistoryTranscriptSystemToolResultCommonModelOutput,
             >(value.clone())
             {
-                return Ok(
+                let best = matching_keys(&[
+                    "request_id",
+                    "tool_name",
+                    "tool_id",
+                    "result_value",
+                    "is_error",
+                    "is_blocked",
+                    "tool_has_been_called",
+                    "tool_latency_secs",
+                    "error_type",
+                    "raw_error_message",
+                    "dynamic_variable_updates",
+                    "type",
+                    "result",
+                ]);
+                let mut chosen = None;
+                let score = matching_keys(&[
+                    "request_id",
+                    "tool_name",
+                    "tool_id",
+                    "result_value",
+                    "is_error",
+                    "is_blocked",
+                    "tool_has_been_called",
+                    "tool_latency_secs",
+                    "error_type",
+                    "raw_error_message",
+                    "dynamic_variable_updates",
+                    "type",
+                ]);
+                if score > best {
+                    if let Ok(alternative) = serde_json::from_value::<
+                        ConversationHistoryTranscriptOtherToolsResultCommonModel,
+                    >(value.clone())
+                    {
+                        chosen = Some(
+                            Self::ConversationHistoryTranscriptOtherToolsResultCommonModel(
+                                alternative,
+                            ),
+                        );
+                    }
+                }
+                return Ok(chosen.unwrap_or(
                     Self::ConversationHistoryTranscriptSystemToolResultCommonModelOutput(parsed),
-                );
+                ));
             }
         }
 
@@ -45,7 +98,51 @@ impl<'de> serde::Deserialize<'de> for WorkflowToolNestedToolsStepModelOutputResu
                 ConversationHistoryTranscriptApiIntegrationWebhookToolsResultCommonModelOutput,
             >(value.clone())
             {
-                return Ok(Self::ConversationHistoryTranscriptApiIntegrationWebhookToolsResultCommonModelOutput(parsed));
+                let best = matching_keys(&[
+                    "request_id",
+                    "tool_name",
+                    "tool_id",
+                    "result_value",
+                    "is_error",
+                    "is_blocked",
+                    "tool_has_been_called",
+                    "tool_latency_secs",
+                    "error_type",
+                    "raw_error_message",
+                    "dynamic_variable_updates",
+                    "type",
+                    "integration_id",
+                    "credential_id",
+                    "integration_connection_id",
+                ]);
+                let mut chosen = None;
+                let score = matching_keys(&[
+                    "request_id",
+                    "tool_name",
+                    "tool_id",
+                    "result_value",
+                    "is_error",
+                    "is_blocked",
+                    "tool_has_been_called",
+                    "tool_latency_secs",
+                    "error_type",
+                    "raw_error_message",
+                    "dynamic_variable_updates",
+                    "type",
+                ]);
+                if score > best {
+                    if let Ok(alternative) = serde_json::from_value::<
+                        ConversationHistoryTranscriptOtherToolsResultCommonModel,
+                    >(value.clone())
+                    {
+                        chosen = Some(
+                            Self::ConversationHistoryTranscriptOtherToolsResultCommonModel(
+                                alternative,
+                            ),
+                        );
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ConversationHistoryTranscriptApiIntegrationWebhookToolsResultCommonModelOutput(parsed)));
             }
         }
 
@@ -55,9 +152,51 @@ impl<'de> serde::Deserialize<'de> for WorkflowToolNestedToolsStepModelOutputResu
                 ConversationHistoryTranscriptWorkflowToolsResultCommonModelOutput,
             >(value.clone())
             {
-                return Ok(
+                let best = matching_keys(&[
+                    "request_id",
+                    "tool_name",
+                    "tool_id",
+                    "result_value",
+                    "is_error",
+                    "is_blocked",
+                    "tool_has_been_called",
+                    "tool_latency_secs",
+                    "error_type",
+                    "raw_error_message",
+                    "dynamic_variable_updates",
+                    "type",
+                    "result",
+                ]);
+                let mut chosen = None;
+                let score = matching_keys(&[
+                    "request_id",
+                    "tool_name",
+                    "tool_id",
+                    "result_value",
+                    "is_error",
+                    "is_blocked",
+                    "tool_has_been_called",
+                    "tool_latency_secs",
+                    "error_type",
+                    "raw_error_message",
+                    "dynamic_variable_updates",
+                    "type",
+                ]);
+                if score > best {
+                    if let Ok(alternative) = serde_json::from_value::<
+                        ConversationHistoryTranscriptOtherToolsResultCommonModel,
+                    >(value.clone())
+                    {
+                        chosen = Some(
+                            Self::ConversationHistoryTranscriptOtherToolsResultCommonModel(
+                                alternative,
+                            ),
+                        );
+                    }
+                }
+                return Ok(chosen.unwrap_or(
                     Self::ConversationHistoryTranscriptWorkflowToolsResultCommonModelOutput(parsed),
-                );
+                ));
             }
         }
 

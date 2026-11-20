@@ -3,7 +3,7 @@ pub use crate::prelude::*;
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct QueryParamsJsonSchemaOutput {
     #[serde(default)]
-    pub properties: std::collections::HashMap<String, LiteralJsonSchemaProperty>,
+    pub properties: std::collections::HashMap<String, QueryParamsJsonSchemaOutputProperties>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<Vec<String>>,
 }
@@ -17,14 +17,14 @@ impl QueryParamsJsonSchemaOutput {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct QueryParamsJsonSchemaOutputBuilder {
-    properties: Option<std::collections::HashMap<String, LiteralJsonSchemaProperty>>,
+    properties: Option<std::collections::HashMap<String, QueryParamsJsonSchemaOutputProperties>>,
     required: Option<Vec<String>>,
 }
 
 impl QueryParamsJsonSchemaOutputBuilder {
     pub fn properties(
         mut self,
-        value: std::collections::HashMap<String, LiteralJsonSchemaProperty>,
+        value: std::collections::HashMap<String, QueryParamsJsonSchemaOutputProperties>,
     ) -> Self {
         self.properties = Some(value);
         self

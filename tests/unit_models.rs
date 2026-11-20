@@ -785,7 +785,7 @@ fn body_text_to_speech_full_round_trips_through_serde() {
 }
 
 #[test]
-fn body_text_to_speech_full_voice_settings_round_trips_through_serde() {
+fn voice_settings_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "stability": 0.5,
@@ -797,7 +797,7 @@ fn body_text_to_speech_full_voice_settings_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: BodyTextToSpeechFullVoiceSettings =
+    let decoded: VoiceSettings =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -1143,8 +1143,7 @@ fn media_generation_response_round_trips_through_serde() {
 fn media_generation_in_progress_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "id": "value",
-        "status": "pending"
+        "id": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -1161,7 +1160,6 @@ fn media_generation_completed_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "id": "value",
-        "status": "completed",
         "content_url": "value",
         "content_mime_type": "value"
     }"#,
@@ -1180,7 +1178,6 @@ fn media_generation_failed_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "id": "value",
-        "status": "failed",
         "failure_reason": "timeout",
         "error_message": "value"
     }"#,
@@ -1261,7 +1258,6 @@ fn eleven_flash_v2_5_request_round_trips_through_serde() {
                 "version_id": "value"
             }
         ],
-        "model_id": "eleven_flash_v2_5",
         "language_code": "value",
         "voice_settings": {
             "stability": 0.5,
@@ -1296,26 +1292,9 @@ fn webhook_target_round_trips_through_serde() {
 }
 
 #[test]
-fn webhook_target_all_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "all"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: WebhookTargetAll =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn webhook_target_ids_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "ids",
         "ids": [
             "value"
         ]
@@ -1381,7 +1360,6 @@ fn eleven_multilingual_v2_request_round_trips_through_serde() {
                 "version_id": "value"
             }
         ],
-        "model_id": "eleven_multilingual_v2",
         "voice_settings": {
             "stability": 0.5,
             "similarity_boost": 0.5,
@@ -1436,7 +1414,6 @@ fn eleven_v3_request_round_trips_through_serde() {
                 "version_id": "value"
             }
         ],
-        "model_id": "eleven_v3",
         "language_code": "value",
         "voice_settings": {
             "stability": 0.5
@@ -2622,7 +2599,6 @@ fn pending_change_round_trips_through_serde() {
 fn pending_subscription_switch_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "kind": "change",
         "next_tier": "free",
         "next_billing_period": "monthly_period",
         "timestamp_seconds": 123
@@ -2641,7 +2617,6 @@ fn pending_subscription_switch_response_model_round_trips_through_serde() {
 fn pending_cancellation_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "kind": "cancellation",
         "timestamp_seconds": 123
     }"#,
     )
@@ -2992,8 +2967,7 @@ fn get_conv_ai_dashboard_settings_response_model_charts_item_round_trips_through
 fn dashboard_call_success_chart_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "name": "value",
-        "type": "call_success"
+        "name": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -3010,7 +2984,6 @@ fn dashboard_criteria_chart_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "type": "criteria",
         "criteria_id": "value"
     }"#,
     )
@@ -3028,7 +3001,6 @@ fn dashboard_data_collection_chart_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "type": "data_collection",
         "data_collection_id": "value"
     }"#,
     )
@@ -4422,7 +4394,6 @@ fn body_create_podcast_v1_studio_podcasts_post_mode_round_trips_through_serde() 
 fn podcast_conversation_mode_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "conversation",
         "conversation": {
             "host_voice_id": "value",
             "guest_voice_id": "value"
@@ -4459,7 +4430,6 @@ fn podcast_conversation_mode_data_round_trips_through_serde() {
 fn podcast_bulletin_mode_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "bulletin",
         "bulletin": {
             "host_voice_id": "value"
         }
@@ -4694,7 +4664,6 @@ fn pronunciation_dictionary_alias_rule_request_model_round_trips_through_serde()
         "string_to_replace": "value",
         "case_sensitive": true,
         "word_boundaries": true,
-        "type": "alias",
         "alias": "value"
     }"#,
     )
@@ -4714,7 +4683,6 @@ fn pronunciation_dictionary_phoneme_rule_request_model_round_trips_through_serde
         "string_to_replace": "value",
         "case_sensitive": true,
         "word_boundaries": true,
-        "type": "phoneme",
         "phoneme": "value",
         "alphabet": "value"
     }"#,
@@ -4788,7 +4756,6 @@ fn pronunciation_dictionary_alias_rule_response_model_round_trips_through_serde(
         "string_to_replace": "value",
         "case_sensitive": true,
         "word_boundaries": true,
-        "type": "alias",
         "alias": "value"
     }"#,
     )
@@ -4808,7 +4775,6 @@ fn pronunciation_dictionary_phoneme_rule_response_model_round_trips_through_serd
         "string_to_replace": "value",
         "case_sensitive": true,
         "word_boundaries": true,
-        "type": "phoneme",
         "phoneme": "value",
         "alphabet": "value"
     }"#,
@@ -6568,7 +6534,6 @@ fn project_video_response_model_round_trips_through_serde() {
             },
             "updated_at_ms": 123
         },
-        "type": "video",
         "canvas_placement": {
             "x_relative": 9.99,
             "y_relative": 9.99,
@@ -7146,7 +7111,6 @@ fn project_external_audio_response_model_round_trips_through_serde() {
             },
             "updated_at_ms": 123
         },
-        "type": "audio",
         "import_speech_progress": 9.99
     }"#,
     )
@@ -7192,7 +7156,6 @@ fn source_context_round_trips_through_serde() {
 fn song_source_context_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "source_type": "song",
         "song_id": "value",
         "chat_id": "value",
         "title": "value",
@@ -7221,7 +7184,6 @@ fn song_source_context_round_trips_through_serde() {
 fn music_explore_song_source_context_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "source_type": "music_explore_song",
         "music_explore_song_id": "value",
         "title": "value",
         "description": "value",
@@ -7243,7 +7205,6 @@ fn music_explore_song_source_context_round_trips_through_serde() {
 fn sfx_source_context_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "source_type": "sfx",
         "sound_generation_history_item_id": "value",
         "text": "value",
         "generation_config": {}
@@ -7384,7 +7345,6 @@ fn project_image_response_model_round_trips_through_serde() {
         "filename": "value",
         "signed_url": "value",
         "thumbnail_signed_url": "value",
-        "type": "image",
         "source": "upload",
         "file_size_bytes": 123,
         "width": 123,
@@ -8561,7 +8521,6 @@ fn chapter_content_block_response_model_nodes_item_round_trips_through_serde() {
 fn chapter_content_block_tts_node_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "tts_node",
         "project_voice_ref_id": "value",
         "text": "value",
         "voice_id": "value"
@@ -8569,22 +8528,6 @@ fn chapter_content_block_tts_node_response_model_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: ChapterContentBlockTtsNodeResponseModel =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn chapter_content_block_extendable_node_response_model_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "_other"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ChapterContentBlockExtendableNodeResponseModel =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -9097,14 +9040,14 @@ fn dubbing_language_response_round_trips_through_serde() {
 }
 
 #[test]
-fn dubbing_language_response_voice_settings_round_trips_through_serde() {
+fn dubbing_voice_settings_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "cloning_strength": 10
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: DubbingLanguageResponseVoiceSettings =
+    let decoded: DubbingVoiceSettings =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -10020,7 +9963,6 @@ fn speech_to_text_chunk_response_model_edited_transcript_round_trips_through_ser
 fn edited_transcript_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "kind": "transcript",
         "text": "value",
         "edited_text": "value"
     }"#,
@@ -10038,7 +9980,6 @@ fn edited_transcript_response_round_trips_through_serde() {
 fn transcript_edit_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "kind": "error",
         "error_type": "edit_failed",
         "message": "value"
     }"#,
@@ -10352,7 +10293,48 @@ fn body_update_audio_native_content_from_url_v1_audio_native_content_post_round_
 }
 
 #[test]
-fn pronunciation_dictionary_rule_items_response_model_round_trips_through_serde() {
+fn watermark_check_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "is_detected": true,
+        "details": {
+            "product": "value",
+            "model": "value",
+            "generated_at": "value",
+            "unique_id": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WatermarkCheck =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn watermark_details_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "product": "value",
+        "model": "value",
+        "generated_at": "value",
+        "unique_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WatermarkDetails =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn pronunciation_dictionary_rules_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "id": "value",
@@ -10361,7 +10343,7 @@ fn pronunciation_dictionary_rule_items_response_model_round_trips_through_serde(
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: PronunciationDictionaryRuleItemsResponseModel =
+    let decoded: PronunciationDictionaryRulesResponseModel =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -10470,6 +10452,62 @@ fn remove_pronunciation_dictionary_rules_request_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: RemovePronunciationDictionaryRulesRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_rule_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "title": "value",
+        "description": "value",
+        "priority": "strict",
+        "id": "value",
+        "created_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentRule =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_create_agent_rule_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "title": "value",
+        "description": "value",
+        "priority": "strict"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCreateAgentRuleRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_agent_rule_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "title": "value",
+        "description": "value",
+        "priority": "strict"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateAgentRuleRequest =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -11259,7 +11297,6 @@ fn o_auth2_client_creds_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "oauth2_client_credentials",
         "provider": "value",
         "client_id": "value",
         "token_url": "value",
@@ -11379,7 +11416,6 @@ fn dependent_available_tool_identifier_round_trips_through_serde() {
         r#"{
         "id": "value",
         "name": "value",
-        "type": "available",
         "created_at_unix_secs": 123,
         "access_level": "admin"
     }"#,
@@ -11397,7 +11433,6 @@ fn dependent_available_tool_identifier_round_trips_through_serde() {
 fn dependent_unknown_tool_identifier_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "unknown",
         "id": "value"
     }"#,
     )
@@ -11436,7 +11471,6 @@ fn dependent_available_mcp_server_identifier_round_trips_through_serde() {
         r#"{
         "id": "value",
         "name": "value",
-        "type": "available",
         "created_at_unix_secs": 123,
         "access_level": "admin"
     }"#,
@@ -11454,8 +11488,7 @@ fn dependent_available_mcp_server_identifier_round_trips_through_serde() {
 fn dependent_unknown_mcp_server_identifier_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "id": "value",
-        "type": "unknown"
+        "id": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -11489,7 +11522,6 @@ fn refresh_token_auth_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "refresh_token_auth",
         "provider": "value",
         "client_id": "value",
         "token_url": "value",
@@ -11545,7 +11577,6 @@ fn basic_auth_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "basic_auth",
         "provider": "value",
         "username": "value",
         "id": "value",
@@ -11594,7 +11625,6 @@ fn bearer_auth_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "bearer_auth",
         "provider": "value",
         "id": "value",
         "used_by": {
@@ -11642,7 +11672,6 @@ fn o_auth2_jwt_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "oauth2_jwt",
         "provider": "value",
         "algorithm": "HS256",
         "key_id": "value",
@@ -11708,7 +11737,6 @@ fn private_key_jwt_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "private_key_jwt",
         "provider": "value",
         "algorithm": "HS256",
         "key_id": "value",
@@ -11768,7 +11796,6 @@ fn mtls_auth_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "mtls",
         "provider": "value",
         "id": "value",
         "used_by": {
@@ -11816,7 +11843,6 @@ fn custom_header_auth_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "custom_header_auth",
         "provider": "value",
         "header_name": "value",
         "id": "value",
@@ -11865,7 +11891,6 @@ fn api_integration_o_auth2_auth_code_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "api_integration_oauth2_auth_code",
         "provider": "value",
         "token_url": "value",
         "scopes": [
@@ -11921,7 +11946,6 @@ fn api_integration_o_auth2_custom_app_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "api_integration_oauth2_custom_app",
         "provider": "value",
         "token_url": "value",
         "scopes": [
@@ -11978,7 +12002,6 @@ fn whats_app_auth_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "whatsapp_auth",
         "provider": "whatsapp",
         "phone_number_id": "value",
         "id": "value",
@@ -12027,7 +12050,6 @@ fn slack_bot_auth_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "slack_bot_auth",
         "provider": "Slack",
         "id": "value",
         "used_by": {
@@ -12075,7 +12097,6 @@ fn url_secret_auth_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "url_secret",
         "provider": "value",
         "id": "value",
         "used_by": {
@@ -12180,7 +12201,7 @@ fn response_create_workspace_auth_connection_v1_workspace_auth_connections_post_
 }
 
 #[test]
-fn auth_connections_item_create_request_round_trips_through_serde() {
+fn auth_connections_create_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
@@ -12202,7 +12223,7 @@ fn auth_connections_item_create_request_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: AuthConnectionsItemCreateRequest =
+    let decoded: AuthConnectionsCreateRequest =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -12215,7 +12236,6 @@ fn create_o_auth2_client_creds_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "oauth2_client_credentials",
         "provider": "value",
         "client_id": "value",
         "token_url": "value",
@@ -12246,7 +12266,6 @@ fn create_custom_header_auth_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "custom_header_auth",
         "provider": "value",
         "header_name": "value",
         "token": "value"
@@ -12266,7 +12285,6 @@ fn create_basic_auth_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "basic_auth",
         "provider": "value",
         "username": "value",
         "password": "value"
@@ -12286,7 +12304,6 @@ fn create_bearer_auth_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "bearer_auth",
         "provider": "value",
         "token": "value"
     }"#,
@@ -12305,7 +12322,6 @@ fn create_o_auth2_jwt_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "oauth2_jwt",
         "provider": "value",
         "algorithm": "HS256",
         "key_id": "value",
@@ -12342,7 +12358,6 @@ fn create_private_key_jwt_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "private_key_jwt",
         "provider": "value",
         "algorithm": "HS256",
         "key_id": "value",
@@ -12373,7 +12388,6 @@ fn create_mtls_auth_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "name": "value",
-        "auth_type": "mtls",
         "provider": "value",
         "client_certificate": "value",
         "client_key": "value",
@@ -12452,7 +12466,7 @@ fn response_update_workspace_auth_connection_v1_workspace_auth_connections_auth_
 }
 
 #[test]
-fn auth_connections_item_update_request_round_trips_through_serde() {
+fn auth_connections_update_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "auth_type": "oauth2_client_credentials",
@@ -12472,7 +12486,7 @@ fn auth_connections_item_update_request_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: AuthConnectionsItemUpdateRequest =
+    let decoded: AuthConnectionsUpdateRequest =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -12484,7 +12498,6 @@ fn auth_connections_item_update_request_round_trips_through_serde() {
 fn update_o_auth2_client_creds_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "auth_type": "oauth2_client_credentials",
         "provider": "value",
         "client_id": "value",
         "scopes": [
@@ -12513,7 +12526,6 @@ fn update_o_auth2_client_creds_request_round_trips_through_serde() {
 fn update_basic_auth_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "auth_type": "basic_auth",
         "provider": "value",
         "username": "value",
         "password": "value"
@@ -12532,7 +12544,6 @@ fn update_basic_auth_request_round_trips_through_serde() {
 fn update_bearer_auth_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "auth_type": "bearer_auth",
         "provider": "value",
         "token": "value"
     }"#,
@@ -12550,7 +12561,6 @@ fn update_bearer_auth_request_round_trips_through_serde() {
 fn update_o_auth2_jwt_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "auth_type": "oauth2_jwt",
         "provider": "value",
         "algorithm": "HS256",
         "key_id": "value",
@@ -13145,6 +13155,44 @@ fn update_member_usage_limit_request_model_round_trips_through_serde() {
 }
 
 #[test]
+fn reception_team_member_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "user_id": "value",
+        "email": "value",
+        "first_name": "value",
+        "is_owner": true,
+        "is_admin": true,
+        "picture_url": "value",
+        "is_suspended": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionTeamMemberResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn body_smb_update_team_member_role_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "role": "workspace_admin"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: BodySmbUpdateTeamMemberRole =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn add_workspace_invite_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -13230,6 +13278,58 @@ fn body_delete_existing_invitation_v1_workspace_invites_delete_round_trips_throu
     )
     .expect("fixture is valid JSON");
     let decoded: BodyDeleteExistingInvitationV1WorkspaceInvitesDelete =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_team_invite_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "email": "value",
+        "seat_type": "workspace_admin",
+        "inviting_user_email": "value",
+        "created_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionTeamInviteResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_team_invite_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "email": "value",
+        "role": "workspace_admin"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTeamInviteRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn body_smb_cancel_team_invite_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "email": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: BodySmbCancelTeamInvite =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -13439,7 +13539,10 @@ fn body_create_workspace_webhook_v1_workspace_webhooks_post_round_trips_through_
             "webhook_url": "value",
             "request_headers": {
                 "key": "value"
-            }
+            },
+            "log_redacted_fields": [
+                "value"
+            ]
         }
     }"#,
     )
@@ -13461,7 +13564,10 @@ fn webhook_hmac_settings_round_trips_through_serde() {
         "webhook_url": "value",
         "request_headers": {
             "key": "value"
-        }
+        },
+        "log_redacted_fields": [
+            "value"
+        ]
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -13502,6 +13608,9 @@ fn body_update_workspace_webhook_v1_workspace_webhooks_webhook_id_patch_round_tr
         },
         "events": [
             "voice_library_removal_notice"
+        ],
+        "log_redacted_fields": [
+            "value"
         ]
     }"#,
     )
@@ -13523,6 +13632,45 @@ fn delete_workspace_webhook_response_model_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: DeleteWorkspaceWebhookResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn webhook_send_result_response_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "delivery_id": "value",
+        "outcome": "delivered",
+        "response_code": 123,
+        "latency_ms": 123,
+        "response_content_type": "value",
+        "response_body_bytes": 123,
+        "failure_origin": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WebhookSendResultResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn body_send_test_webhook_event_v1_workspace_webhooks_webhook_id_test_post_round_trips_through_serde(
+) {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "webhook_type": "project_conversion_status"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: BodySendTestWebhookEventV1WorkspaceWebhooksWebhookIdTestPost =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -14563,7 +14711,6 @@ fn segmented_json_export_options_round_trips_through_serde() {
         r#"{
         "include_speakers": true,
         "include_timestamps": true,
-        "format": "segmented_json",
         "segment_on_silence_longer_than_s": 9.99,
         "max_segment_duration_s": 9.99,
         "max_segment_chars": 123
@@ -14584,7 +14731,6 @@ fn docx_export_options_round_trips_through_serde() {
         r#"{
         "include_speakers": true,
         "include_timestamps": true,
-        "format": "docx",
         "segment_on_silence_longer_than_s": 9.99,
         "max_segment_duration_s": 9.99,
         "max_segment_chars": 123
@@ -14605,7 +14751,6 @@ fn pdf_export_options_round_trips_through_serde() {
         r#"{
         "include_speakers": true,
         "include_timestamps": true,
-        "format": "pdf",
         "segment_on_silence_longer_than_s": 9.99,
         "max_segment_duration_s": 9.99,
         "max_segment_chars": 123
@@ -14627,7 +14772,6 @@ fn txt_export_options_round_trips_through_serde() {
         "max_characters_per_line": 123,
         "include_speakers": true,
         "include_timestamps": true,
-        "format": "txt",
         "segment_on_silence_longer_than_s": 9.99,
         "max_segment_duration_s": 9.99,
         "max_segment_chars": 123
@@ -14648,7 +14792,6 @@ fn html_export_options_round_trips_through_serde() {
         r#"{
         "include_speakers": true,
         "include_timestamps": true,
-        "format": "html",
         "segment_on_silence_longer_than_s": 9.99,
         "max_segment_duration_s": 9.99,
         "max_segment_chars": 123
@@ -14670,7 +14813,6 @@ fn srt_export_options_round_trips_through_serde() {
         "max_characters_per_line": 123,
         "include_speakers": true,
         "include_timestamps": true,
-        "format": "srt",
         "segment_on_silence_longer_than_s": 9.99,
         "max_segment_duration_s": 9.99,
         "max_segment_chars": 123
@@ -14994,6 +15136,130 @@ fn evaluation_criteria_summary_result_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: EvaluationCriteriaSummaryResult =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_agent_conversation_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "conversation_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateAgentConversationResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_agent_conversation_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent": {
+            "type": "persisted",
+            "agent_id": "value",
+            "branch_id": "value",
+            "overrides": {
+                "prompt": "value",
+                "llm": "gpt-4o-mini",
+                "language": "value",
+                "tool_ids": [
+                    "value"
+                ],
+                "native_mcp_server_ids": [
+                    "value"
+                ],
+                "knowledge_base_ids": [
+                    "value"
+                ],
+                "procedure_ids": [
+                    "value"
+                ],
+                "custom_llm_extra_body": {}
+            }
+        },
+        "environment": "value",
+        "user_id": "value",
+        "dynamic_variables": {}
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateAgentConversationRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_messages_persisted_agent_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "persisted",
+        "agent_id": "value",
+        "branch_id": "value",
+        "overrides": {
+            "prompt": "value",
+            "llm": "gpt-4o-mini",
+            "language": "value",
+            "tool_ids": [
+                "value"
+            ],
+            "native_mcp_server_ids": [
+                "value"
+            ],
+            "knowledge_base_ids": [
+                "value"
+            ],
+            "procedure_ids": [
+                "value"
+            ],
+            "custom_llm_extra_body": {}
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentMessagesPersistedAgent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_messages_overrides_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "prompt": "value",
+        "llm": "gpt-4o-mini",
+        "language": "value",
+        "tool_ids": [
+            "value"
+        ],
+        "native_mcp_server_ids": [
+            "value"
+        ],
+        "knowledge_base_ids": [
+            "value"
+        ],
+        "procedure_ids": [
+            "value"
+        ],
+        "custom_llm_extra_body": {}
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentMessagesOverrides =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -16589,7 +16855,6 @@ fn conversation_history_twilio_phone_call_model_round_trips_through_serde() {
         "agent_number": "value",
         "external_number": "value",
         "call_result": "answered",
-        "type": "twilio",
         "stream_sid": "value",
         "call_sid": "value"
     }"#,
@@ -16612,7 +16877,6 @@ fn conversation_history_exotel_phone_call_model_round_trips_through_serde() {
         "agent_number": "value",
         "external_number": "value",
         "call_result": "answered",
-        "type": "exotel",
         "stream_sid": "value",
         "call_sid": "value"
     }"#,
@@ -16635,7 +16899,6 @@ fn conversation_history_sip_trunking_phone_call_model_round_trips_through_serde(
         "agent_number": "value",
         "external_number": "value",
         "call_result": "answered",
-        "type": "sip_trunking",
         "call_id": "value",
         "call_sid": "value",
         "sip_header_dynamic_variables": {
@@ -16965,7 +17228,6 @@ fn platform_metadata_round_trips_through_serde() {
 fn plain_platform_metadata_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "conversation_initiation_source": "plain_integration",
         "thread_id": "value",
         "workspace_id": "value"
     }"#,
@@ -16983,7 +17245,6 @@ fn plain_platform_metadata_round_trips_through_serde() {
 fn zendesk_platform_metadata_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "conversation_initiation_source": "zendesk_integration",
         "ticket_id": "value"
     }"#,
     )
@@ -18316,11 +18577,35 @@ fn conversation_history_transcript_tool_call_api_integration_webhook_details_out
                 "key": "value"
             },
             "body": "value"
+        },
+        "function_details": {
+            "resolved_parameters": {
+                "key": "value"
+            }
         }
     }"#,
     )
     .expect("fixture is valid JSON");
     let decoded: ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_history_transcript_tool_call_integration_function_details_round_trips_through_serde(
+) {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "resolved_parameters": {
+            "key": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationHistoryTranscriptToolCallIntegrationFunctionDetails =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -18488,7 +18773,6 @@ fn conversation_history_transcript_system_tool_result_common_model_output_result
 fn end_call_tool_result_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "end_call_success",
         "status": "success",
         "reason": "value",
         "message": "value"
@@ -18507,7 +18791,6 @@ fn end_call_tool_result_model_round_trips_through_serde() {
 fn language_detection_tool_result_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "language_detection_success",
         "status": "success",
         "reason": "value",
         "language": "value"
@@ -18526,7 +18809,6 @@ fn language_detection_tool_result_model_round_trips_through_serde() {
 fn transfer_to_agent_tool_result_success_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "transfer_to_agent_success",
         "status": "success",
         "from_agent": "value",
         "to_agent": "value",
@@ -18573,7 +18855,6 @@ fn transfer_to_agent_tool_result_success_model_output_branch_info_round_trips_th
 fn transfer_branch_info_configured_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "branch_reason": "configured",
         "branch_id": "value"
     }"#,
     )
@@ -18590,7 +18871,6 @@ fn transfer_branch_info_configured_round_trips_through_serde() {
 fn transfer_branch_info_traffic_split_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "branch_reason": "traffic_split",
         "branch_id": "value",
         "traffic_percentage": 9.99
     }"#,
@@ -18608,7 +18888,6 @@ fn transfer_branch_info_traffic_split_round_trips_through_serde() {
 fn transfer_branch_info_defaulting_to_main_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "branch_reason": "defaulting_to_main",
         "branch_id": "value"
     }"#,
     )
@@ -18625,7 +18904,6 @@ fn transfer_branch_info_defaulting_to_main_round_trips_through_serde() {
 fn transfer_to_agent_tool_result_error_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "transfer_to_agent_error",
         "status": "error",
         "from_agent": "value",
         "error": "value"
@@ -18644,7 +18922,6 @@ fn transfer_to_agent_tool_result_error_model_round_trips_through_serde() {
 fn transfer_to_number_result_twilio_success_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "transfer_to_number_twilio_success",
         "status": "success",
         "transfer_number": "value",
         "reason": "value",
@@ -18668,7 +18945,6 @@ fn transfer_to_number_result_twilio_success_model_round_trips_through_serde() {
 fn transfer_to_number_result_sip_success_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "transfer_to_number_sip_success",
         "status": "success",
         "transfer_number": "value",
         "reason": "value",
@@ -18688,7 +18964,6 @@ fn transfer_to_number_result_sip_success_model_round_trips_through_serde() {
 fn transfer_to_number_result_exotel_success_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "transfer_to_number_exotel_success",
         "status": "success",
         "transfer_number": "value",
         "reason": "value",
@@ -18709,7 +18984,6 @@ fn transfer_to_number_result_exotel_success_model_round_trips_through_serde() {
 fn transfer_to_number_result_amazon_connect_success_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "transfer_to_number_amazon_connect_success",
         "status": "success",
         "reason": "value",
         "client_message": "value",
@@ -18729,7 +19003,6 @@ fn transfer_to_number_result_amazon_connect_success_model_round_trips_through_se
 fn transfer_to_number_result_error_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "transfer_to_number_error",
         "status": "error",
         "error": "value",
         "details": "value"
@@ -18748,7 +19021,6 @@ fn transfer_to_number_result_error_model_round_trips_through_serde() {
 fn skip_turn_tool_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "skip_turn_success",
         "status": "success",
         "reason": "value"
     }"#,
@@ -18766,7 +19038,6 @@ fn skip_turn_tool_response_model_round_trips_through_serde() {
 fn play_dtmf_result_success_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "play_dtmf_success",
         "status": "success",
         "dtmf_tones": "value",
         "reason": "value"
@@ -18785,7 +19056,6 @@ fn play_dtmf_result_success_model_round_trips_through_serde() {
 fn play_dtmf_result_error_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "play_dtmf_error",
         "status": "error",
         "error": "value",
         "details": "value"
@@ -18804,7 +19074,6 @@ fn play_dtmf_result_error_model_round_trips_through_serde() {
 fn voice_mail_detection_result_success_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "voicemail_detection_success",
         "status": "success",
         "voicemail_message": "value",
         "reason": "value"
@@ -18823,7 +19092,6 @@ fn voice_mail_detection_result_success_model_round_trips_through_serde() {
 fn test_tool_result_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "testing_tool_result",
         "status": "success",
         "reason": "value",
         "to_agent": "value",
@@ -18843,7 +19111,6 @@ fn test_tool_result_model_round_trips_through_serde() {
 fn knowledge_base_rag_tool_result_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "knowledge_base_rag_success",
         "status": "success",
         "chunk_count": 123,
         "message": "value",
@@ -18887,7 +19154,6 @@ fn knowledge_base_rag_chunk_model_round_trips_through_serde() {
 fn knowledge_base_tool_result_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "knowledge_base_success",
         "status": "success",
         "chunk_count": 123,
         "message": "value"
@@ -18906,7 +19172,6 @@ fn knowledge_base_tool_result_model_round_trips_through_serde() {
 fn start_procedure_tool_result_success_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "start_procedure_success",
         "status": "success",
         "procedure_id": "value",
         "procedure_name": "value",
@@ -18928,7 +19193,6 @@ fn start_procedure_tool_result_success_model_round_trips_through_serde() {
 fn start_procedure_tool_result_error_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "start_procedure_error",
         "status": "not_found",
         "procedure_id": "value",
         "message": "value"
@@ -18947,7 +19211,6 @@ fn start_procedure_tool_result_error_model_round_trips_through_serde() {
 fn end_procedure_tool_result_success_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "end_procedure_success",
         "status": "success",
         "procedure_id": "value",
         "procedure_name": "value",
@@ -18967,7 +19230,6 @@ fn end_procedure_tool_result_success_model_round_trips_through_serde() {
 fn end_procedure_tool_result_error_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "end_procedure_error",
         "status": "not_found",
         "procedure_id": "value",
         "message": "value"
@@ -18975,22 +19237,6 @@ fn end_procedure_tool_result_error_model_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: EndProcedureToolResultErrorModel =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn dummy_tool_result_model_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "result_type": "dummy"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DummyToolResultModel =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -19132,7 +19378,6 @@ fn workflow_tool_edge_step_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "step_latency_secs": 9.99,
-        "type": "edge",
         "edge_id": "value",
         "target_node_id": "value"
     }"#,
@@ -19151,7 +19396,6 @@ fn workflow_tool_nested_tools_step_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "step_latency_secs": 9.99,
-        "type": "nested_tools",
         "node_id": "value",
         "requests": [
             {
@@ -19256,7 +19500,6 @@ fn workflow_tool_max_iterations_exceeded_step_model_round_trips_through_serde() 
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "step_latency_secs": 9.99,
-        "type": "max_iterations_exceeded",
         "max_iterations": 123
     }"#,
     )
@@ -19432,7 +19675,6 @@ fn guardrail_details_round_trips_through_serde() {
 fn guardrail_llm_verdict_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "llm",
         "rationale": "value"
     }"#,
     )
@@ -19449,29 +19691,12 @@ fn guardrail_llm_verdict_round_trips_through_serde() {
 fn guardrail_classifier_verdict_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "classifier",
         "score": 9.99,
         "threshold": 9.99
     }"#,
     )
     .expect("fixture is valid JSON");
     let decoded: GuardrailClassifierVerdict =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn guardrail_unknown_verdict_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "unknown"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GuardrailUnknownVerdict =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -19613,6 +19838,788 @@ fn sip_log_message_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: SipLogMessage =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_turn_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "turn_id": "value",
+        "status": "in_progress",
+        "output": [
+            {
+                "type": "text",
+                "role": "agent",
+                "id": "value",
+                "text": "value",
+                "created_at_unix_ms": 123
+            }
+        ],
+        "error": {
+            "type": "value",
+            "code": "value",
+            "message": "value"
+        },
+        "required_actions": [
+            {
+                "type": "client_tool_call",
+                "tool_call_id": "value",
+                "tool_name": "value",
+                "parameters": {}
+            }
+        ],
+        "stream_cursor": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationTurn =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn text_output_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "text",
+        "role": "agent",
+        "id": "value",
+        "text": "value",
+        "created_at_unix_ms": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TextOutputItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_output_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "value",
+        "code": "value",
+        "message": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentOutputError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn client_tool_call_required_action_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "client_tool_call",
+        "tool_call_id": "value",
+        "tool_name": "value",
+        "parameters": {}
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ClientToolCallRequiredAction =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn send_conversation_message_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "input": [
+            {
+                "type": "user_message",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "value"
+                    }
+                ]
+            }
+        ],
+        "background": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SendConversationMessageRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn send_conversation_message_request_input_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "user_message",
+        "content": [
+            {
+                "type": "text",
+                "text": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SendConversationMessageRequestInputItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn user_message_input_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "content": [
+            {
+                "type": "text",
+                "text": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UserMessageInputItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn content_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "text",
+        "text": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ContentItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn text_content_part_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TextContentPart =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn file_content_part_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "source": {
+            "type": "base64",
+            "filename": "value",
+            "media_type": "image/png",
+            "data": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: FileContentPart =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn file_content_part_source_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "base64",
+        "filename": "value",
+        "media_type": "image/png",
+        "data": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: FileContentPartSource =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn base64_file_source_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "filename": "value",
+        "media_type": "image/png",
+        "data": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Base64FileSource =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn file_id_source_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "file_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: FileIdSource =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn client_tool_result_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tool_call_id": "value",
+        "result": "value",
+        "is_error": true,
+        "error_type": "user_rejected"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ClientToolResultItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn contextual_update_input_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text": "value",
+        "context_id": "value",
+        "placement": "in_place"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ContextualUpdateInputItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn stream_envelope_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "conversation_id": "value",
+        "turn_id": "value",
+        "created_at_unix_ms": 123,
+        "event": {
+            "type": "stream_ended",
+            "stream_ended_event": {
+                "status": "in_progress",
+                "error": {
+                    "type": "value",
+                    "code": "value",
+                    "message": "value"
+                },
+                "required_actions": [
+                    {
+                        "type": "client_tool_call",
+                        "tool_call_id": "value",
+                        "tool_name": "value",
+                        "parameters": {}
+                    }
+                ]
+            }
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: StreamEnvelope =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "stream_ended",
+        "stream_ended_event": {
+            "status": "in_progress",
+            "error": {
+                "type": "value",
+                "code": "value",
+                "message": "value"
+            },
+            "required_actions": [
+                {
+                    "type": "client_tool_call",
+                    "tool_call_id": "value",
+                    "tool_name": "value",
+                    "parameters": {}
+                }
+            ]
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Event =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn stream_ended_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "stream_ended_event": {
+            "status": "in_progress",
+            "error": {
+                "type": "value",
+                "code": "value",
+                "message": "value"
+            },
+            "required_actions": [
+                {
+                    "type": "client_tool_call",
+                    "tool_call_id": "value",
+                    "tool_name": "value",
+                    "parameters": {}
+                }
+            ]
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: StreamEndedEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn stream_ended_data_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "status": "in_progress",
+        "error": {
+            "type": "value",
+            "code": "value",
+            "message": "value"
+        },
+        "required_actions": [
+            {
+                "type": "client_tool_call",
+                "tool_call_id": "value",
+                "tool_name": "value",
+                "parameters": {}
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: StreamEndedData =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_chat_response_part_client_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text_response_part": {
+            "text": "value",
+            "type": "start",
+            "event_id": 123,
+            "response_id": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentChatResponsePartClientEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_chat_response_part_client_event_data_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text": "value",
+        "type": "start",
+        "event_id": 123,
+        "response_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentChatResponsePartClientEventData =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_reasoning_response_part_client_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "reasoning_response_part": {
+            "text": "value",
+            "type": "start",
+            "event_id": 123
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentReasoningResponsePartClientEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_reasoning_response_part_client_event_data_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text": "value",
+        "type": "start",
+        "event_id": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentReasoningResponsePartClientEventData =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_client_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_response_event": {
+            "agent_response": "value",
+            "event_id": 123,
+            "response_id": "value",
+            "in_response_to_ids": [
+                "value"
+            ],
+            "response_type": "text",
+            "attachments": [
+                {
+                    "url": "value",
+                    "name": "value",
+                    "mime_type": "value"
+                }
+            ]
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseClientEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_client_event_data_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_response": "value",
+        "event_id": 123,
+        "response_id": "value",
+        "in_response_to_ids": [
+            "value"
+        ],
+        "response_type": "text",
+        "attachments": [
+            {
+                "url": "value",
+                "name": "value",
+                "mime_type": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseClientEventData =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_attachment_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "url": "value",
+        "name": "value",
+        "mime_type": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseAttachment =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_request_streamed_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_tool_request": {
+            "tool_name": "value",
+            "tool_call_id": "value",
+            "tool_type": "value",
+            "event_id": 123,
+            "expects_response": true,
+            "disable_interruptions": true,
+            "response_timeout_secs": 123,
+            "execution_mode": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolRequestStreamedEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_request_client_event_data_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tool_name": "value",
+        "tool_call_id": "value",
+        "tool_type": "value",
+        "event_id": 123,
+        "expects_response": true,
+        "disable_interruptions": true,
+        "response_timeout_secs": 123,
+        "execution_mode": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolRequestClientEventData =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_response_streamed_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_tool_response": {
+            "tool_name": "value",
+            "tool_call_id": "value",
+            "tool_type": "value",
+            "is_error": true,
+            "is_blocked": true,
+            "event_id": 123,
+            "is_called": true,
+            "status": "success"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolResponseStreamedEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_response_client_event_data_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tool_name": "value",
+        "tool_call_id": "value",
+        "tool_type": "value",
+        "is_error": true,
+        "is_blocked": true,
+        "event_id": 123,
+        "is_called": true,
+        "status": "success"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolResponseClientEventData =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn client_tool_call_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "client_tool_call": {
+            "tool_name": "value",
+            "tool_call_id": "value",
+            "parameters": {},
+            "event_id": 123,
+            "expects_response": true
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ClientToolCallEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn client_tool_call_client_event_data_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tool_name": "value",
+        "tool_call_id": "value",
+        "parameters": {},
+        "event_id": 123,
+        "expects_response": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ClientToolCallClientEventData =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn send_conversation_message_stream_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "input": [
+            {
+                "type": "user_message",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "value"
+                    }
+                ]
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SendConversationMessageStreamRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn send_conversation_message_stream_request_input_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "user_message",
+        "content": [
+            {
+                "type": "text",
+                "text": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SendConversationMessageStreamRequestInputItem =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -20649,7 +21656,6 @@ fn template_params_item_round_trips_through_serde() {
 fn whats_app_template_header_component_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "header",
         "parameters": [
             {
                 "parameter_name": "value",
@@ -20821,7 +21827,6 @@ fn whats_app_template_location_param_details_round_trips_through_serde() {
 fn whats_app_template_body_component_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "body",
         "parameters": [
             {
                 "parameter_name": "value",
@@ -20844,7 +21849,6 @@ fn whats_app_template_body_component_params_round_trips_through_serde() {
 fn whats_app_template_button_component_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "button",
         "parameters": [
             {
                 "parameter_name": "value",
@@ -21103,6 +22107,66 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                         "verbosity": "auto",
                         "output_format": "mp3_22050_32",
                         "interaction_budget": "realtime"
+                    }
+                },
+                "subagent_config": {
+                    "agents": [
+                        {
+                            "execution_mode": "immediate",
+                            "timeout_secs": 123,
+                            "agent_id": "value",
+                            "branch_id": "value",
+                            "description": "value",
+                            "parameters": {
+                                "property_kind": "array",
+                                "description": "value",
+                                "dynamic_variable": "value",
+                                "constant_value": {},
+                                "is_omitted": true,
+                                "type": "object",
+                                "required": [
+                                    "value"
+                                ],
+                                "properties": {
+                                    "key": {
+                                        "type": "boolean",
+                                        "description": "value",
+                                        "enum": [
+                                            "value"
+                                        ],
+                                        "is_system_provided": true,
+                                        "dynamic_variable": "value",
+                                        "allowed_values": {
+                                            "dynamic_variable": "value"
+                                        },
+                                        "allowed_values_dynamic_variable": "value",
+                                        "constant_value": "value",
+                                        "is_omitted": true
+                                    }
+                                },
+                                "required_constraints": {
+                                    "any_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ],
+                                    "all_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    "self_subagent": {
+                        "execution_mode": "immediate",
+                        "timeout_secs": 123,
+                        "description": "value"
                     }
                 },
                 "prompt": {
@@ -21928,6 +22992,7 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                                 "prompt": "value",
                                 "execution_mode": "streaming",
                                 "model": "gemini-2.5-flash-lite",
+                                "service_tier": "standard",
                                 "history_message_count": 100,
                                 "trigger_action": {
                                     "type": "end_call"
@@ -22001,6 +23066,9 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                     }
                 },
                 "auto_resolve_after_inactive_minutes": 123,
+                "environments": [
+                    "value"
+                ],
                 "notifiers": [
                     {
                         "type": "webhook",
@@ -22280,6 +23348,66 @@ fn conversational_config_round_trips_through_serde() {
                     "verbosity": "auto",
                     "output_format": "mp3_22050_32",
                     "interaction_budget": "realtime"
+                }
+            },
+            "subagent_config": {
+                "agents": [
+                    {
+                        "execution_mode": "immediate",
+                        "timeout_secs": 123,
+                        "agent_id": "value",
+                        "branch_id": "value",
+                        "description": "value",
+                        "parameters": {
+                            "property_kind": "array",
+                            "description": "value",
+                            "dynamic_variable": "value",
+                            "constant_value": {},
+                            "is_omitted": true,
+                            "type": "object",
+                            "required": [
+                                "value"
+                            ],
+                            "properties": {
+                                "key": {
+                                    "type": "boolean",
+                                    "description": "value",
+                                    "enum": [
+                                        "value"
+                                    ],
+                                    "is_system_provided": true,
+                                    "dynamic_variable": "value",
+                                    "allowed_values": {
+                                        "dynamic_variable": "value"
+                                    },
+                                    "allowed_values_dynamic_variable": "value",
+                                    "constant_value": "value",
+                                    "is_omitted": true
+                                }
+                            },
+                            "required_constraints": {
+                                "any_of": [
+                                    {
+                                        "required": [
+                                            "value"
+                                        ]
+                                    }
+                                ],
+                                "all_of": [
+                                    {
+                                        "required": [
+                                            "value"
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "self_subagent": {
+                    "execution_mode": "immediate",
+                    "timeout_secs": 123,
+                    "description": "value"
                 }
             },
             "prompt": {
@@ -23113,6 +24241,66 @@ fn agent_config_round_trips_through_serde() {
                 "interaction_budget": "realtime"
             }
         },
+        "subagent_config": {
+            "agents": [
+                {
+                    "execution_mode": "immediate",
+                    "timeout_secs": 123,
+                    "agent_id": "value",
+                    "branch_id": "value",
+                    "description": "value",
+                    "parameters": {
+                        "property_kind": "array",
+                        "description": "value",
+                        "dynamic_variable": "value",
+                        "constant_value": {},
+                        "is_omitted": true,
+                        "type": "object",
+                        "required": [
+                            "value"
+                        ],
+                        "properties": {
+                            "key": {
+                                "type": "boolean",
+                                "description": "value",
+                                "enum": [
+                                    "value"
+                                ],
+                                "is_system_provided": true,
+                                "dynamic_variable": "value",
+                                "allowed_values": {
+                                    "dynamic_variable": "value"
+                                },
+                                "allowed_values_dynamic_variable": "value",
+                                "constant_value": "value",
+                                "is_omitted": true
+                            }
+                        },
+                        "required_constraints": {
+                            "any_of": [
+                                {
+                                    "required": [
+                                        "value"
+                                    ]
+                                }
+                            ],
+                            "all_of": [
+                                {
+                                    "required": [
+                                        "value"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            ],
+            "self_subagent": {
+                "execution_mode": "immediate",
+                "timeout_secs": 123,
+                "description": "value"
+            }
+        },
         "prompt": {
             "prompt": "value",
             "llm": "gpt-4o-mini",
@@ -23556,6 +24744,359 @@ fn behavior_override_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: BehaviorOverride =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subagent_config_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agents": [
+            {
+                "execution_mode": "immediate",
+                "timeout_secs": 123,
+                "agent_id": "value",
+                "branch_id": "value",
+                "description": "value",
+                "parameters": {
+                    "property_kind": "array",
+                    "description": "value",
+                    "dynamic_variable": "value",
+                    "constant_value": {},
+                    "is_omitted": true,
+                    "type": "object",
+                    "required": [
+                        "value"
+                    ],
+                    "properties": {
+                        "key": {
+                            "type": "boolean",
+                            "description": "value",
+                            "enum": [
+                                "value"
+                            ],
+                            "is_system_provided": true,
+                            "dynamic_variable": "value",
+                            "allowed_values": {
+                                "dynamic_variable": "value"
+                            },
+                            "allowed_values_dynamic_variable": "value",
+                            "constant_value": "value",
+                            "is_omitted": true
+                        }
+                    },
+                    "required_constraints": {
+                        "any_of": [
+                            {
+                                "required": [
+                                    "value"
+                                ]
+                            }
+                        ],
+                        "all_of": [
+                            {
+                                "required": [
+                                    "value"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "self_subagent": {
+            "execution_mode": "immediate",
+            "timeout_secs": 123,
+            "description": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubagentConfigInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sub_agent_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "execution_mode": "immediate",
+        "timeout_secs": 123,
+        "agent_id": "value",
+        "branch_id": "value",
+        "description": "value",
+        "parameters": {
+            "property_kind": "array",
+            "description": "value",
+            "dynamic_variable": "value",
+            "constant_value": {},
+            "is_omitted": true,
+            "type": "object",
+            "required": [
+                "value"
+            ],
+            "properties": {
+                "key": {
+                    "type": "boolean",
+                    "description": "value",
+                    "enum": [
+                        "value"
+                    ],
+                    "is_system_provided": true,
+                    "dynamic_variable": "value",
+                    "allowed_values": {
+                        "dynamic_variable": "value"
+                    },
+                    "allowed_values_dynamic_variable": "value",
+                    "constant_value": "value",
+                    "is_omitted": true
+                }
+            },
+            "required_constraints": {
+                "any_of": [
+                    {
+                        "required": [
+                            "value"
+                        ]
+                    }
+                ],
+                "all_of": [
+                    {
+                        "required": [
+                            "value"
+                        ]
+                    }
+                ]
+            }
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubAgentInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn object_json_schema_property_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "property_kind": "array",
+        "description": "value",
+        "dynamic_variable": "value",
+        "constant_value": {},
+        "is_omitted": true,
+        "type": "object",
+        "required": [
+            "value"
+        ],
+        "properties": {
+            "key": {
+                "type": "boolean",
+                "description": "value",
+                "enum": [
+                    "value"
+                ],
+                "is_system_provided": true,
+                "dynamic_variable": "value",
+                "allowed_values": {
+                    "dynamic_variable": "value"
+                },
+                "allowed_values_dynamic_variable": "value",
+                "constant_value": "value",
+                "is_omitted": true
+            }
+        },
+        "required_constraints": {
+            "any_of": [
+                {
+                    "required": [
+                        "value"
+                    ]
+                }
+            ],
+            "all_of": [
+                {
+                    "required": [
+                        "value"
+                    ]
+                }
+            ]
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ObjectJsonSchemaPropertyInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn object_json_schema_property_input_properties_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "boolean",
+        "description": "value",
+        "enum": [
+            "value"
+        ],
+        "is_system_provided": true,
+        "dynamic_variable": "value",
+        "allowed_values": {
+            "dynamic_variable": "value"
+        },
+        "allowed_values_dynamic_variable": "value",
+        "constant_value": "value",
+        "is_omitted": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ObjectJsonSchemaPropertyInputProperties =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn array_json_schema_property_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "property_kind": "array",
+        "description": "value",
+        "dynamic_variable": "value",
+        "constant_value": [
+            {}
+        ],
+        "is_omitted": true,
+        "type": "array",
+        "items": {
+            "type": "boolean",
+            "description": "value",
+            "enum": [
+                "value"
+            ],
+            "is_system_provided": true,
+            "dynamic_variable": "value",
+            "allowed_values": {
+                "dynamic_variable": "value"
+            },
+            "allowed_values_dynamic_variable": "value",
+            "constant_value": "value",
+            "is_omitted": true
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ArrayJsonSchemaPropertyInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn array_json_schema_property_input_items_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "boolean",
+        "description": "value",
+        "enum": [
+            "value"
+        ],
+        "is_system_provided": true,
+        "dynamic_variable": "value",
+        "allowed_values": {
+            "dynamic_variable": "value"
+        },
+        "allowed_values_dynamic_variable": "value",
+        "constant_value": "value",
+        "is_omitted": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ArrayJsonSchemaPropertyInputItems =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn required_constraints_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "any_of": [
+            {
+                "required": [
+                    "value"
+                ]
+            }
+        ],
+        "all_of": [
+            {
+                "required": [
+                    "value"
+                ]
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: RequiredConstraints =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn required_constraint_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "required": [
+            "value"
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: RequiredConstraint =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn self_subagent_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "execution_mode": "immediate",
+        "timeout_secs": 123,
+        "description": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SelfSubagent =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -24262,26 +25803,9 @@ fn system_tool_config_input_params_round_trips_through_serde() {
 }
 
 #[test]
-fn end_call_tool_config_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "system_tool_type": "end_call"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: EndCallToolConfig =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn language_detection_tool_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "language_detection",
         "only_at_conversation_start": true
     }"#,
     )
@@ -24298,7 +25822,6 @@ fn language_detection_tool_config_round_trips_through_serde() {
 fn transfer_to_agent_tool_config_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "transfer_to_agent",
         "transfers": [
             {
                 "agent_id": "value",
@@ -24353,7 +25876,6 @@ fn agent_transfer_input_round_trips_through_serde() {
 fn transfer_to_number_tool_config_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "transfer_to_number",
         "transfers": [
             {
                 "custom_sip_headers": [
@@ -24379,6 +25901,27 @@ fn transfer_to_number_tool_config_input_round_trips_through_serde() {
                     "value": "0"
                 },
                 "phone_number": "value",
+                "condition": "value"
+            }
+        ],
+        "transfer_rules": [
+            {
+                "provider_configs": [
+                    {
+                        "type": "twilio",
+                        "config": {
+                            "transfer_destination": {
+                                "destination": "value",
+                                "type": "phone"
+                            },
+                            "post_dial_digits": {
+                                "type": "static",
+                                "value": "0"
+                            },
+                            "type": "twilio_warm_conference_transfer"
+                        }
+                    }
+                ],
                 "condition": "value"
             }
         ],
@@ -24455,7 +25998,6 @@ fn phone_number_transfer_custom_sip_headers_item_round_trips_through_serde() {
 fn custom_sip_header_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "static",
         "key": "value",
         "value": "value"
     }"#,
@@ -24474,7 +26016,6 @@ fn custom_sip_header_with_dynamic_variable_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "value": "value",
-        "type": "dynamic",
         "key": "value"
     }"#,
     )
@@ -24508,7 +26049,6 @@ fn phone_number_transfer_transfer_destination_round_trips_through_serde() {
 fn phone_number_transfer_destination_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "phone",
         "phone_number": "value"
     }"#,
     )
@@ -24525,7 +26065,6 @@ fn phone_number_transfer_destination_round_trips_through_serde() {
 fn sip_uri_transfer_destination_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "sip_uri",
         "sip_uri": "value"
     }"#,
     )
@@ -24542,7 +26081,6 @@ fn sip_uri_transfer_destination_round_trips_through_serde() {
 fn phone_number_dynamic_variable_transfer_destination_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "phone_dynamic_variable",
         "phone_number": "value"
     }"#,
     )
@@ -24559,7 +26097,6 @@ fn phone_number_dynamic_variable_transfer_destination_round_trips_through_serde(
 fn sip_uri_dynamic_variable_transfer_destination_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "sip_uri_dynamic_variable",
         "sip_uri": "value"
     }"#,
     )
@@ -24611,7 +26148,6 @@ fn phone_number_transfer_post_dial_digits_round_trips_through_serde() {
 fn post_dial_digits_static_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "static",
         "value": "0"
     }"#,
     )
@@ -24628,8 +26164,7 @@ fn post_dial_digits_static_round_trips_through_serde() {
 fn post_dial_digits_dynamic_variable_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "value": "value",
-        "type": "dynamic"
+        "value": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -24642,10 +26177,555 @@ fn post_dial_digits_dynamic_variable_round_trips_through_serde() {
 }
 
 #[test]
+fn transfer_rule_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "provider_configs": [
+            {
+                "type": "twilio",
+                "config": {
+                    "transfer_destination": {
+                        "destination": "value",
+                        "type": "phone"
+                    },
+                    "post_dial_digits": {
+                        "type": "static",
+                        "value": "0"
+                    },
+                    "type": "twilio_warm_conference_transfer"
+                }
+            }
+        ],
+        "condition": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TransferRuleInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn transfer_rule_input_provider_configs_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "twilio",
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "post_dial_digits": {
+                "type": "static",
+                "value": "0"
+            },
+            "type": "twilio_warm_conference_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TransferRuleInputProviderConfigsItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_transfer_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "post_dial_digits": {
+                "type": "static",
+                "value": "0"
+            },
+            "type": "twilio_warm_conference_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioTransferInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_transfer_input_config_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "post_dial_digits": {
+            "type": "static",
+            "value": "0"
+        },
+        "type": "twilio_warm_conference_transfer"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioTransferInputConfig =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_warm_conference_transfer_config_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "post_dial_digits": {
+            "type": "static",
+            "value": "0"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioWarmConferenceTransferConfigInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_warm_conference_transfer_config_input_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioWarmConferenceTransferConfigInputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn phone_destination_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PhoneDestinationInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn phone_dynamic_variable_destination_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PhoneDynamicVariableDestinationInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_warm_conference_transfer_config_input_post_dial_digits_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "static",
+        "value": "0"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioWarmConferenceTransferConfigInputPostDialDigits =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_cold_blind_transfer_config_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "post_dial_digits": {
+            "type": "static",
+            "value": "0"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioColdBlindTransferConfigInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_cold_blind_transfer_config_input_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioColdBlindTransferConfigInputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_cold_blind_transfer_config_input_post_dial_digits_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "static",
+        "value": "0"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioColdBlindTransferConfigInputPostDialDigits =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_transfer_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "type": "sip_cold_conference_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipTransferInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_transfer_input_config_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "type": "sip_cold_conference_transfer"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipTransferInputConfig =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_conference_transfer_config_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdConferenceTransferConfigInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_conference_transfer_config_input_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdConferenceTransferConfigInputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_refer_transfer_config_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "custom_sip_headers": [
+            {
+                "type": "static",
+                "key": "value",
+                "value": "value"
+            }
+        ],
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "uui": {
+            "data": "value",
+            "protocol_discriminator": "00",
+            "protocol_discriminator_mode": "prefix"
+        },
+        "play_dialtone": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdReferTransferConfigInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_refer_transfer_config_input_custom_sip_headers_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "static",
+        "key": "value",
+        "value": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdReferTransferConfigInputCustomSipHeadersItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_refer_transfer_config_input_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdReferTransferConfigInputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_uri_destination_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipUriDestinationInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_uri_dynamic_variable_destination_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipUriDynamicVariableDestinationInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_transfer_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "type": "exotel_cold_blind_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelTransferInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_transfer_input_config_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "type": "exotel_cold_blind_transfer"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelTransferInputConfig =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_cold_blind_transfer_config_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelColdBlindTransferConfigInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_cold_blind_transfer_config_input_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelColdBlindTransferConfigInputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_warm_transfer_config_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelWarmTransferConfigInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_warm_transfer_config_input_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelWarmTransferConfigInputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn skip_turn_tool_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "skip_turn",
         "wait_timeout_secs": 9.99
     }"#,
     )
@@ -24662,7 +26742,6 @@ fn skip_turn_tool_config_round_trips_through_serde() {
 fn play_dtmf_tool_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "play_keypad_touch_tone",
         "use_out_of_band_dtmf": true,
         "suppress_turn_after_dtmf": true
     }"#,
@@ -24680,7 +26759,6 @@ fn play_dtmf_tool_config_round_trips_through_serde() {
 fn voicemail_detection_tool_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "voicemail_detection",
         "voicemail_message": "value"
     }"#,
     )
@@ -24694,26 +26772,9 @@ fn voicemail_detection_tool_config_round_trips_through_serde() {
 }
 
 #[test]
-fn knowledge_base_rag_tool_config_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "system_tool_type": "knowledge_base_rag"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: KnowledgeBaseRagToolConfig =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn knowledge_base_tool_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "knowledge_base",
         "enabled_strategies": [
             "cat"
         ]
@@ -24732,7 +26793,6 @@ fn knowledge_base_tool_config_round_trips_through_serde() {
 fn start_procedure_tool_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "start_procedure",
         "procedures": {
             "key": {
                 "procedure_id": "value",
@@ -24805,7 +26865,6 @@ fn procedure_draft_ref_round_trips_through_serde() {
 fn end_procedure_tool_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "end_procedure",
         "procedures": {
             "key": {
                 "procedure_id": "value",
@@ -25022,42 +27081,9 @@ fn prompt_agent_api_model_input_backup_llm_config_round_trips_through_serde() {
 }
 
 #[test]
-fn backup_llm_default_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "preference": "default"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: BackupLlmDefault =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn backup_llm_disabled_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "preference": "disabled"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: BackupLlmDisabled =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn backup_llm_override_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "preference": "override",
         "order": [
             "gpt-4o-mini"
         ]
@@ -25679,64 +27705,7 @@ fn query_params_json_schema_input_round_trips_through_serde() {
 }
 
 #[test]
-fn object_json_schema_property_input_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "property_kind": "array",
-        "description": "value",
-        "dynamic_variable": "value",
-        "constant_value": {},
-        "is_omitted": true,
-        "type": "object",
-        "required": [
-            "value"
-        ],
-        "properties": {
-            "key": {
-                "type": "boolean",
-                "description": "value",
-                "enum": [
-                    "value"
-                ],
-                "is_system_provided": true,
-                "dynamic_variable": "value",
-                "allowed_values": {
-                    "dynamic_variable": "value"
-                },
-                "allowed_values_dynamic_variable": "value",
-                "constant_value": "value",
-                "is_omitted": true
-            }
-        },
-        "required_constraints": {
-            "any_of": [
-                {
-                    "required": [
-                        "value"
-                    ]
-                }
-            ],
-            "all_of": [
-                {
-                    "required": [
-                        "value"
-                    ]
-                }
-            ]
-        }
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ObjectJsonSchemaPropertyInput =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn object_json_schema_property_input_properties_round_trips_through_serde() {
+fn query_params_json_schema_input_properties_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "type": "boolean",
@@ -25755,7 +27724,7 @@ fn object_json_schema_property_input_properties_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: ObjectJsonSchemaPropertyInputProperties =
+    let decoded: QueryParamsJsonSchemaInputProperties =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -25764,7 +27733,7 @@ fn object_json_schema_property_input_properties_round_trips_through_serde() {
 }
 
 #[test]
-fn array_json_schema_property_input_round_trips_through_serde() {
+fn query_array_json_schema_property_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "property_kind": "array",
@@ -25793,7 +27762,7 @@ fn array_json_schema_property_input_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: ArrayJsonSchemaPropertyInput =
+    let decoded: QueryArrayJsonSchemaPropertyInput =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -25802,7 +27771,7 @@ fn array_json_schema_property_input_round_trips_through_serde() {
 }
 
 #[test]
-fn array_json_schema_property_input_items_round_trips_through_serde() {
+fn query_array_json_schema_property_input_items_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "type": "boolean",
@@ -25821,54 +27790,7 @@ fn array_json_schema_property_input_items_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: ArrayJsonSchemaPropertyInputItems =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn required_constraints_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "any_of": [
-            {
-                "required": [
-                    "value"
-                ]
-            }
-        ],
-        "all_of": [
-            {
-                "required": [
-                    "value"
-                ]
-            }
-        ]
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: RequiredConstraints =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn required_constraint_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "required": [
-            "value"
-        ]
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: RequiredConstraint =
+    let decoded: QueryArrayJsonSchemaPropertyInputItems =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -25997,195 +27919,6 @@ fn client_tool_config_input_round_trips_through_serde() {
 }
 
 #[test]
-fn mcp_tool_config_input_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "mcp",
-        "name": "value",
-        "description": "value",
-        "response_timeout_secs": 123,
-        "disable_interruptions": true,
-        "interruption_mode": "allow",
-        "force_pre_tool_speech": true,
-        "pre_tool_speech": "auto",
-        "assignments": [
-            {
-                "source": "response",
-                "dynamic_variable": "value",
-                "value_path": "value",
-                "sanitize": true,
-                "preserve_native_type": true
-            }
-        ],
-        "tool_call_sound": "typing",
-        "tool_call_sound_behavior": "auto",
-        "tool_error_handling_mode": "auto",
-        "integration_type": "mcp_server",
-        "parameters": {
-            "property_kind": "array",
-            "description": "value",
-            "dynamic_variable": "value",
-            "constant_value": {},
-            "is_omitted": true,
-            "type": "object",
-            "required": [
-                "value"
-            ],
-            "properties": {
-                "key": {
-                    "type": "boolean",
-                    "description": "value",
-                    "enum": [
-                        "value"
-                    ],
-                    "is_system_provided": true,
-                    "dynamic_variable": "value",
-                    "allowed_values": {
-                        "dynamic_variable": "value"
-                    },
-                    "allowed_values_dynamic_variable": "value",
-                    "constant_value": "value",
-                    "is_omitted": true
-                }
-            },
-            "required_constraints": {
-                "any_of": [
-                    {
-                        "required": [
-                            "value"
-                        ]
-                    }
-                ],
-                "all_of": [
-                    {
-                        "required": [
-                            "value"
-                        ]
-                    }
-                ]
-            }
-        },
-        "approval_policy": "auto_approve_all",
-        "mcp_tool_name": "value",
-        "mcp_tool_description": "value",
-        "mcp_server_id": "value",
-        "mcp_server_name": "value",
-        "mcp_input_schema": {},
-        "execution_mode": "immediate",
-        "input_overrides": {
-            "key": {
-                "source": "constant",
-                "constant_value": "value"
-            }
-        }
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: McpToolConfigInput =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn mcp_tool_config_input_input_overrides_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "source": "constant",
-        "constant_value": "value"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: McpToolConfigInputInputOverrides =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn constant_schema_override_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "source": "constant",
-        "constant_value": "value"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ConstantSchemaOverride =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn constant_schema_override_constant_value_round_trips_through_serde() {
-    let wire =
-        serde_json::from_str::<serde_json::Value>(r#""value""#).expect("fixture is valid JSON");
-    let decoded: ConstantSchemaOverrideConstantValue =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn dynamic_variable_schema_override_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "source": "dynamic_variable",
-        "dynamic_variable": "value"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DynamicVariableSchemaOverride =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn llm_schema_override_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "source": "llm",
-        "prompt": "value"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: LlmSchemaOverride =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn omit_schema_override_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "source": "omit"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: OmitSchemaOverride =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn api_integration_webhook_tool_config_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -26288,6 +28021,66 @@ fn api_integration_webhook_overrides_schema_overrides_round_trips_through_serde(
 }
 
 #[test]
+fn constant_schema_override_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "constant_value": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConstantSchemaOverride =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn constant_schema_override_constant_value_round_trips_through_serde() {
+    let wire =
+        serde_json::from_str::<serde_json::Value>(r#""value""#).expect("fixture is valid JSON");
+    let decoded: ConstantSchemaOverrideConstantValue =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn dynamic_variable_schema_override_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "dynamic_variable": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: DynamicVariableSchemaOverride =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn llm_schema_override_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "prompt": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: LlmSchemaOverride =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn api_integration_webhook_overrides_request_headers_round_trips_through_serde() {
     let wire =
         serde_json::from_str::<serde_json::Value>(r#""value""#).expect("fixture is valid JSON");
@@ -26356,123 +28149,10 @@ fn smb_tool_config_params_round_trips_through_serde() {
 }
 
 #[test]
-fn search_clients_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "search_clients"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: SearchClientsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn send_custom_email_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "send_custom_email"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: SendCustomEmailParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_clients_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_clients"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListClientsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn get_client_by_phone_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "get_client_by_phone"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GetClientByPhoneParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_client_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_client"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateClientParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_client_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_client"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateClientParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_client_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_client"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteClientParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn list_staff_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "list_kwargs": {},
-        "smb_tool_type": "list_staff"
+        "list_kwargs": {}
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -26488,7 +28168,6 @@ fn list_staff_params_round_trips_through_serde() {
 fn create_staff_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "smb_tool_type": "create_staff",
         "per_resource_timezones": true
     }"#,
     )
@@ -26505,7 +28184,6 @@ fn create_staff_params_round_trips_through_serde() {
 fn update_staff_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "smb_tool_type": "update_staff",
         "per_resource_timezones": true
     }"#,
     )
@@ -26519,27 +28197,10 @@ fn update_staff_params_round_trips_through_serde() {
 }
 
 #[test]
-fn delete_staff_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_staff"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteStaffParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn list_assets_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "list_kwargs": {},
-        "smb_tool_type": "list_assets"
+        "list_kwargs": {}
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -26555,7 +28216,6 @@ fn list_assets_params_round_trips_through_serde() {
 fn create_asset_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "smb_tool_type": "create_asset",
         "per_resource_timezones": true
     }"#,
     )
@@ -26572,7 +28232,6 @@ fn create_asset_params_round_trips_through_serde() {
 fn update_asset_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "smb_tool_type": "update_asset",
         "per_resource_timezones": true
     }"#,
     )
@@ -26586,27 +28245,10 @@ fn update_asset_params_round_trips_through_serde() {
 }
 
 #[test]
-fn delete_asset_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_asset"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteAssetParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn list_services_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "list_kwargs": {},
-        "smb_tool_type": "list_services"
+        "list_kwargs": {}
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -26619,59 +28261,10 @@ fn list_services_params_round_trips_through_serde() {
 }
 
 #[test]
-fn create_service_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_service"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateServiceParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_service_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_service"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateServiceParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_service_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_service"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteServiceParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn list_products_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "list_kwargs": {},
-        "smb_tool_type": "list_products"
+        "list_kwargs": {}
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -26684,91 +28277,10 @@ fn list_products_params_round_trips_through_serde() {
 }
 
 #[test]
-fn create_product_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_product"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateProductParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_product_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_product"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateProductParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_product_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_product"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteProductParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn check_service_availability_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "check_service_availability"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CheckServiceAvailabilityParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_client_appointment_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_client_appointment"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateClientAppointmentParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn get_client_appointments_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "include_cancelled": true,
-        "smb_tool_type": "get_client_appointments"
+        "include_cancelled": true
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -26781,58 +28293,9 @@ fn get_client_appointments_params_round_trips_through_serde() {
 }
 
 #[test]
-fn get_appointment_by_confirmation_number_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "get_appointment_by_confirmation_number"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GetAppointmentByConfirmationNumberParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_order_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_order"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateOrderParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn get_order_by_confirmation_number_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "get_order_by_confirmation_number"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GetOrderByConfirmationNumberParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn get_client_orders_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "smb_tool_type": "get_client_orders",
         "include_cancelled": true
     }"#,
     )
@@ -26846,154 +28309,9 @@ fn get_client_orders_params_round_trips_through_serde() {
 }
 
 #[test]
-fn update_order_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_order"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateOrderParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn cancel_order_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "cancel_order"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CancelOrderParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_group_sessions_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_group_sessions"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListGroupSessionsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn schedule_group_session_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "schedule_group_session"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ScheduleGroupSessionParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn register_for_group_session_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "register_for_group_session"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: RegisterForGroupSessionParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn cancel_group_session_registration_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "cancel_group_session_registration"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CancelGroupSessionRegistrationParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_group_session_seats_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_group_session_seats"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateGroupSessionSeatsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn cancel_group_session_for_all_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "cancel_group_session_for_all"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CancelGroupSessionForAllParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_group_session_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_group_session"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteGroupSessionParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn list_calendar_events_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "smb_tool_type": "list_calendar_events",
         "include_cancelled": true
     }"#,
     )
@@ -27007,186 +28325,9 @@ fn list_calendar_events_params_round_trips_through_serde() {
 }
 
 #[test]
-fn update_calendar_event_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_calendar_event"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateCalendarEventParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn cancel_calendar_event_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "cancel_calendar_event"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CancelCalendarEventParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn restore_calendar_event_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "restore_calendar_event"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: RestoreCalendarEventParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_calendar_event_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_calendar_event"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteCalendarEventParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_customer_facing_agents_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_customer_facing_agents"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListCustomerFacingAgentsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn get_agent_config_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "get_agent_config"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GetAgentConfigParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_agent_rules_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_agent_rules"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListAgentRulesParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_agent_rule_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_agent_rule"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateAgentRuleParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_agent_rule_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_agent_rule"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateAgentRuleParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_agent_rule_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_agent_rule"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteAgentRuleParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_transfer_rules_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_transfer_rules"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListTransferRulesParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn create_transfer_rule_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "smb_tool_type": "create_transfer_rule",
         "post_dial_digits_enabled": true
     }"#,
     )
@@ -27203,7 +28344,6 @@ fn create_transfer_rule_params_round_trips_through_serde() {
 fn update_transfer_rule_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "smb_tool_type": "update_transfer_rule",
         "post_dial_digits_enabled": true
     }"#,
     )
@@ -27217,170 +28357,9 @@ fn update_transfer_rule_params_round_trips_through_serde() {
 }
 
 #[test]
-fn delete_transfer_rule_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_transfer_rule"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteTransferRuleParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_agent_procedures_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_agent_procedures"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListAgentProceduresParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_agent_references_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_agent_references"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListAgentReferencesParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_agent_procedure_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_agent_procedure"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateAgentProcedureParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_agent_procedure_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_agent_procedure"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateAgentProcedureParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_agent_procedure_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_agent_procedure"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteAgentProcedureParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_holidays_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_holidays"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListHolidaysParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_holiday_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_holiday"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateHolidayParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_holiday_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_holiday"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateHolidayParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_holiday_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_holiday"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteHolidayParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn get_schedule_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "smb_tool_type": "get_schedule",
         "include_location_filter": true
     }"#,
     )
@@ -27394,411 +28373,10 @@ fn get_schedule_params_round_trips_through_serde() {
 }
 
 #[test]
-fn submit_business_info_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "submit_business_info"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: SubmitBusinessInfoParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_business_info_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_business_info"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateBusinessInfoParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_agent_config_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_agent_config"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateAgentConfigParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn get_analytics_summary_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "get_analytics_summary"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GetAnalyticsSummaryParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn get_workspace_plan_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "get_workspace_plan"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GetWorkspacePlanParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn get_booking_page_settings_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "get_booking_page_settings"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GetBookingPageSettingsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_booking_page_settings_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_booking_page_settings"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateBookingPageSettingsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_booking_page_appearance_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_booking_page_appearance"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateBookingPageAppearanceParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn get_booking_slug_status_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "get_booking_slug_status"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GetBookingSlugStatusParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn set_booking_slug_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "set_booking_slug"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: SetBookingSlugParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_client_interactions_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_client_interactions"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListClientInteractionsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_client_interaction_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_client_interaction"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateClientInteractionParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_client_interaction_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_client_interaction"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteClientInteractionParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn list_locations_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "list_locations"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ListLocationsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_location_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_location"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateLocationParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn update_location_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "update_location"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: UpdateLocationParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn delete_location_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "delete_location"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DeleteLocationParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn leave_message_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "leave_message"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: LeaveMessageParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_service_quote_request_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_service_quote_request"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateServiceQuoteRequestParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn create_product_quote_request_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "create_product_quote_request"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: CreateProductQuoteRequestParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn report_knowledge_gap_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "report_knowledge_gap"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ReportKnowledgeGapParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn opt_in_sms_reminder_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "opt_in_sms_reminder"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: OptInSmsReminderParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn opt_out_sms_reminder_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "opt_out_sms_reminder"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: OptOutSmsReminderParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn trigger_user_verification_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "trigger_user_verification"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: TriggerUserVerificationParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn validate_user_verification_code_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "validate_user_verification_code"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: ValidateUserVerificationCodeParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn owner_list_staff_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "list_kwargs": {},
-        "smb_tool_type": "owner_list_staff"
+        "list_kwargs": {}
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -27814,8 +28392,7 @@ fn owner_list_staff_params_round_trips_through_serde() {
 fn owner_list_assets_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "list_kwargs": {},
-        "smb_tool_type": "owner_list_assets"
+        "list_kwargs": {}
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -27828,27 +28405,10 @@ fn owner_list_assets_params_round_trips_through_serde() {
 }
 
 #[test]
-fn owner_list_locations_params_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "smb_tool_type": "owner_list_locations"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: OwnerListLocationsParams =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn owner_list_services_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "list_kwargs": {},
-        "smb_tool_type": "owner_list_services"
+        "list_kwargs": {}
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -27864,8 +28424,7 @@ fn owner_list_services_params_round_trips_through_serde() {
 fn owner_list_products_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "list_kwargs": {},
-        "smb_tool_type": "owner_list_products"
+        "list_kwargs": {}
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -27881,8 +28440,7 @@ fn owner_list_products_params_round_trips_through_serde() {
 fn owner_get_client_appointments_params_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "include_cancelled": true,
-        "smb_tool_type": "owner_get_client_appointments"
+        "include_cancelled": true
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -28297,6 +28855,7 @@ fn agent_platform_settings_request_model_round_trips_through_serde() {
                             "prompt": "value",
                             "execution_mode": "streaming",
                             "model": "gemini-2.5-flash-lite",
+                            "service_tier": "standard",
                             "history_message_count": 100,
                             "trigger_action": {
                                 "type": "end_call"
@@ -28370,6 +28929,9 @@ fn agent_platform_settings_request_model_round_trips_through_serde() {
                 }
             },
             "auto_resolve_after_inactive_minutes": 123,
+            "environments": [
+                "value"
+            ],
             "notifiers": [
                 {
                     "type": "webhook",
@@ -28691,7 +29253,6 @@ fn widget_config_avatar_round_trips_through_serde() {
 fn orb_avatar_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "orb",
         "color_1": "value",
         "color_2": "value"
     }"#,
@@ -28709,7 +29270,6 @@ fn orb_avatar_round_trips_through_serde() {
 fn url_avatar_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "url",
         "custom_url": "value"
     }"#,
     )
@@ -28726,7 +29286,6 @@ fn url_avatar_round_trips_through_serde() {
 fn image_avatar_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "image",
         "url": "value"
     }"#,
     )
@@ -29103,7 +29662,6 @@ fn agent_analysis_items_input_evaluation_criteria_item_round_trips_through_serde
 fn attached_user_evaluation_ref_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "source": "user",
         "analysis_item_id": "value",
         "version_id": "value",
         "additional_version_ids": [
@@ -29126,7 +29684,6 @@ fn attached_user_evaluation_ref_round_trips_through_serde() {
 fn attached_system_evaluation_ref_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "source": "system",
         "analysis_item_id": "__system_eval_criteria_sentiment",
         "scope": "conversation",
         "weight": 9.99
@@ -29164,7 +29721,6 @@ fn agent_analysis_items_input_data_collection_item_round_trips_through_serde() {
 fn attached_user_data_collection_ref_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "source": "user",
         "analysis_item_id": "value",
         "version_id": "value",
         "scope": "conversation"
@@ -29183,7 +29739,6 @@ fn attached_user_data_collection_ref_round_trips_through_serde() {
 fn attached_system_data_collection_ref_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "source": "system",
         "analysis_item_id": "__system_data_collection_topic",
         "scope": "conversation"
     }"#,
@@ -29575,6 +30130,7 @@ fn guardrails_v1_input_round_trips_through_serde() {
                         "prompt": "value",
                         "execution_mode": "streaming",
                         "model": "gemini-2.5-flash-lite",
+                        "service_tier": "standard",
                         "history_message_count": 100,
                         "trigger_action": {
                             "type": "end_call"
@@ -29764,26 +30320,9 @@ fn content_guardrail_input_trigger_action_round_trips_through_serde() {
 }
 
 #[test]
-fn end_call_trigger_action_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "end_call"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: EndCallTriggerAction =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn retry_trigger_action_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "retry",
         "feedback": "value"
     }"#,
     )
@@ -29808,6 +30347,7 @@ fn custom_guardrail_input_round_trips_through_serde() {
                     "prompt": "value",
                     "execution_mode": "streaming",
                     "model": "gemini-2.5-flash-lite",
+                    "service_tier": "standard",
                     "history_message_count": 100,
                     "trigger_action": {
                         "type": "end_call"
@@ -29838,6 +30378,7 @@ fn custom_guardrails_config_input_round_trips_through_serde() {
                 "prompt": "value",
                 "execution_mode": "streaming",
                 "model": "gemini-2.5-flash-lite",
+                "service_tier": "standard",
                 "history_message_count": 100,
                 "trigger_action": {
                     "type": "end_call"
@@ -29865,6 +30406,7 @@ fn custom_guardrail_config_round_trips_through_serde() {
         "prompt": "value",
         "execution_mode": "streaming",
         "model": "gemini-2.5-flash-lite",
+        "service_tier": "standard",
         "history_message_count": 100,
         "trigger_action": {
             "type": "end_call"
@@ -30051,6 +30593,9 @@ fn alerting_settings_round_trips_through_serde() {
             }
         },
         "auto_resolve_after_inactive_minutes": 123,
+        "environments": [
+            "value"
+        ],
         "notifiers": [
             {
                 "type": "webhook",
@@ -30112,7 +30657,6 @@ fn alerting_settings_notifiers_item_round_trips_through_serde() {
 fn alerting_webhook_notifier_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "webhook",
         "webhook_id": "value"
     }"#,
     )
@@ -30129,7 +30673,6 @@ fn alerting_webhook_notifier_round_trips_through_serde() {
 fn alerting_integration_notifier_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "integration",
         "integration_type": "pagerduty",
         "connection_id": "value",
         "channel_id": "value"
@@ -30244,8 +30787,7 @@ fn workflow_edge_model_input_forward_condition_round_trips_through_serde() {
 fn workflow_unconditional_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "label": "value",
-        "type": "unconditional"
+        "label": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -30262,7 +30804,6 @@ fn workflow_llm_condition_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "label": "value",
-        "type": "llm",
         "condition": "value"
     }"#,
     )
@@ -30280,7 +30821,6 @@ fn workflow_result_condition_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "label": "value",
-        "type": "result",
         "successful": true
     }"#,
     )
@@ -30298,7 +30838,6 @@ fn workflow_expression_condition_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "label": "value",
-        "type": "expression",
         "expression": {
             "type": "string_literal",
             "value": "value"
@@ -30335,7 +30874,6 @@ fn ast_node_input_round_trips_through_serde() {
 fn ast_string_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "string_literal",
         "value": "value"
     }"#,
     )
@@ -30352,7 +30890,6 @@ fn ast_string_node_input_round_trips_through_serde() {
 fn ast_number_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "number_literal",
         "value": 9.99
     }"#,
     )
@@ -30380,28 +30917,11 @@ fn ast_number_node_input_value_round_trips_through_serde() {
 fn ast_boolean_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "boolean_literal",
         "value": true
     }"#,
     )
     .expect("fixture is valid JSON");
     let decoded: AstBooleanNodeInput =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn ast_null_node_input_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "null_literal"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: AstNullNodeInput =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -30508,7 +31028,6 @@ fn astllm_node_input2_round_trips_through_serde() {
 fn ast_dynamic_variable_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "dynamic_variable",
         "name": "value"
     }"#,
     )
@@ -30525,7 +31044,6 @@ fn ast_dynamic_variable_node_input_round_trips_through_serde() {
 fn ast_or_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "or_operator",
         "children": [
             {
                 "type": "string_literal",
@@ -30547,7 +31065,6 @@ fn ast_or_operator_node_input_round_trips_through_serde() {
 fn ast_and_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "and_operator",
         "children": [
             {
                 "type": "string_literal",
@@ -30569,7 +31086,6 @@ fn ast_and_operator_node_input_round_trips_through_serde() {
 fn ast_equals_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "eq_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30593,7 +31109,6 @@ fn ast_equals_operator_node_input_round_trips_through_serde() {
 fn ast_not_equals_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "neq_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30617,7 +31132,6 @@ fn ast_not_equals_operator_node_input_round_trips_through_serde() {
 fn ast_greater_than_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "gt_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30641,7 +31155,6 @@ fn ast_greater_than_operator_node_input_round_trips_through_serde() {
 fn ast_less_than_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "lt_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30665,7 +31178,6 @@ fn ast_less_than_operator_node_input_round_trips_through_serde() {
 fn ast_greater_than_or_equals_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "gte_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30689,7 +31201,6 @@ fn ast_greater_than_or_equals_operator_node_input_round_trips_through_serde() {
 fn ast_less_than_or_equals_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "lte_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30713,7 +31224,6 @@ fn ast_less_than_or_equals_operator_node_input_round_trips_through_serde() {
 fn ast_addition_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "add_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30737,7 +31247,6 @@ fn ast_addition_operator_node_input_round_trips_through_serde() {
 fn ast_subtraction_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "sub_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30761,7 +31270,6 @@ fn ast_subtraction_operator_node_input_round_trips_through_serde() {
 fn ast_multiplication_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "mul_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30785,7 +31293,6 @@ fn ast_multiplication_operator_node_input_round_trips_through_serde() {
 fn ast_division_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "div_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -30809,7 +31316,6 @@ fn ast_division_operator_node_input_round_trips_through_serde() {
 fn ast_conditional_operator_node_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "conditional_operator",
         "condition": {
             "type": "string_literal",
             "value": "value"
@@ -30894,7 +31400,6 @@ fn agent_workflow_request_model_nodes_round_trips_through_serde() {
 fn workflow_start_node_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "start",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -30917,7 +31422,6 @@ fn workflow_start_node_model_input_round_trips_through_serde() {
 fn workflow_end_node_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "end",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -30963,13 +31467,28 @@ fn workflow_phone_number_node_model_input_round_trips_through_serde() {
             "type": "static",
             "value": "0"
         },
-        "type": "phone_number",
         "position": {
             "x": 9.99,
             "y": 9.99
         },
         "edge_order": [
             "value"
+        ],
+        "provider_configs": [
+            {
+                "type": "twilio",
+                "config": {
+                    "transfer_destination": {
+                        "destination": "value",
+                        "type": "phone"
+                    },
+                    "post_dial_digits": {
+                        "type": "static",
+                        "value": "0"
+                    },
+                    "type": "twilio_warm_conference_transfer"
+                }
+            }
         ]
     }"#,
     )
@@ -31035,10 +31554,36 @@ fn workflow_phone_number_node_model_input_post_dial_digits_round_trips_through_s
 }
 
 #[test]
+fn workflow_phone_number_node_model_input_provider_configs_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "twilio",
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "post_dial_digits": {
+                "type": "static",
+                "value": "0"
+            },
+            "type": "twilio_warm_conference_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WorkflowPhoneNumberNodeModelInputProviderConfigsItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn workflow_override_agent_node_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "override_agent",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -31703,7 +32248,8 @@ fn workflow_override_agent_node_model_input_round_trips_through_serde() {
             "value"
         ],
         "label": "value",
-        "entry_behavior": "generate_immediately"
+        "entry_behavior": "generate_immediately",
+        "allow_interruptions_on_entry": true
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -33929,7 +34475,6 @@ fn prompt_agent_api_model_workflow_override_input_tools_item_round_trips_through
 fn workflow_standalone_agent_node_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "standalone_agent",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -33960,7 +34505,6 @@ fn workflow_standalone_agent_node_model_input_round_trips_through_serde() {
 fn workflow_tool_node_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "tool",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -34033,7 +34577,6 @@ fn workflow_tool_locator_schema_overrides_round_trips_through_serde() {
 fn workflow_say_node_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "say",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -34746,7 +35289,6 @@ fn workflow_say_node_model_input_message_round_trips_through_serde() {
 fn say_node_literal_message_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "literal",
         "text": "value",
         "text_translations": {
             "key": {
@@ -34784,7 +35326,6 @@ fn translated_string_round_trips_through_serde() {
 fn say_node_prompt_message_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "prompt",
         "prompt": "value"
     }"#,
     )
@@ -34801,7 +35342,6 @@ fn say_node_prompt_message_input_round_trips_through_serde() {
 fn workflow_update_state_node_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "update_state",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -34847,6 +35387,29 @@ fn workflow_state_update_input_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: WorkflowStateUpdateInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn workflow_start_procedure_node_model_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "position": {
+            "x": 9.99,
+            "y": 9.99
+        },
+        "edge_order": [
+            "value"
+        ],
+        "procedure_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WorkflowStartProcedureNodeModelInput =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -35078,6 +35641,66 @@ fn get_agent_response_model_round_trips_through_serde() {
                         "verbosity": "auto",
                         "output_format": "mp3_22050_32",
                         "interaction_budget": "realtime"
+                    }
+                },
+                "subagent_config": {
+                    "agents": [
+                        {
+                            "execution_mode": "immediate",
+                            "timeout_secs": 123,
+                            "agent_id": "value",
+                            "branch_id": "value",
+                            "description": "value",
+                            "parameters": {
+                                "property_kind": "array",
+                                "description": "value",
+                                "dynamic_variable": "value",
+                                "constant_value": {},
+                                "is_omitted": true,
+                                "type": "object",
+                                "required": [
+                                    "value"
+                                ],
+                                "properties": {
+                                    "key": {
+                                        "type": "boolean",
+                                        "description": "value",
+                                        "enum": [
+                                            "value"
+                                        ],
+                                        "is_system_provided": true,
+                                        "dynamic_variable": "value",
+                                        "allowed_values": {
+                                            "dynamic_variable": "value"
+                                        },
+                                        "allowed_values_dynamic_variable": "value",
+                                        "constant_value": "value",
+                                        "is_omitted": true
+                                    }
+                                },
+                                "required_constraints": {
+                                    "any_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ],
+                                    "all_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    "self_subagent": {
+                        "execution_mode": "immediate",
+                        "timeout_secs": 123,
+                        "description": "value"
                     }
                 },
                 "prompt": {
@@ -35907,6 +36530,7 @@ fn get_agent_response_model_round_trips_through_serde() {
                                 "prompt": "value",
                                 "execution_mode": "streaming",
                                 "model": "gemini-2.5-flash-lite",
+                                "service_tier": "standard",
                                 "history_message_count": 100,
                                 "trigger_action": {
                                     "type": "end_call"
@@ -35980,6 +36604,9 @@ fn get_agent_response_model_round_trips_through_serde() {
                     }
                 },
                 "auto_resolve_after_inactive_minutes": 123,
+                "environments": [
+                    "value"
+                ],
                 "notifiers": [
                     {
                         "type": "webhook",
@@ -36091,6 +36718,9 @@ fn get_agent_response_model_round_trips_through_serde() {
                     "value"
                 ],
                 "referenced_dynamic_variables": [
+                    "value"
+                ],
+                "written_dynamic_variables": [
                     "value"
                 ],
                 "folder_parent_id": "value"
@@ -36528,6 +37158,7 @@ fn agent_platform_settings_response_model_round_trips_through_serde() {
                             "prompt": "value",
                             "execution_mode": "streaming",
                             "model": "gemini-2.5-flash-lite",
+                            "service_tier": "standard",
                             "history_message_count": 100,
                             "trigger_action": {
                                 "type": "end_call"
@@ -36601,6 +37232,9 @@ fn agent_platform_settings_response_model_round_trips_through_serde() {
                 }
             },
             "auto_resolve_after_inactive_minutes": 123,
+            "environments": [
+                "value"
+            ],
             "notifiers": [
                 {
                     "type": "webhook",
@@ -36928,6 +37562,7 @@ fn guardrails_v1_output_round_trips_through_serde() {
                         "prompt": "value",
                         "execution_mode": "streaming",
                         "model": "gemini-2.5-flash-lite",
+                        "service_tier": "standard",
                         "history_message_count": 100,
                         "trigger_action": {
                             "type": "end_call"
@@ -37025,6 +37660,7 @@ fn custom_guardrail_output_round_trips_through_serde() {
                     "prompt": "value",
                     "execution_mode": "streaming",
                     "model": "gemini-2.5-flash-lite",
+                    "service_tier": "standard",
                     "history_message_count": 100,
                     "trigger_action": {
                         "type": "end_call"
@@ -37055,6 +37691,7 @@ fn custom_guardrails_config_output_round_trips_through_serde() {
                 "prompt": "value",
                 "execution_mode": "streaming",
                 "model": "gemini-2.5-flash-lite",
+                "service_tier": "standard",
                 "history_message_count": 100,
                 "trigger_action": {
                     "type": "end_call"
@@ -37120,6 +37757,9 @@ fn alerting_settings_response_round_trips_through_serde() {
             }
         },
         "auto_resolve_after_inactive_minutes": 123,
+        "environments": [
+            "value"
+        ],
         "notifiers": [
             {
                 "type": "webhook",
@@ -37158,7 +37798,6 @@ fn alerting_settings_response_notifiers_item_round_trips_through_serde() {
 fn alerting_webhook_notifier_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "webhook",
         "webhook_id": "value"
     }"#,
     )
@@ -37175,7 +37814,6 @@ fn alerting_webhook_notifier_response_round_trips_through_serde() {
 fn alerting_integration_notifier_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "integration",
         "integration_type": "pagerduty",
         "connection_id": "value",
         "channel_id": "value"
@@ -37249,8 +37887,7 @@ fn get_phone_number_twilio_response_model_round_trips_through_serde() {
             "agent_name": "value",
             "environment": "value",
             "branch_id": "value"
-        },
-        "provider": "twilio"
+        }
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -37295,8 +37932,7 @@ fn get_phone_number_exotel_response_model_round_trips_through_serde() {
             "agent_name": "value",
             "environment": "value",
             "branch_id": "value"
-        },
-        "provider": "exotel"
+        }
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -37323,7 +37959,6 @@ fn get_phone_number_sip_trunk_response_model_round_trips_through_serde() {
             "environment": "value",
             "branch_id": "value"
         },
-        "provider": "sip_trunk",
         "provider_config": {
             "address": "value",
             "transport": "auto",
@@ -37575,8 +38210,7 @@ fn workflow_edge_model_output_forward_condition_round_trips_through_serde() {
 fn workflow_unconditional_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "label": "value",
-        "type": "unconditional"
+        "label": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -37593,7 +38227,6 @@ fn workflow_llm_condition_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "label": "value",
-        "type": "llm",
         "condition": "value"
     }"#,
     )
@@ -37611,7 +38244,6 @@ fn workflow_result_condition_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "label": "value",
-        "type": "result",
         "successful": true
     }"#,
     )
@@ -37629,7 +38261,6 @@ fn workflow_expression_condition_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "label": "value",
-        "type": "expression",
         "expression": {
             "type": "string_literal",
             "value": "value"
@@ -37666,7 +38297,6 @@ fn ast_node_output_round_trips_through_serde() {
 fn ast_string_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "string_literal",
         "value": "value"
     }"#,
     )
@@ -37683,7 +38313,6 @@ fn ast_string_node_output_round_trips_through_serde() {
 fn ast_number_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "number_literal",
         "value": 9.99
     }"#,
     )
@@ -37711,7 +38340,6 @@ fn ast_number_node_output_value_round_trips_through_serde() {
 fn ast_boolean_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "boolean_literal",
         "value": true
     }"#,
     )
@@ -37725,26 +38353,9 @@ fn ast_boolean_node_output_round_trips_through_serde() {
 }
 
 #[test]
-fn ast_null_node_output_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "null_literal"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: AstNullNodeOutput =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn astllm_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "llm",
         "value_schema": {
             "type": "boolean",
             "description": "value",
@@ -37768,7 +38379,6 @@ fn astllm_node_output_round_trips_through_serde() {
 fn ast_dynamic_variable_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "dynamic_variable",
         "name": "value"
     }"#,
     )
@@ -37785,7 +38395,6 @@ fn ast_dynamic_variable_node_output_round_trips_through_serde() {
 fn ast_or_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "or_operator",
         "children": [
             {
                 "type": "string_literal",
@@ -37807,7 +38416,6 @@ fn ast_or_operator_node_output_round_trips_through_serde() {
 fn ast_and_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "and_operator",
         "children": [
             {
                 "type": "string_literal",
@@ -37829,7 +38437,6 @@ fn ast_and_operator_node_output_round_trips_through_serde() {
 fn ast_equals_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "eq_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -37853,7 +38460,6 @@ fn ast_equals_operator_node_output_round_trips_through_serde() {
 fn ast_not_equals_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "neq_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -37877,7 +38483,6 @@ fn ast_not_equals_operator_node_output_round_trips_through_serde() {
 fn ast_greater_than_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "gt_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -37901,7 +38506,6 @@ fn ast_greater_than_operator_node_output_round_trips_through_serde() {
 fn ast_less_than_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "lt_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -37925,7 +38529,6 @@ fn ast_less_than_operator_node_output_round_trips_through_serde() {
 fn ast_greater_than_or_equals_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "gte_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -37949,7 +38552,6 @@ fn ast_greater_than_or_equals_operator_node_output_round_trips_through_serde() {
 fn ast_less_than_or_equals_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "lte_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -37973,7 +38575,6 @@ fn ast_less_than_or_equals_operator_node_output_round_trips_through_serde() {
 fn ast_addition_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "add_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -37997,7 +38598,6 @@ fn ast_addition_operator_node_output_round_trips_through_serde() {
 fn ast_subtraction_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "sub_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -38021,7 +38621,6 @@ fn ast_subtraction_operator_node_output_round_trips_through_serde() {
 fn ast_multiplication_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "mul_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -38045,7 +38644,6 @@ fn ast_multiplication_operator_node_output_round_trips_through_serde() {
 fn ast_division_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "div_operator",
         "left": {
             "type": "string_literal",
             "value": "value"
@@ -38069,7 +38667,6 @@ fn ast_division_operator_node_output_round_trips_through_serde() {
 fn ast_conditional_operator_node_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "conditional_operator",
         "condition": {
             "type": "string_literal",
             "value": "value"
@@ -38154,7 +38751,6 @@ fn agent_workflow_response_model_nodes_round_trips_through_serde() {
 fn workflow_start_node_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "start",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -38177,7 +38773,6 @@ fn workflow_start_node_model_output_round_trips_through_serde() {
 fn workflow_end_node_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "end",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -38223,13 +38818,28 @@ fn workflow_phone_number_node_model_output_round_trips_through_serde() {
             "type": "static",
             "value": "0"
         },
-        "type": "phone_number",
         "position": {
             "x": 9.99,
             "y": 9.99
         },
         "edge_order": [
             "value"
+        ],
+        "provider_configs": [
+            {
+                "type": "twilio",
+                "config": {
+                    "transfer_destination": {
+                        "destination": "value",
+                        "type": "phone"
+                    },
+                    "post_dial_digits": {
+                        "type": "static",
+                        "value": "0"
+                    },
+                    "type": "twilio_warm_conference_transfer"
+                }
+            }
         ]
     }"#,
     )
@@ -38295,10 +38905,523 @@ fn workflow_phone_number_node_model_output_post_dial_digits_round_trips_through_
 }
 
 #[test]
+fn workflow_phone_number_node_model_output_provider_configs_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "twilio",
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "post_dial_digits": {
+                "type": "static",
+                "value": "0"
+            },
+            "type": "twilio_warm_conference_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WorkflowPhoneNumberNodeModelOutputProviderConfigsItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_transfer_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "post_dial_digits": {
+                "type": "static",
+                "value": "0"
+            },
+            "type": "twilio_warm_conference_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioTransferOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_transfer_output_config_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "post_dial_digits": {
+            "type": "static",
+            "value": "0"
+        },
+        "type": "twilio_warm_conference_transfer"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioTransferOutputConfig =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_warm_conference_transfer_config_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "post_dial_digits": {
+            "type": "static",
+            "value": "0"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioWarmConferenceTransferConfigOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_warm_conference_transfer_config_output_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioWarmConferenceTransferConfigOutputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn phone_destination_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PhoneDestinationOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn phone_dynamic_variable_destination_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PhoneDynamicVariableDestinationOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_warm_conference_transfer_config_output_post_dial_digits_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "static",
+        "value": "0"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioWarmConferenceTransferConfigOutputPostDialDigits =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_cold_blind_transfer_config_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "post_dial_digits": {
+            "type": "static",
+            "value": "0"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioColdBlindTransferConfigOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_cold_blind_transfer_config_output_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioColdBlindTransferConfigOutputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn twilio_cold_blind_transfer_config_output_post_dial_digits_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "static",
+        "value": "0"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TwilioColdBlindTransferConfigOutputPostDialDigits =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_transfer_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "type": "sip_cold_conference_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipTransferOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_transfer_output_config_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "type": "sip_cold_conference_transfer"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipTransferOutputConfig =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_conference_transfer_config_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdConferenceTransferConfigOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_conference_transfer_config_output_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdConferenceTransferConfigOutputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_refer_transfer_config_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "custom_sip_headers": [
+            {
+                "type": "static",
+                "key": "value",
+                "value": "value"
+            }
+        ],
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "uui": {
+            "data": "value",
+            "protocol_discriminator": "00",
+            "protocol_discriminator_mode": "prefix"
+        },
+        "play_dialtone": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdReferTransferConfigOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_refer_transfer_config_output_custom_sip_headers_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "static",
+        "key": "value",
+        "value": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdReferTransferConfigOutputCustomSipHeadersItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_cold_refer_transfer_config_output_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipColdReferTransferConfigOutputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_uri_destination_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipUriDestinationOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sip_uri_dynamic_variable_destination_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SipUriDynamicVariableDestinationOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_transfer_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "type": "exotel_cold_blind_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelTransferOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_transfer_output_config_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        },
+        "type": "exotel_cold_blind_transfer"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelTransferOutputConfig =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_cold_blind_transfer_config_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelColdBlindTransferConfigOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_cold_blind_transfer_config_output_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelColdBlindTransferConfigOutputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_warm_transfer_config_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "transfer_destination": {
+            "destination": "value",
+            "type": "phone"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelWarmTransferConfigOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn exotel_warm_transfer_config_output_transfer_destination_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "destination": "value",
+        "type": "phone"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ExotelWarmTransferConfigOutputTransferDestination =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn workflow_override_agent_node_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "override_agent",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -38961,7 +40084,8 @@ fn workflow_override_agent_node_model_output_round_trips_through_serde() {
             "value"
         ],
         "label": "value",
-        "entry_behavior": "generate_immediately"
+        "entry_behavior": "generate_immediately",
+        "allow_interruptions_on_entry": true
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -40979,7 +42103,6 @@ fn system_tool_config_output_params_round_trips_through_serde() {
 fn transfer_to_agent_tool_config_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "transfer_to_agent",
         "transfers": [
             {
                 "agent_id": "value",
@@ -41034,7 +42157,6 @@ fn agent_transfer_output_round_trips_through_serde() {
 fn transfer_to_number_tool_config_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "system_tool_type": "transfer_to_number",
         "transfers": [
             {
                 "custom_sip_headers": [
@@ -41063,11 +42185,91 @@ fn transfer_to_number_tool_config_output_round_trips_through_serde() {
                 "condition": "value"
             }
         ],
+        "transfer_rules": [
+            {
+                "provider_configs": [
+                    {
+                        "type": "twilio",
+                        "config": {
+                            "transfer_destination": {
+                                "destination": "value",
+                                "type": "phone"
+                            },
+                            "post_dial_digits": {
+                                "type": "static",
+                                "value": "0"
+                            },
+                            "type": "twilio_warm_conference_transfer"
+                        }
+                    }
+                ],
+                "condition": "value"
+            }
+        ],
         "enable_client_message": true
     }"#,
     )
     .expect("fixture is valid JSON");
     let decoded: TransferToNumberToolConfigOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn transfer_rule_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "provider_configs": [
+            {
+                "type": "twilio",
+                "config": {
+                    "transfer_destination": {
+                        "destination": "value",
+                        "type": "phone"
+                    },
+                    "post_dial_digits": {
+                        "type": "static",
+                        "value": "0"
+                    },
+                    "type": "twilio_warm_conference_transfer"
+                }
+            }
+        ],
+        "condition": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TransferRuleOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn transfer_rule_output_provider_configs_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "twilio",
+        "config": {
+            "transfer_destination": {
+                "destination": "value",
+                "type": "phone"
+            },
+            "post_dial_digits": {
+                "type": "static",
+                "value": "0"
+            },
+            "type": "twilio_warm_conference_transfer"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TransferRuleOutputProviderConfigsItem =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -41703,6 +42905,99 @@ fn query_params_json_schema_output_round_trips_through_serde() {
 }
 
 #[test]
+fn query_params_json_schema_output_properties_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "boolean",
+        "description": "value",
+        "enum": [
+            "value"
+        ],
+        "is_system_provided": true,
+        "dynamic_variable": "value",
+        "allowed_values": {
+            "dynamic_variable": "value"
+        },
+        "allowed_values_dynamic_variable": "value",
+        "constant_value": "value",
+        "is_omitted": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: QueryParamsJsonSchemaOutputProperties =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn query_array_json_schema_property_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "description": "value",
+        "dynamic_variable": "value",
+        "constant_value": [
+            {}
+        ],
+        "is_omitted": true,
+        "type": "array",
+        "items": {
+            "type": "boolean",
+            "description": "value",
+            "enum": [
+                "value"
+            ],
+            "is_system_provided": true,
+            "dynamic_variable": "value",
+            "allowed_values": {
+                "dynamic_variable": "value"
+            },
+            "allowed_values_dynamic_variable": "value",
+            "constant_value": "value",
+            "is_omitted": true
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: QueryArrayJsonSchemaPropertyOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn query_array_json_schema_property_output_items_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "boolean",
+        "description": "value",
+        "enum": [
+            "value"
+        ],
+        "is_system_provided": true,
+        "dynamic_variable": "value",
+        "allowed_values": {
+            "dynamic_variable": "value"
+        },
+        "allowed_values_dynamic_variable": "value",
+        "constant_value": "value",
+        "is_omitted": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: QueryArrayJsonSchemaPropertyOutputItems =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn object_json_schema_property_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -42120,7 +43415,6 @@ fn api_integration_webhook_tool_config_output_round_trips_through_serde() {
 fn workflow_standalone_agent_node_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "standalone_agent",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -42151,7 +43445,6 @@ fn workflow_standalone_agent_node_model_output_round_trips_through_serde() {
 fn workflow_tool_node_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "tool",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -42185,7 +43478,6 @@ fn workflow_tool_node_model_output_round_trips_through_serde() {
 fn workflow_say_node_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "say",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -42896,7 +44188,6 @@ fn workflow_say_node_model_output_message_round_trips_through_serde() {
 fn say_node_literal_message_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "literal",
         "text": "value",
         "text_translations": {
             "key": {
@@ -42918,7 +44209,6 @@ fn say_node_literal_message_output_round_trips_through_serde() {
 fn say_node_prompt_message_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "prompt",
         "prompt": "value"
     }"#,
     )
@@ -42935,7 +44225,6 @@ fn say_node_prompt_message_output_round_trips_through_serde() {
 fn workflow_update_state_node_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "update_state",
         "position": {
             "x": 9.99,
             "y": 9.99
@@ -42989,6 +44278,29 @@ fn workflow_state_update_output_round_trips_through_serde() {
 }
 
 #[test]
+fn workflow_start_procedure_node_model_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "position": {
+            "x": 9.99,
+            "y": 9.99
+        },
+        "edge_order": [
+            "value"
+        ],
+        "procedure_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WorkflowStartProcedureNodeModelOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn resource_access_info_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -43028,6 +44340,9 @@ fn procedure_ref_response_model_round_trips_through_serde() {
             "value"
         ],
         "referenced_dynamic_variables": [
+            "value"
+        ],
+        "written_dynamic_variables": [
             "value"
         ],
         "folder_parent_id": "value"
@@ -43264,6 +44579,66 @@ fn update_agent_request_round_trips_through_serde() {
                         "verbosity": "auto",
                         "output_format": "mp3_22050_32",
                         "interaction_budget": "realtime"
+                    }
+                },
+                "subagent_config": {
+                    "agents": [
+                        {
+                            "execution_mode": "immediate",
+                            "timeout_secs": 123,
+                            "agent_id": "value",
+                            "branch_id": "value",
+                            "description": "value",
+                            "parameters": {
+                                "property_kind": "array",
+                                "description": "value",
+                                "dynamic_variable": "value",
+                                "constant_value": {},
+                                "is_omitted": true,
+                                "type": "object",
+                                "required": [
+                                    "value"
+                                ],
+                                "properties": {
+                                    "key": {
+                                        "type": "boolean",
+                                        "description": "value",
+                                        "enum": [
+                                            "value"
+                                        ],
+                                        "is_system_provided": true,
+                                        "dynamic_variable": "value",
+                                        "allowed_values": {
+                                            "dynamic_variable": "value"
+                                        },
+                                        "allowed_values_dynamic_variable": "value",
+                                        "constant_value": "value",
+                                        "is_omitted": true
+                                    }
+                                },
+                                "required_constraints": {
+                                    "any_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ],
+                                    "all_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    "self_subagent": {
+                        "execution_mode": "immediate",
+                        "timeout_secs": 123,
+                        "description": "value"
                     }
                 },
                 "prompt": {
@@ -44089,6 +45464,7 @@ fn update_agent_request_round_trips_through_serde() {
                                 "prompt": "value",
                                 "execution_mode": "streaming",
                                 "model": "gemini-2.5-flash-lite",
+                                "service_tier": "standard",
                                 "history_message_count": 100,
                                 "trigger_action": {
                                     "type": "end_call"
@@ -44162,6 +45538,9 @@ fn update_agent_request_round_trips_through_serde() {
                     }
                 },
                 "auto_resolve_after_inactive_minutes": 123,
+                "environments": [
+                    "value"
+                ],
                 "notifiers": [
                     {
                         "type": "webhook",
@@ -46373,7 +47752,6 @@ fn response_unit_test_model_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "llm",
         "success_condition": "value",
         "success_examples": [
             {
@@ -47132,7 +48510,6 @@ fn tool_call_unit_test_model_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "tool",
         "tool_call_parameters": {
             "parameters": [
                 {
@@ -47247,7 +48624,6 @@ fn eval_round_trips_through_serde() {
 fn llm_parameter_evaluation_strategy_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "llm",
         "description": "value"
     }"#,
     )
@@ -47264,7 +48640,6 @@ fn llm_parameter_evaluation_strategy_round_trips_through_serde() {
 fn regex_parameter_evaluation_strategy_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "regex",
         "pattern": "value"
     }"#,
     )
@@ -47281,28 +48656,11 @@ fn regex_parameter_evaluation_strategy_round_trips_through_serde() {
 fn exact_parameter_evaluation_strategy_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "exact",
         "expected_value": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
     let decoded: ExactParameterEvaluationStrategy =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn match_anything_parameter_evaluation_strategy_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "anything"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: MatchAnythingParameterEvaluationStrategy =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -47684,7 +49042,6 @@ fn simulation_test_model_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "simulation",
         "success_condition": "value",
         "success_conditions": [
             "value"
@@ -48067,6 +49424,66 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                             "verbosity": "auto",
                             "output_format": "mp3_22050_32",
                             "interaction_budget": "realtime"
+                        }
+                    },
+                    "subagent_config": {
+                        "agents": [
+                            {
+                                "execution_mode": "immediate",
+                                "timeout_secs": 123,
+                                "agent_id": "value",
+                                "branch_id": "value",
+                                "description": "value",
+                                "parameters": {
+                                    "property_kind": "array",
+                                    "description": "value",
+                                    "dynamic_variable": "value",
+                                    "constant_value": {},
+                                    "is_omitted": true,
+                                    "type": "object",
+                                    "required": [
+                                        "value"
+                                    ],
+                                    "properties": {
+                                        "key": {
+                                            "type": "boolean",
+                                            "description": "value",
+                                            "enum": [
+                                                "value"
+                                            ],
+                                            "is_system_provided": true,
+                                            "dynamic_variable": "value",
+                                            "allowed_values": {
+                                                "dynamic_variable": "value"
+                                            },
+                                            "allowed_values_dynamic_variable": "value",
+                                            "constant_value": "value",
+                                            "is_omitted": true
+                                        }
+                                    },
+                                    "required_constraints": {
+                                        "any_of": [
+                                            {
+                                                "required": [
+                                                    "value"
+                                                ]
+                                            }
+                                        ],
+                                        "all_of": [
+                                            {
+                                                "required": [
+                                                    "value"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ],
+                        "self_subagent": {
+                            "execution_mode": "immediate",
+                            "timeout_secs": 123,
+                            "description": "value"
                         }
                     },
                     "prompt": {
@@ -48892,6 +50309,7 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                                     "prompt": "value",
                                     "execution_mode": "streaming",
                                     "model": "gemini-2.5-flash-lite",
+                                    "service_tier": "standard",
                                     "history_message_count": 100,
                                     "trigger_action": {
                                         "type": "end_call"
@@ -48965,6 +50383,9 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                         }
                     },
                     "auto_resolve_after_inactive_minutes": 123,
+                    "environments": [
+                        "value"
+                    ],
                     "notifiers": [
                         {
                             "type": "webhook",
@@ -49263,6 +50684,66 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                         "verbosity": "auto",
                         "output_format": "mp3_22050_32",
                         "interaction_budget": "realtime"
+                    }
+                },
+                "subagent_config": {
+                    "agents": [
+                        {
+                            "execution_mode": "immediate",
+                            "timeout_secs": 123,
+                            "agent_id": "value",
+                            "branch_id": "value",
+                            "description": "value",
+                            "parameters": {
+                                "property_kind": "array",
+                                "description": "value",
+                                "dynamic_variable": "value",
+                                "constant_value": {},
+                                "is_omitted": true,
+                                "type": "object",
+                                "required": [
+                                    "value"
+                                ],
+                                "properties": {
+                                    "key": {
+                                        "type": "boolean",
+                                        "description": "value",
+                                        "enum": [
+                                            "value"
+                                        ],
+                                        "is_system_provided": true,
+                                        "dynamic_variable": "value",
+                                        "allowed_values": {
+                                            "dynamic_variable": "value"
+                                        },
+                                        "allowed_values_dynamic_variable": "value",
+                                        "constant_value": "value",
+                                        "is_omitted": true
+                                    }
+                                },
+                                "required_constraints": {
+                                    "any_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ],
+                                    "all_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    "self_subagent": {
+                        "execution_mode": "immediate",
+                        "timeout_secs": 123,
+                        "description": "value"
                     }
                 },
                 "prompt": {
@@ -50088,6 +51569,7 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                                 "prompt": "value",
                                 "execution_mode": "streaming",
                                 "model": "gemini-2.5-flash-lite",
+                                "service_tier": "standard",
                                 "history_message_count": 100,
                                 "trigger_action": {
                                     "type": "end_call"
@@ -50161,6 +51643,9 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                     }
                 },
                 "auto_resolve_after_inactive_minutes": 123,
+                "environments": [
+                    "value"
+                ],
                 "notifiers": [
                     {
                         "type": "webhook",
@@ -50359,7 +51844,6 @@ fn summaries_get_ok_response1_round_trips_through_serde() {
 fn agent_summary_batch_successful_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "status": "success",
         "data": {
             "agent_id": "value",
             "name": "value",
@@ -50395,7 +51879,6 @@ fn agent_summary_batch_successful_response_model_round_trips_through_serde() {
 fn batch_failure_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "status": "failure",
         "error_code": 123,
         "error_status": "value",
         "error_message": "value"
@@ -50435,6 +51918,13 @@ fn summaries_get_ok_response2_round_trips_through_serde() {
                 "access_source": "creator"
             },
             "folder_parent_id": "value",
+            "chunking_override": {
+                "max_chunk_size": 123,
+                "overlap_percentage": 123,
+                "custom_separators": [
+                    "value"
+                ]
+            },
             "folder_path": [
                 {
                     "id": "value"
@@ -50476,7 +51966,6 @@ fn summaries_get_ok_response2_round_trips_through_serde() {
 fn knowledge_base_summary_batch_successful_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "status": "success",
         "data": {
             "id": "value",
             "name": "value",
@@ -50497,6 +51986,13 @@ fn knowledge_base_summary_batch_successful_response_model_round_trips_through_se
                 "access_source": "creator"
             },
             "folder_parent_id": "value",
+            "chunking_override": {
+                "max_chunk_size": 123,
+                "overlap_percentage": 123,
+                "custom_separators": [
+                    "value"
+                ]
+            },
             "folder_path": [
                 {
                     "id": "value"
@@ -50557,6 +52053,13 @@ fn data_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value"
@@ -50616,6 +52119,13 @@ fn get_knowledge_base_summary_url_response_model_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value"
@@ -50633,7 +52143,6 @@ fn get_knowledge_base_summary_url_response_model_round_trips_through_serde() {
                 "access_level": "admin"
             }
         ],
-        "type": "url",
         "url": "value",
         "auto_sync_info": {
             "minimum_frequency_days": 123,
@@ -50663,6 +52172,26 @@ fn knowledge_base_document_metadata_response_model_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: KnowledgeBaseDocumentMetadataResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn chunking_override_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "max_chunk_size": 123,
+        "overlap_percentage": 123,
+        "custom_separators": [
+            "value"
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ChunkingOverride =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -50718,7 +52247,6 @@ fn dependent_available_agent_identifier_round_trips_through_serde() {
         ],
         "id": "value",
         "name": "value",
-        "type": "available",
         "created_at_unix_secs": 123,
         "access_level": "admin"
     }"#,
@@ -50739,8 +52267,7 @@ fn dependent_unknown_agent_identifier_round_trips_through_serde() {
         "referenced_resource_ids": [
             "value"
         ],
-        "id": "value",
-        "type": "unknown"
+        "id": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -50794,6 +52321,13 @@ fn get_knowledge_base_summary_file_response_model_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value"
@@ -50811,7 +52345,6 @@ fn get_knowledge_base_summary_file_response_model_round_trips_through_serde() {
                 "access_level": "admin"
             }
         ],
-        "type": "file",
         "external_sync_info": {
             "type": "google_drive",
             "source_entity_id": "value",
@@ -50937,6 +52470,13 @@ fn get_knowledge_base_summary_text_response_model_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value"
@@ -50953,8 +52493,7 @@ fn get_knowledge_base_summary_text_response_model_round_trips_through_serde() {
                 "created_at_unix_secs": 123,
                 "access_level": "admin"
             }
-        ],
-        "type": "text"
+        ]
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -51013,6 +52552,13 @@ fn get_knowledge_base_summary_folder_response_model_round_trips_through_serde() 
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value"
@@ -51030,7 +52576,6 @@ fn get_knowledge_base_summary_folder_response_model_round_trips_through_serde() 
                 "access_level": "admin"
             }
         ],
-        "type": "folder",
         "children_count": 123,
         "document_count": 123,
         "auto_sync_info": {
@@ -51097,6 +52642,87 @@ fn external_folder_sync_info_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: ExternalFolderSyncInfo =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn get_agent_subagent_dependents_response_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agents": [
+            {
+                "referenced_resource_ids": [
+                    "value"
+                ],
+                "id": "value",
+                "name": "value",
+                "type": "available",
+                "created_at_unix_secs": 123,
+                "access_level": "admin"
+            }
+        ],
+        "branches": [
+            {
+                "agent_id": "value",
+                "agent_name": "value",
+                "branch_id": "value",
+                "branch_name": "value",
+                "is_main": true
+            }
+        ],
+        "next_cursor": "value",
+        "has_more": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: GetAgentSubagentDependentsResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn get_agent_subagent_dependents_response_model_agents_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "referenced_resource_ids": [
+            "value"
+        ],
+        "id": "value",
+        "name": "value",
+        "type": "available",
+        "created_at_unix_secs": 123,
+        "access_level": "admin"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: GetAgentSubagentDependentsResponseModelAgentsItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn dependent_branch_info_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_id": "value",
+        "agent_name": "value",
+        "branch_id": "value",
+        "branch_name": "value",
+        "is_main": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: DependentBranchInfo =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -51794,6 +53420,13 @@ fn get_knowledge_base_list_response_model_round_trips_through_serde() {
                     "access_source": "creator"
                 },
                 "folder_parent_id": "value",
+                "chunking_override": {
+                    "max_chunk_size": 123,
+                    "overlap_percentage": 123,
+                    "custom_separators": [
+                        "value"
+                    ]
+                },
                 "folder_path": [
                     {
                         "id": "value"
@@ -51857,6 +53490,13 @@ fn documents_item_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value"
@@ -51922,7 +53562,6 @@ fn get_or_create_rag_indexes_ok_response_round_trips_through_serde() {
 fn rag_index_batch_successful_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "status": "success",
         "data": {
             "id": "value",
             "model": "e5_mistral_7b_instruct",
@@ -52010,6 +53649,13 @@ fn knowledge_base_content_search_response_model_round_trips_through_serde() {
                         "access_source": "creator"
                     },
                     "folder_parent_id": "value",
+                    "chunking_override": {
+                        "max_chunk_size": 123,
+                        "overlap_percentage": 123,
+                        "custom_separators": [
+                            "value"
+                        ]
+                    },
                     "folder_path": [
                         {
                             "id": "value"
@@ -52081,6 +53727,13 @@ fn knowledge_base_content_search_result_round_trips_through_serde() {
                 "access_source": "creator"
             },
             "folder_parent_id": "value",
+            "chunking_override": {
+                "max_chunk_size": 123,
+                "overlap_percentage": 123,
+                "custom_separators": [
+                    "value"
+                ]
+            },
             "folder_path": [
                 {
                     "id": "value"
@@ -52148,6 +53801,13 @@ fn document_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value"
@@ -52968,7 +54628,6 @@ fn create_response_unit_test_request_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "llm",
         "success_condition": "value",
         "success_examples": [
             {
@@ -53423,6 +55082,11 @@ fn conversation_history_transcript_tool_call_api_integration_webhook_details_inp
                 "key": "value"
             },
             "body": "value"
+        },
+        "function_details": {
+            "resolved_parameters": {
+                "key": "value"
+            }
         }
     }"#,
     )
@@ -53539,7 +55203,6 @@ fn conversation_history_transcript_system_tool_result_common_model_input_result_
 fn transfer_to_agent_tool_result_success_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "result_type": "transfer_to_agent_success",
         "status": "success",
         "from_agent": "value",
         "to_agent": "value",
@@ -53716,7 +55379,6 @@ fn workflow_tool_nested_tools_step_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "step_latency_secs": 9.99,
-        "type": "nested_tools",
         "node_id": "value",
         "requests": [
             {
@@ -54174,7 +55836,6 @@ fn create_tool_call_unit_test_request_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "tool",
         "tool_call_parameters": {
             "parameters": [
                 {
@@ -54573,7 +56234,6 @@ fn create_simulation_test_request_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "simulation",
         "success_condition": "value",
         "success_conditions": [
             "value"
@@ -55356,7 +57016,6 @@ fn get_response_unit_test_response_model_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "llm",
         "success_condition": "value",
         "success_examples": [
             {
@@ -55714,7 +57373,6 @@ fn get_tool_call_unit_test_response_model_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "tool",
         "tool_call_parameters": {
             "parameters": [
                 {
@@ -56084,7 +57742,6 @@ fn get_simulation_test_response_model_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "simulation",
         "success_condition": "value",
         "success_conditions": [
             "value"
@@ -57163,7 +58820,6 @@ fn update_response_unit_test_request_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "llm",
         "success_condition": "value",
         "success_examples": [
             {
@@ -57513,7 +59169,6 @@ fn update_tool_call_unit_test_request_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "tool",
         "tool_call_parameters": {
             "parameters": [
                 {
@@ -57875,7 +59530,6 @@ fn update_simulation_test_request_round_trips_through_serde() {
         ],
         "conversation_initiation_source": "unknown",
         "environment": "value",
-        "type": "simulation",
         "success_condition": "value",
         "success_conditions": [
             "value"
@@ -58509,6 +60163,66 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                             "verbosity": "auto",
                             "output_format": "mp3_22050_32",
                             "interaction_budget": "realtime"
+                        }
+                    },
+                    "subagent_config": {
+                        "agents": [
+                            {
+                                "execution_mode": "immediate",
+                                "timeout_secs": 123,
+                                "agent_id": "value",
+                                "branch_id": "value",
+                                "description": "value",
+                                "parameters": {
+                                    "property_kind": "array",
+                                    "description": "value",
+                                    "dynamic_variable": "value",
+                                    "constant_value": {},
+                                    "is_omitted": true,
+                                    "type": "object",
+                                    "required": [
+                                        "value"
+                                    ],
+                                    "properties": {
+                                        "key": {
+                                            "type": "boolean",
+                                            "description": "value",
+                                            "enum": [
+                                                "value"
+                                            ],
+                                            "is_system_provided": true,
+                                            "dynamic_variable": "value",
+                                            "allowed_values": {
+                                                "dynamic_variable": "value"
+                                            },
+                                            "allowed_values_dynamic_variable": "value",
+                                            "constant_value": "value",
+                                            "is_omitted": true
+                                        }
+                                    },
+                                    "required_constraints": {
+                                        "any_of": [
+                                            {
+                                                "required": [
+                                                    "value"
+                                                ]
+                                            }
+                                        ],
+                                        "all_of": [
+                                            {
+                                                "required": [
+                                                    "value"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ],
+                        "self_subagent": {
+                            "execution_mode": "immediate",
+                            "timeout_secs": 123,
+                            "description": "value"
                         }
                     },
                     "prompt": {
@@ -59334,6 +61048,7 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                                     "prompt": "value",
                                     "execution_mode": "streaming",
                                     "model": "gemini-2.5-flash-lite",
+                                    "service_tier": "standard",
                                     "history_message_count": 100,
                                     "trigger_action": {
                                         "type": "end_call"
@@ -59407,6 +61122,9 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                         }
                     },
                     "auto_resolve_after_inactive_minutes": 123,
+                    "environments": [
+                        "value"
+                    ],
                     "notifiers": [
                         {
                             "type": "webhook",
@@ -59821,7 +61539,7 @@ fn get_agent_conversation_tickets_page_response_model_round_trips_through_serde(
                 "agent_id": "value",
                 "needs_clustering": true,
                 "title": "value",
-                "issue_type": "knowledge_gap",
+                "issue_type": {},
                 "labels": [
                     "value"
                 ],
@@ -59899,7 +61617,7 @@ fn agent_conversation_ticket_response_model_round_trips_through_serde() {
         "agent_id": "value",
         "needs_clustering": true,
         "title": "value",
-        "issue_type": "knowledge_gap",
+        "issue_type": {},
         "labels": [
             "value"
         ],
@@ -60288,7 +62006,6 @@ fn create_twilio_phone_number_request_round_trips_through_serde() {
         "label": "value",
         "supports_inbound": true,
         "supports_outbound": true,
-        "provider": "twilio",
         "agent_id": "value",
         "sid": "value",
         "token": "value",
@@ -60336,7 +62053,6 @@ fn create_exotel_phone_number_request_round_trips_through_serde() {
         "label": "value",
         "supports_inbound": true,
         "supports_outbound": true,
-        "provider": "exotel",
         "agent_id": "value",
         "account_sid": "value",
         "api_key": "value",
@@ -60363,7 +62079,6 @@ fn create_sip_trunk_phone_number_request_round_trips_through_serde() {
         "label": "value",
         "supports_inbound": true,
         "supports_outbound": true,
-        "provider": "sip_trunk",
         "agent_id": "value",
         "inbound_trunk_config": {
             "allowed_addresses": [
@@ -60668,6 +62383,73 @@ fn get_phone_numbers_page_response_model_phone_numbers_item_round_trips_through_
 }
 
 #[test]
+fn reception_phone_assignment_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "phone_number": "value",
+        "is_byo": true,
+        "provider": "twilio",
+        "nanp_area_code": 123,
+        "customer_facing_agent_id": "value",
+        "deactivated_at_unix": 123,
+        "deactivation_reason": "tier_downgrade",
+        "regulatory_status": "held",
+        "regulatory_number_type": "local",
+        "regulatory_country": "value",
+        "id": "value",
+        "created_at_unix": 123,
+        "updated_at_unix": 123,
+        "is_active": true,
+        "accepts_public_calls": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionPhoneAssignment =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_phone_assignment_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "customer_facing_agent_id": "value",
+        "area_codes": [
+            "value"
+        ],
+        "number_type": "local",
+        "idempotency_key": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreatePhoneAssignmentRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reassign_phone_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "customer_facing_agent_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReassignPhoneRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn llm_list_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -60958,6 +62740,13 @@ fn response_get_documentation_from_knowledge_base_v1_convai_knowledge_base_docum
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value",
@@ -61008,13 +62797,19 @@ fn get_knowledge_base_url_response_model_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value",
                 "name": "value"
             }
         ],
-        "type": "url",
         "url": "value",
         "extracted_inner_html": "value",
         "content_format": "html",
@@ -61075,13 +62870,19 @@ fn get_knowledge_base_file_response_model_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value",
                 "name": "value"
             }
         ],
-        "type": "file",
         "extracted_inner_html": "value",
         "content_format": "html",
         "filename": "value",
@@ -61143,13 +62944,19 @@ fn get_knowledge_base_text_response_model_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value",
                 "name": "value"
             }
         ],
-        "type": "text",
         "extracted_inner_html": "value",
         "content_format": "html"
     }"#,
@@ -61186,13 +62993,19 @@ fn get_knowledge_base_folder_response_model_round_trips_through_serde() {
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value",
                 "name": "value"
             }
         ],
-        "type": "folder",
         "children_count": 123,
         "document_count": 123,
         "auto_sync_info": {
@@ -61290,6 +63103,13 @@ fn response_update_document_v1_convai_knowledge_base_documentation_id_patch_roun
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value",
@@ -61332,6 +63152,109 @@ fn body_update_document_v1_convai_knowledge_base_documentation_id_patch_round_tr
     )
     .expect("fixture is valid JSON");
     let decoded: BodyUpdateDocumentV1ConvaiKnowledgeBaseDocumentationIdPatch =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn get_document_chunking_override_response_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
+        "effective_chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
+        "inherited_chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: GetDocumentChunkingOverrideResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn update_document_chunking_override_response_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
+        "reindex_queued": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UpdateDocumentChunkingOverrideResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn update_document_chunking_override_request_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "chunking_override": {
+            "max_chunk_size": 200,
+            "overlap_percentage": 25,
+            "custom_separators": [
+                "value"
+            ]
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UpdateDocumentChunkingOverrideRequestModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn chunking_override_request_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "max_chunk_size": 200,
+        "overlap_percentage": 25,
+        "custom_separators": [
+            "value"
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ChunkingOverrideRequestModel =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -61393,26 +63316,6 @@ fn get_knowledge_base_dependent_agents_response_model_agents_item_round_trips_th
     )
     .expect("fixture is valid JSON");
     let decoded: GetKnowledgeBaseDependentAgentsResponseModelAgentsItem =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn dependent_branch_info_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "agent_id": "value",
-        "agent_name": "value",
-        "branch_id": "value",
-        "branch_name": "value",
-        "is_main": true
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DependentBranchInfo =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -61515,7 +63418,6 @@ fn bulk_delete_ok_response_round_trips_through_serde() {
 fn knowledge_base_bulk_delete_successful_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "status": "success",
         "data": {
             "id": "value"
         }
@@ -61714,6 +63616,13 @@ fn response_update_file_document_v1_convai_knowledge_base_documentation_id_updat
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value",
@@ -61765,6 +63674,13 @@ fn response_refresh_url_document_content_v1_convai_knowledge_base_documentation_
             "access_source": "creator"
         },
         "folder_parent_id": "value",
+        "chunking_override": {
+            "max_chunk_size": 123,
+            "overlap_percentage": 123,
+            "custom_separators": [
+                "value"
+            ]
+        },
         "folder_path": [
             {
                 "id": "value",
@@ -63643,26 +65559,9 @@ fn scoring_round_trips_through_serde() {
 }
 
 #[test]
-fn binary_scoring_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "mode": "binary"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: BinaryScoring =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn numeric_uniform_scoring_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "mode": "numeric_uniform",
         "max_score": 123,
         "instructions": "value"
     }"#,
@@ -63872,7 +65771,6 @@ fn update_analysis_item_attachments_response_model_results_item_round_trips_thro
 fn batch_success_response_model_analysis_item_attachment_result_data__round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "status": "success",
         "data": {
             "agent_id": "value",
             "branch_id": "value",
@@ -67394,6 +69292,66 @@ fn merge_preview_response_model_round_trips_through_serde() {
                         "interaction_budget": "realtime"
                     }
                 },
+                "subagent_config": {
+                    "agents": [
+                        {
+                            "execution_mode": "immediate",
+                            "timeout_secs": 123,
+                            "agent_id": "value",
+                            "branch_id": "value",
+                            "description": "value",
+                            "parameters": {
+                                "property_kind": "array",
+                                "description": "value",
+                                "dynamic_variable": "value",
+                                "constant_value": {},
+                                "is_omitted": true,
+                                "type": "object",
+                                "required": [
+                                    "value"
+                                ],
+                                "properties": {
+                                    "key": {
+                                        "type": "boolean",
+                                        "description": "value",
+                                        "enum": [
+                                            "value"
+                                        ],
+                                        "is_system_provided": true,
+                                        "dynamic_variable": "value",
+                                        "allowed_values": {
+                                            "dynamic_variable": "value"
+                                        },
+                                        "allowed_values_dynamic_variable": "value",
+                                        "constant_value": "value",
+                                        "is_omitted": true
+                                    }
+                                },
+                                "required_constraints": {
+                                    "any_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ],
+                                    "all_of": [
+                                        {
+                                            "required": [
+                                                "value"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ],
+                    "self_subagent": {
+                        "execution_mode": "immediate",
+                        "timeout_secs": 123,
+                        "description": "value"
+                    }
+                },
                 "prompt": {
                     "prompt": "value",
                     "llm": "gpt-4o-mini",
@@ -68221,6 +70179,7 @@ fn merge_preview_response_model_round_trips_through_serde() {
                                 "prompt": "value",
                                 "execution_mode": "streaming",
                                 "model": "gemini-2.5-flash-lite",
+                                "service_tier": "standard",
                                 "history_message_count": 100,
                                 "trigger_action": {
                                     "type": "end_call"
@@ -68294,6 +70253,9 @@ fn merge_preview_response_model_round_trips_through_serde() {
                     }
                 },
                 "auto_resolve_after_inactive_minutes": 123,
+                "environments": [
+                    "value"
+                ],
                 "notifiers": [
                     {
                         "type": "webhook",
@@ -68407,6 +70369,9 @@ fn merge_preview_response_model_round_trips_through_serde() {
                 "referenced_dynamic_variables": [
                     "value"
                 ],
+                "written_dynamic_variables": [
+                    "value"
+                ],
                 "folder_parent_id": "value"
             }
         },
@@ -68420,10 +70385,15 @@ fn merge_preview_response_model_round_trips_through_serde() {
                 "section": "conversation_config",
                 "base_value": {},
                 "source_value": {},
-                "target_value": {}
+                "target_value": {},
+                "id": "value",
+                "accepts_custom_value": true
             }
         ],
-        "source_identical_to_target": true
+        "source_identical_to_target": true,
+        "source_tip_version_id": "value",
+        "target_tip_version_id": "value",
+        "merge_error": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -68470,7 +70440,9 @@ fn field_conflict_round_trips_through_serde() {
         "section": "conversation_config",
         "base_value": {},
         "source_value": {},
-        "target_value": {}
+        "target_value": {},
+        "id": "value",
+        "accepts_custom_value": true
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -68488,11 +70460,63 @@ fn merge_a_branch_into_a_target_branch_v1_convai_agents_agent_id_branches_source
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "archive_source_branch": true,
-        "force": true
+        "force": true,
+        "conflict_resolutions": [
+            {
+                "conflict_id": "value",
+                "choice": "source",
+                "custom_value": "value"
+            }
+        ],
+        "source_tip_id": "value",
+        "target_tip_id": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
     let decoded: MergeABranchIntoATargetBranchV1ConvaiAgentsAgentIdBranchesSourceBranchIdMergePost =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conflict_resolution_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "conflict_id": "value",
+        "choice": "source",
+        "custom_value": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConflictResolution =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn body_rebase_a_branch_onto_main_v1_convai_agents_agent_id_branches_branch_id_rebase_post_round_trips_through_serde(
+) {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "conflict_resolutions": [
+            {
+                "conflict_id": "value",
+                "choice": "source",
+                "custom_value": "value"
+            }
+        ],
+        "branch_tip_id": "value",
+        "source_tip_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: BodyRebaseABranchOntoMainV1ConvaiAgentsAgentIdBranchesBranchIdRebasePost =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -68945,26 +70969,9 @@ fn outcome_round_trips_through_serde() {
 }
 
 #[test]
-fn open_outcome_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "status": "open"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: OpenOutcome =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn merged_outcome_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "status": "merged",
         "version_id": "value",
         "at": 123,
         "by_user_id": "value"
@@ -68983,7 +70990,6 @@ fn merged_outcome_round_trips_through_serde() {
 fn closed_outcome_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "status": "closed",
         "reason": "withdrawn",
         "at": 123,
         "by_user_id": "value"
@@ -69139,6 +71145,14 @@ fn workspace_config_response_round_trips_through_serde() {
                         "intervals": []
                     }
                 ],
+                "date_overrides": [
+                    {
+                        "start_date": "2024-01-01",
+                        "end_date": "2024-01-01",
+                        "intervals": [],
+                        "name": "value"
+                    }
+                ],
                 "data_collection": {
                     "callback_time": "value",
                     "redirect_phone_number": "value",
@@ -69175,6 +71189,14 @@ fn workspace_config_response_round_trips_through_serde() {
                             "intervals": []
                         }
                     ],
+                    "date_overrides": [
+                        {
+                            "start_date": "2024-01-01",
+                            "end_date": "2024-01-01",
+                            "intervals": [],
+                            "name": "value"
+                        }
+                    ],
                     "data_collection": {
                         "callback_time": "value",
                         "redirect_phone_number": "value",
@@ -69209,6 +71231,14 @@ fn workspace_config_response_round_trips_through_serde() {
                             6
                         ],
                         "intervals": []
+                    }
+                ],
+                "date_overrides": [
+                    {
+                        "start_date": "2024-01-01",
+                        "end_date": "2024-01-01",
+                        "intervals": [],
+                        "name": "value"
                     }
                 ],
                 "data_collection": {
@@ -69262,6 +71292,14 @@ fn campaign_config_output_round_trips_through_serde() {
                     "intervals": []
                 }
             ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
+                }
+            ],
             "data_collection": {
                 "callback_time": "value",
                 "redirect_phone_number": "value",
@@ -69298,6 +71336,14 @@ fn campaign_config_output_round_trips_through_serde() {
                         "intervals": []
                     }
                 ],
+                "date_overrides": [
+                    {
+                        "start_date": "2024-01-01",
+                        "end_date": "2024-01-01",
+                        "intervals": [],
+                        "name": "value"
+                    }
+                ],
                 "data_collection": {
                     "callback_time": "value",
                     "redirect_phone_number": "value",
@@ -69332,6 +71378,14 @@ fn campaign_config_output_round_trips_through_serde() {
                         6
                     ],
                     "intervals": []
+                }
+            ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
                 }
             ],
             "data_collection": {
@@ -69381,6 +71435,14 @@ fn policy_config_output_round_trips_through_serde() {
                     6
                 ],
                 "intervals": []
+            }
+        ],
+        "date_overrides": [
+            {
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-01",
+                "intervals": [],
+                "name": "value"
             }
         ],
         "data_collection": {
@@ -69451,6 +71513,25 @@ fn calling_period_round_trips_through_serde() {
 }
 
 #[test]
+fn date_override_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "start_date": "2024-01-01",
+        "end_date": "2024-01-01",
+        "intervals": [],
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: DateOverride =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn data_collection_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -69513,6 +71594,14 @@ fn agent_policy_override_output_round_trips_through_serde() {
                 "intervals": []
             }
         ],
+        "date_overrides": [
+            {
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-01",
+                "intervals": [],
+                "name": "value"
+            }
+        ],
         "data_collection": {
             "callback_time": "value",
             "redirect_phone_number": "value",
@@ -69564,6 +71653,14 @@ fn replace_workspace_config_request_round_trips_through_serde() {
                         "intervals": []
                     }
                 ],
+                "date_overrides": [
+                    {
+                        "start_date": "2024-01-01",
+                        "end_date": "2024-01-01",
+                        "intervals": [],
+                        "name": "value"
+                    }
+                ],
                 "data_collection": {
                     "callback_time": "value",
                     "redirect_phone_number": "value",
@@ -69600,6 +71697,14 @@ fn replace_workspace_config_request_round_trips_through_serde() {
                             "intervals": []
                         }
                     ],
+                    "date_overrides": [
+                        {
+                            "start_date": "2024-01-01",
+                            "end_date": "2024-01-01",
+                            "intervals": [],
+                            "name": "value"
+                        }
+                    ],
                     "data_collection": {
                         "callback_time": "value",
                         "redirect_phone_number": "value",
@@ -69634,6 +71739,14 @@ fn replace_workspace_config_request_round_trips_through_serde() {
                             6
                         ],
                         "intervals": []
+                    }
+                ],
+                "date_overrides": [
+                    {
+                        "start_date": "2024-01-01",
+                        "end_date": "2024-01-01",
+                        "intervals": [],
+                        "name": "value"
                     }
                 ],
                 "data_collection": {
@@ -69687,6 +71800,14 @@ fn campaign_config_input_round_trips_through_serde() {
                     "intervals": []
                 }
             ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
+                }
+            ],
             "data_collection": {
                 "callback_time": "value",
                 "redirect_phone_number": "value",
@@ -69723,6 +71844,14 @@ fn campaign_config_input_round_trips_through_serde() {
                         "intervals": []
                     }
                 ],
+                "date_overrides": [
+                    {
+                        "start_date": "2024-01-01",
+                        "end_date": "2024-01-01",
+                        "intervals": [],
+                        "name": "value"
+                    }
+                ],
                 "data_collection": {
                     "callback_time": "value",
                     "redirect_phone_number": "value",
@@ -69757,6 +71886,14 @@ fn campaign_config_input_round_trips_through_serde() {
                         6
                     ],
                     "intervals": []
+                }
+            ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
                 }
             ],
             "data_collection": {
@@ -69808,6 +71945,14 @@ fn policy_config_input_round_trips_through_serde() {
                 "intervals": []
             }
         ],
+        "date_overrides": [
+            {
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-01",
+                "intervals": [],
+                "name": "value"
+            }
+        ],
         "data_collection": {
             "callback_time": "value",
             "redirect_phone_number": "value",
@@ -69854,6 +71999,14 @@ fn agent_policy_override_input_round_trips_through_serde() {
                     6
                 ],
                 "intervals": []
+            }
+        ],
+        "date_overrides": [
+            {
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-01",
+                "intervals": [],
+                "name": "value"
             }
         ],
         "data_collection": {
@@ -69929,6 +72082,14 @@ fn campaign_page_response_round_trips_through_serde() {
                                 123
                             ],
                             "intervals": []
+                        }
+                    ],
+                    "date_overrides": [
+                        {
+                            "start_date": "2024-01-01",
+                            "end_date": "2024-01-01",
+                            "intervals": [],
+                            "name": "value"
                         }
                     ],
                     "data_collection": {
@@ -70032,6 +72193,14 @@ fn campaign_response_round_trips_through_serde() {
                     "intervals": []
                 }
             ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
+                }
+            ],
             "data_collection": {
                 "callback_time": "value",
                 "redirect_phone_number": "value",
@@ -70118,7 +72287,6 @@ fn campaign_response_channel_config_round_trips_through_serde() {
 fn phone_channel_config_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "channel": "phone",
         "agent_phone_number_id": "value",
         "mode_config": {
             "ringing_timeout_secs": 123,
@@ -70180,7 +72348,6 @@ fn phone_voice_config_output_round_trips_through_serde() {
 fn whats_app_channel_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "channel": "whatsapp",
         "whatsapp_phone_number_id": "value",
         "mode_config": {
             "mode": "voice",
@@ -70220,7 +72387,6 @@ fn whats_app_channel_config_mode_config_round_trips_through_serde() {
 fn whats_app_voice_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "mode": "voice",
         "whatsapp_call_permission_request_template_name": "value",
         "whatsapp_call_permission_request_template_language_code": "value"
     }"#,
@@ -70238,7 +72404,6 @@ fn whats_app_voice_config_round_trips_through_serde() {
 fn whats_app_message_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "mode": "message",
         "template": {
             "name": "value",
             "language": "value",
@@ -70369,6 +72534,14 @@ fn campaign_policy_snapshot_round_trips_through_serde() {
                 "intervals": []
             }
         ],
+        "date_overrides": [
+            {
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-01",
+                "intervals": [],
+                "name": "value"
+            }
+        ],
         "data_collection": {
             "callback_time": "value",
             "redirect_phone_number": "value",
@@ -70406,6 +72579,25 @@ fn calling_period_policy_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: CallingPeriodPolicy =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn date_override_policy_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "start_date": "2024-01-01",
+        "end_date": "2024-01-01",
+        "intervals": [],
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: DateOverridePolicy =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -70565,6 +72757,14 @@ fn submit_campaign_response_round_trips_through_serde() {
                             123
                         ],
                         "intervals": []
+                    }
+                ],
+                "date_overrides": [
+                    {
+                        "start_date": "2024-01-01",
+                        "end_date": "2024-01-01",
+                        "intervals": [],
+                        "name": "value"
                     }
                 ],
                 "data_collection": {
@@ -70750,6 +72950,14 @@ fn submit_campaign_request_round_trips_through_serde() {
                         6
                     ],
                     "intervals": []
+                }
+            ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
                 }
             ],
             "data_collection": {
@@ -70948,7 +73156,6 @@ fn submit_campaign_request_channel_config_round_trips_through_serde() {
 fn phone_channel_config_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "channel": "phone",
         "agent_phone_number_id": "value",
         "mode_config": {
             "ringing_timeout_secs": 123,
@@ -71010,7 +73217,6 @@ fn phone_voice_config_input_round_trips_through_serde() {
 fn submit_whats_app_channel_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "channel": "whatsapp",
         "whatsapp_phone_number_id": "value",
         "mode_config": {
             "mode": "voice",
@@ -71050,7 +73256,6 @@ fn submit_whats_app_channel_config_mode_config_round_trips_through_serde() {
 fn submit_whats_app_message_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "mode": "message",
         "template": {
             "name": "value",
             "language": "value"
@@ -72382,6 +74587,9 @@ fn list_procedures_response_model_round_trips_through_serde() {
                 "referenced_dynamic_variables": [
                     "value"
                 ],
+                "written_dynamic_variables": [
+                    "value"
+                ],
                 "folder_parent_id": "value"
             }
         ]
@@ -72416,6 +74624,9 @@ fn procedure_list_item_response_model_round_trips_through_serde() {
             "value"
         ],
         "referenced_dynamic_variables": [
+            "value"
+        ],
+        "written_dynamic_variables": [
             "value"
         ],
         "folder_parent_id": "value"
@@ -72579,6 +74790,87 @@ fn procedure_at_version_response_model_round_trips_through_serde() {
 }
 
 #[test]
+fn reception_procedure_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "trigger": "value",
+        "body": "value",
+        "id": "value",
+        "created_at_unix": 123,
+        "source_key": "value",
+        "missing_tools": [
+            "value"
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionProcedureResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_procedure_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "trigger": "value",
+        "body": "value",
+        "id": "value",
+        "created_at_unix": 123,
+        "source_key": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionProcedure =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_create_procedure_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "trigger": "value",
+        "body": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCreateProcedureRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_procedure_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "trigger": "value",
+        "body": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateProcedureRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn run_conversation_evaluations_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -72725,7 +75017,6 @@ fn environment_variables_create_request_round_trips_through_serde() {
 fn create_string_environment_variable_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "string",
         "label": "value",
         "values": {
             "key": "value"
@@ -72745,7 +75036,6 @@ fn create_string_environment_variable_request_round_trips_through_serde() {
 fn create_secret_environment_variable_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "secret",
         "label": "value",
         "values": {
             "key": {
@@ -72783,7 +75073,6 @@ fn environment_variable_secret_value_request_round_trips_through_serde() {
 fn create_auth_connection_environment_variable_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "auth_connection",
         "label": "value",
         "values": {
             "key": {
@@ -73357,7 +75646,6 @@ fn open_ai_session_config_output_tools_item_round_trips_through_serde() {
 fn open_ai_function_tool_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "function",
         "name": "value",
         "description": "value",
         "parameters": {}
@@ -73376,7 +75664,6 @@ fn open_ai_function_tool_round_trips_through_serde() {
 fn open_aimcp_tool_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "mcp",
         "server_label": "value",
         "server_url": "value",
         "authorization": "value",
@@ -74293,7 +76580,6 @@ fn order_item_request_output_round_trips_through_serde() {
 fn dub_order_item_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "kind": "dub",
         "media_id": "prodmedia_aaaaaaaaaaaaaaaaaaaaaaaaaa",
         "source_language": "value",
         "destination_languages": [
@@ -74318,7 +76604,6 @@ fn dub_order_item_request_round_trips_through_serde() {
 fn subtitle_order_item_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "kind": "subtitles",
         "media_ids": [
             "prodmedia_aaaaaaaaaaaaaaaaaaaaaaaaaa"
         ],
@@ -74372,7 +76657,6 @@ fn cue_options_request_round_trips_through_serde() {
 fn transcription_order_item_request_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "kind": "transcription",
         "media_ids": [
             "prodmedia_aaaaaaaaaaaaaaaaaaaaaaaaaa"
         ],
@@ -74723,7 +77007,6 @@ fn languages_response_round_trips_through_serde() {
 fn paired_languages_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "kind": "pair",
         "language_pairs": [
             {
                 "source_language": {
@@ -74795,7 +77078,6 @@ fn language_info_round_trips_through_serde() {
 fn single_languages_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "kind": "single",
         "languages": [
             {
                 "code": "value",
@@ -75009,7 +77291,6 @@ fn creatify_aurora_request_round_trips_through_serde() {
         "webhook": {
             "type": "all"
         },
-        "model_id": "creatify-aurora",
         "image": {
             "type": "generation",
             "generation_id": "value"
@@ -75053,7 +77334,6 @@ fn image_reference_round_trips_through_serde() {
 fn generation_reference_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "generation",
         "generation_id": "value"
     }"#,
     )
@@ -75070,7 +77350,6 @@ fn generation_reference_round_trips_through_serde() {
 fn static_asset_reference_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "asset",
         "asset_id": "value"
     }"#,
     )
@@ -75087,7 +77366,6 @@ fn static_asset_reference_round_trips_through_serde() {
 fn inline_image_reference_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "inline_base64",
         "content_base64": "value",
         "mime_type": "image/jpeg"
     }"#,
@@ -75122,7 +77400,6 @@ fn audio_reference_round_trips_through_serde() {
 fn inline_audio_reference_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "inline_base64",
         "content_base64": "value",
         "mime_type": "audio/mpeg"
     }"#,
@@ -75167,8 +77444,7 @@ fn veo3_1_request_round_trips_through_serde() {
                 },
                 "role": "subject"
             }
-        ],
-        "model_id": "veo-3.1-generate-001"
+        ]
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -75231,8 +77507,7 @@ fn veo3_1_fast_request_round_trips_through_serde() {
                 },
                 "role": "subject"
             }
-        ],
-        "model_id": "veo-3.1-fast-generate-001"
+        ]
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -75282,7 +77557,6 @@ fn bytedance_seedance2_request_round_trips_through_serde() {
                 "generation_id": "value"
             }
         ],
-        "model_id": "bytedance-seedance-v2",
         "resolution": "480p"
     }"#,
     )
@@ -75316,7 +77590,6 @@ fn video_reference_round_trips_through_serde() {
 fn inline_video_reference_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "inline_base64",
         "content_base64": "value",
         "mime_type": "video/mp4"
     }"#,
@@ -75368,7 +77641,6 @@ fn bytedance_seedance2_fast_request_round_trips_through_serde() {
                 "generation_id": "value"
             }
         ],
-        "model_id": "bytedance-seedance-v2-fast",
         "resolution": "480p"
     }"#,
     )
@@ -75419,7 +77691,6 @@ fn bytedance_seedance2_mini_request_round_trips_through_serde() {
                 "generation_id": "value"
             }
         ],
-        "model_id": "bytedance-seedance-v2-mini",
         "resolution": "480p"
     }"#,
     )
@@ -75439,7 +77710,6 @@ fn bytedance_seedance25_request_round_trips_through_serde() {
         "webhook": {
             "type": "all"
         },
-        "model_id": "bytedance-seedance-v2.5",
         "prompt": "value",
         "aspect_ratio": "auto",
         "resolution": "480p",
@@ -75535,8 +77805,7 @@ fn gpt_image1_request_round_trips_through_serde() {
         },
         "quality": "low",
         "background": "transparent",
-        "aspect_ratio": "1:1",
-        "model_id": "gpt-image-1"
+        "aspect_ratio": "1:1"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -75568,8 +77837,7 @@ fn gpt_image1_5_request_round_trips_through_serde() {
         },
         "quality": "low",
         "background": "transparent",
-        "aspect_ratio": "1:1",
-        "model_id": "gpt-image-1.5"
+        "aspect_ratio": "1:1"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -75600,7 +77868,6 @@ fn gpt_image2_request_round_trips_through_serde() {
             "generation_id": "value"
         },
         "quality": "low",
-        "model_id": "gpt-image-2",
         "aspect_ratio": "auto",
         "resolution": "1K"
     }"#,
@@ -75633,7 +77900,6 @@ fn gpt_image25_sunburst_request_round_trips_through_serde() {
             "generation_id": "value"
         },
         "quality": "low",
-        "model_id": "gpt-image-2.5-sunburst",
         "aspect_ratio": "auto",
         "resolution": "1K"
     }"#,
@@ -75666,7 +77932,6 @@ fn gpt_image25_flare_request_round_trips_through_serde() {
             "generation_id": "value"
         },
         "quality": "low",
-        "model_id": "gpt-image-2.5-flare",
         "aspect_ratio": "auto",
         "resolution": "1K"
     }"#,
@@ -75688,7 +77953,6 @@ fn gemini25_flash_image_request_round_trips_through_serde() {
             "type": "all"
         },
         "prompt": "value",
-        "model_id": "gemini-2.5-flash-image",
         "images": [
             {
                 "type": "generation",
@@ -75715,7 +77979,6 @@ fn gemini3_pro_image_request_round_trips_through_serde() {
             "type": "all"
         },
         "prompt": "value",
-        "model_id": "gemini-3-pro-image",
         "images": [
             {
                 "type": "generation",
@@ -75743,7 +78006,6 @@ fn gemini31_flash_image_request_round_trips_through_serde() {
             "type": "all"
         },
         "prompt": "value",
-        "model_id": "gemini-3.1-flash-image",
         "images": [
             {
                 "type": "generation",
@@ -75771,7 +78033,6 @@ fn gemini31_flash_lite_image_request_round_trips_through_serde() {
             "type": "all"
         },
         "prompt": "value",
-        "model_id": "gemini-3.1-flash-lite-image",
         "images": [
             {
                 "type": "generation",
@@ -75807,7 +78068,6 @@ fn bytedance_seedream5_lite_request_round_trips_through_serde() {
         ],
         "aspect_ratio": "auto",
         "seed": 123,
-        "model_id": "bytedance-seedream-5-lite",
         "resolution": "2K"
     }"#,
     )
@@ -75836,7 +78096,6 @@ fn bytedance_seedream5_pro_request_round_trips_through_serde() {
         ],
         "aspect_ratio": "auto",
         "seed": 123,
-        "model_id": "bytedance-seedream-5-pro",
         "resolution": "1K"
     }"#,
     )
@@ -75946,8 +78205,7 @@ fn template_image_output_round_trips_through_serde() {
         "failure_reason": "timeout",
         "error_message": "value",
         "content_url": "value",
-        "content_mime_type": "value",
-        "type": "image"
+        "content_mime_type": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -75968,8 +78226,7 @@ fn template_video_output_round_trips_through_serde() {
         "failure_reason": "timeout",
         "error_message": "value",
         "content_url": "value",
-        "content_mime_type": "value",
-        "type": "video"
+        "content_mime_type": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -75990,8 +78247,7 @@ fn template_audio_output_round_trips_through_serde() {
         "failure_reason": "timeout",
         "error_message": "value",
         "content_url": "value",
-        "content_mime_type": "value",
-        "type": "audio"
+        "content_mime_type": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -76011,7 +78267,6 @@ fn template_string_output_round_trips_through_serde() {
         "status": "pending",
         "failure_reason": "timeout",
         "error_message": "value",
-        "type": "string",
         "content": "value"
     }"#,
     )
@@ -76032,7 +78287,6 @@ fn template_integer_output_round_trips_through_serde() {
         "status": "pending",
         "failure_reason": "timeout",
         "error_message": "value",
-        "type": "integer",
         "content": 123
     }"#,
     )
@@ -76053,7 +78307,6 @@ fn template_number_output_round_trips_through_serde() {
         "status": "pending",
         "failure_reason": "timeout",
         "error_message": "value",
-        "type": "number",
         "content": 9.99
     }"#,
     )
@@ -76074,7 +78327,6 @@ fn template_boolean_output_round_trips_through_serde() {
         "status": "pending",
         "failure_reason": "timeout",
         "error_message": "value",
-        "type": "boolean",
         "content": true
     }"#,
     )
@@ -76095,7 +78347,6 @@ fn template_array_output_round_trips_through_serde() {
         "status": "pending",
         "failure_reason": "timeout",
         "error_message": "value",
-        "type": "array",
         "content": [
             {
                 "id": "value",
@@ -76128,7 +78379,6 @@ fn template_object_output_round_trips_through_serde() {
         "status": "pending",
         "failure_reason": "timeout",
         "error_message": "value",
-        "type": "object",
         "content": {
             "key": {
                 "id": "value",
@@ -76206,7 +78456,6 @@ fn template_input_reference_round_trips_through_serde() {
 fn voice_reference_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "voice",
         "voice_id": "value"
     }"#,
     )
@@ -76223,7 +78472,6 @@ fn voice_reference_round_trips_through_serde() {
 fn inline_base64_reference_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "inline_base64",
         "content_base64": "value",
         "mime_type": "image/jpeg"
     }"#,
@@ -76454,7 +78702,6 @@ fn string_schema_round_trips_through_serde() {
         r#"{
         "title": "value",
         "description": "value",
-        "type": "string",
         "enum": [
             "value"
         ]
@@ -76475,7 +78722,6 @@ fn number_schema_round_trips_through_serde() {
         r#"{
         "title": "value",
         "description": "value",
-        "type": "number",
         "enum": [
             9.99
         ]
@@ -76495,8 +78741,7 @@ fn integer_schema_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "title": "value",
-        "description": "value",
-        "type": "integer"
+        "description": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -76513,8 +78758,7 @@ fn boolean_schema_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "title": "value",
-        "description": "value",
-        "type": "boolean"
+        "description": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -76531,8 +78775,7 @@ fn image_schema_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "title": "value",
-        "description": "value",
-        "type": "image"
+        "description": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -76549,8 +78792,7 @@ fn video_schema_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "title": "value",
-        "description": "value",
-        "type": "video"
+        "description": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -76567,8 +78809,7 @@ fn audio_schema_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "title": "value",
-        "description": "value",
-        "type": "audio"
+        "description": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -76585,8 +78826,7 @@ fn voice_schema_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "title": "value",
-        "description": "value",
-        "type": "voice"
+        "description": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -76604,7 +78844,6 @@ fn object_schema_round_trips_through_serde() {
         r#"{
         "title": "value",
         "description": "value",
-        "type": "object",
         "properties": {
             "key": {
                 "title": "value",
@@ -76635,7 +78874,6 @@ fn array_schema_round_trips_through_serde() {
         r#"{
         "title": "value",
         "description": "value",
-        "type": "array",
         "items": {
             "title": "value",
             "description": "value",
@@ -76694,6 +78932,194 @@ fn asset_response_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: AssetResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_asset_resource_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "is_active": true,
+        "available_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "photo_url": "value",
+        "location_id": "value",
+        "customer_facing_name": "value",
+        "id": "value",
+        "created_at_unix": 123,
+        "updated_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionAssetResource =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_group_membership_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "label": "value",
+        "rank": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionGroupMembership =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn working_hours_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "hours": {
+            "key": [
+                {
+                    "start_hour": 123,
+                    "start_minute": 123,
+                    "end_hour": 24,
+                    "end_minute": 123
+                }
+            ]
+        },
+        "timezone": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WorkingHours =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn time_range_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "start_hour": 123,
+        "start_minute": 123,
+        "end_hour": 24,
+        "end_minute": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TimeRangeModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_create_asset_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "is_active": true,
+        "available_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "photo_url": "value",
+        "location_id": "value",
+        "customer_facing_name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCreateAssetRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_asset_request_patch_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "is_active": true,
+        "available_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "photo_url": "value",
+        "location_id": "value",
+        "customer_facing_name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateAssetRequestPatch =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -76890,6 +79316,2060 @@ fn body_list_api_requests_v1_workspace_analytics_requests_post_round_trips_throu
     )
     .expect("fixture is valid JSON");
     let decoded: BodyListApiRequestsV1WorkspaceAnalyticsRequestsPost =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_service_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "pricing_mode": "fixed",
+        "intake_questions": [
+            {
+                "id": "value",
+                "label": "value",
+                "kind": "text",
+                "options": [
+                    "value"
+                ],
+                "required": true,
+                "is_active": true
+            }
+        ],
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "variants": [
+            {
+                "id": "value",
+                "duration_minutes": 123,
+                "price": 9.99,
+                "is_active": true
+            }
+        ],
+        "kind": "classic",
+        "buffer_minutes": 123,
+        "service_location": "business",
+        "add_ons": [
+            {
+                "id": "value",
+                "name": "value",
+                "description": "value",
+                "add_duration_minutes": 123,
+                "add_price": 9.99
+            }
+        ],
+        "max_participants": 123,
+        "capacity": 123,
+        "is_active": true,
+        "any_staff_member": true,
+        "staff_ids": [
+            "value"
+        ],
+        "asset_ids": [
+            "value"
+        ],
+        "advance_booking_minutes": 123,
+        "location_ids": [
+            "value"
+        ],
+        "display_on_booking_page": true,
+        "travel_minutes": 123,
+        "travel_before": true,
+        "travel_after": true,
+        "promotions": [
+            {
+                "id": "value",
+                "name": "value",
+                "target": "service",
+                "variant_id": "value",
+                "add_on_id": "value",
+                "promotional_price": 9.99,
+                "days_of_week": [
+                    6
+                ],
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-01",
+                "is_active": true
+            }
+        ],
+        "id": "value",
+        "created_at_unix": 123,
+        "updated_at_unix": 123,
+        "duration_minutes": 123,
+        "price": 9.99
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionService =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_intake_question_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "label": "value",
+        "kind": "text",
+        "options": [
+            "value"
+        ],
+        "required": true,
+        "is_active": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionIntakeQuestion =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_service_variant_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "duration_minutes": 123,
+        "price": 9.99,
+        "is_active": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionServiceVariant =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_add_on_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "name": "value",
+        "description": "value",
+        "add_duration_minutes": 123,
+        "add_price": 9.99
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionAddOn =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_service_promotion_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "name": "value",
+        "target": "service",
+        "variant_id": "value",
+        "add_on_id": "value",
+        "promotional_price": 9.99,
+        "days_of_week": [
+            6
+        ],
+        "start_date": "2024-01-01",
+        "end_date": "2024-01-01",
+        "is_active": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionServicePromotion =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_create_service_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "pricing_mode": "fixed",
+        "intake_questions": [
+            {
+                "id": "value",
+                "label": "value",
+                "kind": "text",
+                "options": [
+                    "value"
+                ],
+                "required": true,
+                "is_active": true
+            }
+        ],
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "variants": [
+            {
+                "id": "value",
+                "duration_minutes": 123,
+                "price": 9.99,
+                "is_active": true
+            }
+        ],
+        "kind": "classic",
+        "buffer_minutes": 123,
+        "service_location": "business",
+        "add_ons": [
+            {
+                "id": "value",
+                "name": "value",
+                "description": "value",
+                "add_duration_minutes": 123,
+                "add_price": 9.99
+            }
+        ],
+        "max_participants": 123,
+        "capacity": 123,
+        "is_active": true,
+        "any_staff_member": true,
+        "staff_ids": [
+            "value"
+        ],
+        "asset_ids": [
+            "value"
+        ],
+        "advance_booking_minutes": 123,
+        "location_ids": [
+            "value"
+        ],
+        "display_on_booking_page": true,
+        "travel_minutes": 123,
+        "travel_before": true,
+        "travel_after": true,
+        "promotions": [
+            {
+                "id": "value",
+                "name": "value",
+                "target": "service",
+                "variant_id": "value",
+                "add_on_id": "value",
+                "promotional_price": 9.99,
+                "days_of_week": [
+                    6
+                ],
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-01",
+                "is_active": true
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCreateServiceRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_service_update_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "service": {
+            "pricing_mode": "fixed",
+            "intake_questions": [
+                {
+                    "id": "value",
+                    "label": "value",
+                    "kind": "text",
+                    "options": [
+                        "value"
+                    ],
+                    "required": true,
+                    "is_active": true
+                }
+            ],
+            "groups": [
+                {
+                    "label": "value",
+                    "rank": 123
+                }
+            ],
+            "ungrouped_rank": 123,
+            "name": "value",
+            "description": "value",
+            "variants": [
+                {
+                    "id": "value",
+                    "duration_minutes": 123,
+                    "price": 9.99,
+                    "is_active": true
+                }
+            ],
+            "kind": "classic",
+            "buffer_minutes": 123,
+            "service_location": "business",
+            "add_ons": [
+                {
+                    "id": "value",
+                    "name": "value",
+                    "description": "value",
+                    "add_duration_minutes": 123,
+                    "add_price": 9.99
+                }
+            ],
+            "max_participants": 123,
+            "capacity": 123,
+            "is_active": true,
+            "any_staff_member": true,
+            "staff_ids": [
+                "value"
+            ],
+            "asset_ids": [
+                "value"
+            ],
+            "advance_booking_minutes": 123,
+            "location_ids": [
+                "value"
+            ],
+            "display_on_booking_page": true,
+            "travel_minutes": 123,
+            "travel_before": true,
+            "travel_after": true,
+            "promotions": [
+                {
+                    "id": "value",
+                    "name": "value",
+                    "target": "service",
+                    "variant_id": "value",
+                    "add_on_id": "value",
+                    "promotional_price": 9.99,
+                    "days_of_week": [
+                        6
+                    ],
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "is_active": true
+                }
+            ],
+            "id": "value",
+            "created_at_unix": 123,
+            "updated_at_unix": 123,
+            "duration_minutes": 123,
+            "price": 9.99
+        },
+        "has_affected_events": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionServiceUpdateResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_service_request_patch_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "pricing_mode": "fixed",
+        "intake_questions": [
+            {
+                "id": "value",
+                "label": "value",
+                "kind": "text",
+                "options": [
+                    "value"
+                ],
+                "required": true,
+                "is_active": true
+            }
+        ],
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "variants": [
+            {
+                "id": "value",
+                "duration_minutes": 123,
+                "price": 9.99,
+                "is_active": true
+            }
+        ],
+        "kind": "classic",
+        "buffer_minutes": 123,
+        "service_location": "business",
+        "add_ons": [
+            {
+                "id": "value",
+                "name": "value",
+                "description": "value",
+                "add_duration_minutes": 123,
+                "add_price": 9.99
+            }
+        ],
+        "max_participants": 123,
+        "capacity": 123,
+        "is_active": true,
+        "any_staff_member": true,
+        "staff_ids": [
+            "value"
+        ],
+        "asset_ids": [
+            "value"
+        ],
+        "advance_booking_minutes": 123,
+        "location_ids": [
+            "value"
+        ],
+        "display_on_booking_page": true,
+        "travel_minutes": 123,
+        "travel_before": true,
+        "travel_after": true,
+        "promotions": [
+            {
+                "id": "value",
+                "name": "value",
+                "target": "service",
+                "variant_id": "value",
+                "add_on_id": "value",
+                "promotional_price": 9.99,
+                "days_of_week": [
+                    6
+                ],
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-01",
+                "is_active": true
+            }
+        ],
+        "duration_minutes": 123,
+        "price": 9.99
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateServiceRequestPatch =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_confirm_service_update_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "pricing_mode": "fixed",
+        "intake_questions": [
+            {
+                "id": "value",
+                "label": "value",
+                "kind": "text",
+                "options": [
+                    "value"
+                ],
+                "required": true,
+                "is_active": true
+            }
+        ],
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "variants": [
+            {
+                "id": "value",
+                "duration_minutes": 123,
+                "price": 9.99,
+                "is_active": true
+            }
+        ],
+        "kind": "classic",
+        "buffer_minutes": 123,
+        "service_location": "business",
+        "add_ons": [
+            {
+                "id": "value",
+                "name": "value",
+                "description": "value",
+                "add_duration_minutes": 123,
+                "add_price": 9.99
+            }
+        ],
+        "max_participants": 123,
+        "capacity": 123,
+        "is_active": true,
+        "any_staff_member": true,
+        "staff_ids": [
+            "value"
+        ],
+        "asset_ids": [
+            "value"
+        ],
+        "advance_booking_minutes": 123,
+        "location_ids": [
+            "value"
+        ],
+        "display_on_booking_page": true,
+        "travel_minutes": 123,
+        "travel_before": true,
+        "travel_after": true,
+        "promotions": [
+            {
+                "id": "value",
+                "name": "value",
+                "target": "service",
+                "variant_id": "value",
+                "add_on_id": "value",
+                "promotional_price": 9.99,
+                "days_of_week": [
+                    6
+                ],
+                "start_date": "2024-01-01",
+                "end_date": "2024-01-01",
+                "is_active": true
+            }
+        ],
+        "duration_minutes": 123,
+        "price": 9.99
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionConfirmServiceUpdateRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_product_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "pricing_mode": "fixed",
+        "intake_questions": [
+            {
+                "id": "value",
+                "label": "value",
+                "kind": "text",
+                "options": [
+                    "value"
+                ],
+                "required": true,
+                "is_active": true
+            }
+        ],
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "price": 9.99,
+        "is_active": true,
+        "orderable": true,
+        "allowed_fulfillment_types": [
+            "pickup"
+        ],
+        "location_ids": [
+            "value"
+        ],
+        "stock": {
+            "key": 123
+        },
+        "id": "value",
+        "created_at_unix": 123,
+        "updated_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionProduct =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_create_product_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "pricing_mode": "fixed",
+        "intake_questions": [
+            {
+                "id": "value",
+                "label": "value",
+                "kind": "text",
+                "options": [
+                    "value"
+                ],
+                "required": true,
+                "is_active": true
+            }
+        ],
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "price": 9.99,
+        "is_active": true,
+        "orderable": true,
+        "allowed_fulfillment_types": [
+            "pickup"
+        ],
+        "location_ids": [
+            "value"
+        ],
+        "track_quantity": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCreateProductRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_product_request_patch_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "pricing_mode": "fixed",
+        "intake_questions": [
+            {
+                "id": "value",
+                "label": "value",
+                "kind": "text",
+                "options": [
+                    "value"
+                ],
+                "required": true,
+                "is_active": true
+            }
+        ],
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "price": 9.99,
+        "is_active": true,
+        "orderable": true,
+        "allowed_fulfillment_types": [
+            "pickup"
+        ],
+        "location_ids": [
+            "value"
+        ],
+        "track_quantity": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateProductRequestPatch =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_product_stock_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "location_id": "value",
+        "on_hand": 123,
+        "expected_on_hand": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateProductStockRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_adjust_product_stock_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "location_id": "value",
+        "delta": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionAdjustProductStockRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_staff_resource_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "is_active": true,
+        "email": "value",
+        "phone": "value",
+        "sms_notifications_opted_in": true,
+        "photo_url": "value",
+        "location_id": "value",
+        "working_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "display_on_booking_page": true,
+        "customer_facing_name": "value",
+        "id": "value",
+        "created_at_unix": 123,
+        "updated_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionStaffResource =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_create_staff_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "is_active": true,
+        "email": "value",
+        "phone": "value",
+        "sms_notifications_opted_in": true,
+        "photo_url": "value",
+        "location_id": "value",
+        "working_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "display_on_booking_page": true,
+        "customer_facing_name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCreateStaffRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_staff_request_patch_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "groups": [
+            {
+                "label": "value",
+                "rank": 123
+            }
+        ],
+        "ungrouped_rank": 123,
+        "name": "value",
+        "description": "value",
+        "is_active": true,
+        "email": "value",
+        "phone": "value",
+        "sms_notifications_opted_in": true,
+        "photo_url": "value",
+        "location_id": "value",
+        "working_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "display_on_booking_page": true,
+        "customer_facing_name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateStaffRequestPatch =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_customer_facing_agent_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_id": "value",
+        "config": {
+            "additional_instructions": "value",
+            "tone_traits": [
+                "value"
+            ],
+            "details_to_collect": [
+                "value"
+            ],
+            "llm": "gpt-4o-mini",
+            "reasoning_effort": "none",
+            "disable_rag": true,
+            "background_voice_detection": true,
+            "turn_eagerness": "patient",
+            "voice_id": "value",
+            "language": "value",
+            "additional_languages": [
+                "value"
+            ],
+            "first_message": "value",
+            "first_message_mode": "interruptible",
+            "enable_end_call_tool": true,
+            "enable_skip_turn_tool": true,
+            "enable_play_keypad_touch_tone_tool": true,
+            "agent_rules": [
+                {
+                    "title": "value",
+                    "description": "value",
+                    "priority": "strict",
+                    "id": "value",
+                    "created_at_unix": 123
+                }
+            ],
+            "transfer_rules": [
+                {
+                    "label": "value",
+                    "phone_number": "value",
+                    "condition": "value",
+                    "post_dial_digits": "0",
+                    "id": "value",
+                    "created_at_unix": 123
+                }
+            ],
+            "hide_caller_number_on_transfers": true,
+            "record_after_transfers": true,
+            "procedures": [
+                {
+                    "name": "value",
+                    "trigger": "value",
+                    "body": "value",
+                    "id": "value",
+                    "created_at_unix": 123,
+                    "source_key": "value"
+                }
+            ],
+            "enable_secure_mode": true,
+            "enable_spam_protection": true
+        },
+        "deactivated_at_unix": 123,
+        "deactivation_reason": "tier_downgrade",
+        "name": "value",
+        "agent_exists": true,
+        "is_transfer_allowed": true,
+        "is_active": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCustomerFacingAgentResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_customer_facing_config_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "additional_instructions": "value",
+        "tone_traits": [
+            "value"
+        ],
+        "details_to_collect": [
+            "value"
+        ],
+        "llm": "gpt-4o-mini",
+        "reasoning_effort": "none",
+        "disable_rag": true,
+        "background_voice_detection": true,
+        "turn_eagerness": "patient",
+        "voice_id": "value",
+        "language": "value",
+        "additional_languages": [
+            "value"
+        ],
+        "first_message": "value",
+        "first_message_mode": "interruptible",
+        "enable_end_call_tool": true,
+        "enable_skip_turn_tool": true,
+        "enable_play_keypad_touch_tone_tool": true,
+        "agent_rules": [
+            {
+                "title": "value",
+                "description": "value",
+                "priority": "strict",
+                "id": "value",
+                "created_at_unix": 123
+            }
+        ],
+        "transfer_rules": [
+            {
+                "label": "value",
+                "phone_number": "value",
+                "condition": "value",
+                "post_dial_digits": "0",
+                "id": "value",
+                "created_at_unix": 123
+            }
+        ],
+        "hide_caller_number_on_transfers": true,
+        "record_after_transfers": true,
+        "procedures": [
+            {
+                "name": "value",
+                "trigger": "value",
+                "body": "value",
+                "id": "value",
+                "created_at_unix": 123,
+                "source_key": "value"
+            }
+        ],
+        "enable_secure_mode": true,
+        "enable_spam_protection": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCustomerFacingConfigOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_transfer_rule_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "label": "value",
+        "phone_number": "value",
+        "condition": "value",
+        "post_dial_digits": "0",
+        "id": "value",
+        "created_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionTransferRule =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_customer_facing_agent_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "config": {
+            "additional_instructions": "value",
+            "tone_traits": [
+                "value"
+            ],
+            "details_to_collect": [
+                "value"
+            ],
+            "llm": "gpt-4o-mini",
+            "reasoning_effort": "none",
+            "disable_rag": true,
+            "background_voice_detection": true,
+            "turn_eagerness": "patient",
+            "voice_id": "value",
+            "language": "value",
+            "additional_languages": [
+                "value"
+            ],
+            "first_message": "value",
+            "first_message_mode": "interruptible",
+            "enable_end_call_tool": true,
+            "enable_skip_turn_tool": true,
+            "enable_play_keypad_touch_tone_tool": true,
+            "hide_caller_number_on_transfers": true,
+            "record_after_transfers": true,
+            "enable_secure_mode": true,
+            "enable_spam_protection": true
+        },
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateCustomerFacingAgentRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_customer_facing_config_patch_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "additional_instructions": "value",
+        "tone_traits": [
+            "value"
+        ],
+        "details_to_collect": [
+            "value"
+        ],
+        "llm": "gpt-4o-mini",
+        "reasoning_effort": "none",
+        "disable_rag": true,
+        "background_voice_detection": true,
+        "turn_eagerness": "patient",
+        "voice_id": "value",
+        "language": "value",
+        "additional_languages": [
+            "value"
+        ],
+        "first_message": "value",
+        "first_message_mode": "interruptible",
+        "enable_end_call_tool": true,
+        "enable_skip_turn_tool": true,
+        "enable_play_keypad_touch_tone_tool": true,
+        "hide_caller_number_on_transfers": true,
+        "record_after_transfers": true,
+        "enable_secure_mode": true,
+        "enable_spam_protection": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCustomerFacingConfigPatch =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_create_transfer_rule_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "label": "value",
+        "phone_number": "value",
+        "condition": "value",
+        "post_dial_digits": "0"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCreateTransferRuleRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_transfer_rule_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "label": "value",
+        "phone_number": "value",
+        "condition": "value",
+        "post_dial_digits": "0"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateTransferRuleRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn holiday_response_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "start_date": {
+            "year": 2026,
+            "month": 12,
+            "day": 31
+        },
+        "end_date": {
+            "year": 2026,
+            "month": 12,
+            "day": 31
+        },
+        "holiday_type": "closed",
+        "override_hours": [
+            {
+                "start_hour": 123,
+                "start_minute": 123,
+                "end_hour": 24,
+                "end_minute": 123
+            }
+        ],
+        "time_off_type": "staff",
+        "resource_id": "value",
+        "location_id": "value",
+        "reason": "value",
+        "id": "value",
+        "created_at_unix": 123,
+        "updated_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: HolidayResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn date_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "year": 2026,
+        "month": 12,
+        "day": 31
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: DateModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_create_holiday_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "start_date": {
+            "year": 2026,
+            "month": 12,
+            "day": 31
+        },
+        "end_date": {
+            "year": 2026,
+            "month": 12,
+            "day": 31
+        },
+        "holiday_type": "closed",
+        "override_hours": [
+            {
+                "start_hour": 123,
+                "start_minute": 123,
+                "end_hour": 24,
+                "end_minute": 123
+            }
+        ],
+        "time_off_type": "staff",
+        "resource_id": "value",
+        "location_id": "value",
+        "reason": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionCreateHolidayRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_holiday_request_patch_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "start_date": {
+            "year": 2026,
+            "month": 12,
+            "day": 31
+        },
+        "end_date": {
+            "year": 2026,
+            "month": 12,
+            "day": 31
+        },
+        "holiday_type": "closed",
+        "override_hours": [
+            {
+                "start_hour": 123,
+                "start_minute": 123,
+                "end_hour": 24,
+                "end_minute": 123
+            }
+        ],
+        "time_off_type": "staff",
+        "resource_id": "value",
+        "location_id": "value",
+        "reason": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateHolidayRequestPatch =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_location_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "address": "value",
+        "notes": "value",
+        "operating_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "customer_facing_name": "value",
+        "max_concurrent_appointments": 123,
+        "id": "value",
+        "deactivated_at_unix": 123,
+        "deactivation_reason": "tier_downgrade",
+        "is_active": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionLocationResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_location_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "address": "value",
+        "notes": "value",
+        "operating_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "customer_facing_name": "value",
+        "max_concurrent_appointments": 123,
+        "is_active": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionLocationRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_location_request_patch_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "address": "value",
+        "notes": "value",
+        "operating_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "customer_facing_name": "value",
+        "max_concurrent_appointments": 123,
+        "is_active": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionLocationRequestPatch =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_agent_info_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "business_name": "value",
+        "business_country": "value",
+        "business_description": "value",
+        "timezone": "value",
+        "currency": "USD",
+        "operating_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "tool_call_sound": "typing",
+        "id": "value",
+        "created_at_unix": 123,
+        "updated_at_unix": 123,
+        "workspace_now": {
+            "today": {
+                "year": 2026,
+                "month": 12,
+                "day": 31
+            },
+            "hour": 123,
+            "minute": 123,
+            "fetched_at_ms": 123
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionAgentInfoResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn workspace_now_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "today": {
+            "year": 2026,
+            "month": 12,
+            "day": 31
+        },
+        "hour": 123,
+        "minute": 123,
+        "fetched_at_ms": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WorkspaceNow =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_update_agent_info_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "business_name": "value",
+        "business_country": "value",
+        "business_description": "value",
+        "timezone": "value",
+        "currency": "USD",
+        "operating_hours": {
+            "hours": {
+                "key": [
+                    {
+                        "start_hour": 123,
+                        "start_minute": 123,
+                        "end_hour": 24,
+                        "end_minute": 123
+                    }
+                ]
+            },
+            "timezone": "value"
+        },
+        "tool_call_sound": "typing"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionUpdateAgentInfoRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_knowledge_source_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "source_type": "file",
+        "source_url": "value",
+        "last_scraped_at_unix": 123,
+        "original_filename": "value",
+        "content_type": "value",
+        "file_size_bytes": 123,
+        "status": "processing",
+        "error_message": "value",
+        "failure_reason": "blocked_url",
+        "crawl_entire_site": true,
+        "scraped_pages_count": 123,
+        "content_preview": "value",
+        "processing_started_at_unix": 123,
+        "id": "value",
+        "created_at_unix": 123,
+        "updated_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionKnowledgeSource =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn add_url_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "url": "value",
+        "crawl_entire_site": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AddUrlRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_workspaces_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "workspaces": [
+            {
+                "workspace_id": "value",
+                "business_name": "value",
+                "billing_tier": "value",
+                "receptionist_count": 123,
+                "calls_last_30_days": 123,
+                "created_at_unix": 123,
+                "subscription": {
+                    "tier_id": "value",
+                    "billing_period": "monthly_period",
+                    "billing_period_end_unix": 123,
+                    "cancel_at_unix": 123,
+                    "pending_downgrade_tier": "value",
+                    "pending_downgrade_at_unix": 123
+                },
+                "has_payment_issue": true,
+                "onboarding_completed_at_unix": 123
+            }
+        ],
+        "next_cursor": "value",
+        "has_more": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerWorkspacesResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_workspace_summary_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "workspace_id": "value",
+        "business_name": "value",
+        "billing_tier": "value",
+        "receptionist_count": 123,
+        "calls_last_30_days": 123,
+        "created_at_unix": 123,
+        "subscription": {
+            "tier_id": "value",
+            "billing_period": "monthly_period",
+            "billing_period_end_unix": 123,
+            "cancel_at_unix": 123,
+            "pending_downgrade_tier": "value",
+            "pending_downgrade_at_unix": 123
+        },
+        "has_payment_issue": true,
+        "onboarding_completed_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerWorkspaceSummary =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_workspace_subscription_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tier_id": "value",
+        "billing_period": "monthly_period",
+        "billing_period_end_unix": 123,
+        "cancel_at_unix": 123,
+        "pending_downgrade_tier": "value",
+        "pending_downgrade_at_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerWorkspaceSubscription =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn provision_reseller_workspace_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "workspace_id": "value",
+        "business_name": "value",
+        "billing_tier": "value",
+        "receptionist_count": 123,
+        "calls_last_30_days": 123,
+        "created_at_unix": 123,
+        "subscription": {
+            "tier_id": "value",
+            "billing_period": "monthly_period",
+            "billing_period_end_unix": 123,
+            "cancel_at_unix": 123,
+            "pending_downgrade_tier": "value",
+            "pending_downgrade_at_unix": 123
+        },
+        "has_payment_issue": true,
+        "onboarding_completed_at_unix": 123,
+        "member_results": [
+            {
+                "email": "value",
+                "outcome": "invited",
+                "error_status": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ProvisionResellerWorkspaceResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn team_invite_result_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "email": "value",
+        "outcome": "invited",
+        "error_status": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TeamInviteResult =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reception_provision_reseller_workspace_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "business_name": "value",
+        "vertical": "salon_barbershop",
+        "subscription": {
+            "tier_id": "value",
+            "billing_period": "monthly_period"
+        },
+        "phone_number": "value",
+        "members": [
+            {
+                "email": "value",
+                "role": "workspace_admin"
+            }
+        ],
+        "complete_onboarding": true,
+        "idempotency_key": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceptionProvisionResellerWorkspaceRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn provision_reseller_workspace_subscription_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tier_id": "value",
+        "billing_period": "monthly_period"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ProvisionResellerWorkspaceSubscription =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn team_invite_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "email": "value",
+        "role": "workspace_admin"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TeamInviteRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_workspace_onboarding_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "onboarding_completed_at_unix": 123,
+        "customer_facing_agent_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerWorkspaceOnboardingResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn assign_reseller_tier_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tier_id": "value",
+        "billing_period": "monthly_period",
+        "idempotency_key": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AssignResellerTierRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn change_reseller_tier_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tier_id": "value",
+        "billing_period": "monthly_period",
+        "idempotency_key": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ChangeResellerTierRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_tier_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tier_id": "value",
+        "display_name": "value",
+        "tier_economics": {
+            "monthly_price_usd": 9.99,
+            "annual_price_usd": 9.99,
+            "included_minutes_per_month": 9.99,
+            "overage_price_per_minute_usd": 9.99,
+            "max_phone_numbers": 123,
+            "concurrent_calls": 123,
+            "max_active_locations": 123,
+            "max_customer_facing_agents": 123,
+            "max_team_members": 123,
+            "assistant_daily_messages": 123
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerTierResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_tier_economics_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "monthly_price_usd": 9.99,
+        "annual_price_usd": 9.99,
+        "included_minutes_per_month": 9.99,
+        "overage_price_per_minute_usd": 9.99,
+        "max_phone_numbers": 123,
+        "concurrent_calls": 123,
+        "max_active_locations": 123,
+        "max_customer_facing_agents": 123,
+        "max_team_members": 123,
+        "assistant_daily_messages": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerTierEconomics =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_invoices_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "invoices": [
+            {
+                "invoice_id": "value",
+                "workspace_id": "value",
+                "workspace_name": "value",
+                "status": "paid",
+                "amount_cents": 123,
+                "currency": "value",
+                "created_unix": 123,
+                "paid_unix": 123,
+                "pay_url": "value",
+                "pdf_url": "value"
+            }
+        ],
+        "next_cursor": "value",
+        "has_more": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerInvoicesResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_invoice_summary_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "invoice_id": "value",
+        "workspace_id": "value",
+        "workspace_name": "value",
+        "status": "paid",
+        "amount_cents": 123,
+        "currency": "value",
+        "created_unix": 123,
+        "paid_unix": 123,
+        "pay_url": "value",
+        "pdf_url": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerInvoiceSummary =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_invoice_detail_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "invoice_id": "value",
+        "workspace_id": "value",
+        "workspace_name": "value",
+        "status": "paid",
+        "amount_cents": 123,
+        "currency": "value",
+        "created_unix": 123,
+        "paid_unix": 123,
+        "pay_url": "value",
+        "pdf_url": "value",
+        "lines": [
+            {
+                "kind": "plan",
+                "description": "value",
+                "quantity": 123,
+                "amount_cents": 123,
+                "period_start_unix": 123,
+                "period_end_unix": 123
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerInvoiceDetail =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_invoice_line_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "kind": "plan",
+        "description": "value",
+        "quantity": 123,
+        "amount_cents": 123,
+        "period_start_unix": 123,
+        "period_end_unix": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerInvoiceLine =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_upcoming_payments_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "payments": [
+            {
+                "workspace_id": "value",
+                "workspace_name": "value",
+                "subscription": {
+                    "tier_id": "value",
+                    "billing_period": "monthly_period",
+                    "billing_period_end_unix": 123,
+                    "cancel_at_unix": 123,
+                    "pending_downgrade_tier": "value",
+                    "pending_downgrade_at_unix": 123
+                },
+                "plan_usd": 9.99,
+                "overage_so_far_usd": 9.99
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerUpcomingPaymentsResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn reseller_upcoming_payment_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "workspace_id": "value",
+        "workspace_name": "value",
+        "subscription": {
+            "tier_id": "value",
+            "billing_period": "monthly_period",
+            "billing_period_end_unix": 123,
+            "cancel_at_unix": 123,
+            "pending_downgrade_tier": "value",
+            "pending_downgrade_at_unix": 123
+        },
+        "plan_usd": 9.99,
+        "overage_so_far_usd": 9.99
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ResellerUpcomingPayment =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -77441,7 +81921,6 @@ fn send_upstream_message_round_trips_through_serde() {
 fn agent_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "agent_response",
         "event_id": 123,
         "content": "value",
         "is_final": true
@@ -77449,22 +81928,6 @@ fn agent_response_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: AgentResponse =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn pong_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "pong"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: Pong =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -77493,7 +81956,6 @@ fn receive_upstream_message_round_trips_through_serde() {
 fn init_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "init",
         "conversation_id": "value"
     }"#,
     )
@@ -77510,7 +81972,6 @@ fn init_round_trips_through_serde() {
 fn user_transcript_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "user_transcript",
         "event_id": 123,
         "user_transcript": [
             {
@@ -77547,42 +82008,9 @@ fn user_transcript_user_transcript_item_round_trips_through_serde() {
 }
 
 #[test]
-fn ping_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "ping"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: Ping =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn close_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "type": "close"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: Close =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn speech_engine_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "type": "error",
         "message": "value"
     }"#,
     )
@@ -77740,7 +82168,7 @@ fn session_started_round_trips_through_serde() {
 }
 
 #[test]
-fn config_round_trips_through_serde() {
+fn session_started_config_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "sample_rate": 123,
@@ -77776,7 +82204,7 @@ fn config_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: Config =
+    let decoded: SessionStartedConfig =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -77791,6 +82219,7 @@ fn partial_transcript_round_trips_through_serde() {
         "message_type": "partial_transcript",
         "text": "value",
         "turn_probability": 9.99,
+        "language_code": "value",
         "words": [
             {
                 "text": "value",
@@ -79230,28 +83659,11 @@ fn send_translate_stream_message_round_trips_through_serde() {
 fn translate_input_audio_chunk_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "input_audio_chunk",
         "audio_base_64": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
     let decoded: TranslateInputAudioChunk =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn translate_end_of_stream_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "message_type": "end_of_stream"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: TranslateEndOfStream =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -79281,7 +83693,6 @@ fn receive_translate_stream_message_round_trips_through_serde() {
 fn translate_session_started_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "session_started",
         "session_id": "value",
         "client_session_id": "value"
     }"#,
@@ -79299,7 +83710,6 @@ fn translate_session_started_round_trips_through_serde() {
 fn translate_status_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "status",
         "status": "value"
     }"#,
     )
@@ -79316,7 +83726,6 @@ fn translate_status_round_trips_through_serde() {
 fn translate_partial_transcript_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "partial_transcript",
         "text": "value"
     }"#,
     )
@@ -79333,7 +83742,6 @@ fn translate_partial_transcript_round_trips_through_serde() {
 fn translate_final_transcript_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "final_transcript",
         "text": "value"
     }"#,
     )
@@ -79350,7 +83758,6 @@ fn translate_final_transcript_round_trips_through_serde() {
 fn translate_translation_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "translation",
         "text": "value"
     }"#,
     )
@@ -79367,7 +83774,6 @@ fn translate_translation_round_trips_through_serde() {
 fn translate_audio_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "audio",
         "data": "value",
         "sample_rate": 123
     }"#,
@@ -79385,7 +83791,6 @@ fn translate_audio_round_trips_through_serde() {
 fn translate_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "error",
         "error": "value"
     }"#,
     )
@@ -79402,7 +83807,6 @@ fn translate_error_round_trips_through_serde() {
 fn translate_auth_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "auth_error",
         "error": "value"
     }"#,
     )
@@ -79419,7 +83823,6 @@ fn translate_auth_error_round_trips_through_serde() {
 fn translate_rate_limited_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "rate_limited",
         "error": "value"
     }"#,
     )
@@ -79436,7 +83839,6 @@ fn translate_rate_limited_error_round_trips_through_serde() {
 fn translate_queue_overflow_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "queue_overflow",
         "error": "value"
     }"#,
     )
@@ -79453,7 +83855,6 @@ fn translate_queue_overflow_error_round_trips_through_serde() {
 fn translate_input_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "input_error",
         "error": "value"
     }"#,
     )
@@ -79470,7 +83871,6 @@ fn translate_input_error_round_trips_through_serde() {
 fn translate_transcriber_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "transcriber_error",
         "error": "value"
     }"#,
     )
@@ -79487,7 +83887,6 @@ fn translate_transcriber_error_round_trips_through_serde() {
 fn translate_translation_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "translation_error",
         "error": "value"
     }"#,
     )
@@ -79504,7 +83903,6 @@ fn translate_translation_error_round_trips_through_serde() {
 fn translate_audio_output_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "audio_output_error",
         "error": "value"
     }"#,
     )
@@ -79521,7 +83919,6 @@ fn translate_audio_output_error_round_trips_through_serde() {
 fn translate_quota_exceeded_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "quota_exceeded",
         "error": "value"
     }"#,
     )
@@ -79538,7 +83935,6 @@ fn translate_quota_exceeded_error_round_trips_through_serde() {
 fn translate_payment_issue_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "payment_issue",
         "error": "value"
     }"#,
     )
@@ -79555,7 +83951,6 @@ fn translate_payment_issue_error_round_trips_through_serde() {
 fn translate_unaccepted_terms_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "unaccepted_terms",
         "error": "value"
     }"#,
     )
@@ -79589,28 +83984,11 @@ fn send_dubbing_stream_message_round_trips_through_serde() {
 fn dubbing_input_audio_chunk_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "input_audio_chunk",
         "audio_base_64": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
     let decoded: DubbingInputAudioChunk =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn dubbing_end_of_stream_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "message_type": "end_of_stream"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: DubbingEndOfStream =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -79640,7 +84018,6 @@ fn receive_dubbing_stream_message_round_trips_through_serde() {
 fn dubbing_session_started_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "session_started",
         "session_id": "value",
         "client_session_id": "value"
     }"#,
@@ -79658,7 +84035,6 @@ fn dubbing_session_started_round_trips_through_serde() {
 fn receive_dubbing_stream_message2_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "status",
         "status": "started"
     }"#,
     )
@@ -79675,7 +84051,6 @@ fn receive_dubbing_stream_message2_round_trips_through_serde() {
 fn dubbing_partial_transcript_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "partial_transcript",
         "text": "value"
     }"#,
     )
@@ -79692,7 +84067,6 @@ fn dubbing_partial_transcript_round_trips_through_serde() {
 fn dubbing_committed_transcript_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "committed_transcript",
         "text": "value",
         "segment_id": "value",
         "start_s": 9.99,
@@ -79713,7 +84087,6 @@ fn dubbing_committed_transcript_round_trips_through_serde() {
 fn dubbing_translation_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "translation",
         "text": "value",
         "segment_id": "value",
         "start_s": 9.99,
@@ -79734,7 +84107,6 @@ fn dubbing_translation_round_trips_through_serde() {
 fn dubbing_audio_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "audio",
         "data": "value",
         "sample_rate": 123
     }"#,
@@ -79752,7 +84124,6 @@ fn dubbing_audio_round_trips_through_serde() {
 fn dubbing_error_payload_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "error",
         "error": "value"
     }"#,
     )
@@ -79769,7 +84140,6 @@ fn dubbing_error_payload_round_trips_through_serde() {
 fn dubbing_auth_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "auth_error",
         "error": "value"
     }"#,
     )
@@ -79786,7 +84156,6 @@ fn dubbing_auth_error_round_trips_through_serde() {
 fn dubbing_rate_limited_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "rate_limited",
         "error": "value"
     }"#,
     )
@@ -79803,7 +84172,6 @@ fn dubbing_rate_limited_error_round_trips_through_serde() {
 fn dubbing_queue_overflow_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "queue_overflow",
         "error": "value"
     }"#,
     )
@@ -79820,7 +84188,6 @@ fn dubbing_queue_overflow_error_round_trips_through_serde() {
 fn dubbing_invalid_request_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "invalid_request",
         "error": "value"
     }"#,
     )
@@ -79837,7 +84204,6 @@ fn dubbing_invalid_request_error_round_trips_through_serde() {
 fn dubbing_input_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "input_error",
         "error": "value"
     }"#,
     )
@@ -79854,7 +84220,6 @@ fn dubbing_input_error_round_trips_through_serde() {
 fn dubbing_transcriber_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "transcriber_error",
         "error": "value"
     }"#,
     )
@@ -79871,7 +84236,6 @@ fn dubbing_transcriber_error_round_trips_through_serde() {
 fn dubbing_translation_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "translation_error",
         "error": "value"
     }"#,
     )
@@ -79888,7 +84252,6 @@ fn dubbing_translation_error_round_trips_through_serde() {
 fn dubbing_audio_output_error_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
-        "message_type": "audio_output_error",
         "error": "value"
     }"#,
     )
@@ -80458,91 +84821,6 @@ fn stream_output_format_query_parameter1_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn media_generation_in_progress_response_status_variants_round_trip_through_serde() {
-    let cases: Vec<(MediaGenerationInProgressResponseStatus, serde_json::Value)> = vec![
-        (
-            MediaGenerationInProgressResponseStatus::Pending,
-            serde_json::from_str::<serde_json::Value>(r#""pending""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            MediaGenerationInProgressResponseStatus::Generating,
-            serde_json::from_str::<serde_json::Value>(r#""generating""#)
-                .expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: MediaGenerationInProgressResponseStatus =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: MediaGenerationInProgressResponseStatus =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn media_generation_completed_response_status_variants_round_trip_through_serde() {
-    let cases: Vec<(MediaGenerationCompletedResponseStatus, serde_json::Value)> = vec![(
-        MediaGenerationCompletedResponseStatus::Completed,
-        serde_json::from_str::<serde_json::Value>(r#""completed""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: MediaGenerationCompletedResponseStatus =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: MediaGenerationCompletedResponseStatus =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn media_generation_failed_response_status_variants_round_trip_through_serde() {
-    let cases: Vec<(MediaGenerationFailedResponseStatus, serde_json::Value)> = vec![(
-        MediaGenerationFailedResponseStatus::Failed,
-        serde_json::from_str::<serde_json::Value>(r#""failed""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: MediaGenerationFailedResponseStatus =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: MediaGenerationFailedResponseStatus = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn failure_reason_variants_round_trip_through_serde() {
     let cases: Vec<(FailureReason, serde_json::Value)> = vec![
         (
@@ -80669,56 +84947,6 @@ fn media_generation_create_response_status_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn webhook_target_all_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WebhookTargetAllType, serde_json::Value)> = vec![(
-        WebhookTargetAllType::All,
-        serde_json::from_str::<serde_json::Value>(r#""all""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WebhookTargetAllType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WebhookTargetAllType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn webhook_target_ids_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WebhookTargetIdsType, serde_json::Value)> = vec![(
-        WebhookTargetIdsType::Ids,
-        serde_json::from_str::<serde_json::Value>(r#""ids""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WebhookTargetIdsType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WebhookTargetIdsType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn eleven_flash_v2_5_request_output_format_variants_round_trip_through_serde() {
     let cases: Vec<(ElevenFlashV2_5RequestOutputFormat, serde_json::Value)> = vec![
         (
@@ -80769,83 +84997,6 @@ fn eleven_flash_v2_5_request_output_format_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: ElevenFlashV2_5RequestOutputFormat = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn eleven_flash_v2_5_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(ElevenFlashV2_5RequestModelId, serde_json::Value)> = vec![(
-        ElevenFlashV2_5RequestModelId::ElevenFlashV2_5,
-        serde_json::from_str::<serde_json::Value>(r#""eleven_flash_v2_5""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ElevenFlashV2_5RequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ElevenFlashV2_5RequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn eleven_multilingual_v2_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(ElevenMultilingualV2RequestModelId, serde_json::Value)> = vec![(
-        ElevenMultilingualV2RequestModelId::ElevenMultilingualV2,
-        serde_json::from_str::<serde_json::Value>(r#""eleven_multilingual_v2""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ElevenMultilingualV2RequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ElevenMultilingualV2RequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn eleven_v3_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(ElevenV3RequestModelId, serde_json::Value)> = vec![(
-        ElevenV3RequestModelId::ElevenV3,
-        serde_json::from_str::<serde_json::Value>(r#""eleven_v3""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ElevenV3RequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ElevenV3RequestModelId = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -81359,26 +85510,26 @@ fn voice_design_request_model_model_id_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn currency_variants_round_trip_through_serde() {
-    let cases: Vec<(Currency, serde_json::Value)> = vec![
+fn subscription_response_currency_variants_round_trip_through_serde() {
+    let cases: Vec<(SubscriptionResponseCurrency, serde_json::Value)> = vec![
         (
-            Currency::Usd,
+            SubscriptionResponseCurrency::Usd,
             serde_json::from_str::<serde_json::Value>(r#""usd""#).expect("fixture is valid JSON"),
         ),
         (
-            Currency::Eur,
+            SubscriptionResponseCurrency::Eur,
             serde_json::from_str::<serde_json::Value>(r#""eur""#).expect("fixture is valid JSON"),
         ),
         (
-            Currency::Inr,
+            SubscriptionResponseCurrency::Inr,
             serde_json::from_str::<serde_json::Value>(r#""inr""#).expect("fixture is valid JSON"),
         ),
         (
-            Currency::Pln,
+            SubscriptionResponseCurrency::Pln,
             serde_json::from_str::<serde_json::Value>(r#""pln""#).expect("fixture is valid JSON"),
         ),
         (
-            Currency::Gbp,
+            SubscriptionResponseCurrency::Gbp,
             serde_json::from_str::<serde_json::Value>(r#""gbp""#).expect("fixture is valid JSON"),
         ),
     ];
@@ -81387,13 +85538,13 @@ fn currency_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: Currency =
+        let decoded: SubscriptionResponseCurrency =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Currency = serde_json::from_value(unrecognized.clone())
+    let decoded: SubscriptionResponseCurrency = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -81454,25 +85605,25 @@ fn subscription_status_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn billing_period_variants_round_trip_through_serde() {
-    let cases: Vec<(BillingPeriod, serde_json::Value)> = vec![
+fn character_refresh_period_variants_round_trip_through_serde() {
+    let cases: Vec<(CharacterRefreshPeriod, serde_json::Value)> = vec![
         (
-            BillingPeriod::MonthlyPeriod,
+            CharacterRefreshPeriod::MonthlyPeriod,
             serde_json::from_str::<serde_json::Value>(r#""monthly_period""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BillingPeriod::Num3MonthPeriod,
+            CharacterRefreshPeriod::Num3MonthPeriod,
             serde_json::from_str::<serde_json::Value>(r#""3_month_period""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BillingPeriod::Num6MonthPeriod,
+            CharacterRefreshPeriod::Num6MonthPeriod,
             serde_json::from_str::<serde_json::Value>(r#""6_month_period""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BillingPeriod::AnnualPeriod,
+            CharacterRefreshPeriod::AnnualPeriod,
             serde_json::from_str::<serde_json::Value>(r#""annual_period""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -81482,13 +85633,13 @@ fn billing_period_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: BillingPeriod =
+        let decoded: CharacterRefreshPeriod =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BillingPeriod = serde_json::from_value(unrecognized.clone())
+    let decoded: CharacterRefreshPeriod = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -81593,35 +85744,6 @@ fn payment_intent_status_item_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn pending_subscription_switch_response_model_kind_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        PendingSubscriptionSwitchResponseModelKind,
-        serde_json::Value,
-    )> = vec![(
-        PendingSubscriptionSwitchResponseModelKind::Change,
-        serde_json::from_str::<serde_json::Value>(r#""change""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PendingSubscriptionSwitchResponseModelKind =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PendingSubscriptionSwitchResponseModelKind =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn next_tier_variants_round_trip_through_serde() {
     let cases: Vec<(NextTier, serde_json::Value)> = vec![
         (
@@ -81693,33 +85815,6 @@ fn next_tier_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: NextTier = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn pending_cancellation_response_model_kind_variants_round_trip_through_serde() {
-    let cases: Vec<(PendingCancellationResponseModelKind, serde_json::Value)> = vec![(
-        PendingCancellationResponseModelKind::Cancellation,
-        serde_json::from_str::<serde_json::Value>(r#""cancellation""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PendingCancellationResponseModelKind =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PendingCancellationResponseModelKind =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -81878,57 +85973,6 @@ fn livekit_stack_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: LivekitStackType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn dashboard_call_success_chart_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DashboardCallSuccessChartModelType, serde_json::Value)> = vec![(
-        DashboardCallSuccessChartModelType::CallSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""call_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DashboardCallSuccessChartModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DashboardCallSuccessChartModelType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn dashboard_criteria_chart_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DashboardCriteriaChartModelType, serde_json::Value)> = vec![(
-        DashboardCriteriaChartModelType::Criteria,
-        serde_json::from_str::<serde_json::Value>(r#""criteria""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DashboardCriteriaChartModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DashboardCriteriaChartModelType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -82628,57 +86672,6 @@ fn caption_style_vertical_placement_model_align_variants_round_trip_through_serd
 }
 
 #[test]
-fn podcast_conversation_mode_type_variants_round_trip_through_serde() {
-    let cases: Vec<(PodcastConversationModeType, serde_json::Value)> = vec![(
-        PodcastConversationModeType::Conversation,
-        serde_json::from_str::<serde_json::Value>(r#""conversation""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PodcastConversationModeType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PodcastConversationModeType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn podcast_bulletin_mode_type_variants_round_trip_through_serde() {
-    let cases: Vec<(PodcastBulletinModeType, serde_json::Value)> = vec![(
-        PodcastBulletinModeType::Bulletin,
-        serde_json::from_str::<serde_json::Value>(r#""bulletin""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PodcastBulletinModeType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PodcastBulletinModeType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn podcast_text_source_type_variants_round_trip_through_serde() {
     let cases: Vec<(PodcastTextSourceType, serde_json::Value)> = vec![(
         PodcastTextSourceType::Text,
@@ -82856,64 +86849,6 @@ fn body_create_podcast_v1_studio_podcasts_post_apply_text_normalization_variants
 }
 
 #[test]
-fn pronunciation_dictionary_alias_rule_request_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        PronunciationDictionaryAliasRuleRequestModelType,
-        serde_json::Value,
-    )> = vec![(
-        PronunciationDictionaryAliasRuleRequestModelType::Alias,
-        serde_json::from_str::<serde_json::Value>(r#""alias""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PronunciationDictionaryAliasRuleRequestModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PronunciationDictionaryAliasRuleRequestModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn pronunciation_dictionary_phoneme_rule_request_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        PronunciationDictionaryPhonemeRuleRequestModelType,
-        serde_json::Value,
-    )> = vec![(
-        PronunciationDictionaryPhonemeRuleRequestModelType::Phoneme,
-        serde_json::from_str::<serde_json::Value>(r#""phoneme""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PronunciationDictionaryPhonemeRuleRequestModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PronunciationDictionaryPhonemeRuleRequestModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_rules_post_workspace_access_variants_round_trip_through_serde(
 ) {
     let cases: Vec<(AddAPronunciationDictionaryV1PronunciationDictionariesAddFromRulesPostWorkspaceAccess, serde_json::Value)> = vec![
@@ -82935,64 +86870,6 @@ fn add_a_pronunciation_dictionary_v1_pronunciation_dictionaries_add_from_rules_p
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: AddAPronunciationDictionaryV1PronunciationDictionariesAddFromRulesPostWorkspaceAccess = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn pronunciation_dictionary_alias_rule_response_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        PronunciationDictionaryAliasRuleResponseModelType,
-        serde_json::Value,
-    )> = vec![(
-        PronunciationDictionaryAliasRuleResponseModelType::Alias,
-        serde_json::from_str::<serde_json::Value>(r#""alias""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PronunciationDictionaryAliasRuleResponseModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PronunciationDictionaryAliasRuleResponseModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn pronunciation_dictionary_phoneme_rule_response_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        PronunciationDictionaryPhonemeRuleResponseModelType,
-        serde_json::Value,
-    )> = vec![(
-        PronunciationDictionaryPhonemeRuleResponseModelType::Phoneme,
-        serde_json::from_str::<serde_json::Value>(r#""phoneme""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PronunciationDictionaryPhonemeRuleResponseModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PronunciationDictionaryPhonemeRuleResponseModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -83455,31 +87332,6 @@ fn asset_transcription_status_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn project_video_response_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ProjectVideoResponseModelType, serde_json::Value)> = vec![(
-        ProjectVideoResponseModelType::Video,
-        serde_json::from_str::<serde_json::Value>(r#""video""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ProjectVideoResponseModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ProjectVideoResponseModelType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn enter_effect_variants_round_trip_through_serde() {
     let cases: Vec<(EnterEffect, serde_json::Value)> = vec![
         (
@@ -83559,83 +87411,6 @@ fn enter_effect_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: EnterEffect = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn song_source_context_source_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SongSourceContextSourceType, serde_json::Value)> = vec![(
-        SongSourceContextSourceType::Song,
-        serde_json::from_str::<serde_json::Value>(r#""song""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SongSourceContextSourceType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SongSourceContextSourceType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn music_explore_song_source_context_source_type_variants_round_trip_through_serde() {
-    let cases: Vec<(MusicExploreSongSourceContextSourceType, serde_json::Value)> = vec![(
-        MusicExploreSongSourceContextSourceType::MusicExploreSong,
-        serde_json::from_str::<serde_json::Value>(r#""music_explore_song""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: MusicExploreSongSourceContextSourceType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: MusicExploreSongSourceContextSourceType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn sfx_source_context_source_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SfxSourceContextSourceType, serde_json::Value)> = vec![(
-        SfxSourceContextSourceType::Sfx,
-        serde_json::from_str::<serde_json::Value>(r#""sfx""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SfxSourceContextSourceType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SfxSourceContextSourceType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -84150,35 +87925,6 @@ fn chapter_content_block_tts_node_response_model_type_variants_round_trip_throug
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: ChapterContentBlockTtsNodeResponseModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn chapter_content_block_extendable_node_response_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        ChapterContentBlockExtendableNodeResponseModelType,
-        serde_json::Value,
-    )> = vec![(
-        ChapterContentBlockExtendableNodeResponseModelType::Other,
-        serde_json::from_str::<serde_json::Value>(r#""_other""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ChapterContentBlockExtendableNodeResponseModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ChapterContentBlockExtendableNodeResponseModelType =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
@@ -84781,32 +88527,6 @@ fn speech_to_text_word_response_model_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn edited_transcript_response_kind_variants_round_trip_through_serde() {
-    let cases: Vec<(EditedTranscriptResponseKind, serde_json::Value)> = vec![(
-        EditedTranscriptResponseKind::Transcript,
-        serde_json::from_str::<serde_json::Value>(r#""transcript""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: EditedTranscriptResponseKind =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: EditedTranscriptResponseKind = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn error_type_variants_round_trip_through_serde() {
     let cases: Vec<(ErrorType, serde_json::Value)> = vec![(
         ErrorType::EditFailed,
@@ -84862,6 +88582,39 @@ fn audio_native_project_settings_response_model_status_variants_round_trip_throu
     let decoded: AudioNativeProjectSettingsResponseModelStatus =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn rule_priority_variants_round_trip_through_serde() {
+    let cases: Vec<(RulePriority, serde_json::Value)> = vec![
+        (
+            RulePriority::Strict,
+            serde_json::from_str::<serde_json::Value>(r#""strict""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            RulePriority::Suggestion,
+            serde_json::from_str::<serde_json::Value>(r#""suggestion""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: RulePriority =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: RulePriority = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -85022,6 +88775,11 @@ fn permission_type_variants_round_trip_through_serde() {
                 .expect("fixture is valid JSON"),
         ),
         (
+            PermissionType::AgentsEnvironmentVariablesWrite,
+            serde_json::from_str::<serde_json::Value>(r#""agents_environment_variables_write""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
             PermissionType::MusicGeneration,
             serde_json::from_str::<serde_json::Value>(r#""music_generation""#)
                 .expect("fixture is valid JSON"),
@@ -85130,6 +88888,11 @@ fn permission_type_variants_round_trip_through_serde() {
             serde_json::from_str::<serde_json::Value>(r#""synthid_detector""#)
                 .expect("fixture is valid JSON"),
         ),
+        (
+            PermissionType::Watermark,
+            serde_json::from_str::<serde_json::Value>(r#""watermark""#)
+                .expect("fixture is valid JSON"),
+        ),
     ];
     for (variant, wire) in cases {
         assert_eq!(
@@ -85151,25 +88914,25 @@ fn permission_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn loc_itemk_reason_variants_round_trip_through_serde() {
-    let cases: Vec<(LocItemkReason, serde_json::Value)> = vec![
+fn lock_reason_variants_round_trip_through_serde() {
+    let cases: Vec<(LockReason, serde_json::Value)> = vec![
         (
-            LocItemkReason::TrialEnded,
+            LockReason::TrialEnded,
             serde_json::from_str::<serde_json::Value>(r#""trial_ended""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            LocItemkReason::SubscriptionDowngrade,
+            LockReason::SubscriptionDowngrade,
             serde_json::from_str::<serde_json::Value>(r#""subscription_downgrade""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            LocItemkReason::ExposedPublicly,
+            LockReason::ExposedPublicly,
             serde_json::from_str::<serde_json::Value>(r#""exposed_publicly""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            LocItemkReason::SelfDisabled,
+            LockReason::SelfDisabled,
             serde_json::from_str::<serde_json::Value>(r#""self_disabled""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -85179,13 +88942,13 @@ fn loc_itemk_reason_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: LocItemkReason =
+        let decoded: LockReason =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: LocItemkReason = serde_json::from_value(unrecognized.clone())
+    let decoded: LockReason = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -86054,6 +89817,21 @@ fn audit_activity_name_variants_round_trip_through_serde() {
                 .expect("fixture is valid JSON"),
         ),
         (
+            AuditActivityName::OAuthAppAuthorizationGrant,
+            serde_json::from_str::<serde_json::Value>(r#""OAuth App Authorization Grant""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::OAuthAppAuthorizationManagement,
+            serde_json::from_str::<serde_json::Value>(r#""OAuth App Authorization Management""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::OAuthAppAuthorizationRevocation,
+            serde_json::from_str::<serde_json::Value>(r#""OAuth App Authorization Revocation""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
             AuditActivityName::PasswordResetEmailRequest,
             serde_json::from_str::<serde_json::Value>(r#""Password Reset Email Request""#)
                 .expect("fixture is valid JSON"),
@@ -86338,6 +90116,62 @@ fn audit_activity_name_variants_round_trip_through_serde() {
                 .expect("fixture is valid JSON"),
         ),
         (
+            AuditActivityName::WorkloadIdentityFederationAssignmentCreation,
+            serde_json::from_str::<serde_json::Value>(
+                r#""Workload Identity Federation Assignment Creation""#,
+            )
+            .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::WorkloadIdentityFederationAssignmentDeletion,
+            serde_json::from_str::<serde_json::Value>(
+                r#""Workload Identity Federation Assignment Deletion""#,
+            )
+            .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::WorkloadIdentityFederationAssignmentManagement,
+            serde_json::from_str::<serde_json::Value>(
+                r#""Workload Identity Federation Assignment Management""#,
+            )
+            .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::WorkloadIdentityFederationPoolCreation,
+            serde_json::from_str::<serde_json::Value>(
+                r#""Workload Identity Federation Pool Creation""#,
+            )
+            .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::WorkloadIdentityFederationPoolDeletion,
+            serde_json::from_str::<serde_json::Value>(
+                r#""Workload Identity Federation Pool Deletion""#,
+            )
+            .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::WorkloadIdentityFederationPoolManagement,
+            serde_json::from_str::<serde_json::Value>(
+                r#""Workload Identity Federation Pool Management""#,
+            )
+            .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::WorkloadIdentityFederationPoolUpdate,
+            serde_json::from_str::<serde_json::Value>(
+                r#""Workload Identity Federation Pool Update""#,
+            )
+            .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::WorkloadIdentityFederationTokenExchange,
+            serde_json::from_str::<serde_json::Value>(
+                r#""Workload Identity Federation Token Exchange""#,
+            )
+            .expect("fixture is valid JSON"),
+        ),
+        (
             AuditActivityName::WorkspaceCreation,
             serde_json::from_str::<serde_json::Value>(r#""Workspace Creation""#)
                 .expect("fixture is valid JSON"),
@@ -86481,114 +90315,6 @@ fn auth_connection_status_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn refresh_token_auth_response_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(RefreshTokenAuthResponseAuthType, serde_json::Value)> = vec![(
-        RefreshTokenAuthResponseAuthType::RefreshTokenAuth,
-        serde_json::from_str::<serde_json::Value>(r#""refresh_token_auth""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: RefreshTokenAuthResponseAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: RefreshTokenAuthResponseAuthType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn basic_auth_response_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(BasicAuthResponseAuthType, serde_json::Value)> = vec![(
-        BasicAuthResponseAuthType::BasicAuth,
-        serde_json::from_str::<serde_json::Value>(r#""basic_auth""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BasicAuthResponseAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BasicAuthResponseAuthType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn bearer_auth_response_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(BearerAuthResponseAuthType, serde_json::Value)> = vec![(
-        BearerAuthResponseAuthType::BearerAuth,
-        serde_json::from_str::<serde_json::Value>(r#""bearer_auth""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BearerAuthResponseAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BearerAuthResponseAuthType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn api_integration_o_auth2_auth_code_response_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        ApiIntegrationOAuth2AuthCodeResponseAuthType,
-        serde_json::Value,
-    )> = vec![(
-        ApiIntegrationOAuth2AuthCodeResponseAuthType::ApiIntegrationOauth2AuthCode,
-        serde_json::from_str::<serde_json::Value>(r#""api_integration_oauth2_auth_code""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ApiIntegrationOAuth2AuthCodeResponseAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ApiIntegrationOAuth2AuthCodeResponseAuthType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn api_integration_o_auth2_auth_code_response_scope_separator_variants_round_trip_through_serde() {
     let cases: Vec<(
         ApiIntegrationOAuth2AuthCodeResponseScopeSeparator,
@@ -86624,88 +90350,6 @@ fn api_integration_o_auth2_auth_code_response_scope_separator_variants_round_tri
 }
 
 #[test]
-fn api_integration_o_auth2_custom_app_response_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        ApiIntegrationOAuth2CustomAppResponseAuthType,
-        serde_json::Value,
-    )> = vec![(
-        ApiIntegrationOAuth2CustomAppResponseAuthType::ApiIntegrationOauth2CustomApp,
-        serde_json::from_str::<serde_json::Value>(r#""api_integration_oauth2_custom_app""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ApiIntegrationOAuth2CustomAppResponseAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ApiIntegrationOAuth2CustomAppResponseAuthType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn whats_app_auth_response_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WhatsAppAuthResponseAuthType, serde_json::Value)> = vec![(
-        WhatsAppAuthResponseAuthType::WhatsappAuth,
-        serde_json::from_str::<serde_json::Value>(r#""whatsapp_auth""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WhatsAppAuthResponseAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WhatsAppAuthResponseAuthType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn slack_bot_auth_response_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SlackBotAuthResponseAuthType, serde_json::Value)> = vec![(
-        SlackBotAuthResponseAuthType::SlackBotAuth,
-        serde_json::from_str::<serde_json::Value>(r#""slack_bot_auth""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SlackBotAuthResponseAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SlackBotAuthResponseAuthType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn slack_bot_auth_response_provider_variants_round_trip_through_serde() {
     let cases: Vec<(SlackBotAuthResponseProvider, serde_json::Value)> = vec![(
         SlackBotAuthResponseProvider::Slack,
@@ -86723,112 +90367,6 @@ fn slack_bot_auth_response_provider_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: SlackBotAuthResponseProvider = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn url_secret_auth_response_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UrlSecretAuthResponseAuthType, serde_json::Value)> = vec![(
-        UrlSecretAuthResponseAuthType::UrlSecret,
-        serde_json::from_str::<serde_json::Value>(r#""url_secret""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UrlSecretAuthResponseAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UrlSecretAuthResponseAuthType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_o_auth2_client_creds_request_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateOAuth2ClientCredsRequestAuthType, serde_json::Value)> = vec![(
-        CreateOAuth2ClientCredsRequestAuthType::Oauth2ClientCredentials,
-        serde_json::from_str::<serde_json::Value>(r#""oauth2_client_credentials""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateOAuth2ClientCredsRequestAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateOAuth2ClientCredsRequestAuthType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_custom_header_auth_request_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateCustomHeaderAuthRequestAuthType, serde_json::Value)> = vec![(
-        CreateCustomHeaderAuthRequestAuthType::CustomHeaderAuth,
-        serde_json::from_str::<serde_json::Value>(r#""custom_header_auth""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateCustomHeaderAuthRequestAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateCustomHeaderAuthRequestAuthType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_o_auth2_jwt_request_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateOAuth2JwtRequestAuthType, serde_json::Value)> = vec![(
-        CreateOAuth2JwtRequestAuthType::Oauth2Jwt,
-        serde_json::from_str::<serde_json::Value>(r#""oauth2_jwt""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateOAuth2JwtRequestAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateOAuth2JwtRequestAuthType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -86955,57 +90493,6 @@ fn create_o_auth2_jwt_request_jwt_usage_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: CreateOAuth2JwtRequestJwtUsage = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_private_key_jwt_request_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreatePrivateKeyJwtRequestAuthType, serde_json::Value)> = vec![(
-        CreatePrivateKeyJwtRequestAuthType::PrivateKeyJwt,
-        serde_json::from_str::<serde_json::Value>(r#""private_key_jwt""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreatePrivateKeyJwtRequestAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreatePrivateKeyJwtRequestAuthType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_mtls_auth_request_auth_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateMtlsAuthRequestAuthType, serde_json::Value)> = vec![(
-        CreateMtlsAuthRequestAuthType::Mtls,
-        serde_json::from_str::<serde_json::Value>(r#""mtls""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateMtlsAuthRequestAuthType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateMtlsAuthRequestAuthType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -87203,6 +90690,11 @@ fn workspace_group_permission_variants_round_trip_through_serde() {
                 .expect("fixture is valid JSON"),
         ),
         (
+            WorkspaceGroupPermission::AgentsEnvironmentVariablesWrite,
+            serde_json::from_str::<serde_json::Value>(r#""agents_environment_variables_write""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
             WorkspaceGroupPermission::VoiceIsolator,
             serde_json::from_str::<serde_json::Value>(r#""voice_isolator""#)
                 .expect("fixture is valid JSON"),
@@ -87215,6 +90707,11 @@ fn workspace_group_permission_variants_round_trip_through_serde() {
         (
             WorkspaceGroupPermission::SynthidDetector,
             serde_json::from_str::<serde_json::Value>(r#""synthid_detector""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WorkspaceGroupPermission::Watermark,
+            serde_json::from_str::<serde_json::Value>(r#""watermark""#)
                 .expect("fixture is valid JSON"),
         ),
         (
@@ -87412,6 +90909,72 @@ fn default_sharing_group_config_permission_level_variants_round_trip_through_ser
     let decoded: DefaultSharingGroupConfigPermissionLevel =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn body_smb_update_team_member_role_role_variants_round_trip_through_serde() {
+    let cases: Vec<(BodySmbUpdateTeamMemberRoleRole, serde_json::Value)> = vec![
+        (
+            BodySmbUpdateTeamMemberRoleRole::WorkspaceAdmin,
+            serde_json::from_str::<serde_json::Value>(r#""workspace_admin""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            BodySmbUpdateTeamMemberRoleRole::WorkspaceMember,
+            serde_json::from_str::<serde_json::Value>(r#""workspace_member""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: BodySmbUpdateTeamMemberRoleRole =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: BodySmbUpdateTeamMemberRoleRole = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn create_team_invite_request_role_variants_round_trip_through_serde() {
+    let cases: Vec<(CreateTeamInviteRequestRole, serde_json::Value)> = vec![
+        (
+            CreateTeamInviteRequestRole::WorkspaceAdmin,
+            serde_json::from_str::<serde_json::Value>(r#""workspace_admin""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            CreateTeamInviteRequestRole::WorkspaceMember,
+            serde_json::from_str::<serde_json::Value>(r#""workspace_member""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: CreateTeamInviteRequestRole =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: CreateTeamInviteRequestRole = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -87909,6 +91472,234 @@ fn webhook_hmac_settings_auth_type_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn webhook_outcome_variants_round_trip_through_serde() {
+    let cases: Vec<(WebhookOutcome, serde_json::Value)> = vec![
+        (
+            WebhookOutcome::Delivered,
+            serde_json::from_str::<serde_json::Value>(r#""delivered""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookOutcome::FailedRetryScheduled,
+            serde_json::from_str::<serde_json::Value>(r#""failed_retry_scheduled""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookOutcome::FailedExhausted,
+            serde_json::from_str::<serde_json::Value>(r#""failed_exhausted""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookOutcome::FailedNoRetry,
+            serde_json::from_str::<serde_json::Value>(r#""failed_no_retry""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookOutcome::FailedRetryError,
+            serde_json::from_str::<serde_json::Value>(r#""failed_retry_error""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookOutcome::DroppedQueueFull,
+            serde_json::from_str::<serde_json::Value>(r#""dropped_queue_full""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookOutcome::DroppedPayloadTooLarge,
+            serde_json::from_str::<serde_json::Value>(r#""dropped_payload_too_large""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookOutcome::SkippedDisabled,
+            serde_json::from_str::<serde_json::Value>(r#""skipped_disabled""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookOutcome::NotSentConfiguration,
+            serde_json::from_str::<serde_json::Value>(r#""not_sent_configuration""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: WebhookOutcome =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: WebhookOutcome = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn webhook_types_variants_round_trip_through_serde() {
+    let cases: Vec<(WebhookTypes, serde_json::Value)> = vec![
+        (
+            WebhookTypes::ProjectConversionStatus,
+            serde_json::from_str::<serde_json::Value>(r#""project_conversion_status""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::ChapterConversionStatus,
+            serde_json::from_str::<serde_json::Value>(r#""chapter_conversion_status""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::PostCallTranscription,
+            serde_json::from_str::<serde_json::Value>(r#""post_call_transcription""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::PostCallTranscriptionOtel,
+            serde_json::from_str::<serde_json::Value>(r#""post_call_transcription_otel""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::PostCallAudio,
+            serde_json::from_str::<serde_json::Value>(r#""post_call_audio""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::PostCallUnredactedTranscription,
+            serde_json::from_str::<serde_json::Value>(r#""post_call_unredacted_transcription""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::PostCallUnredactedTranscriptionOtel,
+            serde_json::from_str::<serde_json::Value>(
+                r#""post_call_unredacted_transcription_otel""#,
+            )
+            .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::PostCallUnredactedAudio,
+            serde_json::from_str::<serde_json::Value>(r#""post_call_unredacted_audio""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::PostCallAnalysis,
+            serde_json::from_str::<serde_json::Value>(r#""post_call_analysis""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::CallInitiationFailure,
+            serde_json::from_str::<serde_json::Value>(r#""call_initiation_failure""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::ConversationInitiationClientData,
+            serde_json::from_str::<serde_json::Value>(r#""conversation_initiation_client_data""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::AnsweringMachineDetection,
+            serde_json::from_str::<serde_json::Value>(r#""answering_machine_detection""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::VoiceRemovalNotice,
+            serde_json::from_str::<serde_json::Value>(r#""voice_removal_notice""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::VoiceRemovalNoticeWithdrawn,
+            serde_json::from_str::<serde_json::Value>(r#""voice_removal_notice_withdrawn""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::VoiceRemoved,
+            serde_json::from_str::<serde_json::Value>(r#""voice_removed""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::SpeechToTextTranscription,
+            serde_json::from_str::<serde_json::Value>(r#""speech_to_text_transcription""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::WebhookError,
+            serde_json::from_str::<serde_json::Value>(r#""webhook_error""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::SpeechToTextBatch,
+            serde_json::from_str::<serde_json::Value>(r#""speech_to_text_batch""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::AgentQaEvaluationCompleted,
+            serde_json::from_str::<serde_json::Value>(r#""agent_qa_evaluation_completed""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::ConvaiAlertingNotification,
+            serde_json::from_str::<serde_json::Value>(r#""convai_alerting_notification""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::FlowsGeneration,
+            serde_json::from_str::<serde_json::Value>(r#""flows_generation""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::FlowsTemplateRun,
+            serde_json::from_str::<serde_json::Value>(r#""flows_template_run""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::DubbingProjectReady,
+            serde_json::from_str::<serde_json::Value>(r#""dubbing_project_ready""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::DubbingProjectFailed,
+            serde_json::from_str::<serde_json::Value>(r#""dubbing_project_failed""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::DubbingLanguageCompleted,
+            serde_json::from_str::<serde_json::Value>(r#""dubbing_language_completed""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::DubbingLanguageFailed,
+            serde_json::from_str::<serde_json::Value>(r#""dubbing_language_failed""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WebhookTypes::SupportTicketMessageAdded,
+            serde_json::from_str::<serde_json::Value>(r#""support_ticket_message_added""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: WebhookTypes =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: WebhookTypes = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn music_model_id_variants_round_trip_through_serde() {
     let cases: Vec<(MusicModelId, serde_json::Value)> = vec![
         (
@@ -88281,157 +92072,6 @@ fn body_speech_to_text_v1_speech_to_text_post_timestamps_granularity_variants_ro
 }
 
 #[test]
-fn segmented_json_export_options_format_variants_round_trip_through_serde() {
-    let cases: Vec<(SegmentedJsonExportOptionsFormat, serde_json::Value)> = vec![(
-        SegmentedJsonExportOptionsFormat::SegmentedJson,
-        serde_json::from_str::<serde_json::Value>(r#""segmented_json""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SegmentedJsonExportOptionsFormat =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SegmentedJsonExportOptionsFormat = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn docx_export_options_format_variants_round_trip_through_serde() {
-    let cases: Vec<(DocxExportOptionsFormat, serde_json::Value)> = vec![(
-        DocxExportOptionsFormat::Docx,
-        serde_json::from_str::<serde_json::Value>(r#""docx""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DocxExportOptionsFormat =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DocxExportOptionsFormat = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn pdf_export_options_format_variants_round_trip_through_serde() {
-    let cases: Vec<(PdfExportOptionsFormat, serde_json::Value)> = vec![(
-        PdfExportOptionsFormat::Pdf,
-        serde_json::from_str::<serde_json::Value>(r#""pdf""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PdfExportOptionsFormat =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PdfExportOptionsFormat = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn txt_export_options_format_variants_round_trip_through_serde() {
-    let cases: Vec<(TxtExportOptionsFormat, serde_json::Value)> = vec![(
-        TxtExportOptionsFormat::Txt,
-        serde_json::from_str::<serde_json::Value>(r#""txt""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TxtExportOptionsFormat =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TxtExportOptionsFormat = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn html_export_options_format_variants_round_trip_through_serde() {
-    let cases: Vec<(HtmlExportOptionsFormat, serde_json::Value)> = vec![(
-        HtmlExportOptionsFormat::Html,
-        serde_json::from_str::<serde_json::Value>(r#""html""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: HtmlExportOptionsFormat =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: HtmlExportOptionsFormat = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn srt_export_options_format_variants_round_trip_through_serde() {
-    let cases: Vec<(SrtExportOptionsFormat, serde_json::Value)> = vec![(
-        SrtExportOptionsFormat::Srt,
-        serde_json::from_str::<serde_json::Value>(r#""srt""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SrtExportOptionsFormat =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SrtExportOptionsFormat = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn file_format_variants_round_trip_through_serde() {
     let cases: Vec<(FileFormat, serde_json::Value)> = vec![
         (
@@ -88738,6 +92378,11 @@ fn list_conversation_initiation_source_variants_round_trip_through_serde() {
                 .expect("fixture is valid JSON"),
         ),
         (
+            ListConversationInitiationSource::PlainIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""plain_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
             ListConversationInitiationSource::SalesforceIntegration,
             serde_json::from_str::<serde_json::Value>(r#""salesforce_integration""#)
                 .expect("fixture is valid JSON"),
@@ -88755,6 +92400,11 @@ fn list_conversation_initiation_source_variants_round_trip_through_serde() {
         (
             ListConversationInitiationSource::SubagentTool,
             serde_json::from_str::<serde_json::Value>(r#""subagent_tool""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ListConversationInitiationSource::AgentMessagesApi,
+            serde_json::from_str::<serde_json::Value>(r#""agent_messages_api""#)
                 .expect("fixture is valid JSON"),
         ),
     ];
@@ -89032,6 +92682,627 @@ fn guardrail_type_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn agent_messages_persisted_agent_type_variants_round_trip_through_serde() {
+    let cases: Vec<(AgentMessagesPersistedAgentType, serde_json::Value)> = vec![(
+        AgentMessagesPersistedAgentType::Persisted,
+        serde_json::from_str::<serde_json::Value>(r#""persisted""#).expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: AgentMessagesPersistedAgentType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: AgentMessagesPersistedAgentType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn llm_variants_round_trip_through_serde() {
+    let cases: Vec<(Llm, serde_json::Value)> = vec![
+        (
+            Llm::Gpt4OMini,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4O,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4""#).expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4Turbo,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4_1,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4_1Mini,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4_1Nano,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5""#).expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_1,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.1""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_2,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.2""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_2ChatLatest,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-chat-latest""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_4,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_4Mini,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_4Nano,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_5,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_6Sol,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-sol""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_6Terra,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-terra""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_6Luna,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-luna""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt6Astra,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6-astra""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt6Sol,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6-sol""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt6Luna,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6-luna""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt6_1Sol,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-sol""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt6_1Terra,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-terra""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt6_2Astra,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6.2-astra""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt6_2Sol,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6.2-sol""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5Mini,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5Nano,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt3_5Turbo,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini1_5Pro,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini1_5Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_0Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_0FlashLite,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_5FlashLite,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_5Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3ProPreview,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3-pro-preview""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3FlashPreview,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3-flash-preview""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3_1ProPreview,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-pro-preview""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3_1FlashLitePreview,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite-preview""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3_1FlashLite,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3_5Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3_5FlashLite,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash-lite""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3_6Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.6-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3_7Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.7-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini3_8Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.8-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini4Argon,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-4-argon""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini4Hydrogen,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-4-hydrogen""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini4Neon,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-4-neon""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeSonnet4_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeOpus4_6,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-6""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeOpus4_7,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-7""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeOpus4_8,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-8""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeOpus5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeOpus5_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-5-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeSonnet4_6,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-6""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeSonnet5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeSonnet5_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeSonnet4,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeHaiku4_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeHaiku5_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-haiku-5-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Claude3_7Sonnet,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Claude3_5Sonnet,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Claude3_5SonnetV1,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v1""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Claude3Haiku,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::CustomLlm,
+            serde_json::from_str::<serde_json::Value>(r#""custom-llm""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Qwen3_4B,
+            serde_json::from_str::<serde_json::Value>(r#""qwen3-4b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Qwen3_30BA3B,
+            serde_json::from_str::<serde_json::Value>(r#""qwen3-30b-a3b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Qwen36_35BA3B,
+            serde_json::from_str::<serde_json::Value>(r#""qwen36-35b-a3b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Qwen35_397BA17B,
+            serde_json::from_str::<serde_json::Value>(r#""qwen35-397b-a17b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::GptOss20B,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-oss-20b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::GptOss120B,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-oss-120b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Glm45AirFp8,
+            serde_json::from_str::<serde_json::Value>(r#""glm-45-air-fp8""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Glm52,
+            serde_json::from_str::<serde_json::Value>(r#""glm-52""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::DeepseekV41Flash,
+            serde_json::from_str::<serde_json::Value>(r#""deepseek-v41-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Nemotron35SuperVlNvfp4,
+            serde_json::from_str::<serde_json::Value>(r#""nemotron-35-super-vl-nvfp4""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_5FlashPreview09_2025,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-09-2025""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_5FlashLitePreview09_2025,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-09-2025""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_5FlashPreview05_20,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-05-20""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_5FlashPreview04_17,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-04-17""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_5FlashLitePreview06_17,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-06-17""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_0FlashLite001,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite-001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini2_0Flash001,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini1_5Flash002,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-002""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini1_5Flash001,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini1_5Pro002,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-002""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gemini1_5Pro001,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeSonnet4_20250514,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4@20250514""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeSonnet4_5_20250929,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5@20250929""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::ClaudeHaiku4_5_20251001,
+            serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5@20251001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Claude3_7Sonnet20250219,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet@20250219""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Claude3_5Sonnet20240620,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet@20240620""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Claude3_5SonnetV2_20241022,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v2@20241022""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Claude3Haiku20240307,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku@20240307""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_2025_08_07,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-2025-08-07""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_1_2025_11_13,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.1-2025-11-13""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_2_2025_12_11,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-2025-12-11""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_4_2026_03_05,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-2026-03-05""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_4Mini2026_03_17,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini-2026-03-17""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_4Nano2026_03_17,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano-2026-03-17""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5_5_2026_04_23,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.5-2026-04-23""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5Mini2025_08_07,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini-2025-08-07""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt5Nano2025_08_07,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano-2025-08-07""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4_1_2025_04_14,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-2025-04-14""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4_1Mini2025_04_14,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini-2025-04-14""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4_1Nano2025_04_14,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano-2025-04-14""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4OMini2024_07_18,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini-2024-07-18""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4O2024_11_20,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-11-20""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4O2024_08_06,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-08-06""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4O2024_05_13,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-05-13""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4_0613,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4-0613""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4_0314,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4-0314""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt4Turbo2024_04_09,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo-2024-04-09""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt3_5Turbo0125,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-0125""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::Gpt3_5Turbo1106,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-1106""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::WattTool8B,
+            serde_json::from_str::<serde_json::Value>(r#""watt-tool-8b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Llm::WattTool70B,
+            serde_json::from_str::<serde_json::Value>(r#""watt-tool-70b""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: Llm =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: Llm = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn conversation_feedback_type_variants_round_trip_through_serde() {
     let cases: Vec<(ConversationFeedbackType, serde_json::Value)> = vec![
         (
@@ -89226,94 +93497,6 @@ fn call_result_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn conversation_history_twilio_phone_call_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        ConversationHistoryTwilioPhoneCallModelType,
-        serde_json::Value,
-    )> = vec![(
-        ConversationHistoryTwilioPhoneCallModelType::Twilio,
-        serde_json::from_str::<serde_json::Value>(r#""twilio""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ConversationHistoryTwilioPhoneCallModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ConversationHistoryTwilioPhoneCallModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn conversation_history_exotel_phone_call_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        ConversationHistoryExotelPhoneCallModelType,
-        serde_json::Value,
-    )> = vec![(
-        ConversationHistoryExotelPhoneCallModelType::Exotel,
-        serde_json::from_str::<serde_json::Value>(r#""exotel""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ConversationHistoryExotelPhoneCallModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ConversationHistoryExotelPhoneCallModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn conversation_history_sip_trunking_phone_call_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        ConversationHistorySipTrunkingPhoneCallModelType,
-        serde_json::Value,
-    )> = vec![(
-        ConversationHistorySipTrunkingPhoneCallModelType::SipTrunking,
-        serde_json::from_str::<serde_json::Value>(r#""sip_trunking""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ConversationHistorySipTrunkingPhoneCallModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ConversationHistorySipTrunkingPhoneCallModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn campaign_conversation_type_variants_round_trip_through_serde() {
     let cases: Vec<(CampaignConversationType, serde_json::Value)> = vec![
         (
@@ -89387,66 +93570,6 @@ fn delivery_status_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: DeliveryStatus = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn plain_platform_metadata_conversation_initiation_source_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        PlainPlatformMetadataConversationInitiationSource,
-        serde_json::Value,
-    )> = vec![(
-        PlainPlatformMetadataConversationInitiationSource::PlainIntegration,
-        serde_json::from_str::<serde_json::Value>(r#""plain_integration""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PlainPlatformMetadataConversationInitiationSource =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PlainPlatformMetadataConversationInitiationSource =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn zendesk_platform_metadata_conversation_initiation_source_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        ZendeskPlatformMetadataConversationInitiationSource,
-        serde_json::Value,
-    )> = vec![(
-        ZendeskPlatformMetadataConversationInitiationSource::ZendeskIntegration,
-        serde_json::from_str::<serde_json::Value>(r#""zendesk_integration""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ZendeskPlatformMetadataConversationInitiationSource =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ZendeskPlatformMetadataConversationInitiationSource =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -89834,587 +93957,6 @@ fn tts_optimize_streaming_latency_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn llm_variants_round_trip_through_serde() {
-    let cases: Vec<(Llm, serde_json::Value)> = vec![
-        (
-            Llm::Gpt4OMini,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4O,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4o""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4""#).expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4Turbo,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4_1,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4_1Mini,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4_1Nano,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5""#).expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_1,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.1""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_2,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.2""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_2ChatLatest,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-chat-latest""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_4,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_4Mini,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_4Nano,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_5,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.5""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_6Sol,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-sol""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_6Terra,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-terra""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_6Luna,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-luna""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt6Astra,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-6-astra""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt6Sol,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-6-sol""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt6Luna,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-6-luna""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt6_1Sol,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-sol""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt6_1Terra,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-terra""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5Mini,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5Nano,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt3_5Turbo,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini1_5Pro,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini1_5Flash,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_0Flash,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_0FlashLite,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_5FlashLite,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_5Flash,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3ProPreview,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3-pro-preview""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3FlashPreview,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3-flash-preview""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3_1ProPreview,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-pro-preview""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3_1FlashLitePreview,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite-preview""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3_1FlashLite,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3_5Flash,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3_5FlashLite,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash-lite""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3_6Flash,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3.6-flash""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3_7Flash,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3.7-flash""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini3_8Flash,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-3.8-flash""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini4Argon,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-4-argon""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeSonnet4_5,
-            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeOpus4_6,
-            serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-6""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeOpus4_7,
-            serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-7""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeOpus4_8,
-            serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-8""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeOpus5,
-            serde_json::from_str::<serde_json::Value>(r#""claude-opus-5""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeOpus5_5,
-            serde_json::from_str::<serde_json::Value>(r#""claude-opus-5-5""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeSonnet4_6,
-            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-6""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeSonnet5,
-            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeSonnet5_5,
-            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5-5""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeSonnet4,
-            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeHaiku4_5,
-            serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeHaiku5_5,
-            serde_json::from_str::<serde_json::Value>(r#""claude-haiku-5-5""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Claude3_7Sonnet,
-            serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Claude3_5Sonnet,
-            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Claude3_5SonnetV1,
-            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v1""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Claude3Haiku,
-            serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::GrokBeta,
-            serde_json::from_str::<serde_json::Value>(r#""grok-beta""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::CustomLlm,
-            serde_json::from_str::<serde_json::Value>(r#""custom-llm""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Qwen3_4B,
-            serde_json::from_str::<serde_json::Value>(r#""qwen3-4b""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Qwen3_30BA3B,
-            serde_json::from_str::<serde_json::Value>(r#""qwen3-30b-a3b""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Qwen36_35BA3B,
-            serde_json::from_str::<serde_json::Value>(r#""qwen36-35b-a3b""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Qwen35_397BA17B,
-            serde_json::from_str::<serde_json::Value>(r#""qwen35-397b-a17b""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::GptOss20B,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-oss-20b""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::GptOss120B,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-oss-120b""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Glm45AirFp8,
-            serde_json::from_str::<serde_json::Value>(r#""glm-45-air-fp8""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Glm52,
-            serde_json::from_str::<serde_json::Value>(r#""glm-52""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::DeepseekV41Flash,
-            serde_json::from_str::<serde_json::Value>(r#""deepseek-v41-flash""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Nemotron35SuperVlNvfp4,
-            serde_json::from_str::<serde_json::Value>(r#""nemotron-35-super-vl-nvfp4""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_5FlashPreview09_2025,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-09-2025""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_5FlashLitePreview09_2025,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-09-2025""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_5FlashPreview05_20,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-05-20""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_5FlashPreview04_17,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-04-17""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_5FlashLitePreview06_17,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-06-17""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_0FlashLite001,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite-001""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini2_0Flash001,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-001""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini1_5Flash002,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-002""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini1_5Flash001,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-001""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini1_5Pro002,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-002""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gemini1_5Pro001,
-            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-001""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeSonnet4_20250514,
-            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4@20250514""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeSonnet4_5_20250929,
-            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5@20250929""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::ClaudeHaiku4_5_20251001,
-            serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5@20251001""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Claude3_7Sonnet20250219,
-            serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet@20250219""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Claude3_5Sonnet20240620,
-            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet@20240620""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Claude3_5SonnetV2_20241022,
-            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v2@20241022""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Claude3Haiku20240307,
-            serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku@20240307""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_2025_08_07,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5-2025-08-07""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_1_2025_11_13,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.1-2025-11-13""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_2_2025_12_11,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-2025-12-11""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_4_2026_03_05,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-2026-03-05""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_4Mini2026_03_17,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini-2026-03-17""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_4Nano2026_03_17,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano-2026-03-17""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5_5_2026_04_23,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5.5-2026-04-23""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5Mini2025_08_07,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini-2025-08-07""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt5Nano2025_08_07,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano-2025-08-07""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4_1_2025_04_14,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-2025-04-14""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4_1Mini2025_04_14,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini-2025-04-14""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4_1Nano2025_04_14,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano-2025-04-14""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4OMini2024_07_18,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini-2024-07-18""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4O2024_11_20,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-11-20""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4O2024_08_06,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-08-06""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4O2024_05_13,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-05-13""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4_0613,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4-0613""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4_0314,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4-0314""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt4Turbo2024_04_09,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo-2024-04-09""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt3_5Turbo0125,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-0125""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::Gpt3_5Turbo1106,
-            serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-1106""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::WattTool8B,
-            serde_json::from_str::<serde_json::Value>(r#""watt-tool-8b""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            Llm::WattTool70B,
-            serde_json::from_str::<serde_json::Value>(r#""watt-tool-70b""#)
-                .expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: Llm =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Llm = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn llm_reasoning_effort_variants_round_trip_through_serde() {
     let cases: Vec<(LlmReasoningEffort, serde_json::Value)> = vec![
         (
@@ -90701,487 +94243,6 @@ fn conversation_history_transcript_other_tools_result_common_model_type_variants
 }
 
 #[test]
-fn end_call_tool_result_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(EndCallToolResultModelResultType, serde_json::Value)> = vec![(
-        EndCallToolResultModelResultType::EndCallSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""end_call_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: EndCallToolResultModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: EndCallToolResultModelResultType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn language_detection_tool_result_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        LanguageDetectionToolResultModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        LanguageDetectionToolResultModelResultType::LanguageDetectionSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""language_detection_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: LanguageDetectionToolResultModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: LanguageDetectionToolResultModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_branch_info_configured_branch_reason_variants_round_trip_through_serde() {
-    let cases: Vec<(TransferBranchInfoConfiguredBranchReason, serde_json::Value)> = vec![(
-        TransferBranchInfoConfiguredBranchReason::Configured,
-        serde_json::from_str::<serde_json::Value>(r#""configured""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferBranchInfoConfiguredBranchReason =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferBranchInfoConfiguredBranchReason =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_branch_info_traffic_split_branch_reason_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        TransferBranchInfoTrafficSplitBranchReason,
-        serde_json::Value,
-    )> = vec![(
-        TransferBranchInfoTrafficSplitBranchReason::TrafficSplit,
-        serde_json::from_str::<serde_json::Value>(r#""traffic_split""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferBranchInfoTrafficSplitBranchReason =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferBranchInfoTrafficSplitBranchReason =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_branch_info_defaulting_to_main_branch_reason_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        TransferBranchInfoDefaultingToMainBranchReason,
-        serde_json::Value,
-    )> = vec![(
-        TransferBranchInfoDefaultingToMainBranchReason::DefaultingToMain,
-        serde_json::from_str::<serde_json::Value>(r#""defaulting_to_main""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferBranchInfoDefaultingToMainBranchReason =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferBranchInfoDefaultingToMainBranchReason =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_to_agent_tool_result_error_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        TransferToAgentToolResultErrorModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        TransferToAgentToolResultErrorModelResultType::TransferToAgentError,
-        serde_json::from_str::<serde_json::Value>(r#""transfer_to_agent_error""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferToAgentToolResultErrorModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferToAgentToolResultErrorModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_to_number_result_twilio_success_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        TransferToNumberResultTwilioSuccessModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        TransferToNumberResultTwilioSuccessModelResultType::TransferToNumberTwilioSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""transfer_to_number_twilio_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferToNumberResultTwilioSuccessModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferToNumberResultTwilioSuccessModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_to_number_result_sip_success_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        TransferToNumberResultSipSuccessModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        TransferToNumberResultSipSuccessModelResultType::TransferToNumberSipSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""transfer_to_number_sip_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferToNumberResultSipSuccessModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferToNumberResultSipSuccessModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_to_number_result_exotel_success_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        TransferToNumberResultExotelSuccessModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        TransferToNumberResultExotelSuccessModelResultType::TransferToNumberExotelSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""transfer_to_number_exotel_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferToNumberResultExotelSuccessModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferToNumberResultExotelSuccessModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_to_number_result_amazon_connect_success_model_result_type_variants_round_trip_through_serde(
-) {
-    let cases: Vec<(TransferToNumberResultAmazonConnectSuccessModelResultType, serde_json::Value)> = vec![
-        (TransferToNumberResultAmazonConnectSuccessModelResultType::TransferToNumberAmazonConnectSuccess, serde_json::from_str::<serde_json::Value>(r#""transfer_to_number_amazon_connect_success""#).expect("fixture is valid JSON")),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferToNumberResultAmazonConnectSuccessModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferToNumberResultAmazonConnectSuccessModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_to_number_result_error_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        TransferToNumberResultErrorModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        TransferToNumberResultErrorModelResultType::TransferToNumberError,
-        serde_json::from_str::<serde_json::Value>(r#""transfer_to_number_error""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferToNumberResultErrorModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferToNumberResultErrorModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn skip_turn_tool_response_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SkipTurnToolResponseModelResultType, serde_json::Value)> = vec![(
-        SkipTurnToolResponseModelResultType::SkipTurnSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""skip_turn_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SkipTurnToolResponseModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SkipTurnToolResponseModelResultType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn play_dtmf_result_success_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(PlayDtmfResultSuccessModelResultType, serde_json::Value)> = vec![(
-        PlayDtmfResultSuccessModelResultType::PlayDtmfSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""play_dtmf_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PlayDtmfResultSuccessModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PlayDtmfResultSuccessModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn play_dtmf_result_error_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(PlayDtmfResultErrorModelResultType, serde_json::Value)> = vec![(
-        PlayDtmfResultErrorModelResultType::PlayDtmfError,
-        serde_json::from_str::<serde_json::Value>(r#""play_dtmf_error""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PlayDtmfResultErrorModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PlayDtmfResultErrorModelResultType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn voice_mail_detection_result_success_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        VoiceMailDetectionResultSuccessModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        VoiceMailDetectionResultSuccessModelResultType::VoicemailDetectionSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""voicemail_detection_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: VoiceMailDetectionResultSuccessModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: VoiceMailDetectionResultSuccessModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn test_tool_result_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TestToolResultModelResultType, serde_json::Value)> = vec![(
-        TestToolResultModelResultType::TestingToolResult,
-        serde_json::from_str::<serde_json::Value>(r#""testing_tool_result""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TestToolResultModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TestToolResultModelResultType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn knowledge_base_rag_tool_result_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(KnowledgeBaseRagToolResultModelResultType, serde_json::Value)> = vec![(
-        KnowledgeBaseRagToolResultModelResultType::KnowledgeBaseRagSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""knowledge_base_rag_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: KnowledgeBaseRagToolResultModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: KnowledgeBaseRagToolResultModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn knowledge_base_rag_tool_status_variants_round_trip_through_serde() {
     let cases: Vec<(KnowledgeBaseRagToolStatus, serde_json::Value)> = vec![
         (
@@ -91213,33 +94274,6 @@ fn knowledge_base_rag_tool_status_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: KnowledgeBaseRagToolStatus = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn knowledge_base_tool_result_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(KnowledgeBaseToolResultModelResultType, serde_json::Value)> = vec![(
-        KnowledgeBaseToolResultModelResultType::KnowledgeBaseSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""knowledge_base_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: KnowledgeBaseToolResultModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: KnowledgeBaseToolResultModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -91285,66 +94319,6 @@ fn knowledge_base_tool_status_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn start_procedure_tool_result_success_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        StartProcedureToolResultSuccessModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        StartProcedureToolResultSuccessModelResultType::StartProcedureSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""start_procedure_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: StartProcedureToolResultSuccessModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: StartProcedureToolResultSuccessModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn start_procedure_tool_result_error_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        StartProcedureToolResultErrorModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        StartProcedureToolResultErrorModelResultType::StartProcedureError,
-        serde_json::from_str::<serde_json::Value>(r#""start_procedure_error""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: StartProcedureToolResultErrorModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: StartProcedureToolResultErrorModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn start_procedure_tool_error_status_variants_round_trip_through_serde() {
     let cases: Vec<(StartProcedureToolErrorStatus, serde_json::Value)> = vec![
         (
@@ -91383,66 +94357,6 @@ fn start_procedure_tool_error_status_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn end_procedure_tool_result_success_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        EndProcedureToolResultSuccessModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        EndProcedureToolResultSuccessModelResultType::EndProcedureSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""end_procedure_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: EndProcedureToolResultSuccessModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: EndProcedureToolResultSuccessModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn end_procedure_tool_result_error_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        EndProcedureToolResultErrorModelResultType,
-        serde_json::Value,
-    )> = vec![(
-        EndProcedureToolResultErrorModelResultType::EndProcedureError,
-        serde_json::from_str::<serde_json::Value>(r#""end_procedure_error""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: EndProcedureToolResultErrorModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: EndProcedureToolResultErrorModelResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn end_procedure_tool_error_status_variants_round_trip_through_serde() {
     let cases: Vec<(EndProcedureToolErrorStatus, serde_json::Value)> = vec![
         (
@@ -91469,86 +94383,6 @@ fn end_procedure_tool_error_status_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: EndProcedureToolErrorStatus = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn dummy_tool_result_model_result_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DummyToolResultModelResultType, serde_json::Value)> = vec![(
-        DummyToolResultModelResultType::Dummy,
-        serde_json::from_str::<serde_json::Value>(r#""dummy""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DummyToolResultModelResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DummyToolResultModelResultType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_tool_edge_step_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowToolEdgeStepModelType, serde_json::Value)> = vec![(
-        WorkflowToolEdgeStepModelType::Edge,
-        serde_json::from_str::<serde_json::Value>(r#""edge""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowToolEdgeStepModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowToolEdgeStepModelType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_tool_max_iterations_exceeded_step_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        WorkflowToolMaxIterationsExceededStepModelType,
-        serde_json::Value,
-    )> = vec![(
-        WorkflowToolMaxIterationsExceededStepModelType::MaxIterationsExceeded,
-        serde_json::from_str::<serde_json::Value>(r#""max_iterations_exceeded""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowToolMaxIterationsExceededStepModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowToolMaxIterationsExceededStepModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -91698,32 +94532,6 @@ fn guardrail_execution_mode_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn guardrail_classifier_verdict_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GuardrailClassifierVerdictType, serde_json::Value)> = vec![(
-        GuardrailClassifierVerdictType::Classifier,
-        serde_json::from_str::<serde_json::Value>(r#""classifier""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GuardrailClassifierVerdictType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GuardrailClassifierVerdictType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn get_format_variants_round_trip_through_serde() {
     let cases: Vec<(GetFormat, serde_json::Value)> = vec![
         (
@@ -91779,6 +94587,351 @@ fn sip_log_message_direction_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: SipLogMessageDirection = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn agent_output_status_variants_round_trip_through_serde() {
+    let cases: Vec<(AgentOutputStatus, serde_json::Value)> = vec![
+        (
+            AgentOutputStatus::InProgress,
+            serde_json::from_str::<serde_json::Value>(r#""in_progress""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputStatus::Completed,
+            serde_json::from_str::<serde_json::Value>(r#""completed""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputStatus::RequiresAction,
+            serde_json::from_str::<serde_json::Value>(r#""requires_action""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputStatus::Failed,
+            serde_json::from_str::<serde_json::Value>(r#""failed""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputStatus::TimedOut,
+            serde_json::from_str::<serde_json::Value>(r#""timed_out""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: AgentOutputStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: AgentOutputStatus = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn text_output_item_role_variants_round_trip_through_serde() {
+    let cases: Vec<(TextOutputItemRole, serde_json::Value)> = vec![(
+        TextOutputItemRole::Agent,
+        serde_json::from_str::<serde_json::Value>(r#""agent""#).expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TextOutputItemRole =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TextOutputItemRole = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn file_input_mime_type_variants_round_trip_through_serde() {
+    let cases: Vec<(FileInputMimeType, serde_json::Value)> = vec![
+        (
+            FileInputMimeType::ImagePng,
+            serde_json::from_str::<serde_json::Value>(r#""image/png""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            FileInputMimeType::ImageJpeg,
+            serde_json::from_str::<serde_json::Value>(r#""image/jpeg""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            FileInputMimeType::ImageGif,
+            serde_json::from_str::<serde_json::Value>(r#""image/gif""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            FileInputMimeType::ImageWebp,
+            serde_json::from_str::<serde_json::Value>(r#""image/webp""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            FileInputMimeType::ApplicationPdf,
+            serde_json::from_str::<serde_json::Value>(r#""application/pdf""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            FileInputMimeType::TextPlain,
+            serde_json::from_str::<serde_json::Value>(r#""text/plain""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: FileInputMimeType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: FileInputMimeType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn client_tool_result_item_error_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ClientToolResultItemErrorType, serde_json::Value)> = vec![
+        (
+            ClientToolResultItemErrorType::UserRejected,
+            serde_json::from_str::<serde_json::Value>(r#""user_rejected""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultItemErrorType::ExternalServer,
+            serde_json::from_str::<serde_json::Value>(r#""external_server""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultItemErrorType::ExternalClient,
+            serde_json::from_str::<serde_json::Value>(r#""external_client""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultItemErrorType::CustomerAuth,
+            serde_json::from_str::<serde_json::Value>(r#""customer_auth""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultItemErrorType::ClientTimeout,
+            serde_json::from_str::<serde_json::Value>(r#""client_timeout""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultItemErrorType::Unknown,
+            serde_json::from_str::<serde_json::Value>(r#""unknown""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ClientToolResultItemErrorType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ClientToolResultItemErrorType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn contextual_update_placement_variants_round_trip_through_serde() {
+    let cases: Vec<(ContextualUpdatePlacement, serde_json::Value)> = vec![
+        (
+            ContextualUpdatePlacement::InPlace,
+            serde_json::from_str::<serde_json::Value>(r#""in_place""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ContextualUpdatePlacement::End,
+            serde_json::from_str::<serde_json::Value>(r#""end""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ContextualUpdatePlacement =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ContextualUpdatePlacement = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn agent_chat_response_part_type_variants_round_trip_through_serde() {
+    let cases: Vec<(AgentChatResponsePartType, serde_json::Value)> = vec![
+        (
+            AgentChatResponsePartType::Start,
+            serde_json::from_str::<serde_json::Value>(r#""start""#).expect("fixture is valid JSON"),
+        ),
+        (
+            AgentChatResponsePartType::Delta,
+            serde_json::from_str::<serde_json::Value>(r#""delta""#).expect("fixture is valid JSON"),
+        ),
+        (
+            AgentChatResponsePartType::Stop,
+            serde_json::from_str::<serde_json::Value>(r#""stop""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: AgentChatResponsePartType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: AgentChatResponsePartType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn agent_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(AgentResponseType, serde_json::Value)> = vec![
+        (
+            AgentResponseType::Text,
+            serde_json::from_str::<serde_json::Value>(r#""text""#).expect("fixture is valid JSON"),
+        ),
+        (
+            AgentResponseType::Voice,
+            serde_json::from_str::<serde_json::Value>(r#""voice""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: AgentResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: AgentResponseType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn agent_tool_response_status_variants_round_trip_through_serde() {
+    let cases: Vec<(AgentToolResponseStatus, serde_json::Value)> = vec![
+        (
+            AgentToolResponseStatus::Success,
+            serde_json::from_str::<serde_json::Value>(r#""success""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentToolResponseStatus::Error,
+            serde_json::from_str::<serde_json::Value>(r#""error""#).expect("fixture is valid JSON"),
+        ),
+        (
+            AgentToolResponseStatus::Blocked,
+            serde_json::from_str::<serde_json::Value>(r#""blocked""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentToolResponseStatus::Skipped,
+            serde_json::from_str::<serde_json::Value>(r#""skipped""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: AgentToolResponseStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: AgentToolResponseStatus = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn client_tool_call_event_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ClientToolCallEventType, serde_json::Value)> = vec![(
+        ClientToolCallEventType::ClientToolCall,
+        serde_json::from_str::<serde_json::Value>(r#""client_tool_call""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ClientToolCallEventType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ClientToolCallEventType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -91901,32 +95054,6 @@ fn twilio_answered_by_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn whats_app_template_header_component_params_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WhatsAppTemplateHeaderComponentParamsType, serde_json::Value)> = vec![(
-        WhatsAppTemplateHeaderComponentParamsType::Header,
-        serde_json::from_str::<serde_json::Value>(r#""header""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WhatsAppTemplateHeaderComponentParamsType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WhatsAppTemplateHeaderComponentParamsType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn whats_app_template_document_param_type_variants_round_trip_through_serde() {
     let cases: Vec<(WhatsAppTemplateDocumentParamType, serde_json::Value)> = vec![(
         WhatsAppTemplateDocumentParamType::Document,
@@ -91977,58 +95104,6 @@ fn whats_app_template_location_param_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn whats_app_template_body_component_params_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WhatsAppTemplateBodyComponentParamsType, serde_json::Value)> = vec![(
-        WhatsAppTemplateBodyComponentParamsType::Body,
-        serde_json::from_str::<serde_json::Value>(r#""body""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WhatsAppTemplateBodyComponentParamsType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WhatsAppTemplateBodyComponentParamsType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn whats_app_template_button_component_params_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WhatsAppTemplateButtonComponentParamsType, serde_json::Value)> = vec![(
-        WhatsAppTemplateButtonComponentParamsType::Button,
-        serde_json::from_str::<serde_json::Value>(r#""button""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WhatsAppTemplateButtonComponentParamsType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WhatsAppTemplateButtonComponentParamsType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn asr_quality_variants_round_trip_through_serde() {
     let cases: Vec<(AsrQuality, serde_json::Value)> = vec![(
         AsrQuality::High,
@@ -92069,6 +95144,16 @@ fn asr_provider_variants_round_trip_through_serde() {
         (
             AsrProvider::ScribeV2Turbo,
             serde_json::from_str::<serde_json::Value>(r#""scribe_v2_turbo""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AsrProvider::ScribeV3Live,
+            serde_json::from_str::<serde_json::Value>(r#""scribe_v3_live""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AsrProvider::ScribeV3LiveMedical,
+            serde_json::from_str::<serde_json::Value>(r#""scribe_v3_live_medical""#)
                 .expect("fixture is valid JSON"),
         ),
     ];
@@ -92680,6 +95765,121 @@ fn interaction_budget_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn object_json_schema_property_input_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ObjectJsonSchemaPropertyInputType, serde_json::Value)> = vec![(
+        ObjectJsonSchemaPropertyInputType::Object,
+        serde_json::from_str::<serde_json::Value>(r#""object""#).expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ObjectJsonSchemaPropertyInputType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ObjectJsonSchemaPropertyInputType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn array_json_schema_property_input_property_kind_variants_round_trip_through_serde() {
+    let cases: Vec<(ArrayJsonSchemaPropertyInputPropertyKind, serde_json::Value)> = vec![
+        (
+            ArrayJsonSchemaPropertyInputPropertyKind::Array,
+            serde_json::from_str::<serde_json::Value>(r#""array""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ArrayJsonSchemaPropertyInputPropertyKind::Object,
+            serde_json::from_str::<serde_json::Value>(r#""object""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ArrayJsonSchemaPropertyInputPropertyKind =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ArrayJsonSchemaPropertyInputPropertyKind =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn array_json_schema_property_input_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ArrayJsonSchemaPropertyInputType, serde_json::Value)> = vec![(
+        ArrayJsonSchemaPropertyInputType::Array,
+        serde_json::from_str::<serde_json::Value>(r#""array""#).expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ArrayJsonSchemaPropertyInputType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ArrayJsonSchemaPropertyInputType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn self_subagent_execution_mode_variants_round_trip_through_serde() {
+    let cases: Vec<(SelfSubagentExecutionMode, serde_json::Value)> = vec![
+        (
+            SelfSubagentExecutionMode::Immediate,
+            serde_json::from_str::<serde_json::Value>(r#""immediate""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SelfSubagentExecutionMode::Async_,
+            serde_json::from_str::<serde_json::Value>(r#""async""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: SelfSubagentExecutionMode =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: SelfSubagentExecutionMode = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn llm_service_tier_variants_round_trip_through_serde() {
     let cases: Vec<(LlmServiceTier, serde_json::Value)> = vec![
         (
@@ -92955,254 +96155,6 @@ fn tool_error_handling_mode_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn end_call_tool_config_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(EndCallToolConfigSystemToolType, serde_json::Value)> = vec![(
-        EndCallToolConfigSystemToolType::EndCall,
-        serde_json::from_str::<serde_json::Value>(r#""end_call""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: EndCallToolConfigSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: EndCallToolConfigSystemToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn language_detection_tool_config_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(LanguageDetectionToolConfigSystemToolType, serde_json::Value)> = vec![(
-        LanguageDetectionToolConfigSystemToolType::LanguageDetection,
-        serde_json::from_str::<serde_json::Value>(r#""language_detection""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: LanguageDetectionToolConfigSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: LanguageDetectionToolConfigSystemToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_to_agent_tool_config_input_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        TransferToAgentToolConfigInputSystemToolType,
-        serde_json::Value,
-    )> = vec![(
-        TransferToAgentToolConfigInputSystemToolType::TransferToAgent,
-        serde_json::from_str::<serde_json::Value>(r#""transfer_to_agent""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferToAgentToolConfigInputSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferToAgentToolConfigInputSystemToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transfer_to_number_tool_config_input_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        TransferToNumberToolConfigInputSystemToolType,
-        serde_json::Value,
-    )> = vec![(
-        TransferToNumberToolConfigInputSystemToolType::TransferToNumber,
-        serde_json::from_str::<serde_json::Value>(r#""transfer_to_number""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferToNumberToolConfigInputSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferToNumberToolConfigInputSystemToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn custom_sip_header_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CustomSipHeaderType, serde_json::Value)> = vec![(
-        CustomSipHeaderType::Static_,
-        serde_json::from_str::<serde_json::Value>(r#""static""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CustomSipHeaderType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CustomSipHeaderType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn custom_sip_header_with_dynamic_variable_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CustomSipHeaderWithDynamicVariableType, serde_json::Value)> = vec![(
-        CustomSipHeaderWithDynamicVariableType::Dynamic,
-        serde_json::from_str::<serde_json::Value>(r#""dynamic""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CustomSipHeaderWithDynamicVariableType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CustomSipHeaderWithDynamicVariableType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn sip_uri_transfer_destination_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SipUriTransferDestinationType, serde_json::Value)> = vec![(
-        SipUriTransferDestinationType::SipUri,
-        serde_json::from_str::<serde_json::Value>(r#""sip_uri""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SipUriTransferDestinationType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SipUriTransferDestinationType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn phone_number_dynamic_variable_transfer_destination_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        PhoneNumberDynamicVariableTransferDestinationType,
-        serde_json::Value,
-    )> = vec![(
-        PhoneNumberDynamicVariableTransferDestinationType::PhoneDynamicVariable,
-        serde_json::from_str::<serde_json::Value>(r#""phone_dynamic_variable""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PhoneNumberDynamicVariableTransferDestinationType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PhoneNumberDynamicVariableTransferDestinationType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn sip_uri_dynamic_variable_transfer_destination_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        SipUriDynamicVariableTransferDestinationType,
-        serde_json::Value,
-    )> = vec![(
-        SipUriDynamicVariableTransferDestinationType::SipUriDynamicVariable,
-        serde_json::from_str::<serde_json::Value>(r#""sip_uri_dynamic_variable""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SipUriDynamicVariableTransferDestinationType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SipUriDynamicVariableTransferDestinationType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn transfer_type_enum_variants_round_trip_through_serde() {
     let cases: Vec<(TransferTypeEnum, serde_json::Value)> = vec![
         (
@@ -93273,141 +96225,6 @@ fn protocol_discriminator_mode_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn skip_turn_tool_config_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SkipTurnToolConfigSystemToolType, serde_json::Value)> = vec![(
-        SkipTurnToolConfigSystemToolType::SkipTurn,
-        serde_json::from_str::<serde_json::Value>(r#""skip_turn""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SkipTurnToolConfigSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SkipTurnToolConfigSystemToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn play_dtmf_tool_config_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(PlayDtmfToolConfigSystemToolType, serde_json::Value)> = vec![(
-        PlayDtmfToolConfigSystemToolType::PlayKeypadTouchTone,
-        serde_json::from_str::<serde_json::Value>(r#""play_keypad_touch_tone""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PlayDtmfToolConfigSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PlayDtmfToolConfigSystemToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn voicemail_detection_tool_config_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        VoicemailDetectionToolConfigSystemToolType,
-        serde_json::Value,
-    )> = vec![(
-        VoicemailDetectionToolConfigSystemToolType::VoicemailDetection,
-        serde_json::from_str::<serde_json::Value>(r#""voicemail_detection""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: VoicemailDetectionToolConfigSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: VoicemailDetectionToolConfigSystemToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn knowledge_base_rag_tool_config_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(KnowledgeBaseRagToolConfigSystemToolType, serde_json::Value)> = vec![(
-        KnowledgeBaseRagToolConfigSystemToolType::KnowledgeBaseRag,
-        serde_json::from_str::<serde_json::Value>(r#""knowledge_base_rag""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: KnowledgeBaseRagToolConfigSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: KnowledgeBaseRagToolConfigSystemToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn knowledge_base_tool_config_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(KnowledgeBaseToolConfigSystemToolType, serde_json::Value)> = vec![(
-        KnowledgeBaseToolConfigSystemToolType::KnowledgeBase,
-        serde_json::from_str::<serde_json::Value>(r#""knowledge_base""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: KnowledgeBaseToolConfigSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: KnowledgeBaseToolConfigSystemToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn search_strategy_variants_round_trip_through_serde() {
     let cases: Vec<(SearchStrategy, serde_json::Value)> = vec![
         (
@@ -93449,60 +96266,6 @@ fn search_strategy_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn start_procedure_tool_config_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(StartProcedureToolConfigSystemToolType, serde_json::Value)> = vec![(
-        StartProcedureToolConfigSystemToolType::StartProcedure,
-        serde_json::from_str::<serde_json::Value>(r#""start_procedure""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: StartProcedureToolConfigSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: StartProcedureToolConfigSystemToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn end_procedure_tool_config_system_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(EndProcedureToolConfigSystemToolType, serde_json::Value)> = vec![(
-        EndProcedureToolConfigSystemToolType::EndProcedure,
-        serde_json::from_str::<serde_json::Value>(r#""end_procedure""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: EndProcedureToolConfigSystemToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: EndProcedureToolConfigSystemToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn custom_llmapi_type_variants_round_trip_through_serde() {
     let cases: Vec<(CustomLlmapiType, serde_json::Value)> = vec![
         (
@@ -93533,81 +96296,6 @@ fn custom_llmapi_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: CustomLlmapiType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn backup_llm_default_preference_variants_round_trip_through_serde() {
-    let cases: Vec<(BackupLlmDefaultPreference, serde_json::Value)> = vec![(
-        BackupLlmDefaultPreference::Default,
-        serde_json::from_str::<serde_json::Value>(r#""default""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BackupLlmDefaultPreference =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BackupLlmDefaultPreference = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn backup_llm_disabled_preference_variants_round_trip_through_serde() {
-    let cases: Vec<(BackupLlmDisabledPreference, serde_json::Value)> = vec![(
-        BackupLlmDisabledPreference::Disabled,
-        serde_json::from_str::<serde_json::Value>(r#""disabled""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BackupLlmDisabledPreference =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BackupLlmDisabledPreference = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn backup_llm_override_preference_variants_round_trip_through_serde() {
-    let cases: Vec<(BackupLlmOverridePreference, serde_json::Value)> = vec![(
-        BackupLlmOverridePreference::Override_,
-        serde_json::from_str::<serde_json::Value>(r#""override""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BackupLlmOverridePreference =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BackupLlmOverridePreference = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -93716,89 +96404,6 @@ fn webhook_tool_api_schema_config_input_method_variants_round_trip_through_serde
     let decoded: WebhookToolApiSchemaConfigInputMethod =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn object_json_schema_property_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ObjectJsonSchemaPropertyInputType, serde_json::Value)> = vec![(
-        ObjectJsonSchemaPropertyInputType::Object,
-        serde_json::from_str::<serde_json::Value>(r#""object""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ObjectJsonSchemaPropertyInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ObjectJsonSchemaPropertyInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn array_json_schema_property_input_property_kind_variants_round_trip_through_serde() {
-    let cases: Vec<(ArrayJsonSchemaPropertyInputPropertyKind, serde_json::Value)> = vec![
-        (
-            ArrayJsonSchemaPropertyInputPropertyKind::Array,
-            serde_json::from_str::<serde_json::Value>(r#""array""#).expect("fixture is valid JSON"),
-        ),
-        (
-            ArrayJsonSchemaPropertyInputPropertyKind::Object,
-            serde_json::from_str::<serde_json::Value>(r#""object""#)
-                .expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ArrayJsonSchemaPropertyInputPropertyKind =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ArrayJsonSchemaPropertyInputPropertyKind =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn array_json_schema_property_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ArrayJsonSchemaPropertyInputType, serde_json::Value)> = vec![(
-        ArrayJsonSchemaPropertyInputType::Array,
-        serde_json::from_str::<serde_json::Value>(r#""array""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ArrayJsonSchemaPropertyInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ArrayJsonSchemaPropertyInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -93930,127 +96535,6 @@ fn client_tool_config_input_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn integration_type_variants_round_trip_through_serde() {
-    let cases: Vec<(IntegrationType, serde_json::Value)> = vec![
-        (
-            IntegrationType::McpServer,
-            serde_json::from_str::<serde_json::Value>(r#""mcp_server""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            IntegrationType::McpIntegration,
-            serde_json::from_str::<serde_json::Value>(r#""mcp_integration""#)
-                .expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: IntegrationType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: IntegrationType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn mcp_approval_policy_variants_round_trip_through_serde() {
-    let cases: Vec<(McpApprovalPolicy, serde_json::Value)> = vec![
-        (
-            McpApprovalPolicy::AutoApproveAll,
-            serde_json::from_str::<serde_json::Value>(r#""auto_approve_all""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            McpApprovalPolicy::RequireApprovalAll,
-            serde_json::from_str::<serde_json::Value>(r#""require_approval_all""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            McpApprovalPolicy::RequireApprovalPerTool,
-            serde_json::from_str::<serde_json::Value>(r#""require_approval_per_tool""#)
-                .expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: McpApprovalPolicy =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: McpApprovalPolicy = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn constant_schema_override_source_variants_round_trip_through_serde() {
-    let cases: Vec<(ConstantSchemaOverrideSource, serde_json::Value)> = vec![(
-        ConstantSchemaOverrideSource::Constant,
-        serde_json::from_str::<serde_json::Value>(r#""constant""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ConstantSchemaOverrideSource =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ConstantSchemaOverrideSource = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn omit_schema_override_source_variants_round_trip_through_serde() {
-    let cases: Vec<(OmitSchemaOverrideSource, serde_json::Value)> = vec![(
-        OmitSchemaOverrideSource::Omit,
-        serde_json::from_str::<serde_json::Value>(r#""omit""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OmitSchemaOverrideSource =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OmitSchemaOverrideSource = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn api_integration_webhook_tool_config_input_type_variants_round_trip_through_serde() {
     let cases: Vec<(ApiIntegrationWebhookToolConfigInputType, serde_json::Value)> = vec![(
         ApiIntegrationWebhookToolConfigInputType::ApiIntegrationWebhook,
@@ -94096,2536 +96580,6 @@ fn smb_tool_config_type_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: SmbToolConfigType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn search_clients_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SearchClientsParamsSmbToolType, serde_json::Value)> = vec![(
-        SearchClientsParamsSmbToolType::SearchClients,
-        serde_json::from_str::<serde_json::Value>(r#""search_clients""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SearchClientsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SearchClientsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn send_custom_email_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SendCustomEmailParamsSmbToolType, serde_json::Value)> = vec![(
-        SendCustomEmailParamsSmbToolType::SendCustomEmail,
-        serde_json::from_str::<serde_json::Value>(r#""send_custom_email""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SendCustomEmailParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SendCustomEmailParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_clients_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListClientsParamsSmbToolType, serde_json::Value)> = vec![(
-        ListClientsParamsSmbToolType::ListClients,
-        serde_json::from_str::<serde_json::Value>(r#""list_clients""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListClientsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListClientsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_client_by_phone_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetClientByPhoneParamsSmbToolType, serde_json::Value)> = vec![(
-        GetClientByPhoneParamsSmbToolType::GetClientByPhone,
-        serde_json::from_str::<serde_json::Value>(r#""get_client_by_phone""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetClientByPhoneParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetClientByPhoneParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_client_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateClientParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateClientParamsSmbToolType::CreateClient,
-        serde_json::from_str::<serde_json::Value>(r#""create_client""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateClientParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateClientParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_client_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateClientParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateClientParamsSmbToolType::UpdateClient,
-        serde_json::from_str::<serde_json::Value>(r#""update_client""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateClientParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateClientParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_client_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteClientParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteClientParamsSmbToolType::DeleteClient,
-        serde_json::from_str::<serde_json::Value>(r#""delete_client""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteClientParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteClientParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_staff_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListStaffParamsSmbToolType, serde_json::Value)> = vec![(
-        ListStaffParamsSmbToolType::ListStaff,
-        serde_json::from_str::<serde_json::Value>(r#""list_staff""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListStaffParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListStaffParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_staff_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateStaffParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateStaffParamsSmbToolType::CreateStaff,
-        serde_json::from_str::<serde_json::Value>(r#""create_staff""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateStaffParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateStaffParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_staff_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateStaffParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateStaffParamsSmbToolType::UpdateStaff,
-        serde_json::from_str::<serde_json::Value>(r#""update_staff""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateStaffParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateStaffParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_staff_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteStaffParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteStaffParamsSmbToolType::DeleteStaff,
-        serde_json::from_str::<serde_json::Value>(r#""delete_staff""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteStaffParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteStaffParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_assets_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListAssetsParamsSmbToolType, serde_json::Value)> = vec![(
-        ListAssetsParamsSmbToolType::ListAssets,
-        serde_json::from_str::<serde_json::Value>(r#""list_assets""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListAssetsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListAssetsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_asset_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateAssetParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateAssetParamsSmbToolType::CreateAsset,
-        serde_json::from_str::<serde_json::Value>(r#""create_asset""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateAssetParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateAssetParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_asset_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateAssetParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateAssetParamsSmbToolType::UpdateAsset,
-        serde_json::from_str::<serde_json::Value>(r#""update_asset""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateAssetParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateAssetParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_asset_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteAssetParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteAssetParamsSmbToolType::DeleteAsset,
-        serde_json::from_str::<serde_json::Value>(r#""delete_asset""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteAssetParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteAssetParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_services_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListServicesParamsSmbToolType, serde_json::Value)> = vec![(
-        ListServicesParamsSmbToolType::ListServices,
-        serde_json::from_str::<serde_json::Value>(r#""list_services""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListServicesParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListServicesParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_service_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateServiceParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateServiceParamsSmbToolType::CreateService,
-        serde_json::from_str::<serde_json::Value>(r#""create_service""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateServiceParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateServiceParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_service_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateServiceParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateServiceParamsSmbToolType::UpdateService,
-        serde_json::from_str::<serde_json::Value>(r#""update_service""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateServiceParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateServiceParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_service_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteServiceParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteServiceParamsSmbToolType::DeleteService,
-        serde_json::from_str::<serde_json::Value>(r#""delete_service""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteServiceParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteServiceParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_products_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListProductsParamsSmbToolType, serde_json::Value)> = vec![(
-        ListProductsParamsSmbToolType::ListProducts,
-        serde_json::from_str::<serde_json::Value>(r#""list_products""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListProductsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListProductsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_product_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateProductParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateProductParamsSmbToolType::CreateProduct,
-        serde_json::from_str::<serde_json::Value>(r#""create_product""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateProductParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateProductParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_product_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateProductParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateProductParamsSmbToolType::UpdateProduct,
-        serde_json::from_str::<serde_json::Value>(r#""update_product""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateProductParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateProductParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_product_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteProductParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteProductParamsSmbToolType::DeleteProduct,
-        serde_json::from_str::<serde_json::Value>(r#""delete_product""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteProductParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteProductParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn check_service_availability_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CheckServiceAvailabilityParamsSmbToolType, serde_json::Value)> = vec![(
-        CheckServiceAvailabilityParamsSmbToolType::CheckServiceAvailability,
-        serde_json::from_str::<serde_json::Value>(r#""check_service_availability""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CheckServiceAvailabilityParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CheckServiceAvailabilityParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_client_appointment_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateClientAppointmentParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateClientAppointmentParamsSmbToolType::CreateClientAppointment,
-        serde_json::from_str::<serde_json::Value>(r#""create_client_appointment""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateClientAppointmentParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateClientAppointmentParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_client_appointments_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetClientAppointmentsParamsSmbToolType, serde_json::Value)> = vec![(
-        GetClientAppointmentsParamsSmbToolType::GetClientAppointments,
-        serde_json::from_str::<serde_json::Value>(r#""get_client_appointments""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetClientAppointmentsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetClientAppointmentsParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_appointment_by_confirmation_number_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        GetAppointmentByConfirmationNumberParamsSmbToolType,
-        serde_json::Value,
-    )> = vec![(
-        GetAppointmentByConfirmationNumberParamsSmbToolType::GetAppointmentByConfirmationNumber,
-        serde_json::from_str::<serde_json::Value>(r#""get_appointment_by_confirmation_number""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetAppointmentByConfirmationNumberParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetAppointmentByConfirmationNumberParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_order_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateOrderParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateOrderParamsSmbToolType::CreateOrder,
-        serde_json::from_str::<serde_json::Value>(r#""create_order""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateOrderParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateOrderParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_order_by_confirmation_number_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        GetOrderByConfirmationNumberParamsSmbToolType,
-        serde_json::Value,
-    )> = vec![(
-        GetOrderByConfirmationNumberParamsSmbToolType::GetOrderByConfirmationNumber,
-        serde_json::from_str::<serde_json::Value>(r#""get_order_by_confirmation_number""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetOrderByConfirmationNumberParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetOrderByConfirmationNumberParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_client_orders_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetClientOrdersParamsSmbToolType, serde_json::Value)> = vec![(
-        GetClientOrdersParamsSmbToolType::GetClientOrders,
-        serde_json::from_str::<serde_json::Value>(r#""get_client_orders""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetClientOrdersParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetClientOrdersParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_order_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateOrderParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateOrderParamsSmbToolType::UpdateOrder,
-        serde_json::from_str::<serde_json::Value>(r#""update_order""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateOrderParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateOrderParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn cancel_order_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CancelOrderParamsSmbToolType, serde_json::Value)> = vec![(
-        CancelOrderParamsSmbToolType::CancelOrder,
-        serde_json::from_str::<serde_json::Value>(r#""cancel_order""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CancelOrderParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CancelOrderParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_group_sessions_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListGroupSessionsParamsSmbToolType, serde_json::Value)> = vec![(
-        ListGroupSessionsParamsSmbToolType::ListGroupSessions,
-        serde_json::from_str::<serde_json::Value>(r#""list_group_sessions""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListGroupSessionsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListGroupSessionsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn schedule_group_session_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ScheduleGroupSessionParamsSmbToolType, serde_json::Value)> = vec![(
-        ScheduleGroupSessionParamsSmbToolType::ScheduleGroupSession,
-        serde_json::from_str::<serde_json::Value>(r#""schedule_group_session""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ScheduleGroupSessionParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ScheduleGroupSessionParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn register_for_group_session_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(RegisterForGroupSessionParamsSmbToolType, serde_json::Value)> = vec![(
-        RegisterForGroupSessionParamsSmbToolType::RegisterForGroupSession,
-        serde_json::from_str::<serde_json::Value>(r#""register_for_group_session""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: RegisterForGroupSessionParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: RegisterForGroupSessionParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn cancel_group_session_registration_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        CancelGroupSessionRegistrationParamsSmbToolType,
-        serde_json::Value,
-    )> = vec![(
-        CancelGroupSessionRegistrationParamsSmbToolType::CancelGroupSessionRegistration,
-        serde_json::from_str::<serde_json::Value>(r#""cancel_group_session_registration""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CancelGroupSessionRegistrationParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CancelGroupSessionRegistrationParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_group_session_seats_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateGroupSessionSeatsParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateGroupSessionSeatsParamsSmbToolType::UpdateGroupSessionSeats,
-        serde_json::from_str::<serde_json::Value>(r#""update_group_session_seats""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateGroupSessionSeatsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateGroupSessionSeatsParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn cancel_group_session_for_all_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CancelGroupSessionForAllParamsSmbToolType, serde_json::Value)> = vec![(
-        CancelGroupSessionForAllParamsSmbToolType::CancelGroupSessionForAll,
-        serde_json::from_str::<serde_json::Value>(r#""cancel_group_session_for_all""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CancelGroupSessionForAllParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CancelGroupSessionForAllParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_group_session_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteGroupSessionParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteGroupSessionParamsSmbToolType::DeleteGroupSession,
-        serde_json::from_str::<serde_json::Value>(r#""delete_group_session""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteGroupSessionParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteGroupSessionParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_calendar_events_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListCalendarEventsParamsSmbToolType, serde_json::Value)> = vec![(
-        ListCalendarEventsParamsSmbToolType::ListCalendarEvents,
-        serde_json::from_str::<serde_json::Value>(r#""list_calendar_events""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListCalendarEventsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListCalendarEventsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_calendar_event_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateCalendarEventParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateCalendarEventParamsSmbToolType::UpdateCalendarEvent,
-        serde_json::from_str::<serde_json::Value>(r#""update_calendar_event""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateCalendarEventParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateCalendarEventParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn cancel_calendar_event_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CancelCalendarEventParamsSmbToolType, serde_json::Value)> = vec![(
-        CancelCalendarEventParamsSmbToolType::CancelCalendarEvent,
-        serde_json::from_str::<serde_json::Value>(r#""cancel_calendar_event""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CancelCalendarEventParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CancelCalendarEventParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn restore_calendar_event_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(RestoreCalendarEventParamsSmbToolType, serde_json::Value)> = vec![(
-        RestoreCalendarEventParamsSmbToolType::RestoreCalendarEvent,
-        serde_json::from_str::<serde_json::Value>(r#""restore_calendar_event""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: RestoreCalendarEventParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: RestoreCalendarEventParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_calendar_event_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteCalendarEventParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteCalendarEventParamsSmbToolType::DeleteCalendarEvent,
-        serde_json::from_str::<serde_json::Value>(r#""delete_calendar_event""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteCalendarEventParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteCalendarEventParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_customer_facing_agents_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListCustomerFacingAgentsParamsSmbToolType, serde_json::Value)> = vec![(
-        ListCustomerFacingAgentsParamsSmbToolType::ListCustomerFacingAgents,
-        serde_json::from_str::<serde_json::Value>(r#""list_customer_facing_agents""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListCustomerFacingAgentsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListCustomerFacingAgentsParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_agent_config_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetAgentConfigParamsSmbToolType, serde_json::Value)> = vec![(
-        GetAgentConfigParamsSmbToolType::GetAgentConfig,
-        serde_json::from_str::<serde_json::Value>(r#""get_agent_config""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetAgentConfigParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetAgentConfigParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_agent_rules_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListAgentRulesParamsSmbToolType, serde_json::Value)> = vec![(
-        ListAgentRulesParamsSmbToolType::ListAgentRules,
-        serde_json::from_str::<serde_json::Value>(r#""list_agent_rules""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListAgentRulesParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListAgentRulesParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_agent_rule_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateAgentRuleParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateAgentRuleParamsSmbToolType::CreateAgentRule,
-        serde_json::from_str::<serde_json::Value>(r#""create_agent_rule""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateAgentRuleParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateAgentRuleParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_agent_rule_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateAgentRuleParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateAgentRuleParamsSmbToolType::UpdateAgentRule,
-        serde_json::from_str::<serde_json::Value>(r#""update_agent_rule""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateAgentRuleParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateAgentRuleParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_agent_rule_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteAgentRuleParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteAgentRuleParamsSmbToolType::DeleteAgentRule,
-        serde_json::from_str::<serde_json::Value>(r#""delete_agent_rule""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteAgentRuleParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteAgentRuleParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_transfer_rules_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListTransferRulesParamsSmbToolType, serde_json::Value)> = vec![(
-        ListTransferRulesParamsSmbToolType::ListTransferRules,
-        serde_json::from_str::<serde_json::Value>(r#""list_transfer_rules""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListTransferRulesParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListTransferRulesParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_transfer_rule_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateTransferRuleParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateTransferRuleParamsSmbToolType::CreateTransferRule,
-        serde_json::from_str::<serde_json::Value>(r#""create_transfer_rule""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateTransferRuleParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateTransferRuleParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_transfer_rule_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateTransferRuleParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateTransferRuleParamsSmbToolType::UpdateTransferRule,
-        serde_json::from_str::<serde_json::Value>(r#""update_transfer_rule""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateTransferRuleParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateTransferRuleParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_transfer_rule_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteTransferRuleParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteTransferRuleParamsSmbToolType::DeleteTransferRule,
-        serde_json::from_str::<serde_json::Value>(r#""delete_transfer_rule""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteTransferRuleParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteTransferRuleParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_agent_procedures_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListAgentProceduresParamsSmbToolType, serde_json::Value)> = vec![(
-        ListAgentProceduresParamsSmbToolType::ListAgentProcedures,
-        serde_json::from_str::<serde_json::Value>(r#""list_agent_procedures""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListAgentProceduresParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListAgentProceduresParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_agent_references_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListAgentReferencesParamsSmbToolType, serde_json::Value)> = vec![(
-        ListAgentReferencesParamsSmbToolType::ListAgentReferences,
-        serde_json::from_str::<serde_json::Value>(r#""list_agent_references""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListAgentReferencesParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListAgentReferencesParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_agent_procedure_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateAgentProcedureParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateAgentProcedureParamsSmbToolType::CreateAgentProcedure,
-        serde_json::from_str::<serde_json::Value>(r#""create_agent_procedure""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateAgentProcedureParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateAgentProcedureParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_agent_procedure_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateAgentProcedureParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateAgentProcedureParamsSmbToolType::UpdateAgentProcedure,
-        serde_json::from_str::<serde_json::Value>(r#""update_agent_procedure""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateAgentProcedureParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateAgentProcedureParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_agent_procedure_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteAgentProcedureParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteAgentProcedureParamsSmbToolType::DeleteAgentProcedure,
-        serde_json::from_str::<serde_json::Value>(r#""delete_agent_procedure""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteAgentProcedureParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteAgentProcedureParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_holidays_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListHolidaysParamsSmbToolType, serde_json::Value)> = vec![(
-        ListHolidaysParamsSmbToolType::ListHolidays,
-        serde_json::from_str::<serde_json::Value>(r#""list_holidays""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListHolidaysParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListHolidaysParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_holiday_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateHolidayParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateHolidayParamsSmbToolType::CreateHoliday,
-        serde_json::from_str::<serde_json::Value>(r#""create_holiday""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateHolidayParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateHolidayParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_holiday_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateHolidayParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateHolidayParamsSmbToolType::UpdateHoliday,
-        serde_json::from_str::<serde_json::Value>(r#""update_holiday""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateHolidayParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateHolidayParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_holiday_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteHolidayParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteHolidayParamsSmbToolType::DeleteHoliday,
-        serde_json::from_str::<serde_json::Value>(r#""delete_holiday""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteHolidayParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteHolidayParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_schedule_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetScheduleParamsSmbToolType, serde_json::Value)> = vec![(
-        GetScheduleParamsSmbToolType::GetSchedule,
-        serde_json::from_str::<serde_json::Value>(r#""get_schedule""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetScheduleParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetScheduleParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn submit_business_info_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SubmitBusinessInfoParamsSmbToolType, serde_json::Value)> = vec![(
-        SubmitBusinessInfoParamsSmbToolType::SubmitBusinessInfo,
-        serde_json::from_str::<serde_json::Value>(r#""submit_business_info""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SubmitBusinessInfoParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SubmitBusinessInfoParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_business_info_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateBusinessInfoParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateBusinessInfoParamsSmbToolType::UpdateBusinessInfo,
-        serde_json::from_str::<serde_json::Value>(r#""update_business_info""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateBusinessInfoParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateBusinessInfoParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_agent_config_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateAgentConfigParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateAgentConfigParamsSmbToolType::UpdateAgentConfig,
-        serde_json::from_str::<serde_json::Value>(r#""update_agent_config""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateAgentConfigParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateAgentConfigParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_analytics_summary_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetAnalyticsSummaryParamsSmbToolType, serde_json::Value)> = vec![(
-        GetAnalyticsSummaryParamsSmbToolType::GetAnalyticsSummary,
-        serde_json::from_str::<serde_json::Value>(r#""get_analytics_summary""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetAnalyticsSummaryParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetAnalyticsSummaryParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_workspace_plan_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetWorkspacePlanParamsSmbToolType, serde_json::Value)> = vec![(
-        GetWorkspacePlanParamsSmbToolType::GetWorkspacePlan,
-        serde_json::from_str::<serde_json::Value>(r#""get_workspace_plan""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetWorkspacePlanParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetWorkspacePlanParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_booking_page_settings_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetBookingPageSettingsParamsSmbToolType, serde_json::Value)> = vec![(
-        GetBookingPageSettingsParamsSmbToolType::GetBookingPageSettings,
-        serde_json::from_str::<serde_json::Value>(r#""get_booking_page_settings""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetBookingPageSettingsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetBookingPageSettingsParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_booking_page_settings_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        UpdateBookingPageSettingsParamsSmbToolType,
-        serde_json::Value,
-    )> = vec![(
-        UpdateBookingPageSettingsParamsSmbToolType::UpdateBookingPageSettings,
-        serde_json::from_str::<serde_json::Value>(r#""update_booking_page_settings""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateBookingPageSettingsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateBookingPageSettingsParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_booking_page_appearance_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        UpdateBookingPageAppearanceParamsSmbToolType,
-        serde_json::Value,
-    )> = vec![(
-        UpdateBookingPageAppearanceParamsSmbToolType::UpdateBookingPageAppearance,
-        serde_json::from_str::<serde_json::Value>(r#""update_booking_page_appearance""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateBookingPageAppearanceParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateBookingPageAppearanceParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_booking_slug_status_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetBookingSlugStatusParamsSmbToolType, serde_json::Value)> = vec![(
-        GetBookingSlugStatusParamsSmbToolType::GetBookingSlugStatus,
-        serde_json::from_str::<serde_json::Value>(r#""get_booking_slug_status""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetBookingSlugStatusParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetBookingSlugStatusParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn set_booking_slug_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SetBookingSlugParamsSmbToolType, serde_json::Value)> = vec![(
-        SetBookingSlugParamsSmbToolType::SetBookingSlug,
-        serde_json::from_str::<serde_json::Value>(r#""set_booking_slug""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SetBookingSlugParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SetBookingSlugParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_client_interactions_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListClientInteractionsParamsSmbToolType, serde_json::Value)> = vec![(
-        ListClientInteractionsParamsSmbToolType::ListClientInteractions,
-        serde_json::from_str::<serde_json::Value>(r#""list_client_interactions""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListClientInteractionsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListClientInteractionsParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_client_interaction_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateClientInteractionParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateClientInteractionParamsSmbToolType::CreateClientInteraction,
-        serde_json::from_str::<serde_json::Value>(r#""create_client_interaction""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateClientInteractionParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateClientInteractionParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_client_interaction_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteClientInteractionParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteClientInteractionParamsSmbToolType::DeleteClientInteraction,
-        serde_json::from_str::<serde_json::Value>(r#""delete_client_interaction""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteClientInteractionParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteClientInteractionParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn list_locations_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ListLocationsParamsSmbToolType, serde_json::Value)> = vec![(
-        ListLocationsParamsSmbToolType::ListLocations,
-        serde_json::from_str::<serde_json::Value>(r#""list_locations""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ListLocationsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListLocationsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_location_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateLocationParamsSmbToolType, serde_json::Value)> = vec![(
-        CreateLocationParamsSmbToolType::CreateLocation,
-        serde_json::from_str::<serde_json::Value>(r#""create_location""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateLocationParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateLocationParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn update_location_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UpdateLocationParamsSmbToolType, serde_json::Value)> = vec![(
-        UpdateLocationParamsSmbToolType::UpdateLocation,
-        serde_json::from_str::<serde_json::Value>(r#""update_location""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UpdateLocationParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UpdateLocationParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn delete_location_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DeleteLocationParamsSmbToolType, serde_json::Value)> = vec![(
-        DeleteLocationParamsSmbToolType::DeleteLocation,
-        serde_json::from_str::<serde_json::Value>(r#""delete_location""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DeleteLocationParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DeleteLocationParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn leave_message_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(LeaveMessageParamsSmbToolType, serde_json::Value)> = vec![(
-        LeaveMessageParamsSmbToolType::LeaveMessage,
-        serde_json::from_str::<serde_json::Value>(r#""leave_message""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: LeaveMessageParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: LeaveMessageParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_service_quote_request_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        CreateServiceQuoteRequestParamsSmbToolType,
-        serde_json::Value,
-    )> = vec![(
-        CreateServiceQuoteRequestParamsSmbToolType::CreateServiceQuoteRequest,
-        serde_json::from_str::<serde_json::Value>(r#""create_service_quote_request""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateServiceQuoteRequestParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateServiceQuoteRequestParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_product_quote_request_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        CreateProductQuoteRequestParamsSmbToolType,
-        serde_json::Value,
-    )> = vec![(
-        CreateProductQuoteRequestParamsSmbToolType::CreateProductQuoteRequest,
-        serde_json::from_str::<serde_json::Value>(r#""create_product_quote_request""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateProductQuoteRequestParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateProductQuoteRequestParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn report_knowledge_gap_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ReportKnowledgeGapParamsSmbToolType, serde_json::Value)> = vec![(
-        ReportKnowledgeGapParamsSmbToolType::ReportKnowledgeGap,
-        serde_json::from_str::<serde_json::Value>(r#""report_knowledge_gap""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ReportKnowledgeGapParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ReportKnowledgeGapParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn opt_in_sms_reminder_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(OptInSmsReminderParamsSmbToolType, serde_json::Value)> = vec![(
-        OptInSmsReminderParamsSmbToolType::OptInSmsReminder,
-        serde_json::from_str::<serde_json::Value>(r#""opt_in_sms_reminder""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OptInSmsReminderParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OptInSmsReminderParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn opt_out_sms_reminder_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(OptOutSmsReminderParamsSmbToolType, serde_json::Value)> = vec![(
-        OptOutSmsReminderParamsSmbToolType::OptOutSmsReminder,
-        serde_json::from_str::<serde_json::Value>(r#""opt_out_sms_reminder""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OptOutSmsReminderParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OptOutSmsReminderParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn trigger_user_verification_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TriggerUserVerificationParamsSmbToolType, serde_json::Value)> = vec![(
-        TriggerUserVerificationParamsSmbToolType::TriggerUserVerification,
-        serde_json::from_str::<serde_json::Value>(r#""trigger_user_verification""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TriggerUserVerificationParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TriggerUserVerificationParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn validate_user_verification_code_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        ValidateUserVerificationCodeParamsSmbToolType,
-        serde_json::Value,
-    )> = vec![(
-        ValidateUserVerificationCodeParamsSmbToolType::ValidateUserVerificationCode,
-        serde_json::from_str::<serde_json::Value>(r#""validate_user_verification_code""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ValidateUserVerificationCodeParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ValidateUserVerificationCodeParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn owner_list_staff_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(OwnerListStaffParamsSmbToolType, serde_json::Value)> = vec![(
-        OwnerListStaffParamsSmbToolType::OwnerListStaff,
-        serde_json::from_str::<serde_json::Value>(r#""owner_list_staff""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OwnerListStaffParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OwnerListStaffParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn owner_list_assets_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(OwnerListAssetsParamsSmbToolType, serde_json::Value)> = vec![(
-        OwnerListAssetsParamsSmbToolType::OwnerListAssets,
-        serde_json::from_str::<serde_json::Value>(r#""owner_list_assets""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OwnerListAssetsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OwnerListAssetsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn owner_list_locations_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(OwnerListLocationsParamsSmbToolType, serde_json::Value)> = vec![(
-        OwnerListLocationsParamsSmbToolType::OwnerListLocations,
-        serde_json::from_str::<serde_json::Value>(r#""owner_list_locations""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OwnerListLocationsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OwnerListLocationsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn owner_list_services_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(OwnerListServicesParamsSmbToolType, serde_json::Value)> = vec![(
-        OwnerListServicesParamsSmbToolType::OwnerListServices,
-        serde_json::from_str::<serde_json::Value>(r#""owner_list_services""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OwnerListServicesParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OwnerListServicesParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn owner_list_products_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(OwnerListProductsParamsSmbToolType, serde_json::Value)> = vec![(
-        OwnerListProductsParamsSmbToolType::OwnerListProducts,
-        serde_json::from_str::<serde_json::Value>(r#""owner_list_products""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OwnerListProductsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OwnerListProductsParamsSmbToolType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn owner_get_client_appointments_params_smb_tool_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        OwnerGetClientAppointmentsParamsSmbToolType,
-        serde_json::Value,
-    )> = vec![(
-        OwnerGetClientAppointmentsParamsSmbToolType::OwnerGetClientAppointments,
-        serde_json::from_str::<serde_json::Value>(r#""owner_get_client_appointments""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OwnerGetClientAppointmentsParamsSmbToolType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OwnerGetClientAppointmentsParamsSmbToolType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -96785,81 +96739,6 @@ fn widget_expandable_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: WidgetExpandable = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn orb_avatar_type_variants_round_trip_through_serde() {
-    let cases: Vec<(OrbAvatarType, serde_json::Value)> = vec![(
-        OrbAvatarType::Orb,
-        serde_json::from_str::<serde_json::Value>(r#""orb""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OrbAvatarType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OrbAvatarType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn url_avatar_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UrlAvatarType, serde_json::Value)> = vec![(
-        UrlAvatarType::Url,
-        serde_json::from_str::<serde_json::Value>(r#""url""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UrlAvatarType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UrlAvatarType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn image_avatar_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ImageAvatarType, serde_json::Value)> = vec![(
-        ImageAvatarType::Image,
-        serde_json::from_str::<serde_json::Value>(r#""image""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ImageAvatarType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ImageAvatarType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -97107,31 +96986,6 @@ fn guardrails_v1_input_version_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn retry_trigger_action_type_variants_round_trip_through_serde() {
-    let cases: Vec<(RetryTriggerActionType, serde_json::Value)> = vec![(
-        RetryTriggerActionType::Retry,
-        serde_json::from_str::<serde_json::Value>(r#""retry""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: RetryTriggerActionType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: RetryTriggerActionType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn custom_guardrail_config_model_variants_round_trip_through_serde() {
     let cases: Vec<(CustomGuardrailConfigModel, serde_json::Value)> = vec![
         (
@@ -97272,6 +97126,11 @@ fn config_entity_type_variants_round_trip_through_serde() {
         (
             ConfigEntityType::Language,
             serde_json::from_str::<serde_json::Value>(r#""language""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ConfigEntityType::CriminalRecord,
+            serde_json::from_str::<serde_json::Value>(r#""criminal_record""#)
                 .expect("fixture is valid JSON"),
         ),
         (
@@ -97576,189 +97435,6 @@ fn alerting_integration_notifier_integration_type_variants_round_trip_through_se
 }
 
 #[test]
-fn workflow_unconditional_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowUnconditionalModelInputType, serde_json::Value)> = vec![(
-        WorkflowUnconditionalModelInputType::Unconditional,
-        serde_json::from_str::<serde_json::Value>(r#""unconditional""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowUnconditionalModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowUnconditionalModelInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_result_condition_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowResultConditionModelInputType, serde_json::Value)> = vec![(
-        WorkflowResultConditionModelInputType::Result,
-        serde_json::from_str::<serde_json::Value>(r#""result""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowResultConditionModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowResultConditionModelInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_expression_condition_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowExpressionConditionModelInputType, serde_json::Value)> = vec![(
-        WorkflowExpressionConditionModelInputType::Expression,
-        serde_json::from_str::<serde_json::Value>(r#""expression""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowExpressionConditionModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowExpressionConditionModelInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_string_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstStringNodeInputType, serde_json::Value)> = vec![(
-        AstStringNodeInputType::StringLiteral,
-        serde_json::from_str::<serde_json::Value>(r#""string_literal""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstStringNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstStringNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_number_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstNumberNodeInputType, serde_json::Value)> = vec![(
-        AstNumberNodeInputType::NumberLiteral,
-        serde_json::from_str::<serde_json::Value>(r#""number_literal""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstNumberNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstNumberNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_boolean_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstBooleanNodeInputType, serde_json::Value)> = vec![(
-        AstBooleanNodeInputType::BooleanLiteral,
-        serde_json::from_str::<serde_json::Value>(r#""boolean_literal""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstBooleanNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstBooleanNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_null_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstNullNodeInputType, serde_json::Value)> = vec![(
-        AstNullNodeInputType::NullLiteral,
-        serde_json::from_str::<serde_json::Value>(r#""null_literal""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstNullNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstNullNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn ast_dynamic_variable_node_input_type_variants_round_trip_through_serde() {
     let cases: Vec<(AstDynamicVariableNodeInputType, serde_json::Value)> = vec![(
         AstDynamicVariableNodeInputType::DynamicVariable,
@@ -97777,400 +97453,6 @@ fn ast_dynamic_variable_node_input_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: AstDynamicVariableNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_or_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstOrOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstOrOperatorNodeInputType::OrOperator,
-        serde_json::from_str::<serde_json::Value>(r#""or_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstOrOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstOrOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_and_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstAndOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstAndOperatorNodeInputType::AndOperator,
-        serde_json::from_str::<serde_json::Value>(r#""and_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstAndOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstAndOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_equals_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstEqualsOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstEqualsOperatorNodeInputType::EqOperator,
-        serde_json::from_str::<serde_json::Value>(r#""eq_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstEqualsOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstEqualsOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_not_equals_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstNotEqualsOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstNotEqualsOperatorNodeInputType::NeqOperator,
-        serde_json::from_str::<serde_json::Value>(r#""neq_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstNotEqualsOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstNotEqualsOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_greater_than_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstGreaterThanOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstGreaterThanOperatorNodeInputType::GtOperator,
-        serde_json::from_str::<serde_json::Value>(r#""gt_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstGreaterThanOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstGreaterThanOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_less_than_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstLessThanOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstLessThanOperatorNodeInputType::LtOperator,
-        serde_json::from_str::<serde_json::Value>(r#""lt_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstLessThanOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstLessThanOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_greater_than_or_equals_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        AstGreaterThanOrEqualsOperatorNodeInputType,
-        serde_json::Value,
-    )> = vec![(
-        AstGreaterThanOrEqualsOperatorNodeInputType::GteOperator,
-        serde_json::from_str::<serde_json::Value>(r#""gte_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstGreaterThanOrEqualsOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstGreaterThanOrEqualsOperatorNodeInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_less_than_or_equals_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstLessThanOrEqualsOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstLessThanOrEqualsOperatorNodeInputType::LteOperator,
-        serde_json::from_str::<serde_json::Value>(r#""lte_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstLessThanOrEqualsOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstLessThanOrEqualsOperatorNodeInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_addition_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstAdditionOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstAdditionOperatorNodeInputType::AddOperator,
-        serde_json::from_str::<serde_json::Value>(r#""add_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstAdditionOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstAdditionOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_subtraction_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstSubtractionOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstSubtractionOperatorNodeInputType::SubOperator,
-        serde_json::from_str::<serde_json::Value>(r#""sub_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstSubtractionOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstSubtractionOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_multiplication_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstMultiplicationOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstMultiplicationOperatorNodeInputType::MulOperator,
-        serde_json::from_str::<serde_json::Value>(r#""mul_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstMultiplicationOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstMultiplicationOperatorNodeInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_division_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstDivisionOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstDivisionOperatorNodeInputType::DivOperator,
-        serde_json::from_str::<serde_json::Value>(r#""div_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstDivisionOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstDivisionOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ast_conditional_operator_node_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AstConditionalOperatorNodeInputType, serde_json::Value)> = vec![(
-        AstConditionalOperatorNodeInputType::ConditionalOperator,
-        serde_json::from_str::<serde_json::Value>(r#""conditional_operator""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AstConditionalOperatorNodeInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AstConditionalOperatorNodeInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_start_node_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowStartNodeModelInputType, serde_json::Value)> = vec![(
-        WorkflowStartNodeModelInputType::Start,
-        serde_json::from_str::<serde_json::Value>(r#""start""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowStartNodeModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowStartNodeModelInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_end_node_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowEndNodeModelInputType, serde_json::Value)> = vec![(
-        WorkflowEndNodeModelInputType::End,
-        serde_json::from_str::<serde_json::Value>(r#""end""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowEndNodeModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowEndNodeModelInputType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -98205,60 +97487,6 @@ fn workflow_end_node_outcome_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: WorkflowEndNodeOutcome = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_phone_number_node_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowPhoneNumberNodeModelInputType, serde_json::Value)> = vec![(
-        WorkflowPhoneNumberNodeModelInputType::PhoneNumber,
-        serde_json::from_str::<serde_json::Value>(r#""phone_number""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowPhoneNumberNodeModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowPhoneNumberNodeModelInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_override_agent_node_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowOverrideAgentNodeModelInputType, serde_json::Value)> = vec![(
-        WorkflowOverrideAgentNodeModelInputType::OverrideAgent,
-        serde_json::from_str::<serde_json::Value>(r#""override_agent""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowOverrideAgentNodeModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowOverrideAgentNodeModelInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -98303,135 +97531,6 @@ fn entry_behavior_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn workflow_standalone_agent_node_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowStandaloneAgentNodeModelInputType, serde_json::Value)> = vec![(
-        WorkflowStandaloneAgentNodeModelInputType::StandaloneAgent,
-        serde_json::from_str::<serde_json::Value>(r#""standalone_agent""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowStandaloneAgentNodeModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowStandaloneAgentNodeModelInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_say_node_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowSayNodeModelInputType, serde_json::Value)> = vec![(
-        WorkflowSayNodeModelInputType::Say,
-        serde_json::from_str::<serde_json::Value>(r#""say""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowSayNodeModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowSayNodeModelInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn say_node_literal_message_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SayNodeLiteralMessageInputType, serde_json::Value)> = vec![(
-        SayNodeLiteralMessageInputType::Literal,
-        serde_json::from_str::<serde_json::Value>(r#""literal""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SayNodeLiteralMessageInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SayNodeLiteralMessageInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn say_node_prompt_message_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SayNodePromptMessageInputType, serde_json::Value)> = vec![(
-        SayNodePromptMessageInputType::Prompt,
-        serde_json::from_str::<serde_json::Value>(r#""prompt""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SayNodePromptMessageInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SayNodePromptMessageInputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_update_state_node_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowUpdateStateNodeModelInputType, serde_json::Value)> = vec![(
-        WorkflowUpdateStateNodeModelInputType::UpdateState,
-        serde_json::from_str::<serde_json::Value>(r#""update_state""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowUpdateStateNodeModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowUpdateStateNodeModelInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn alerting_webhook_notifier_response_type_variants_round_trip_through_serde() {
     let cases: Vec<(AlertingWebhookNotifierResponseType, serde_json::Value)> = vec![(
         AlertingWebhookNotifierResponseType::Webhook,
@@ -98450,33 +97549,6 @@ fn alerting_webhook_notifier_response_type_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: AlertingWebhookNotifierResponseType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn alerting_integration_notifier_response_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AlertingIntegrationNotifierResponseType, serde_json::Value)> = vec![(
-        AlertingIntegrationNotifierResponseType::Integration,
-        serde_json::from_str::<serde_json::Value>(r#""integration""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AlertingIntegrationNotifierResponseType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AlertingIntegrationNotifierResponseType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -98511,87 +97583,6 @@ fn alerting_integration_notifier_response_integration_type_variants_round_trip_t
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: AlertingIntegrationNotifierResponseIntegrationType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_phone_number_twilio_response_model_provider_variants_round_trip_through_serde() {
-    let cases: Vec<(GetPhoneNumberTwilioResponseModelProvider, serde_json::Value)> = vec![(
-        GetPhoneNumberTwilioResponseModelProvider::Twilio,
-        serde_json::from_str::<serde_json::Value>(r#""twilio""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetPhoneNumberTwilioResponseModelProvider =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetPhoneNumberTwilioResponseModelProvider =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_phone_number_exotel_response_model_provider_variants_round_trip_through_serde() {
-    let cases: Vec<(GetPhoneNumberExotelResponseModelProvider, serde_json::Value)> = vec![(
-        GetPhoneNumberExotelResponseModelProvider::Exotel,
-        serde_json::from_str::<serde_json::Value>(r#""exotel""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetPhoneNumberExotelResponseModelProvider =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetPhoneNumberExotelResponseModelProvider =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_phone_number_sip_trunk_response_model_provider_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        GetPhoneNumberSipTrunkResponseModelProvider,
-        serde_json::Value,
-    )> = vec![(
-        GetPhoneNumberSipTrunkResponseModelProvider::SipTrunk,
-        serde_json::from_str::<serde_json::Value>(r#""sip_trunk""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetPhoneNumberSipTrunkResponseModelProvider =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetPhoneNumberSipTrunkResponseModelProvider =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
@@ -98766,6 +97757,77 @@ fn astllm_node_output_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: AstllmNodeOutputType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn integration_type_variants_round_trip_through_serde() {
+    let cases: Vec<(IntegrationType, serde_json::Value)> = vec![
+        (
+            IntegrationType::McpServer,
+            serde_json::from_str::<serde_json::Value>(r#""mcp_server""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IntegrationType::McpIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""mcp_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: IntegrationType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: IntegrationType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn mcp_approval_policy_variants_round_trip_through_serde() {
+    let cases: Vec<(McpApprovalPolicy, serde_json::Value)> = vec![
+        (
+            McpApprovalPolicy::AutoApproveAll,
+            serde_json::from_str::<serde_json::Value>(r#""auto_approve_all""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            McpApprovalPolicy::RequireApprovalAll,
+            serde_json::from_str::<serde_json::Value>(r#""require_approval_all""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            McpApprovalPolicy::RequireApprovalPerTool,
+            serde_json::from_str::<serde_json::Value>(r#""require_approval_per_tool""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: McpApprovalPolicy =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: McpApprovalPolicy = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -99070,87 +98132,6 @@ fn agent_failure_response_example_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn regex_parameter_evaluation_strategy_type_variants_round_trip_through_serde() {
-    let cases: Vec<(RegexParameterEvaluationStrategyType, serde_json::Value)> = vec![(
-        RegexParameterEvaluationStrategyType::Regex,
-        serde_json::from_str::<serde_json::Value>(r#""regex""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: RegexParameterEvaluationStrategyType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: RegexParameterEvaluationStrategyType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn exact_parameter_evaluation_strategy_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ExactParameterEvaluationStrategyType, serde_json::Value)> = vec![(
-        ExactParameterEvaluationStrategyType::Exact,
-        serde_json::from_str::<serde_json::Value>(r#""exact""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ExactParameterEvaluationStrategyType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ExactParameterEvaluationStrategyType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn match_anything_parameter_evaluation_strategy_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        MatchAnythingParameterEvaluationStrategyType,
-        serde_json::Value,
-    )> = vec![(
-        MatchAnythingParameterEvaluationStrategyType::Anything,
-        serde_json::from_str::<serde_json::Value>(r#""anything""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: MatchAnythingParameterEvaluationStrategyType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: MatchAnythingParameterEvaluationStrategyType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn referenced_tool_common_model_type_variants_round_trip_through_serde() {
     let cases: Vec<(ReferencedToolCommonModelType, serde_json::Value)> = vec![
         (
@@ -99433,86 +98414,6 @@ fn rag_index_status_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn dependent_available_agent_identifier_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DependentAvailableAgentIdentifierType, serde_json::Value)> = vec![(
-        DependentAvailableAgentIdentifierType::Available,
-        serde_json::from_str::<serde_json::Value>(r#""available""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DependentAvailableAgentIdentifierType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DependentAvailableAgentIdentifierType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn dependent_unknown_agent_identifier_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DependentUnknownAgentIdentifierType, serde_json::Value)> = vec![(
-        DependentUnknownAgentIdentifierType::Unknown,
-        serde_json::from_str::<serde_json::Value>(r#""unknown""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DependentUnknownAgentIdentifierType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DependentUnknownAgentIdentifierType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_knowledge_base_summary_url_response_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        GetKnowledgeBaseSummaryUrlResponseModelType,
-        serde_json::Value,
-    )> = vec![(
-        GetKnowledgeBaseSummaryUrlResponseModelType::Url,
-        serde_json::from_str::<serde_json::Value>(r#""url""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetKnowledgeBaseSummaryUrlResponseModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetKnowledgeBaseSummaryUrlResponseModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn external_sync_provider_variants_round_trip_through_serde() {
     let cases: Vec<(ExternalSyncProvider, serde_json::Value)> = vec![(
         ExternalSyncProvider::GoogleDrive,
@@ -99730,37 +98631,6 @@ fn conversation_history_transcript_common_model_input_role_variants_round_trip_t
 }
 
 #[test]
-fn transfer_to_agent_tool_result_success_model_input_result_type_variants_round_trip_through_serde()
-{
-    let cases: Vec<(
-        TransferToAgentToolResultSuccessModelInputResultType,
-        serde_json::Value,
-    )> = vec![(
-        TransferToAgentToolResultSuccessModelInputResultType::TransferToAgentSuccess,
-        serde_json::from_str::<serde_json::Value>(r#""transfer_to_agent_success""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TransferToAgentToolResultSuccessModelInputResultType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TransferToAgentToolResultSuccessModelInputResultType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn conversation_history_transcript_workflow_tools_result_common_model_input_type_variants_round_trip_through_serde(
 ) {
     let cases: Vec<(
@@ -99784,84 +98654,6 @@ fn conversation_history_transcript_workflow_tools_result_common_model_input_type
     let decoded: ConversationHistoryTranscriptWorkflowToolsResultCommonModelInputType =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn workflow_tool_nested_tools_step_model_input_type_variants_round_trip_through_serde() {
-    let cases: Vec<(WorkflowToolNestedToolsStepModelInputType, serde_json::Value)> = vec![(
-        WorkflowToolNestedToolsStepModelInputType::NestedTools,
-        serde_json::from_str::<serde_json::Value>(r#""nested_tools""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: WorkflowToolNestedToolsStepModelInputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: WorkflowToolNestedToolsStepModelInputType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_tool_call_unit_test_request_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateToolCallUnitTestRequestType, serde_json::Value)> = vec![(
-        CreateToolCallUnitTestRequestType::Tool,
-        serde_json::from_str::<serde_json::Value>(r#""tool""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateToolCallUnitTestRequestType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateToolCallUnitTestRequestType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_simulation_test_request_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateSimulationTestRequestType, serde_json::Value)> = vec![(
-        CreateSimulationTestRequestType::Simulation,
-        serde_json::from_str::<serde_json::Value>(r#""simulation""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateSimulationTestRequestType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateSimulationTestRequestType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -100070,74 +98862,6 @@ fn message_search_sort_by_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: MessageSearchSortBy = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn agent_conversation_ticket_issue_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AgentConversationTicketIssueType, serde_json::Value)> = vec![
-        (
-            AgentConversationTicketIssueType::KnowledgeGap,
-            serde_json::from_str::<serde_json::Value>(r#""knowledge_gap""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            AgentConversationTicketIssueType::IncorrectInformation,
-            serde_json::from_str::<serde_json::Value>(r#""incorrect_information""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            AgentConversationTicketIssueType::DocumentationGap,
-            serde_json::from_str::<serde_json::Value>(r#""documentation_gap""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            AgentConversationTicketIssueType::ProductFeedback,
-            serde_json::from_str::<serde_json::Value>(r#""product_feedback""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            AgentConversationTicketIssueType::PlatformBug,
-            serde_json::from_str::<serde_json::Value>(r#""platform_bug""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            AgentConversationTicketIssueType::ToolIssue,
-            serde_json::from_str::<serde_json::Value>(r#""tool_issue""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            AgentConversationTicketIssueType::MissingTool,
-            serde_json::from_str::<serde_json::Value>(r#""missing_tool""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            AgentConversationTicketIssueType::UnnecessaryEscalation,
-            serde_json::from_str::<serde_json::Value>(r#""unnecessary_escalation""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            AgentConversationTicketIssueType::WrongAction,
-            serde_json::from_str::<serde_json::Value>(r#""wrong_action""#)
-                .expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AgentConversationTicketIssueType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AgentConversationTicketIssueType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -100523,32 +99247,6 @@ fn exotel_api_subdomain_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn create_sip_trunk_phone_number_request_provider_variants_round_trip_through_serde() {
-    let cases: Vec<(CreateSipTrunkPhoneNumberRequestProvider, serde_json::Value)> = vec![(
-        CreateSipTrunkPhoneNumberRequestProvider::SipTrunk,
-        serde_json::from_str::<serde_json::Value>(r#""sip_trunk""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateSipTrunkPhoneNumberRequestProvider =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateSipTrunkPhoneNumberRequestProvider =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn phone_number_sort_by_variants_round_trip_through_serde() {
     let cases: Vec<(PhoneNumberSortBy, serde_json::Value)> = vec![
         (
@@ -100573,6 +99271,144 @@ fn phone_number_sort_by_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: PhoneNumberSortBy = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reception_phone_provider_variants_round_trip_through_serde() {
+    let cases: Vec<(ReceptionPhoneProvider, serde_json::Value)> = vec![
+        (
+            ReceptionPhoneProvider::Twilio,
+            serde_json::from_str::<serde_json::Value>(r#""twilio""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionPhoneProvider::SipTrunk,
+            serde_json::from_str::<serde_json::Value>(r#""sip_trunk""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReceptionPhoneProvider =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReceptionPhoneProvider = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reception_phone_assignment_deactivation_reason_variants_round_trip_through_serde() {
+    let cases: Vec<(
+        ReceptionPhoneAssignmentDeactivationReason,
+        serde_json::Value,
+    )> = vec![
+        (
+            ReceptionPhoneAssignmentDeactivationReason::TierDowngrade,
+            serde_json::from_str::<serde_json::Value>(r#""tier_downgrade""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionPhoneAssignmentDeactivationReason::NoEntitlement,
+            serde_json::from_str::<serde_json::Value>(r#""no_entitlement""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionPhoneAssignmentDeactivationReason::User,
+            serde_json::from_str::<serde_json::Value>(r#""user""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReceptionPhoneAssignmentDeactivationReason =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReceptionPhoneAssignmentDeactivationReason =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reception_phone_regulatory_status_variants_round_trip_through_serde() {
+    let cases: Vec<(ReceptionPhoneRegulatoryStatus, serde_json::Value)> = vec![
+        (
+            ReceptionPhoneRegulatoryStatus::Held,
+            serde_json::from_str::<serde_json::Value>(r#""held""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionPhoneRegulatoryStatus::Approved,
+            serde_json::from_str::<serde_json::Value>(r#""approved""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReceptionPhoneRegulatoryStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReceptionPhoneRegulatoryStatus = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn application_number_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ApplicationNumberType, serde_json::Value)> = vec![
+        (
+            ApplicationNumberType::Local,
+            serde_json::from_str::<serde_json::Value>(r#""local""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ApplicationNumberType::Mobile,
+            serde_json::from_str::<serde_json::Value>(r#""mobile""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ApplicationNumberType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ApplicationNumberType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -100606,58 +99442,6 @@ fn content_format_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: ContentFormat = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_knowledge_base_file_response_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetKnowledgeBaseFileResponseModelType, serde_json::Value)> = vec![(
-        GetKnowledgeBaseFileResponseModelType::File,
-        serde_json::from_str::<serde_json::Value>(r#""file""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetKnowledgeBaseFileResponseModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetKnowledgeBaseFileResponseModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn get_knowledge_base_folder_response_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(GetKnowledgeBaseFolderResponseModelType, serde_json::Value)> = vec![(
-        GetKnowledgeBaseFolderResponseModelType::Folder,
-        serde_json::from_str::<serde_json::Value>(r#""folder""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GetKnowledgeBaseFolderResponseModelType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetKnowledgeBaseFolderResponseModelType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -101075,57 +99859,6 @@ fn user_evaluation_analysis_item_kind_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: UserEvaluationAnalysisItemKind = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn binary_scoring_mode_variants_round_trip_through_serde() {
-    let cases: Vec<(BinaryScoringMode, serde_json::Value)> = vec![(
-        BinaryScoringMode::Binary,
-        serde_json::from_str::<serde_json::Value>(r#""binary""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BinaryScoringMode =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BinaryScoringMode = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn numeric_uniform_scoring_mode_variants_round_trip_through_serde() {
-    let cases: Vec<(NumericUniformScoringMode, serde_json::Value)> = vec![(
-        NumericUniformScoringMode::NumericUniform,
-        serde_json::from_str::<serde_json::Value>(r#""numeric_uniform""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: NumericUniformScoringMode =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: NumericUniformScoringMode = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -101662,6 +100395,44 @@ fn conflict_section_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn conflict_resolution_choice_variants_round_trip_through_serde() {
+    let cases: Vec<(ConflictResolutionChoice, serde_json::Value)> = vec![
+        (
+            ConflictResolutionChoice::Source,
+            serde_json::from_str::<serde_json::Value>(r#""source""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ConflictResolutionChoice::Target,
+            serde_json::from_str::<serde_json::Value>(r#""target""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ConflictResolutionChoice::Custom,
+            serde_json::from_str::<serde_json::Value>(r#""custom""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ConflictResolutionChoice =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ConflictResolutionChoice = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn agent_deployment_source_variants_round_trip_through_serde() {
     let cases: Vec<(AgentDeploymentSource, serde_json::Value)> = vec![
         (
@@ -101752,81 +100523,6 @@ fn merge_proposal_review_state_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: MergeProposalReviewState = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn open_outcome_status_variants_round_trip_through_serde() {
-    let cases: Vec<(OpenOutcomeStatus, serde_json::Value)> = vec![(
-        OpenOutcomeStatus::Open,
-        serde_json::from_str::<serde_json::Value>(r#""open""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: OpenOutcomeStatus =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: OpenOutcomeStatus = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn merged_outcome_status_variants_round_trip_through_serde() {
-    let cases: Vec<(MergedOutcomeStatus, serde_json::Value)> = vec![(
-        MergedOutcomeStatus::Merged,
-        serde_json::from_str::<serde_json::Value>(r#""merged""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: MergedOutcomeStatus =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: MergedOutcomeStatus = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn closed_outcome_status_variants_round_trip_through_serde() {
-    let cases: Vec<(ClosedOutcomeStatus, serde_json::Value)> = vec![(
-        ClosedOutcomeStatus::Closed,
-        serde_json::from_str::<serde_json::Value>(r#""closed""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: ClosedOutcomeStatus =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ClosedOutcomeStatus = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -102165,31 +100861,6 @@ fn list_mode_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn phone_channel_config_input_channel_variants_round_trip_through_serde() {
-    let cases: Vec<(PhoneChannelConfigInputChannel, serde_json::Value)> = vec![(
-        PhoneChannelConfigInputChannel::Phone,
-        serde_json::from_str::<serde_json::Value>(r#""phone""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PhoneChannelConfigInputChannel =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PhoneChannelConfigInputChannel = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn phone_voice_config_input_mode_variants_round_trip_through_serde() {
     let cases: Vec<(PhoneVoiceConfigInputMode, serde_json::Value)> = vec![(
         PhoneVoiceConfigInputMode::Voice,
@@ -102232,31 +100903,6 @@ fn submit_whats_app_channel_config_channel_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: SubmitWhatsAppChannelConfigChannel = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn submit_whats_app_message_config_mode_variants_round_trip_through_serde() {
-    let cases: Vec<(SubmitWhatsAppMessageConfigMode, serde_json::Value)> = vec![(
-        SubmitWhatsAppMessageConfigMode::Message,
-        serde_json::from_str::<serde_json::Value>(r#""message""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SubmitWhatsAppMessageConfigMode =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SubmitWhatsAppMessageConfigMode = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -102747,94 +101393,6 @@ fn environment_variable_response_type_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: EnvironmentVariableResponseType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_string_environment_variable_request_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        CreateStringEnvironmentVariableRequestType,
-        serde_json::Value,
-    )> = vec![(
-        CreateStringEnvironmentVariableRequestType::String,
-        serde_json::from_str::<serde_json::Value>(r#""string""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateStringEnvironmentVariableRequestType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateStringEnvironmentVariableRequestType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_secret_environment_variable_request_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        CreateSecretEnvironmentVariableRequestType,
-        serde_json::Value,
-    )> = vec![(
-        CreateSecretEnvironmentVariableRequestType::Secret,
-        serde_json::from_str::<serde_json::Value>(r#""secret""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateSecretEnvironmentVariableRequestType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateSecretEnvironmentVariableRequestType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn create_auth_connection_environment_variable_request_type_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        CreateAuthConnectionEnvironmentVariableRequestType,
-        serde_json::Value,
-    )> = vec![(
-        CreateAuthConnectionEnvironmentVariableRequestType::AuthConnection,
-        serde_json::from_str::<serde_json::Value>(r#""auth_connection""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreateAuthConnectionEnvironmentVariableRequestType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreateAuthConnectionEnvironmentVariableRequestType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -103500,132 +102058,6 @@ fn order_state_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn dub_order_item_request_kind_variants_round_trip_through_serde() {
-    let cases: Vec<(DubOrderItemRequestKind, serde_json::Value)> = vec![(
-        DubOrderItemRequestKind::Dub,
-        serde_json::from_str::<serde_json::Value>(r#""dub""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DubOrderItemRequestKind =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DubOrderItemRequestKind = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn subtitle_order_item_request_kind_variants_round_trip_through_serde() {
-    let cases: Vec<(SubtitleOrderItemRequestKind, serde_json::Value)> = vec![(
-        SubtitleOrderItemRequestKind::Subtitles,
-        serde_json::from_str::<serde_json::Value>(r#""subtitles""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SubtitleOrderItemRequestKind =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SubtitleOrderItemRequestKind = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn transcription_order_item_request_kind_variants_round_trip_through_serde() {
-    let cases: Vec<(TranscriptionOrderItemRequestKind, serde_json::Value)> = vec![(
-        TranscriptionOrderItemRequestKind::Transcription,
-        serde_json::from_str::<serde_json::Value>(r#""transcription""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TranscriptionOrderItemRequestKind =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TranscriptionOrderItemRequestKind = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn paired_languages_response_kind_variants_round_trip_through_serde() {
-    let cases: Vec<(PairedLanguagesResponseKind, serde_json::Value)> = vec![(
-        PairedLanguagesResponseKind::Pair,
-        serde_json::from_str::<serde_json::Value>(r#""pair""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PairedLanguagesResponseKind =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PairedLanguagesResponseKind = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn single_languages_response_kind_variants_round_trip_through_serde() {
-    let cases: Vec<(SingleLanguagesResponseKind, serde_json::Value)> = vec![(
-        SingleLanguagesResponseKind::Single,
-        serde_json::from_str::<serde_json::Value>(r#""single""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SingleLanguagesResponseKind =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SingleLanguagesResponseKind = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn order_item_kind_variants_round_trip_through_serde() {
     let cases: Vec<(OrderItemKind, serde_json::Value)> = vec![
         (
@@ -103663,32 +102095,6 @@ fn order_item_kind_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn creatify_aurora_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(CreatifyAuroraRequestModelId, serde_json::Value)> = vec![(
-        CreatifyAuroraRequestModelId::CreatifyAurora,
-        serde_json::from_str::<serde_json::Value>(r#""creatify-aurora""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CreatifyAuroraRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CreatifyAuroraRequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn generation_reference_type_variants_round_trip_through_serde() {
     let cases: Vec<(GenerationReferenceType, serde_json::Value)> = vec![(
         GenerationReferenceType::Generation,
@@ -103707,31 +102113,6 @@ fn generation_reference_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: GenerationReferenceType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn static_asset_reference_type_variants_round_trip_through_serde() {
-    let cases: Vec<(StaticAssetReferenceType, serde_json::Value)> = vec![(
-        StaticAssetReferenceType::Asset,
-        serde_json::from_str::<serde_json::Value>(r#""asset""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: StaticAssetReferenceType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: StaticAssetReferenceType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -103780,32 +102161,6 @@ fn inline_image_reference_mime_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: InlineImageReferenceMimeType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn inline_audio_reference_type_variants_round_trip_through_serde() {
-    let cases: Vec<(InlineAudioReferenceType, serde_json::Value)> = vec![(
-        InlineAudioReferenceType::InlineBase64,
-        serde_json::from_str::<serde_json::Value>(r#""inline_base64""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: InlineAudioReferenceType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: InlineAudioReferenceType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -103871,32 +102226,6 @@ fn veo_image_reference_role_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: VeoImageReferenceRole = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn veo3_1_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(Veo3_1RequestModelId, serde_json::Value)> = vec![(
-        Veo3_1RequestModelId::Veo3_1Generate001,
-        serde_json::from_str::<serde_json::Value>(r#""veo-3.1-generate-001""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: Veo3_1RequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Veo3_1RequestModelId = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -103998,32 +102327,6 @@ fn veo3_1_fast_request_resolution_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn veo3_1_fast_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(Veo3_1FastRequestModelId, serde_json::Value)> = vec![(
-        Veo3_1FastRequestModelId::Veo3_1FastGenerate001,
-        serde_json::from_str::<serde_json::Value>(r#""veo-3.1-fast-generate-001""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: Veo3_1FastRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Veo3_1FastRequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn inline_video_reference_mime_type_variants_round_trip_through_serde() {
     let cases: Vec<(InlineVideoReferenceMimeType, serde_json::Value)> = vec![
         (
@@ -104054,71 +102357,6 @@ fn inline_video_reference_mime_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: InlineVideoReferenceMimeType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn bytedance_seedance2_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(BytedanceSeedance2RequestModelId, serde_json::Value)> = vec![(
-        BytedanceSeedance2RequestModelId::BytedanceSeedanceV2,
-        serde_json::from_str::<serde_json::Value>(r#""bytedance-seedance-v2""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BytedanceSeedance2RequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BytedanceSeedance2RequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn bytedance_seedance2_request_resolution_variants_round_trip_through_serde() {
-    let cases: Vec<(BytedanceSeedance2RequestResolution, serde_json::Value)> = vec![
-        (
-            BytedanceSeedance2RequestResolution::Num480P,
-            serde_json::from_str::<serde_json::Value>(r#""480p""#).expect("fixture is valid JSON"),
-        ),
-        (
-            BytedanceSeedance2RequestResolution::Num720P,
-            serde_json::from_str::<serde_json::Value>(r#""720p""#).expect("fixture is valid JSON"),
-        ),
-        (
-            BytedanceSeedance2RequestResolution::Num1080P,
-            serde_json::from_str::<serde_json::Value>(r#""1080p""#).expect("fixture is valid JSON"),
-        ),
-        (
-            BytedanceSeedance2RequestResolution::Num4K,
-            serde_json::from_str::<serde_json::Value>(r#""4k""#).expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BytedanceSeedance2RequestResolution =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BytedanceSeedance2RequestResolution = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -104179,33 +102417,6 @@ fn bytedance_seedance2_fast_request_aspect_ratio_variants_round_trip_through_ser
 }
 
 #[test]
-fn bytedance_seedance2_fast_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(BytedanceSeedance2FastRequestModelId, serde_json::Value)> = vec![(
-        BytedanceSeedance2FastRequestModelId::BytedanceSeedanceV2Fast,
-        serde_json::from_str::<serde_json::Value>(r#""bytedance-seedance-v2-fast""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BytedanceSeedance2FastRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BytedanceSeedance2FastRequestModelId =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn bytedance_seedance2_fast_request_resolution_variants_round_trip_through_serde() {
     let cases: Vec<(BytedanceSeedance2FastRequestResolution, serde_json::Value)> = vec![
         (
@@ -104231,59 +102442,6 @@ fn bytedance_seedance2_fast_request_resolution_variants_round_trip_through_serde
     let decoded: BytedanceSeedance2FastRequestResolution =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn bytedance_seedance2_mini_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(BytedanceSeedance2MiniRequestModelId, serde_json::Value)> = vec![(
-        BytedanceSeedance2MiniRequestModelId::BytedanceSeedanceV2Mini,
-        serde_json::from_str::<serde_json::Value>(r#""bytedance-seedance-v2-mini""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BytedanceSeedance2MiniRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BytedanceSeedance2MiniRequestModelId =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn bytedance_seedance25_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(BytedanceSeedance25RequestModelId, serde_json::Value)> = vec![(
-        BytedanceSeedance25RequestModelId::BytedanceSeedanceV2_5,
-        serde_json::from_str::<serde_json::Value>(r#""bytedance-seedance-v2.5""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BytedanceSeedance25RequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BytedanceSeedance25RequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -104356,6 +102514,10 @@ fn bytedance_seedance25_request_resolution_variants_round_trip_through_serde() {
         (
             BytedanceSeedance25RequestResolution::Num1080P,
             serde_json::from_str::<serde_json::Value>(r#""1080p""#).expect("fixture is valid JSON"),
+        ),
+        (
+            BytedanceSeedance25RequestResolution::Num4K,
+            serde_json::from_str::<serde_json::Value>(r#""4k""#).expect("fixture is valid JSON"),
         ),
     ];
     for (variant, wire) in cases {
@@ -104487,110 +102649,6 @@ fn gpt_image1_request_aspect_ratio_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn gpt_image1_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(GptImage1RequestModelId, serde_json::Value)> = vec![(
-        GptImage1RequestModelId::GptImage1,
-        serde_json::from_str::<serde_json::Value>(r#""gpt-image-1""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GptImage1RequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GptImage1RequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn gpt_image1_5_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(GptImage1_5RequestModelId, serde_json::Value)> = vec![(
-        GptImage1_5RequestModelId::GptImage1_5,
-        serde_json::from_str::<serde_json::Value>(r#""gpt-image-1.5""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GptImage1_5RequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GptImage1_5RequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn gpt_image2_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(GptImage2RequestModelId, serde_json::Value)> = vec![(
-        GptImage2RequestModelId::GptImage2,
-        serde_json::from_str::<serde_json::Value>(r#""gpt-image-2""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GptImage2RequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GptImage2RequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn gpt_image25_sunburst_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(GptImage25SunburstRequestModelId, serde_json::Value)> = vec![(
-        GptImage25SunburstRequestModelId::GptImage2_5Sunburst,
-        serde_json::from_str::<serde_json::Value>(r#""gpt-image-2.5-sunburst""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GptImage25SunburstRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GptImage25SunburstRequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn gpt_image25_flare_request_quality_variants_round_trip_through_serde() {
     let cases: Vec<(GptImage25FlareRequestQuality, serde_json::Value)> = vec![
         (
@@ -104627,32 +102685,6 @@ fn gpt_image25_flare_request_quality_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: GptImage25FlareRequestQuality = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn gpt_image25_flare_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(GptImage25FlareRequestModelId, serde_json::Value)> = vec![(
-        GptImage25FlareRequestModelId::GptImage2_5Flare,
-        serde_json::from_str::<serde_json::Value>(r#""gpt-image-2.5-flare""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: GptImage25FlareRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GptImage25FlareRequestModelId = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -104744,32 +102776,6 @@ fn gpt_image25_flare_request_aspect_ratio_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn gemini25_flash_image_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(Gemini25FlashImageRequestModelId, serde_json::Value)> = vec![(
-        Gemini25FlashImageRequestModelId::Gemini2_5FlashImage,
-        serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-image""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: Gemini25FlashImageRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Gemini25FlashImageRequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn gemini25_flash_image_request_aspect_ratio_variants_round_trip_through_serde() {
     let cases: Vec<(Gemini25FlashImageRequestAspectRatio, serde_json::Value)> = vec![
         (
@@ -104838,32 +102844,6 @@ fn gemini25_flash_image_request_aspect_ratio_variants_round_trip_through_serde()
 }
 
 #[test]
-fn gemini3_pro_image_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(Gemini3ProImageRequestModelId, serde_json::Value)> = vec![(
-        Gemini3ProImageRequestModelId::Gemini3ProImage,
-        serde_json::from_str::<serde_json::Value>(r#""gemini-3-pro-image""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: Gemini3ProImageRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Gemini3ProImageRequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn gemini3_pro_image_request_resolution_variants_round_trip_through_serde() {
     let cases: Vec<(Gemini3ProImageRequestResolution, serde_json::Value)> = vec![
         (
@@ -104891,32 +102871,6 @@ fn gemini3_pro_image_request_resolution_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: Gemini3ProImageRequestResolution = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn gemini31_flash_image_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(Gemini31FlashImageRequestModelId, serde_json::Value)> = vec![(
-        Gemini31FlashImageRequestModelId::Gemini3_1FlashImage,
-        serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-image""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: Gemini31FlashImageRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Gemini31FlashImageRequestModelId = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -105048,33 +103002,6 @@ fn gemini31_flash_image_request_resolution_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn gemini31_flash_lite_image_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(Gemini31FlashLiteImageRequestModelId, serde_json::Value)> = vec![(
-        Gemini31FlashLiteImageRequestModelId::Gemini3_1FlashLiteImage,
-        serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite-image""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: Gemini31FlashLiteImageRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Gemini31FlashLiteImageRequestModelId =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn gemini31_flash_lite_image_request_resolution_variants_round_trip_through_serde() {
     let cases: Vec<(Gemini31FlashLiteImageRequestResolution, serde_json::Value)> = vec![(
         Gemini31FlashLiteImageRequestResolution::Num1K,
@@ -105149,33 +103076,6 @@ fn bytedance_seedream5_lite_request_aspect_ratio_variants_round_trip_through_ser
 }
 
 #[test]
-fn bytedance_seedream5_lite_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(BytedanceSeedream5LiteRequestModelId, serde_json::Value)> = vec![(
-        BytedanceSeedream5LiteRequestModelId::BytedanceSeedream5Lite,
-        serde_json::from_str::<serde_json::Value>(r#""bytedance-seedream-5-lite""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BytedanceSeedream5LiteRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BytedanceSeedream5LiteRequestModelId =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn bytedance_seedream5_lite_request_resolution_variants_round_trip_through_serde() {
     let cases: Vec<(BytedanceSeedream5LiteRequestResolution, serde_json::Value)> = vec![
         (
@@ -105201,32 +103101,6 @@ fn bytedance_seedream5_lite_request_resolution_variants_round_trip_through_serde
     let decoded: BytedanceSeedream5LiteRequestResolution =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn bytedance_seedream5_pro_request_model_id_variants_round_trip_through_serde() {
-    let cases: Vec<(BytedanceSeedream5ProRequestModelId, serde_json::Value)> = vec![(
-        BytedanceSeedream5ProRequestModelId::BytedanceSeedream5Pro,
-        serde_json::from_str::<serde_json::Value>(r#""bytedance-seedream-5-pro""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BytedanceSeedream5ProRequestModelId =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BytedanceSeedream5ProRequestModelId = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -105309,181 +103183,6 @@ fn template_run_status_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn template_image_output_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TemplateImageOutputType, serde_json::Value)> = vec![(
-        TemplateImageOutputType::Image,
-        serde_json::from_str::<serde_json::Value>(r#""image""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TemplateImageOutputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TemplateImageOutputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn template_video_output_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TemplateVideoOutputType, serde_json::Value)> = vec![(
-        TemplateVideoOutputType::Video,
-        serde_json::from_str::<serde_json::Value>(r#""video""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TemplateVideoOutputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TemplateVideoOutputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn template_audio_output_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TemplateAudioOutputType, serde_json::Value)> = vec![(
-        TemplateAudioOutputType::Audio,
-        serde_json::from_str::<serde_json::Value>(r#""audio""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TemplateAudioOutputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TemplateAudioOutputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn template_string_output_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TemplateStringOutputType, serde_json::Value)> = vec![(
-        TemplateStringOutputType::String,
-        serde_json::from_str::<serde_json::Value>(r#""string""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TemplateStringOutputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TemplateStringOutputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn template_integer_output_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TemplateIntegerOutputType, serde_json::Value)> = vec![(
-        TemplateIntegerOutputType::Integer,
-        serde_json::from_str::<serde_json::Value>(r#""integer""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TemplateIntegerOutputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TemplateIntegerOutputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn template_number_output_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TemplateNumberOutputType, serde_json::Value)> = vec![(
-        TemplateNumberOutputType::Number,
-        serde_json::from_str::<serde_json::Value>(r#""number""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TemplateNumberOutputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TemplateNumberOutputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn template_boolean_output_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TemplateBooleanOutputType, serde_json::Value)> = vec![(
-        TemplateBooleanOutputType::Boolean,
-        serde_json::from_str::<serde_json::Value>(r#""boolean""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TemplateBooleanOutputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TemplateBooleanOutputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn template_array_output_failure_reason_variants_round_trip_through_serde() {
     let cases: Vec<(TemplateArrayOutputFailureReason, serde_json::Value)> = vec![
         (
@@ -105534,56 +103233,6 @@ fn template_array_output_failure_reason_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: TemplateArrayOutputFailureReason = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn template_array_output_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TemplateArrayOutputType, serde_json::Value)> = vec![(
-        TemplateArrayOutputType::Array,
-        serde_json::from_str::<serde_json::Value>(r#""array""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TemplateArrayOutputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TemplateArrayOutputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn template_object_output_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TemplateObjectOutputType, serde_json::Value)> = vec![(
-        TemplateObjectOutputType::Object,
-        serde_json::from_str::<serde_json::Value>(r#""object""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TemplateObjectOutputType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TemplateObjectOutputType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -105665,81 +103314,6 @@ fn inline_base64_reference_mime_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn number_schema_type_variants_round_trip_through_serde() {
-    let cases: Vec<(NumberSchemaType, serde_json::Value)> = vec![(
-        NumberSchemaType::Number,
-        serde_json::from_str::<serde_json::Value>(r#""number""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: NumberSchemaType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: NumberSchemaType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn integer_schema_type_variants_round_trip_through_serde() {
-    let cases: Vec<(IntegerSchemaType, serde_json::Value)> = vec![(
-        IntegerSchemaType::Integer,
-        serde_json::from_str::<serde_json::Value>(r#""integer""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: IntegerSchemaType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: IntegerSchemaType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn boolean_schema_type_variants_round_trip_through_serde() {
-    let cases: Vec<(BooleanSchemaType, serde_json::Value)> = vec![(
-        BooleanSchemaType::Boolean,
-        serde_json::from_str::<serde_json::Value>(r#""boolean""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: BooleanSchemaType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BooleanSchemaType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn image_schema_type_variants_round_trip_through_serde() {
     let cases: Vec<(ImageSchemaType, serde_json::Value)> = vec![(
         ImageSchemaType::Image,
@@ -105757,31 +103331,6 @@ fn image_schema_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: ImageSchemaType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn audio_schema_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AudioSchemaType, serde_json::Value)> = vec![(
-        AudioSchemaType::Audio,
-        serde_json::from_str::<serde_json::Value>(r#""audio""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AudioSchemaType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AudioSchemaType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -106180,6 +103729,1123 @@ fn body_list_api_requests_v1_workspace_analytics_requests_post_sort_variants_rou
 }
 
 #[test]
+fn pricing_mode_variants_round_trip_through_serde() {
+    let cases: Vec<(PricingMode, serde_json::Value)> = vec![
+        (
+            PricingMode::Fixed,
+            serde_json::from_str::<serde_json::Value>(r#""fixed""#).expect("fixture is valid JSON"),
+        ),
+        (
+            PricingMode::Quote,
+            serde_json::from_str::<serde_json::Value>(r#""quote""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: PricingMode =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: PricingMode = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn intake_question_kind_variants_round_trip_through_serde() {
+    let cases: Vec<(IntakeQuestionKind, serde_json::Value)> = vec![
+        (
+            IntakeQuestionKind::Text,
+            serde_json::from_str::<serde_json::Value>(r#""text""#).expect("fixture is valid JSON"),
+        ),
+        (
+            IntakeQuestionKind::Number,
+            serde_json::from_str::<serde_json::Value>(r#""number""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IntakeQuestionKind::Choice,
+            serde_json::from_str::<serde_json::Value>(r#""choice""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: IntakeQuestionKind =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: IntakeQuestionKind = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reception_service_kind_variants_round_trip_through_serde() {
+    let cases: Vec<(ReceptionServiceKind, serde_json::Value)> = vec![
+        (
+            ReceptionServiceKind::Classic,
+            serde_json::from_str::<serde_json::Value>(r#""classic""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionServiceKind::Rental,
+            serde_json::from_str::<serde_json::Value>(r#""rental""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionServiceKind::Group,
+            serde_json::from_str::<serde_json::Value>(r#""group""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReceptionServiceKind =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReceptionServiceKind = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn service_location_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ServiceLocationType, serde_json::Value)> = vec![
+        (
+            ServiceLocationType::Business,
+            serde_json::from_str::<serde_json::Value>(r#""business""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ServiceLocationType::Customer,
+            serde_json::from_str::<serde_json::Value>(r#""customer""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ServiceLocationType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ServiceLocationType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn promotion_target_variants_round_trip_through_serde() {
+    let cases: Vec<(PromotionTarget, serde_json::Value)> = vec![
+        (
+            PromotionTarget::Service,
+            serde_json::from_str::<serde_json::Value>(r#""service""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromotionTarget::AddOn,
+            serde_json::from_str::<serde_json::Value>(r#""add_on""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: PromotionTarget =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: PromotionTarget = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn order_fulfillment_type_variants_round_trip_through_serde() {
+    let cases: Vec<(OrderFulfillmentType, serde_json::Value)> = vec![
+        (
+            OrderFulfillmentType::Pickup,
+            serde_json::from_str::<serde_json::Value>(r#""pickup""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            OrderFulfillmentType::Delivery,
+            serde_json::from_str::<serde_json::Value>(r#""delivery""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            OrderFulfillmentType::Digital,
+            serde_json::from_str::<serde_json::Value>(r#""digital""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: OrderFulfillmentType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: OrderFulfillmentType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reception_turn_eagerness_variants_round_trip_through_serde() {
+    let cases: Vec<(ReceptionTurnEagerness, serde_json::Value)> = vec![
+        (
+            ReceptionTurnEagerness::Patient,
+            serde_json::from_str::<serde_json::Value>(r#""patient""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionTurnEagerness::Normal,
+            serde_json::from_str::<serde_json::Value>(r#""normal""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionTurnEagerness::Eager,
+            serde_json::from_str::<serde_json::Value>(r#""eager""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReceptionTurnEagerness =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReceptionTurnEagerness = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn first_message_mode_variants_round_trip_through_serde() {
+    let cases: Vec<(FirstMessageMode, serde_json::Value)> = vec![
+        (
+            FirstMessageMode::Interruptible,
+            serde_json::from_str::<serde_json::Value>(r#""interruptible""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            FirstMessageMode::Uninterruptible,
+            serde_json::from_str::<serde_json::Value>(r#""uninterruptible""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            FirstMessageMode::RecordingNotice,
+            serde_json::from_str::<serde_json::Value>(r#""recording_notice""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: FirstMessageMode =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: FirstMessageMode = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reception_customer_facing_agent_deactivation_reason_variants_round_trip_through_serde() {
+    let cases: Vec<(
+        ReceptionCustomerFacingAgentDeactivationReason,
+        serde_json::Value,
+    )> = vec![
+        (
+            ReceptionCustomerFacingAgentDeactivationReason::TierDowngrade,
+            serde_json::from_str::<serde_json::Value>(r#""tier_downgrade""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionCustomerFacingAgentDeactivationReason::User,
+            serde_json::from_str::<serde_json::Value>(r#""user""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReceptionCustomerFacingAgentDeactivationReason =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReceptionCustomerFacingAgentDeactivationReason =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn variant_variants_round_trip_through_serde() {
+    let cases: Vec<(Variant, serde_json::Value)> = vec![
+        (
+            Variant::Tiny,
+            serde_json::from_str::<serde_json::Value>(r#""tiny""#).expect("fixture is valid JSON"),
+        ),
+        (
+            Variant::Compact,
+            serde_json::from_str::<serde_json::Value>(r#""compact""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Variant::Full,
+            serde_json::from_str::<serde_json::Value>(r#""full""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: Variant =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: Variant = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn placement_variants_round_trip_through_serde() {
+    let cases: Vec<(Placement, serde_json::Value)> = vec![
+        (
+            Placement::TopLeft,
+            serde_json::from_str::<serde_json::Value>(r#""top-left""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Placement::Top,
+            serde_json::from_str::<serde_json::Value>(r#""top""#).expect("fixture is valid JSON"),
+        ),
+        (
+            Placement::TopRight,
+            serde_json::from_str::<serde_json::Value>(r#""top-right""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Placement::BottomLeft,
+            serde_json::from_str::<serde_json::Value>(r#""bottom-left""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Placement::Bottom,
+            serde_json::from_str::<serde_json::Value>(r#""bottom""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            Placement::BottomRight,
+            serde_json::from_str::<serde_json::Value>(r#""bottom-right""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: Placement =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: Placement = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn holiday_type_variants_round_trip_through_serde() {
+    let cases: Vec<(HolidayType, serde_json::Value)> = vec![
+        (
+            HolidayType::Closed,
+            serde_json::from_str::<serde_json::Value>(r#""closed""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            HolidayType::Override_,
+            serde_json::from_str::<serde_json::Value>(r#""override""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: HolidayType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: HolidayType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn time_off_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TimeOffType, serde_json::Value)> = vec![
+        (
+            TimeOffType::Staff,
+            serde_json::from_str::<serde_json::Value>(r#""staff""#).expect("fixture is valid JSON"),
+        ),
+        (
+            TimeOffType::Asset,
+            serde_json::from_str::<serde_json::Value>(r#""asset""#).expect("fixture is valid JSON"),
+        ),
+        (
+            TimeOffType::Location,
+            serde_json::from_str::<serde_json::Value>(r#""location""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TimeOffType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TimeOffType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reception_location_deactivation_reason_variants_round_trip_through_serde() {
+    let cases: Vec<(ReceptionLocationDeactivationReason, serde_json::Value)> = vec![
+        (
+            ReceptionLocationDeactivationReason::TierDowngrade,
+            serde_json::from_str::<serde_json::Value>(r#""tier_downgrade""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionLocationDeactivationReason::User,
+            serde_json::from_str::<serde_json::Value>(r#""user""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReceptionLocationDeactivationReason =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReceptionLocationDeactivationReason = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reception_agent_info_response_currency_variants_round_trip_through_serde() {
+    let cases: Vec<(ReceptionAgentInfoResponseCurrency, serde_json::Value)> = vec![
+        (
+            ReceptionAgentInfoResponseCurrency::Usd,
+            serde_json::from_str::<serde_json::Value>(r#""USD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Eur,
+            serde_json::from_str::<serde_json::Value>(r#""EUR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Gbp,
+            serde_json::from_str::<serde_json::Value>(r#""GBP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Pln,
+            serde_json::from_str::<serde_json::Value>(r#""PLN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Cad,
+            serde_json::from_str::<serde_json::Value>(r#""CAD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Aud,
+            serde_json::from_str::<serde_json::Value>(r#""AUD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Chf,
+            serde_json::from_str::<serde_json::Value>(r#""CHF""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Sek,
+            serde_json::from_str::<serde_json::Value>(r#""SEK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Nok,
+            serde_json::from_str::<serde_json::Value>(r#""NOK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Dkk,
+            serde_json::from_str::<serde_json::Value>(r#""DKK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Isk,
+            serde_json::from_str::<serde_json::Value>(r#""ISK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Czk,
+            serde_json::from_str::<serde_json::Value>(r#""CZK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Huf,
+            serde_json::from_str::<serde_json::Value>(r#""HUF""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Ron,
+            serde_json::from_str::<serde_json::Value>(r#""RON""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Bgn,
+            serde_json::from_str::<serde_json::Value>(r#""BGN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Jpy,
+            serde_json::from_str::<serde_json::Value>(r#""JPY""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Cny,
+            serde_json::from_str::<serde_json::Value>(r#""CNY""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Twd,
+            serde_json::from_str::<serde_json::Value>(r#""TWD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Inr,
+            serde_json::from_str::<serde_json::Value>(r#""INR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Brl,
+            serde_json::from_str::<serde_json::Value>(r#""BRL""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Mxn,
+            serde_json::from_str::<serde_json::Value>(r#""MXN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Krw,
+            serde_json::from_str::<serde_json::Value>(r#""KRW""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Sgd,
+            serde_json::from_str::<serde_json::Value>(r#""SGD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Hkd,
+            serde_json::from_str::<serde_json::Value>(r#""HKD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Nzd,
+            serde_json::from_str::<serde_json::Value>(r#""NZD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Zar,
+            serde_json::from_str::<serde_json::Value>(r#""ZAR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Aed,
+            serde_json::from_str::<serde_json::Value>(r#""AED""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Sar,
+            serde_json::from_str::<serde_json::Value>(r#""SAR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Qar,
+            serde_json::from_str::<serde_json::Value>(r#""QAR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Kwd,
+            serde_json::from_str::<serde_json::Value>(r#""KWD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Ils,
+            serde_json::from_str::<serde_json::Value>(r#""ILS""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Try,
+            serde_json::from_str::<serde_json::Value>(r#""TRY""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Thb,
+            serde_json::from_str::<serde_json::Value>(r#""THB""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Idr,
+            serde_json::from_str::<serde_json::Value>(r#""IDR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Myr,
+            serde_json::from_str::<serde_json::Value>(r#""MYR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Php,
+            serde_json::from_str::<serde_json::Value>(r#""PHP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Vnd,
+            serde_json::from_str::<serde_json::Value>(r#""VND""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Bdt,
+            serde_json::from_str::<serde_json::Value>(r#""BDT""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Rub,
+            serde_json::from_str::<serde_json::Value>(r#""RUB""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Uah,
+            serde_json::from_str::<serde_json::Value>(r#""UAH""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Clp,
+            serde_json::from_str::<serde_json::Value>(r#""CLP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Cop,
+            serde_json::from_str::<serde_json::Value>(r#""COP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Ars,
+            serde_json::from_str::<serde_json::Value>(r#""ARS""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Pen,
+            serde_json::from_str::<serde_json::Value>(r#""PEN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Egp,
+            serde_json::from_str::<serde_json::Value>(r#""EGP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Ngn,
+            serde_json::from_str::<serde_json::Value>(r#""NGN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Kes,
+            serde_json::from_str::<serde_json::Value>(r#""KES""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Pkr,
+            serde_json::from_str::<serde_json::Value>(r#""PKR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionAgentInfoResponseCurrency::Gel,
+            serde_json::from_str::<serde_json::Value>(r#""GEL""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReceptionAgentInfoResponseCurrency =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReceptionAgentInfoResponseCurrency = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn knowledge_source_type_variants_round_trip_through_serde() {
+    let cases: Vec<(KnowledgeSourceType, serde_json::Value)> = vec![
+        (
+            KnowledgeSourceType::File,
+            serde_json::from_str::<serde_json::Value>(r#""file""#).expect("fixture is valid JSON"),
+        ),
+        (
+            KnowledgeSourceType::Url,
+            serde_json::from_str::<serde_json::Value>(r#""url""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: KnowledgeSourceType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: KnowledgeSourceType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn knowledge_source_status_variants_round_trip_through_serde() {
+    let cases: Vec<(KnowledgeSourceStatus, serde_json::Value)> = vec![
+        (
+            KnowledgeSourceStatus::Processing,
+            serde_json::from_str::<serde_json::Value>(r#""processing""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            KnowledgeSourceStatus::Ready,
+            serde_json::from_str::<serde_json::Value>(r#""ready""#).expect("fixture is valid JSON"),
+        ),
+        (
+            KnowledgeSourceStatus::Error,
+            serde_json::from_str::<serde_json::Value>(r#""error""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: KnowledgeSourceStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: KnowledgeSourceStatus = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ingest_failure_variants_round_trip_through_serde() {
+    let cases: Vec<(IngestFailure, serde_json::Value)> = vec![
+        (
+            IngestFailure::BlockedUrl,
+            serde_json::from_str::<serde_json::Value>(r#""blocked_url""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IngestFailure::DnsFailure,
+            serde_json::from_str::<serde_json::Value>(r#""dns_failure""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IngestFailure::HostUnreachable,
+            serde_json::from_str::<serde_json::Value>(r#""host_unreachable""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IngestFailure::AccessRefused,
+            serde_json::from_str::<serde_json::Value>(r#""access_refused""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IngestFailure::CrawlTimeout,
+            serde_json::from_str::<serde_json::Value>(r#""crawl_timeout""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IngestFailure::NoPages,
+            serde_json::from_str::<serde_json::Value>(r#""no_pages""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IngestFailure::NoContent,
+            serde_json::from_str::<serde_json::Value>(r#""no_content""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IngestFailure::UpstreamTimeout,
+            serde_json::from_str::<serde_json::Value>(r#""upstream_timeout""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IngestFailure::UpstreamError,
+            serde_json::from_str::<serde_json::Value>(r#""upstream_error""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IngestFailure::Unknown,
+            serde_json::from_str::<serde_json::Value>(r#""unknown""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: IngestFailure =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: IngestFailure = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn team_invite_outcome_variants_round_trip_through_serde() {
+    let cases: Vec<(TeamInviteOutcome, serde_json::Value)> = vec![
+        (
+            TeamInviteOutcome::Invited,
+            serde_json::from_str::<serde_json::Value>(r#""invited""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TeamInviteOutcome::Failed,
+            serde_json::from_str::<serde_json::Value>(r#""failed""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TeamInviteOutcome =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TeamInviteOutcome = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reception_vertical_variants_round_trip_through_serde() {
+    let cases: Vec<(ReceptionVertical, serde_json::Value)> = vec![
+        (
+            ReceptionVertical::SalonBarbershop,
+            serde_json::from_str::<serde_json::Value>(r#""salon_barbershop""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::NailBeauty,
+            serde_json::from_str::<serde_json::Value>(r#""nail_beauty""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Spa,
+            serde_json::from_str::<serde_json::Value>(r#""spa""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Medical,
+            serde_json::from_str::<serde_json::Value>(r#""medical""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Veterinary,
+            serde_json::from_str::<serde_json::Value>(r#""veterinary""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Fitness,
+            serde_json::from_str::<serde_json::Value>(r#""fitness""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::HomeServices,
+            serde_json::from_str::<serde_json::Value>(r#""home_services""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Photography,
+            serde_json::from_str::<serde_json::Value>(r#""photography""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Consulting,
+            serde_json::from_str::<serde_json::Value>(r#""consulting""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Restaurant,
+            serde_json::from_str::<serde_json::Value>(r#""restaurant""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Dental,
+            serde_json::from_str::<serde_json::Value>(r#""dental""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::AutoService,
+            serde_json::from_str::<serde_json::Value>(r#""auto_service""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Tutoring,
+            serde_json::from_str::<serde_json::Value>(r#""tutoring""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Legal,
+            serde_json::from_str::<serde_json::Value>(r#""legal""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::RealEstate,
+            serde_json::from_str::<serde_json::Value>(r#""real_estate""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReceptionVertical::Other,
+            serde_json::from_str::<serde_json::Value>(r#""other""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReceptionVertical =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReceptionVertical = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn assign_reseller_tier_request_billing_period_variants_round_trip_through_serde() {
+    let cases: Vec<(AssignResellerTierRequestBillingPeriod, serde_json::Value)> = vec![
+        (
+            AssignResellerTierRequestBillingPeriod::MonthlyPeriod,
+            serde_json::from_str::<serde_json::Value>(r#""monthly_period""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AssignResellerTierRequestBillingPeriod::AnnualPeriod,
+            serde_json::from_str::<serde_json::Value>(r#""annual_period""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: AssignResellerTierRequestBillingPeriod =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: AssignResellerTierRequestBillingPeriod =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reseller_invoice_status_variants_round_trip_through_serde() {
+    let cases: Vec<(ResellerInvoiceStatus, serde_json::Value)> = vec![
+        (
+            ResellerInvoiceStatus::Paid,
+            serde_json::from_str::<serde_json::Value>(r#""paid""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerInvoiceStatus::Open,
+            serde_json::from_str::<serde_json::Value>(r#""open""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerInvoiceStatus::Void,
+            serde_json::from_str::<serde_json::Value>(r#""void""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ResellerInvoiceStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ResellerInvoiceStatus = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reseller_invoice_line_kind_variants_round_trip_through_serde() {
+    let cases: Vec<(ResellerInvoiceLineKind, serde_json::Value)> = vec![
+        (
+            ResellerInvoiceLineKind::Plan,
+            serde_json::from_str::<serde_json::Value>(r#""plan""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerInvoiceLineKind::Telephony,
+            serde_json::from_str::<serde_json::Value>(r#""telephony""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerInvoiceLineKind::Overage,
+            serde_json::from_str::<serde_json::Value>(r#""overage""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerInvoiceLineKind::Proration,
+            serde_json::from_str::<serde_json::Value>(r#""proration""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerInvoiceLineKind::Adjustment,
+            serde_json::from_str::<serde_json::Value>(r#""adjustment""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ResellerInvoiceLineKind =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ResellerInvoiceLineKind = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn final_is_final_variants_round_trip_through_serde() {
     let cases: Vec<(FinalIsFinal, serde_json::Value)> = vec![(
         FinalIsFinal::True_,
@@ -106235,158 +104901,6 @@ fn text_to_dialogue_multi_context_realtime_apply_text_normalization_variants_rou
     let decoded: TextToDialogueMultiContextRealtimeApplyTextNormalization =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn agent_response_type_variants_round_trip_through_serde() {
-    let cases: Vec<(AgentResponseType, serde_json::Value)> = vec![(
-        AgentResponseType::AgentResponse,
-        serde_json::from_str::<serde_json::Value>(r#""agent_response""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AgentResponseType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AgentResponseType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn pong_type_variants_round_trip_through_serde() {
-    let cases: Vec<(PongType, serde_json::Value)> = vec![(
-        PongType::Pong,
-        serde_json::from_str::<serde_json::Value>(r#""pong""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PongType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PongType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn init_type_variants_round_trip_through_serde() {
-    let cases: Vec<(InitType, serde_json::Value)> = vec![(
-        InitType::Init,
-        serde_json::from_str::<serde_json::Value>(r#""init""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: InitType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: InitType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn user_transcript_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UserTranscriptType, serde_json::Value)> = vec![(
-        UserTranscriptType::UserTranscript,
-        serde_json::from_str::<serde_json::Value>(r#""user_transcript""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: UserTranscriptType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UserTranscriptType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn ping_type_variants_round_trip_through_serde() {
-    let cases: Vec<(PingType, serde_json::Value)> = vec![(
-        PingType::Ping,
-        serde_json::from_str::<serde_json::Value>(r#""ping""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: PingType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: PingType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn close_type_variants_round_trip_through_serde() {
-    let cases: Vec<(CloseType, serde_json::Value)> = vec![(
-        CloseType::Close,
-        serde_json::from_str::<serde_json::Value>(r#""close""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: CloseType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: CloseType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -107253,59 +105767,6 @@ fn translation_realtime_eagerness_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn translate_final_transcript_message_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TranslateFinalTranscriptMessageType, serde_json::Value)> = vec![(
-        TranslateFinalTranscriptMessageType::FinalTranscript,
-        serde_json::from_str::<serde_json::Value>(r#""final_transcript""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TranslateFinalTranscriptMessageType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TranslateFinalTranscriptMessageType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn translate_payment_issue_error_message_type_variants_round_trip_through_serde() {
-    let cases: Vec<(TranslatePaymentIssueErrorMessageType, serde_json::Value)> = vec![(
-        TranslatePaymentIssueErrorMessageType::PaymentIssue,
-        serde_json::from_str::<serde_json::Value>(r#""payment_issue""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TranslatePaymentIssueErrorMessageType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TranslatePaymentIssueErrorMessageType =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn dubbing_live_max_lag_s_variants_round_trip_through_serde() {
     let cases: Vec<(DubbingLiveMaxLagS, serde_json::Value)> = vec![
         (
@@ -107488,58 +105949,6 @@ fn dubbing_live_output_format_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn dubbing_input_audio_chunk_message_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DubbingInputAudioChunkMessageType, serde_json::Value)> = vec![(
-        DubbingInputAudioChunkMessageType::InputAudioChunk,
-        serde_json::from_str::<serde_json::Value>(r#""input_audio_chunk""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DubbingInputAudioChunkMessageType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DubbingInputAudioChunkMessageType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn dubbing_end_of_stream_message_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DubbingEndOfStreamMessageType, serde_json::Value)> = vec![(
-        DubbingEndOfStreamMessageType::EndOfStream,
-        serde_json::from_str::<serde_json::Value>(r#""end_of_stream""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DubbingEndOfStreamMessageType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DubbingEndOfStreamMessageType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn dubbing_session_started_message_type_variants_round_trip_through_serde() {
     let cases: Vec<(DubbingSessionStartedMessageType, serde_json::Value)> = vec![(
         DubbingSessionStartedMessageType::SessionStarted,
@@ -107558,31 +105967,6 @@ fn dubbing_session_started_message_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: DubbingSessionStartedMessageType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn dubbing_status_message_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DubbingStatusMessageType, serde_json::Value)> = vec![(
-        DubbingStatusMessageType::Status,
-        serde_json::from_str::<serde_json::Value>(r#""status""#).expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DubbingStatusMessageType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DubbingStatusMessageType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -107642,32 +106026,6 @@ fn dubbing_partial_transcript_message_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: DubbingPartialTranscriptMessageType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn dubbing_translation_message_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DubbingTranslationMessageType, serde_json::Value)> = vec![(
-        DubbingTranslationMessageType::Translation,
-        serde_json::from_str::<serde_json::Value>(r#""translation""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DubbingTranslationMessageType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DubbingTranslationMessageType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -107851,58 +106209,6 @@ fn dubbing_transcriber_error_message_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: DubbingTranscriberErrorMessageType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn dubbing_translation_error_message_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DubbingTranslationErrorMessageType, serde_json::Value)> = vec![(
-        DubbingTranslationErrorMessageType::TranslationError,
-        serde_json::from_str::<serde_json::Value>(r#""translation_error""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DubbingTranslationErrorMessageType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DubbingTranslationErrorMessageType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn dubbing_audio_output_error_message_type_variants_round_trip_through_serde() {
-    let cases: Vec<(DubbingAudioOutputErrorMessageType, serde_json::Value)> = vec![(
-        DubbingAudioOutputErrorMessageType::AudioOutputError,
-        serde_json::from_str::<serde_json::Value>(r#""audio_output_error""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: DubbingAudioOutputErrorMessageType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: DubbingAudioOutputErrorMessageType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),

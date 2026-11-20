@@ -338,7 +338,10 @@ async fn update_sends_the_real_wire_request() {
     let client = ApiClient::new(config).expect("client should construct");
     let body = serde_json::from_value(request_body.clone()).unwrap();
 
-    let result = client.api_keys.update("value", "value", &body, None).await;
+    let result = client
+        .api_keys
+        .update("value", "value", Some(&body), None)
+        .await;
     assert!(result.is_ok(), "call failed: {:?}", result.as_ref().err());
 
     let received = server.received_requests().await.expect("requests recorded");
@@ -426,7 +429,10 @@ async fn update_surfaces_the_declared_422() {
     let client = ApiClient::new(config).expect("client should construct");
     let body = serde_json::from_value(request_body.clone()).unwrap();
 
-    let result = client.api_keys.update("value", "value", &body, None).await;
+    let result = client
+        .api_keys
+        .update("value", "value", Some(&body), None)
+        .await;
 
     match result {
         Ok(_) => panic!("expected the declared 422 to surface as an error"),
@@ -546,7 +552,7 @@ async fn delete_surfaces_the_declared_422() {
 }
 
 #[tokio::test]
-async fn disable_sends_the_real_wire_request() {
+async fn disable_2_sends_the_real_wire_request() {
     let server = MockServer::start().await;
     let expected_response =
         serde_json::from_str::<serde_json::Value>(r#"{}"#).expect("fixture is valid JSON");
@@ -599,7 +605,7 @@ async fn disable_sends_the_real_wire_request() {
 }
 
 #[tokio::test]
-async fn disable_surfaces_the_declared_422() {
+async fn disable_2_surfaces_the_declared_422() {
     let server = MockServer::start().await;
     let error_body = serde_json::from_str::<serde_json::Value>(
         r#"{

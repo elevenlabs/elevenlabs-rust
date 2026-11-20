@@ -2,10 +2,10 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ApiIntegrationWebhookToolConfigInput {
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<ApiIntegrationWebhookToolConfigInputType>,
     pub name: String,
     /// Description of when the tool should be used and what it does.
-    #[serde(default)]
     pub description: String,
     /// The maximum time in seconds to wait for the tool call to complete. Must be between 5 and 300 seconds (inclusive).
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -41,9 +41,7 @@ pub struct ApiIntegrationWebhookToolConfigInput {
     /// The version of the API integration tool
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_version: Option<String>,
-    #[serde(default)]
     pub api_integration_id: String,
-    #[serde(default)]
     pub api_integration_connection_id: String,
     /// User overrides applied on top of the base api_schema
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -59,6 +57,7 @@ impl ApiIntegrationWebhookToolConfigInput {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct ApiIntegrationWebhookToolConfigInputBuilder {
+    r#type: Option<ApiIntegrationWebhookToolConfigInputType>,
     name: Option<String>,
     description: Option<String>,
     response_timeout_secs: Option<i64>,
@@ -79,6 +78,11 @@ pub struct ApiIntegrationWebhookToolConfigInputBuilder {
 }
 
 impl ApiIntegrationWebhookToolConfigInputBuilder {
+    pub fn r#type(mut self, value: ApiIntegrationWebhookToolConfigInputType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn name(mut self, value: impl Into<String>) -> Self {
         self.name = Some(value.into());
         self
@@ -172,6 +176,7 @@ impl ApiIntegrationWebhookToolConfigInputBuilder {
     /// - [`api_integration_connection_id`](ApiIntegrationWebhookToolConfigInputBuilder::api_integration_connection_id)
     pub fn build(self) -> Result<ApiIntegrationWebhookToolConfigInput, BuildError> {
         Ok(ApiIntegrationWebhookToolConfigInput {
+            r#type: self.r#type,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             description: self
                 .description

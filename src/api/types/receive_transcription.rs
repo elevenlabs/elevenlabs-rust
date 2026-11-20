@@ -35,6 +35,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         D: serde::Deserializer<'de>,
     {
         let value = <serde_json::Value as serde::Deserialize>::deserialize(deserializer)?;
+        let matching_keys = |keys: &[&str]| {
+            value
+                .as_object()
+                .map(|object| {
+                    object
+                        .keys()
+                        .filter(|key| keys.contains(&key.as_str()))
+                        .count()
+                })
+                .unwrap_or(0)
+        };
 
         let mut matched_literal = false;
 
@@ -45,7 +56,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<SessionStarted>(value.clone()) {
-                return Ok(Self::SessionStarted(parsed));
+                let best = matching_keys(&["message_type", "session_id", "config"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::SessionStarted(parsed)));
             }
         }
 
@@ -56,7 +77,23 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<PartialTranscript>(value.clone()) {
-                return Ok(Self::PartialTranscript(parsed));
+                let best = matching_keys(&[
+                    "message_type",
+                    "text",
+                    "turn_probability",
+                    "language_code",
+                    "words",
+                ]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::PartialTranscript(parsed)));
             }
         }
 
@@ -67,7 +104,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<CommittedTranscript>(value.clone()) {
-                return Ok(Self::CommittedTranscript(parsed));
+                let best = matching_keys(&["message_type", "text", "segment_index"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::CommittedTranscript(parsed)));
             }
         }
 
@@ -78,7 +125,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<DiarizedTranscript>(value.clone()) {
-                return Ok(Self::DiarizedTranscript(parsed));
+                let best = matching_keys(&["message_type", "segment_index", "text", "words"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::DiarizedTranscript(parsed)));
             }
         }
 
@@ -89,7 +146,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<SpeakersMerged>(value.clone()) {
-                return Ok(Self::SpeakersMerged(parsed));
+                let best = matching_keys(&["message_type", "from_speaker_id", "to_speaker_id"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::SpeakersMerged(parsed)));
             }
         }
 
@@ -102,7 +169,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
             if let Ok(parsed) =
                 serde_json::from_value::<CommittedTranscriptWithTimestamps>(value.clone())
             {
-                return Ok(Self::CommittedTranscriptWithTimestamps(parsed));
+                let best = matching_keys(&["message_type", "text", "language_code", "words"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::CommittedTranscriptWithTimestamps(parsed)));
             }
         }
 
@@ -114,7 +191,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<CommittedTranscriptEntities>(value.clone())
             {
-                return Ok(Self::CommittedTranscriptEntities(parsed));
+                let best = matching_keys(&["message_type", "text", "entities"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::CommittedTranscriptEntities(parsed)));
             }
         }
 
@@ -125,7 +212,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<RedactedTranscript>(value.clone()) {
-                return Ok(Self::RedactedTranscript(parsed));
+                let best = matching_keys(&["message_type", "text", "redacted_text"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::RedactedTranscript(parsed)));
             }
         }
 
@@ -136,7 +233,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeWarning>(value.clone()) {
-                return Ok(Self::ScribeWarning(parsed));
+                let best = matching_keys(&["message_type", "warning"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeWarning(parsed)));
             }
         }
 
@@ -147,7 +254,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeError>(value.clone()) {
-                return Ok(Self::ScribeError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeError(parsed)));
             }
         }
 
@@ -158,7 +275,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeAuthError>(value.clone()) {
-                return Ok(Self::ScribeAuthError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeAuthError(parsed)));
             }
         }
 
@@ -169,7 +296,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeQuotaExceededError>(value.clone()) {
-                return Ok(Self::ScribeQuotaExceededError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeQuotaExceededError(parsed)));
             }
         }
 
@@ -180,7 +317,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeThrottledError>(value.clone()) {
-                return Ok(Self::ScribeThrottledError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeThrottledError(parsed)));
             }
         }
 
@@ -192,7 +339,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeUnacceptedTermsError>(value.clone())
             {
-                return Ok(Self::ScribeUnacceptedTermsError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeUnacceptedTermsError(parsed)));
             }
         }
 
@@ -203,7 +360,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeRateLimitedError>(value.clone()) {
-                return Ok(Self::ScribeRateLimitedError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeRateLimitedError(parsed)));
             }
         }
 
@@ -214,7 +381,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeQueueOverflowError>(value.clone()) {
-                return Ok(Self::ScribeQueueOverflowError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeQueueOverflowError(parsed)));
             }
         }
 
@@ -227,7 +404,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
             if let Ok(parsed) =
                 serde_json::from_value::<ScribeResourceExhaustedError>(value.clone())
             {
-                return Ok(Self::ScribeResourceExhaustedError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeResourceExhaustedError(parsed)));
             }
         }
 
@@ -240,7 +427,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
             if let Ok(parsed) =
                 serde_json::from_value::<ScribeSessionTimeLimitExceededError>(value.clone())
             {
-                return Ok(Self::ScribeSessionTimeLimitExceededError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeSessionTimeLimitExceededError(parsed)));
             }
         }
 
@@ -251,7 +448,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeInputError>(value.clone()) {
-                return Ok(Self::ScribeInputError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeInputError(parsed)));
             }
         }
 
@@ -262,7 +469,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeInvalidRequestError>(value.clone()) {
-                return Ok(Self::ScribeInvalidRequestError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeInvalidRequestError(parsed)));
             }
         }
 
@@ -275,7 +492,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
             if let Ok(parsed) =
                 serde_json::from_value::<ScribeChunkSizeExceededError>(value.clone())
             {
-                return Ok(Self::ScribeChunkSizeExceededError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeChunkSizeExceededError(parsed)));
             }
         }
 
@@ -288,7 +515,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
             if let Ok(parsed) =
                 serde_json::from_value::<ScribeInsufficientAudioActivityError>(value.clone())
             {
-                return Ok(Self::ScribeInsufficientAudioActivityError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeInsufficientAudioActivityError(parsed)));
             }
         }
 
@@ -299,7 +536,17 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
         {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<ScribeTranscriberError>(value.clone()) {
-                return Ok(Self::ScribeTranscriberError(parsed));
+                let best = matching_keys(&["message_type", "error"]);
+                let mut chosen = None;
+                let score = matching_keys(&["message_type", "text", "edited_text"]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<EditedTranscript>(value.clone())
+                    {
+                        chosen = Some(Self::EditedTranscript(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ScribeTranscriberError(parsed)));
             }
         }
 

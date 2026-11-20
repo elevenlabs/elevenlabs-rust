@@ -61,6 +61,9 @@ pub enum AuditActivityName {
     NotificationPreferenceDeletion,
     NotificationPreferenceManagement,
     NotificationPreferenceUpdate,
+    OAuthAppAuthorizationGrant,
+    OAuthAppAuthorizationManagement,
+    OAuthAppAuthorizationRevocation,
     PasswordResetEmailRequest,
     PasswordResetLinkGeneration,
     ReportingWorkspaceSsoInheritanceUpdate,
@@ -117,6 +120,14 @@ pub enum AuditActivityName {
     WebhookDeletion,
     WebhookManagement,
     WebhookUpdate,
+    WorkloadIdentityFederationAssignmentCreation,
+    WorkloadIdentityFederationAssignmentDeletion,
+    WorkloadIdentityFederationAssignmentManagement,
+    WorkloadIdentityFederationPoolCreation,
+    WorkloadIdentityFederationPoolDeletion,
+    WorkloadIdentityFederationPoolManagement,
+    WorkloadIdentityFederationPoolUpdate,
+    WorkloadIdentityFederationTokenExchange,
     WorkspaceCreation,
     WorkspaceDeletion,
     WorkspaceDeletionCancellation,
@@ -249,6 +260,15 @@ impl Serialize for AuditActivityName {
             Self::NotificationPreferenceUpdate => {
                 serializer.serialize_str("Notification Preference Update")
             }
+            Self::OAuthAppAuthorizationGrant => {
+                serializer.serialize_str("OAuth App Authorization Grant")
+            }
+            Self::OAuthAppAuthorizationManagement => {
+                serializer.serialize_str("OAuth App Authorization Management")
+            }
+            Self::OAuthAppAuthorizationRevocation => {
+                serializer.serialize_str("OAuth App Authorization Revocation")
+            }
             Self::PasswordResetEmailRequest => {
                 serializer.serialize_str("Password Reset Email Request")
             }
@@ -343,6 +363,30 @@ impl Serialize for AuditActivityName {
             Self::WebhookDeletion => serializer.serialize_str("Webhook Deletion"),
             Self::WebhookManagement => serializer.serialize_str("Webhook Management"),
             Self::WebhookUpdate => serializer.serialize_str("Webhook Update"),
+            Self::WorkloadIdentityFederationAssignmentCreation => {
+                serializer.serialize_str("Workload Identity Federation Assignment Creation")
+            }
+            Self::WorkloadIdentityFederationAssignmentDeletion => {
+                serializer.serialize_str("Workload Identity Federation Assignment Deletion")
+            }
+            Self::WorkloadIdentityFederationAssignmentManagement => {
+                serializer.serialize_str("Workload Identity Federation Assignment Management")
+            }
+            Self::WorkloadIdentityFederationPoolCreation => {
+                serializer.serialize_str("Workload Identity Federation Pool Creation")
+            }
+            Self::WorkloadIdentityFederationPoolDeletion => {
+                serializer.serialize_str("Workload Identity Federation Pool Deletion")
+            }
+            Self::WorkloadIdentityFederationPoolManagement => {
+                serializer.serialize_str("Workload Identity Federation Pool Management")
+            }
+            Self::WorkloadIdentityFederationPoolUpdate => {
+                serializer.serialize_str("Workload Identity Federation Pool Update")
+            }
+            Self::WorkloadIdentityFederationTokenExchange => {
+                serializer.serialize_str("Workload Identity Federation Token Exchange")
+            }
             Self::WorkspaceCreation => serializer.serialize_str("Workspace Creation"),
             Self::WorkspaceDeletion => serializer.serialize_str("Workspace Deletion"),
             Self::WorkspaceDeletionCancellation => {
@@ -446,6 +490,9 @@ impl<'de> Deserialize<'de> for AuditActivityName {
             "Notification Preference Deletion" => Ok(Self::NotificationPreferenceDeletion),
             "Notification Preference Management" => Ok(Self::NotificationPreferenceManagement),
             "Notification Preference Update" => Ok(Self::NotificationPreferenceUpdate),
+            "OAuth App Authorization Grant" => Ok(Self::OAuthAppAuthorizationGrant),
+            "OAuth App Authorization Management" => Ok(Self::OAuthAppAuthorizationManagement),
+            "OAuth App Authorization Revocation" => Ok(Self::OAuthAppAuthorizationRevocation),
             "Password Reset Email Request" => Ok(Self::PasswordResetEmailRequest),
             "Password Reset Link Generation" => Ok(Self::PasswordResetLinkGeneration),
             "Reporting Workspace SSO Inheritance Update" => {
@@ -506,6 +553,30 @@ impl<'de> Deserialize<'de> for AuditActivityName {
             "Webhook Deletion" => Ok(Self::WebhookDeletion),
             "Webhook Management" => Ok(Self::WebhookManagement),
             "Webhook Update" => Ok(Self::WebhookUpdate),
+            "Workload Identity Federation Assignment Creation" => {
+                Ok(Self::WorkloadIdentityFederationAssignmentCreation)
+            }
+            "Workload Identity Federation Assignment Deletion" => {
+                Ok(Self::WorkloadIdentityFederationAssignmentDeletion)
+            }
+            "Workload Identity Federation Assignment Management" => {
+                Ok(Self::WorkloadIdentityFederationAssignmentManagement)
+            }
+            "Workload Identity Federation Pool Creation" => {
+                Ok(Self::WorkloadIdentityFederationPoolCreation)
+            }
+            "Workload Identity Federation Pool Deletion" => {
+                Ok(Self::WorkloadIdentityFederationPoolDeletion)
+            }
+            "Workload Identity Federation Pool Management" => {
+                Ok(Self::WorkloadIdentityFederationPoolManagement)
+            }
+            "Workload Identity Federation Pool Update" => {
+                Ok(Self::WorkloadIdentityFederationPoolUpdate)
+            }
+            "Workload Identity Federation Token Exchange" => {
+                Ok(Self::WorkloadIdentityFederationTokenExchange)
+            }
             "Workspace Creation" => Ok(Self::WorkspaceCreation),
             "Workspace Deletion" => Ok(Self::WorkspaceDeletion),
             "Workspace Deletion Cancellation" => Ok(Self::WorkspaceDeletionCancellation),
@@ -594,6 +665,13 @@ impl fmt::Display for AuditActivityName {
                 write!(f, "Notification Preference Management")
             }
             Self::NotificationPreferenceUpdate => write!(f, "Notification Preference Update"),
+            Self::OAuthAppAuthorizationGrant => write!(f, "OAuth App Authorization Grant"),
+            Self::OAuthAppAuthorizationManagement => {
+                write!(f, "OAuth App Authorization Management")
+            }
+            Self::OAuthAppAuthorizationRevocation => {
+                write!(f, "OAuth App Authorization Revocation")
+            }
             Self::PasswordResetEmailRequest => write!(f, "Password Reset Email Request"),
             Self::PasswordResetLinkGeneration => write!(f, "Password Reset Link Generation"),
             Self::ReportingWorkspaceSsoInheritanceUpdate => {
@@ -660,6 +738,30 @@ impl fmt::Display for AuditActivityName {
             Self::WebhookDeletion => write!(f, "Webhook Deletion"),
             Self::WebhookManagement => write!(f, "Webhook Management"),
             Self::WebhookUpdate => write!(f, "Webhook Update"),
+            Self::WorkloadIdentityFederationAssignmentCreation => {
+                write!(f, "Workload Identity Federation Assignment Creation")
+            }
+            Self::WorkloadIdentityFederationAssignmentDeletion => {
+                write!(f, "Workload Identity Federation Assignment Deletion")
+            }
+            Self::WorkloadIdentityFederationAssignmentManagement => {
+                write!(f, "Workload Identity Federation Assignment Management")
+            }
+            Self::WorkloadIdentityFederationPoolCreation => {
+                write!(f, "Workload Identity Federation Pool Creation")
+            }
+            Self::WorkloadIdentityFederationPoolDeletion => {
+                write!(f, "Workload Identity Federation Pool Deletion")
+            }
+            Self::WorkloadIdentityFederationPoolManagement => {
+                write!(f, "Workload Identity Federation Pool Management")
+            }
+            Self::WorkloadIdentityFederationPoolUpdate => {
+                write!(f, "Workload Identity Federation Pool Update")
+            }
+            Self::WorkloadIdentityFederationTokenExchange => {
+                write!(f, "Workload Identity Federation Token Exchange")
+            }
             Self::WorkspaceCreation => write!(f, "Workspace Creation"),
             Self::WorkspaceDeletion => write!(f, "Workspace Deletion"),
             Self::WorkspaceDeletionCancellation => write!(f, "Workspace Deletion Cancellation"),

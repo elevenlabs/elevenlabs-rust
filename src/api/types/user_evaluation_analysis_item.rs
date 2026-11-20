@@ -8,6 +8,8 @@ pub struct UserEvaluationAnalysisItem {
     /// LLM to use for this item. If unset, the attaching agent's analysis_llm default is used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub llm: Option<Llm>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kind: Option<UserEvaluationAnalysisItemKind>,
     /// The prompt used to evaluate the conversation.
     pub conversation_goal_prompt: String,
     /// Whether the attaching agent's knowledge base is used when evaluating this criterion.
@@ -30,6 +32,7 @@ pub struct UserEvaluationAnalysisItemBuilder {
     name: Option<String>,
     source: Option<AttachedUserDataCollectionRefSource>,
     llm: Option<Llm>,
+    kind: Option<UserEvaluationAnalysisItemKind>,
     conversation_goal_prompt: Option<String>,
     use_knowledge_base: Option<bool>,
     scoring: Option<Scoring>,
@@ -48,6 +51,11 @@ impl UserEvaluationAnalysisItemBuilder {
 
     pub fn llm(mut self, value: Llm) -> Self {
         self.llm = Some(value);
+        self
+    }
+
+    pub fn kind(mut self, value: UserEvaluationAnalysisItemKind) -> Self {
+        self.kind = Some(value);
         self
     }
 
@@ -75,6 +83,7 @@ impl UserEvaluationAnalysisItemBuilder {
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             source: self.source,
             llm: self.llm,
+            kind: self.kind,
             conversation_goal_prompt: self
                 .conversation_goal_prompt
                 .ok_or_else(|| BuildError::missing_field("conversation_goal_prompt"))?,

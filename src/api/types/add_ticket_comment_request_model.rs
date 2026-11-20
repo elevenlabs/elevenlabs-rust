@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct AddTicketCommentRequestModel {
-    /// A comment discussing how to resolve the ticket.
+    /// A comment discussing how to resolve the agent issue.
     #[serde(default)]
     pub comment: String,
 }

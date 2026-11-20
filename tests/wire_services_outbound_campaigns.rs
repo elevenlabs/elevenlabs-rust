@@ -274,6 +274,14 @@ async fn create_sends_the_real_wire_request() {
                         "intervals": []
                     }
                 ],
+                "date_overrides": [
+                    {
+                        "start_date": "2024-01-01",
+                        "end_date": "2024-01-01",
+                        "intervals": [],
+                        "name": "value"
+                    }
+                ],
                 "data_collection": {
                     "callback_time": "value",
                     "redirect_phone_number": "value",
@@ -447,6 +455,14 @@ async fn create_sends_the_real_wire_request() {
                         6
                     ],
                     "intervals": []
+                }
+            ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
                 }
             ],
             "data_collection": {
@@ -688,6 +704,14 @@ async fn create_surfaces_the_declared_422() {
                     "intervals": []
                 }
             ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
+                }
+            ],
             "data_collection": {
                 "callback_time": "value",
                 "redirect_phone_number": "value",
@@ -807,6 +831,14 @@ async fn get_sends_the_real_wire_request() {
                         123
                     ],
                     "intervals": []
+                }
+            ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
                 }
             ],
             "data_collection": {
@@ -1251,6 +1283,14 @@ async fn pause_sends_the_real_wire_request() {
                     "intervals": []
                 }
             ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
+                }
+            ],
             "data_collection": {
                 "callback_time": "value",
                 "redirect_phone_number": "value",
@@ -1438,6 +1478,14 @@ async fn resume_sends_the_real_wire_request() {
                     "intervals": []
                 }
             ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
+                }
+            ],
             "data_collection": {
                 "callback_time": "value",
                 "redirect_phone_number": "value",
@@ -1623,6 +1671,14 @@ async fn stop_sends_the_real_wire_request() {
                         123
                     ],
                     "intervals": []
+                }
+            ],
+            "date_overrides": [
+                {
+                    "start_date": "2024-01-01",
+                    "end_date": "2024-01-01",
+                    "intervals": [],
+                    "name": "value"
                 }
             ],
             "data_collection": {

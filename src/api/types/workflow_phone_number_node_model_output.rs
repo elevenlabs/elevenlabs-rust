@@ -18,6 +18,9 @@ pub struct WorkflowPhoneNumberNodeModelOutput {
     /// The ids of outgoing edges in the order they should be evaluated.
     #[serde(default)]
     pub edge_order: Vec<String>,
+    /// Per-provider transfer configuration. Mutually exclusive with a non-empty `transfer_destination`: when present, the configuration matching the call's telephony provider is executed and the legacy transfer fields are ignored.
+    #[serde(default)]
+    pub provider_configs: Vec<WorkflowPhoneNumberNodeModelOutputProviderConfigsItem>,
 }
 
 impl WorkflowPhoneNumberNodeModelOutput {
@@ -37,6 +40,7 @@ pub struct WorkflowPhoneNumberNodeModelOutputBuilder {
     post_dial_digits: Option<WorkflowPhoneNumberNodeModelOutputPostDialDigits>,
     position: Option<PositionOutput>,
     edge_order: Option<Vec<String>>,
+    provider_configs: Option<Vec<WorkflowPhoneNumberNodeModelOutputProviderConfigsItem>>,
 }
 
 impl WorkflowPhoneNumberNodeModelOutputBuilder {
@@ -89,6 +93,14 @@ impl WorkflowPhoneNumberNodeModelOutputBuilder {
         self
     }
 
+    pub fn provider_configs(
+        mut self,
+        value: Vec<WorkflowPhoneNumberNodeModelOutputProviderConfigsItem>,
+    ) -> Self {
+        self.provider_configs = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`WorkflowPhoneNumberNodeModelOutput`].
     /// This method will fail if any of the following fields are not set:
     /// - [`custom_sip_headers`](WorkflowPhoneNumberNodeModelOutputBuilder::custom_sip_headers)
@@ -97,6 +109,7 @@ impl WorkflowPhoneNumberNodeModelOutputBuilder {
     /// - [`sip_refer_play_dialtone`](WorkflowPhoneNumberNodeModelOutputBuilder::sip_refer_play_dialtone)
     /// - [`position`](WorkflowPhoneNumberNodeModelOutputBuilder::position)
     /// - [`edge_order`](WorkflowPhoneNumberNodeModelOutputBuilder::edge_order)
+    /// - [`provider_configs`](WorkflowPhoneNumberNodeModelOutputBuilder::provider_configs)
     pub fn build(self) -> Result<WorkflowPhoneNumberNodeModelOutput, BuildError> {
         Ok(WorkflowPhoneNumberNodeModelOutput {
             custom_sip_headers: self
@@ -119,6 +132,9 @@ impl WorkflowPhoneNumberNodeModelOutputBuilder {
             edge_order: self
                 .edge_order
                 .ok_or_else(|| BuildError::missing_field("edge_order"))?,
+            provider_configs: self
+                .provider_configs
+                .ok_or_else(|| BuildError::missing_field("provider_configs"))?,
         })
     }
 }

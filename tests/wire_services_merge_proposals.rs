@@ -366,7 +366,7 @@ async fn update_sends_the_real_wire_request() {
 
     let result = client
         .merge_proposals
-        .update("value", "value", &body, None)
+        .update("value", "value", Some(&body), None)
         .await;
     assert!(result.is_ok(), "call failed: {:?}", result.as_ref().err());
 
@@ -449,7 +449,7 @@ async fn update_surfaces_the_declared_422() {
 
     let result = client
         .merge_proposals
-        .update("value", "value", &body, None)
+        .update("value", "value", Some(&body), None)
         .await;
 
     match result {
@@ -889,7 +889,7 @@ async fn merge_sends_the_real_wire_request() {
 
     let result = client
         .merge_proposals
-        .merge("value", "value", &body, None)
+        .merge("value", "value", Some(&body), None)
         .await;
     assert!(result.is_ok(), "call failed: {:?}", result.as_ref().err());
 
@@ -968,7 +968,7 @@ async fn merge_surfaces_the_declared_422() {
 
     let result = client
         .merge_proposals
-        .merge("value", "value", &body, None)
+        .merge("value", "value", Some(&body), None)
         .await;
 
     match result {

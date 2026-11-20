@@ -18,14 +18,7 @@ impl AssetsClient {
     /// configuration, so a later `set_access_token` reaches it; one built here
     /// owns its configuration outright and is unaffected by the root client.
     pub fn new(config: ClientConfig) -> Result<Self, crate::error::ApiError> {
-        let http_client = Arc::new(
-            HttpClient::new(
-                config.base_url.clone(),
-                config.timeout.as_millis() as u64,
-                config.max_retries,
-            )
-            .map_err(crate::error::ApiError::Network)?,
-        );
+        let http_client = Arc::new(HttpClient::new(config.clone())?);
         let config_manager = Arc::new(ConfigManager::new(config));
         Ok(Self::with_shared(http_client, config_manager))
     }
@@ -332,5 +325,401 @@ impl AssetsClient {
 
         let _ = response;
         Ok(())
+    }
+
+    /// Get All Assets
+    ///
+    /// List the workspace's bookable assets, such as rooms or equipment.
+    ///
+    /// # Arguments
+    ///
+    /// * `xi_workspace_id` - The customer workspace a reseller's API key acts on.
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn list_2(
+        &self,
+        xi_workspace_id: String,
+        options: Option<RequestOptions>,
+    ) -> Result<Vec<ReceptionAssetResource>, crate::error::ApiError> {
+        let url = "/v1/reception/assets";
+
+        let mut request = self.http_client.get(url);
+        request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        let config = self.config.get_assets_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let bytes = response.bytes().await?;
+        let result: Vec<ReceptionAssetResource> = if bytes.is_empty() {
+            Default::default()
+        } else {
+            serde_json::from_slice(&bytes).map_err(|err| crate::error::ApiError::DecodeError {
+                status,
+                message: format!("{err}"),
+            })?
+        };
+        Ok(result)
+    }
+
+    /// Create Asset
+    ///
+    /// Create a bookable asset, such as a room or a piece of equipment.
+    ///
+    /// # Arguments
+    ///
+    /// * `body`
+    /// * `xi_workspace_id` - The customer workspace a reseller's API key acts on.
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn create_2(
+        &self,
+        body: &ReceptionCreateAssetRequest,
+        xi_workspace_id: String,
+        options: Option<RequestOptions>,
+    ) -> Result<ReceptionAssetResource, crate::error::ApiError> {
+        let url = "/v1/reception/assets";
+
+        let mut request = self.http_client.post(url);
+        request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        request = match options
+            .as_ref()
+            .and_then(|opts| opts.merge_into_body(&body))
+        {
+            Some(merged) => request.json(&merged),
+            None => request.json(&body),
+        };
+        let config = self.config.get_assets_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: ReceptionAssetResource =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
+
+    /// Get Asset
+    ///
+    /// Get an asset by ID.
+    ///
+    /// # Arguments
+    ///
+    /// * `asset_id` - ID of the asset. Returned when you create one; list them with `GET /v1/reception/assets`.
+    /// * `xi_workspace_id` - The customer workspace a reseller's API key acts on.
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn get_2(
+        &self,
+        asset_id: &str,
+        xi_workspace_id: String,
+        options: Option<RequestOptions>,
+    ) -> Result<ReceptionAssetResource, crate::error::ApiError> {
+        let url = format!("/v1/reception/assets/{}", asset_id);
+
+        let mut request = self.http_client.get(url);
+        request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        let config = self.config.get_assets_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: ReceptionAssetResource =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
+
+    /// Update Asset
+    ///
+    /// Update an asset. Only the fields sent are changed.
+    ///
+    /// # Arguments
+    ///
+    /// * `asset_id` - ID of the asset. Returned when you create one; list them with `GET /v1/reception/assets`.
+    /// * `body`
+    /// * `xi_workspace_id` - The customer workspace a reseller's API key acts on.
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn update(
+        &self,
+        asset_id: &str,
+        body: &ReceptionUpdateAssetRequestPatch,
+        xi_workspace_id: String,
+        options: Option<RequestOptions>,
+    ) -> Result<ReceptionAssetResource, crate::error::ApiError> {
+        let url = format!("/v1/reception/assets/{}", asset_id);
+
+        let mut request = self.http_client.put(url);
+        request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        request = match options
+            .as_ref()
+            .and_then(|opts| opts.merge_into_body(&body))
+        {
+            Some(merged) => request.json(&merged),
+            None => request.json(&body),
+        };
+        let config = self.config.get_assets_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: ReceptionAssetResource =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
+
+    /// Delete Asset
+    ///
+    /// Delete an asset.
+    ///
+    /// # Arguments
+    ///
+    /// * `asset_id` - ID of the asset. Returned when you create one; list them with `GET /v1/reception/assets`.
+    /// * `xi_workspace_id` - The customer workspace a reseller's API key acts on.
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn delete_2(
+        &self,
+        asset_id: &str,
+        xi_workspace_id: String,
+        options: Option<RequestOptions>,
+    ) -> Result<std::collections::HashMap<String, String>, crate::error::ApiError> {
+        let url = format!("/v1/reception/assets/{}", asset_id);
+
+        let mut request = self.http_client.delete(url);
+        request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        let config = self.config.get_assets_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let bytes = response.bytes().await?;
+        let result: std::collections::HashMap<String, String> = if bytes.is_empty() {
+            Default::default()
+        } else {
+            serde_json::from_slice(&bytes).map_err(|err| crate::error::ApiError::DecodeError {
+                status,
+                message: format!("{err}"),
+            })?
+        };
+        Ok(result)
     }
 }

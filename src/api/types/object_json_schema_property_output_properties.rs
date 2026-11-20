@@ -20,6 +20,17 @@ impl<'de> serde::Deserialize<'de> for ObjectJsonSchemaPropertyOutputProperties {
                 .map(|object| keys.iter().any(|key| object.contains_key(*key)))
                 .unwrap_or(false)
         };
+        let matching_keys = |keys: &[&str]| {
+            value
+                .as_object()
+                .map(|object| {
+                    object
+                        .keys()
+                        .filter(|key| keys.contains(&key.as_str()))
+                        .count()
+                })
+                .unwrap_or(0)
+        };
 
         let mut matched_literal = false;
 
@@ -28,7 +39,36 @@ impl<'de> serde::Deserialize<'de> for ObjectJsonSchemaPropertyOutputProperties {
             if let Ok(parsed) =
                 serde_json::from_value::<ObjectJsonSchemaPropertyOutput>(value.clone())
             {
-                return Ok(Self::ObjectJsonSchemaPropertyOutput(parsed));
+                let best = matching_keys(&[
+                    "description",
+                    "dynamic_variable",
+                    "constant_value",
+                    "is_omitted",
+                    "type",
+                    "required",
+                    "properties",
+                    "required_constraints",
+                ]);
+                let mut chosen = None;
+                let score = matching_keys(&[
+                    "type",
+                    "description",
+                    "enum",
+                    "is_system_provided",
+                    "dynamic_variable",
+                    "allowed_values",
+                    "allowed_values_dynamic_variable",
+                    "constant_value",
+                    "is_omitted",
+                ]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<LiteralJsonSchemaProperty>(value.clone())
+                    {
+                        chosen = Some(Self::LiteralJsonSchemaProperty(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ObjectJsonSchemaPropertyOutput(parsed)));
             }
         }
 
@@ -37,7 +77,34 @@ impl<'de> serde::Deserialize<'de> for ObjectJsonSchemaPropertyOutputProperties {
             if let Ok(parsed) =
                 serde_json::from_value::<ArrayJsonSchemaPropertyOutput>(value.clone())
             {
-                return Ok(Self::ArrayJsonSchemaPropertyOutput(parsed));
+                let best = matching_keys(&[
+                    "description",
+                    "dynamic_variable",
+                    "constant_value",
+                    "is_omitted",
+                    "type",
+                    "items",
+                ]);
+                let mut chosen = None;
+                let score = matching_keys(&[
+                    "type",
+                    "description",
+                    "enum",
+                    "is_system_provided",
+                    "dynamic_variable",
+                    "allowed_values",
+                    "allowed_values_dynamic_variable",
+                    "constant_value",
+                    "is_omitted",
+                ]);
+                if score > best {
+                    if let Ok(alternative) =
+                        serde_json::from_value::<LiteralJsonSchemaProperty>(value.clone())
+                    {
+                        chosen = Some(Self::LiteralJsonSchemaProperty(alternative));
+                    }
+                }
+                return Ok(chosen.unwrap_or(Self::ArrayJsonSchemaPropertyOutput(parsed)));
             }
         }
 

@@ -15,6 +15,12 @@ pub struct FieldConflict {
     /// Value on the target branch tip.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_value: Option<serde_json::Value>,
+    /// Stable identifier of this conflict within a merge.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Whether a resolution of this conflict may use `custom` with a `custom_value` instead of keeping a side.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accepts_custom_value: Option<bool>,
 }
 
 impl FieldConflict {
@@ -31,6 +37,8 @@ pub struct FieldConflictBuilder {
     base_value: Option<serde_json::Value>,
     source_value: Option<serde_json::Value>,
     target_value: Option<serde_json::Value>,
+    id: Option<String>,
+    accepts_custom_value: Option<bool>,
 }
 
 impl FieldConflictBuilder {
@@ -59,6 +67,16 @@ impl FieldConflictBuilder {
         self
     }
 
+    pub fn id(mut self, value: impl Into<String>) -> Self {
+        self.id = Some(value.into());
+        self
+    }
+
+    pub fn accepts_custom_value(mut self, value: bool) -> Self {
+        self.accepts_custom_value = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`FieldConflict`].
     /// This method will fail if any of the following fields are not set:
     /// - [`path`](FieldConflictBuilder::path)
@@ -72,6 +90,8 @@ impl FieldConflictBuilder {
             base_value: self.base_value,
             source_value: self.source_value,
             target_value: self.target_value,
+            id: self.id,
+            accepts_custom_value: self.accepts_custom_value,
         })
     }
 }

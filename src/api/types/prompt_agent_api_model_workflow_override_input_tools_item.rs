@@ -1,158 +1,216 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(tag = "type")]
-#[non_exhaustive]
+#[derive(Debug, Clone, Serialize, PartialEq)]
+#[serde(untagged)]
 pub enum PromptAgentApiModelWorkflowOverrideInputToolsItem {
-    #[serde(rename = "api_integration_webhook")]
-    ApiIntegrationWebhook {
-        #[serde(flatten)]
-        data: ApiIntegrationWebhookToolConfigInput,
-    },
+    WebhookToolConfigInput(WebhookToolConfigInput),
+    ClientToolConfigInput(ClientToolConfigInput),
+    SystemToolConfigInput(SystemToolConfigInput),
+    ApiIntegrationWebhookToolConfigInput(ApiIntegrationWebhookToolConfigInput),
+    SmbToolConfig(SmbToolConfig),
+}
 
-    #[serde(rename = "client")]
-    Client {
-        #[serde(flatten)]
-        data: ClientToolConfigInput,
-    },
+impl<'de> serde::Deserialize<'de> for PromptAgentApiModelWorkflowOverrideInputToolsItem {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = <serde_json::Value as serde::Deserialize>::deserialize(deserializer)?;
 
-    #[serde(rename = "mcp")]
-    Mcp {
-        #[serde(flatten)]
-        data: McpToolConfigInput,
-    },
+        let mut matched_literal = false;
 
-    #[serde(rename = "smb")]
-    Smb {
-        #[serde(flatten)]
-        data: SmbToolConfig,
-    },
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("webhook") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<WebhookToolConfigInput>(value.clone()) {
+                return Ok(Self::WebhookToolConfigInput(parsed));
+            }
+        }
 
-    #[serde(rename = "system")]
-    System {
-        #[serde(flatten)]
-        data: SystemToolConfigInput,
-    },
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("client") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<ClientToolConfigInput>(value.clone()) {
+                return Ok(Self::ClientToolConfigInput(parsed));
+            }
+        }
 
-    #[serde(rename = "webhook")]
-    Webhook {
-        #[serde(flatten)]
-        data: WebhookToolConfigInput,
-    },
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("system") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<SystemToolConfigInput>(value.clone()) {
+                return Ok(Self::SystemToolConfigInput(parsed));
+            }
+        }
 
-    /// Catch-all variant for unrecognized discriminant values.
-    /// If the server sends a discriminant not recognized by the current SDK
-    /// version, the raw payload is captured here so callers can still inspect it.
-    #[serde(untagged)]
-    __Unknown(serde_json::Value),
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("api_integration_webhook")
+        {
+            matched_literal = true;
+            if let Ok(parsed) =
+                serde_json::from_value::<ApiIntegrationWebhookToolConfigInput>(value.clone())
+            {
+                return Ok(Self::ApiIntegrationWebhookToolConfigInput(parsed));
+            }
+        }
+
+        if value.get("type").and_then(serde_json::Value::as_str) == Some("smb") {
+            matched_literal = true;
+            if let Ok(parsed) = serde_json::from_value::<SmbToolConfig>(value.clone()) {
+                return Ok(Self::SmbToolConfig(parsed));
+            }
+        }
+
+        if !matched_literal {
+            if let Ok(parsed) = serde_json::from_value::<WebhookToolConfigInput>(value.clone()) {
+                return Ok(Self::WebhookToolConfigInput(parsed));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<ClientToolConfigInput>(value.clone()) {
+                return Ok(Self::ClientToolConfigInput(parsed));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<SystemToolConfigInput>(value.clone()) {
+                return Ok(Self::SystemToolConfigInput(parsed));
+            }
+
+            if let Ok(parsed) =
+                serde_json::from_value::<ApiIntegrationWebhookToolConfigInput>(value.clone())
+            {
+                return Ok(Self::ApiIntegrationWebhookToolConfigInput(parsed));
+            }
+
+            if let Ok(parsed) = serde_json::from_value::<SmbToolConfig>(value.clone()) {
+                return Ok(Self::SmbToolConfig(parsed));
+            }
+        }
+
+        Err(serde::de::Error::custom(
+            "data did not match any variant of untagged enum PromptAgentApiModelWorkflowOverrideInputToolsItem",
+        ))
+    }
 }
 
 impl PromptAgentApiModelWorkflowOverrideInputToolsItem {
-    pub fn is_api_integration_webhook(&self) -> bool {
-        matches!(self, Self::ApiIntegrationWebhook { .. })
+    pub fn is_webhook_tool_config_input(&self) -> bool {
+        matches!(self, Self::WebhookToolConfigInput(_))
     }
 
-    pub fn as_api_integration_webhook(&self) -> Option<&ApiIntegrationWebhookToolConfigInput> {
+    pub fn as_webhook_tool_config_input(&self) -> Option<&WebhookToolConfigInput> {
         match self {
-            Self::ApiIntegrationWebhook { data } => Some(data),
+            Self::WebhookToolConfigInput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_api_integration_webhook(self) -> Option<ApiIntegrationWebhookToolConfigInput> {
+    pub fn into_webhook_tool_config_input(self) -> Option<WebhookToolConfigInput> {
         match self {
-            Self::ApiIntegrationWebhook { data } => Some(data),
+            Self::WebhookToolConfigInput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_client(&self) -> bool {
-        matches!(self, Self::Client { .. })
+    pub fn is_client_tool_config_input(&self) -> bool {
+        matches!(self, Self::ClientToolConfigInput(_))
     }
 
-    pub fn as_client(&self) -> Option<&ClientToolConfigInput> {
+    pub fn as_client_tool_config_input(&self) -> Option<&ClientToolConfigInput> {
         match self {
-            Self::Client { data } => Some(data),
+            Self::ClientToolConfigInput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_client(self) -> Option<ClientToolConfigInput> {
+    pub fn into_client_tool_config_input(self) -> Option<ClientToolConfigInput> {
         match self {
-            Self::Client { data } => Some(data),
+            Self::ClientToolConfigInput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_mcp(&self) -> bool {
-        matches!(self, Self::Mcp { .. })
+    pub fn is_system_tool_config_input(&self) -> bool {
+        matches!(self, Self::SystemToolConfigInput(_))
     }
 
-    pub fn as_mcp(&self) -> Option<&McpToolConfigInput> {
+    pub fn as_system_tool_config_input(&self) -> Option<&SystemToolConfigInput> {
         match self {
-            Self::Mcp { data } => Some(data),
+            Self::SystemToolConfigInput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_mcp(self) -> Option<McpToolConfigInput> {
+    pub fn into_system_tool_config_input(self) -> Option<SystemToolConfigInput> {
         match self {
-            Self::Mcp { data } => Some(data),
+            Self::SystemToolConfigInput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_smb(&self) -> bool {
-        matches!(self, Self::Smb { .. })
+    pub fn is_api_integration_webhook_tool_config_input(&self) -> bool {
+        matches!(self, Self::ApiIntegrationWebhookToolConfigInput(_))
     }
 
-    pub fn as_smb(&self) -> Option<&SmbToolConfig> {
+    pub fn as_api_integration_webhook_tool_config_input(
+        &self,
+    ) -> Option<&ApiIntegrationWebhookToolConfigInput> {
         match self {
-            Self::Smb { data } => Some(data),
+            Self::ApiIntegrationWebhookToolConfigInput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_smb(self) -> Option<SmbToolConfig> {
+    pub fn into_api_integration_webhook_tool_config_input(
+        self,
+    ) -> Option<ApiIntegrationWebhookToolConfigInput> {
         match self {
-            Self::Smb { data } => Some(data),
+            Self::ApiIntegrationWebhookToolConfigInput(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn is_system(&self) -> bool {
-        matches!(self, Self::System { .. })
+    pub fn is_smb_tool_config(&self) -> bool {
+        matches!(self, Self::SmbToolConfig(_))
     }
 
-    pub fn as_system(&self) -> Option<&SystemToolConfigInput> {
+    pub fn as_smb_tool_config(&self) -> Option<&SmbToolConfig> {
         match self {
-            Self::System { data } => Some(data),
+            Self::SmbToolConfig(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_system(self) -> Option<SystemToolConfigInput> {
+    pub fn into_smb_tool_config(self) -> Option<SmbToolConfig> {
         match self {
-            Self::System { data } => Some(data),
+            Self::SmbToolConfig(value) => Some(value),
             _ => None,
         }
     }
+}
 
-    pub fn is_webhook(&self) -> bool {
-        matches!(self, Self::Webhook { .. })
-    }
-
-    pub fn as_webhook(&self) -> Option<&WebhookToolConfigInput> {
+impl fmt::Display for PromptAgentApiModelWorkflowOverrideInputToolsItem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Webhook { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn into_webhook(self) -> Option<WebhookToolConfigInput> {
-        match self {
-            Self::Webhook { data } => Some(data),
-            _ => None,
+            Self::WebhookToolConfigInput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::ClientToolConfigInput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::SystemToolConfigInput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::ApiIntegrationWebhookToolConfigInput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::SmbToolConfig(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
         }
     }
 }

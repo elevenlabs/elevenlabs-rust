@@ -3,7 +3,9 @@ pub use crate::prelude::*;
 /// SMB tool configuration that wraps SMB tool parameters.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SmbToolConfig {
-    #[serde(default)]
+    /// Tool type identifier
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<SmbToolConfigType>,
     pub name: String,
     /// Description of when the tool should be used and what it does.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -53,6 +55,7 @@ impl SmbToolConfig {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct SmbToolConfigBuilder {
+    r#type: Option<SmbToolConfigType>,
     name: Option<String>,
     description: Option<String>,
     response_timeout_secs: Option<i64>,
@@ -70,6 +73,11 @@ pub struct SmbToolConfigBuilder {
 }
 
 impl SmbToolConfigBuilder {
+    pub fn r#type(mut self, value: SmbToolConfigType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn name(mut self, value: impl Into<String>) -> Self {
         self.name = Some(value.into());
         self
@@ -146,6 +154,7 @@ impl SmbToolConfigBuilder {
     /// - [`params`](SmbToolConfigBuilder::params)
     pub fn build(self) -> Result<SmbToolConfig, BuildError> {
         Ok(SmbToolConfig {
+            r#type: self.r#type,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
             description: self.description,
             response_timeout_secs: self.response_timeout_secs,

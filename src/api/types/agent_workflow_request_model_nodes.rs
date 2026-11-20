@@ -34,6 +34,12 @@ pub enum AgentWorkflowRequestModelNodes {
         data: WorkflowStartNodeModelInput,
     },
 
+    #[serde(rename = "start_procedure")]
+    StartProcedure {
+        #[serde(flatten)]
+        data: WorkflowStartProcedureNodeModelInput,
+    },
+
     #[serde(rename = "tool")]
     Tool {
         #[serde(flatten)]
@@ -146,6 +152,24 @@ impl AgentWorkflowRequestModelNodes {
     pub fn into_start(self) -> Option<WorkflowStartNodeModelInput> {
         match self {
             Self::Start { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn is_start_procedure(&self) -> bool {
+        matches!(self, Self::StartProcedure { .. })
+    }
+
+    pub fn as_start_procedure(&self) -> Option<&WorkflowStartProcedureNodeModelInput> {
+        match self {
+            Self::StartProcedure { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn into_start_procedure(self) -> Option<WorkflowStartProcedureNodeModelInput> {
+        match self {
+            Self::StartProcedure { data } => Some(data),
             _ => None,
         }
     }

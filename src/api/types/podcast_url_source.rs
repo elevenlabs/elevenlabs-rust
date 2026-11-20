@@ -2,6 +2,8 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct PodcastUrlSource {
+    /// The type of source to create.
+    pub r#type: PodcastUrlSourceType,
     /// The URL to create the podcast from.
     pub url: String,
 }
@@ -15,10 +17,16 @@ impl PodcastUrlSource {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct PodcastUrlSourceBuilder {
+    r#type: Option<PodcastUrlSourceType>,
     url: Option<String>,
 }
 
 impl PodcastUrlSourceBuilder {
+    pub fn r#type(mut self, value: PodcastUrlSourceType) -> Self {
+        self.r#type = Some(value);
+        self
+    }
+
     pub fn url(mut self, value: impl Into<String>) -> Self {
         self.url = Some(value.into());
         self
@@ -26,9 +34,13 @@ impl PodcastUrlSourceBuilder {
 
     /// Consumes the builder and constructs a [`PodcastUrlSource`].
     /// This method will fail if any of the following fields are not set:
+    /// - [`r#type`](PodcastUrlSourceBuilder::type)
     /// - [`url`](PodcastUrlSourceBuilder::url)
     pub fn build(self) -> Result<PodcastUrlSource, BuildError> {
         Ok(PodcastUrlSource {
+            r#type: self
+                .r#type
+                .ok_or_else(|| BuildError::missing_field("r#type"))?,
             url: self.url.ok_or_else(|| BuildError::missing_field("url"))?,
         })
     }
