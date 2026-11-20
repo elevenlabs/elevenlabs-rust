@@ -20,6 +20,10 @@ pub enum WorkflowIssueCode {
     MissingInsertResult,
     UnreachableNode,
     UnknownNodeType,
+    /// Two different `Tool` objects with the same name are used by the workflow's nodes.
+    DuplicateToolName,
+    /// A node uses a `Tool` object with no id: build with the tools' ids, or push the agent.
+    UnresolvedTool,
     /// Rust-specific: the validated workflow still doesn't deserialize into the generated
     /// `AgentWorkflowRequestModel` (e.g. a loaded field has the wrong shape). Other SDKs surface
     /// their native deserialization error here instead.
@@ -45,6 +49,8 @@ impl WorkflowIssueCode {
             Self::MissingInsertResult => "missing_insert_result",
             Self::UnreachableNode => "unreachable_node",
             Self::UnknownNodeType => "unknown_node_type",
+            Self::DuplicateToolName => "duplicate_tool_name",
+            Self::UnresolvedTool => "unresolved_tool",
             Self::InvalidModel => "invalid_model",
         }
     }

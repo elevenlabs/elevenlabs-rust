@@ -263,6 +263,81 @@ let built_in_entry = transfer.build_config()?; // for the agent's prompt.built_i
   editing: `into_webhook()`, `into_client()` and `into_system()` return the typed tool. Fields the
   builder doesn't model, and tools of types it can't edit, are written back unchanged.
 
+## Agents as code
+
+`agent_builder` puts an agent's settings, its tools and its workflow in one definition.
+`client.agents_as_code().push()` creates or updates every webhook and client tool the agent uses,
+then the agent, with the tools' ids filled in. Workflow tool nodes and subagents take `Tool`
+objects as well as tool ids.
+
+```rust
+use elevenlabs_rust_sdk::agent_builder::{Agent, AgentOptions, PushOptions};
+use elevenlabs_rust_sdk::agent_tools::{Schema, SystemTool, Tool};
+use elevenlabs_rust_sdk::agent_workflows::{Chain, Workflow};
+
+let get_order: Tool = Tool::webhook("get_order", "Look up an order by its number")
+    .get("https://api.example.com/orders/{order_id}")
+    .path_param("order_id", Schema::string().describe("The order number"))
+    .into();
+
+let wf = Workflow::new(None);
+wf.converse("triage", "Find out what the caller needs", Default::default())
+    .when("Caller gave an order number".into(), None)
+    .tool("lookup", vec![get_order.clone().into()], Default::default());
+
+let agent = Agent::new(
+    "Support line",
+    AgentOptions::new()
+        .prompt("You are a support agent for Acme.")
+        .first_message("Hi, how can I help?")
+        .tools(vec![SystemTool::end_call().into()])
+        .workflow(wf),
+);
+agent.validate()?; // no API key needed, so CI can run it
+
+let created = client.agents_as_code().push(&agent, PushOptions::default()).await?;
+// Later: update the same agent. Unchanged tools aren't sent again.
+client
+    .agents_as_code()
+    .push(&agent, PushOptions { agent_id: Some(created.agent_id), ..Default::default() })
+    .await?;
+```
+
+`AgentProject` reads and writes the ElevenLabs CLI's project layout (`agents.json`, `tools.json`,
+`agent_configs/`, `tool_configs/`), so a repo works with both the SDK and the CLI. With a project,
+`push` finds the agent and its tools by the ids the project recorded, and records new ones:
+
+```rust
+use elevenlabs_rust_sdk::agent_builder::{AgentOptions, AgentProject, PullOptions, PushOptions};
+
+let mut project = AgentProject::open(".")?;
+let mut agent = project.agent("Support line")?.clone();
+agent.update(AgentOptions::new().first_message("Hello!"));
+client
+    .agents_as_code()
+    .push(&agent, PushOptions { project: Some(&mut project), ..Default::default() })
+    .await?;
+
+// Bring an agent made in the dashboard into the project.
+let pulled = client
+    .agents_as_code()
+    .pull("agent_123", PullOptions { project: Some(&mut project), ..Default::default() })
+    .await?;
+```
+
+- Without a project, `push` with `agent_id` matches tools by name among the tools that agent
+  already uses, so a same-named tool another agent uses is never touched. With `branch_id`, it
+  updates that branch and matches against the branch's tools.
+- `push` reports what it did to each tool (`created`, `updated`, `unchanged` or `detached`).
+  Detached tools are never deleted. If a request fails partway, `PushError::Push` carries what was
+  written before the failure, and a project opened from a directory is saved with those ids.
+- Settings the SDK doesn't model, kept from a loaded config, are sent too, and a project file
+  nothing changed keeps its exact text. Files are written owner-only (`0600`), never through a
+  symlink and never outside the project. YAML and TOML configs aren't supported yet.
+- Tools are values: two tools with the same definition are the same tool, and two different
+  definitions with one name are reported as `duplicate_tool_name`. `Agent` holds a `Workflow`,
+  which isn't `Send`, so await `push` and `pull` directly rather than spawning them.
+
 ## Webhooks
 
 ElevenLabs signs every webhook it sends with your webhook secret. Use `webhooks::construct_event`

@@ -5,9 +5,130 @@ use std::collections::HashMap;
 
 use serde_json::{json, Map, Value};
 
+use crate::agent_tools::Tool;
+
 use super::destination::Destination;
 use super::errors::{WorkflowIssue, WorkflowIssueCode};
 use super::wire::{as_object, WireMap};
+
+/// A tool a workflow node uses: an existing tool's id, or a [`Tool`] object whose id is filled in
+/// when the workflow is built with tool ids (as `agents_as_code().push()` does). Converts from a
+/// `&str`/`String` id and from any tool type, so `vec!["tool_1".into(), get_order.into()]` mixes
+/// them.
+// A `Tool` is much larger than an id, but refs only live while a node is built.
+#[allow(clippy::large_enum_variant)]
+#[derive(Debug, Clone, PartialEq)]
+pub enum ToolRef {
+    /// An existing tool, by id.
+    Id(String),
+    /// A tool defined in code. It stands in the graph as `<tool:NAME>` until the workflow is built.
+    Tool(Tool),
+}
+
+impl From<&str> for ToolRef {
+    fn from(id: &str) -> Self {
+        ToolRef::Id(id.to_string())
+    }
+}
+
+impl From<String> for ToolRef {
+    fn from(id: String) -> Self {
+        ToolRef::Id(id)
+    }
+}
+
+impl From<&String> for ToolRef {
+    fn from(id: &String) -> Self {
+        ToolRef::Id(id.clone())
+    }
+}
+
+impl From<Tool> for ToolRef {
+    fn from(tool: Tool) -> Self {
+        ToolRef::Tool(tool)
+    }
+}
+
+impl From<&Tool> for ToolRef {
+    fn from(tool: &Tool) -> Self {
+        ToolRef::Tool(tool.clone())
+    }
+}
+
+impl From<crate::agent_tools::WebhookTool> for ToolRef {
+    fn from(tool: crate::agent_tools::WebhookTool) -> Self {
+        ToolRef::Tool(tool.into())
+    }
+}
+
+impl From<crate::agent_tools::ClientTool> for ToolRef {
+    fn from(tool: crate::agent_tools::ClientTool) -> Self {
+        ToolRef::Tool(tool.into())
+    }
+}
+
+impl From<crate::agent_tools::SystemTool> for ToolRef {
+    fn from(tool: crate::agent_tools::SystemTool) -> Self {
+        ToolRef::Tool(tool.into())
+    }
+}
+
+/// The placeholder a [`Tool`] object stands under in the graph until the workflow is built.
+pub(crate) fn tool_placeholder(name: &str) -> String {
+    format!("<tool:{name}>")
+}
+
+/// A tool id as shown in messages: the name for a `Tool` object's placeholder.
+pub(crate) fn display_tool(id: &str) -> &str {
+    id.strip_prefix("<tool:")
+        .and_then(|rest| rest.strip_suffix('>'))
+        .unwrap_or(id)
+}
+
+/// The tool ids (or placeholders) a node uses: a tool node's tools, or a subagent's extra tools.
+pub(crate) fn node_tool_ids(model: &WireMap) -> Vec<String> {
+    let mut ids: Vec<String> = model
+        .get("tools")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(|t| t.get("tool_id").and_then(Value::as_str).map(str::to_string))
+        .collect();
+    ids.extend(
+        model
+            .get("additional_tool_ids")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+            .filter_map(|id| id.as_str().map(str::to_string)),
+    );
+    ids
+}
+
+/// Replaces the tool ids in a node's tools (tool nodes) or extra tools (subagents), in place.
+pub(crate) fn map_node_tool_ids(model: &mut WireMap, map: &dyn Fn(&str) -> String) {
+    match model.get("type").and_then(Value::as_str) {
+        Some("tool") => {
+            if let Some(Value::Array(tools)) = model.get_mut("tools") {
+                for tool in tools {
+                    if let Some(Value::String(id)) = tool.get_mut("tool_id") {
+                        *id = map(id);
+                    }
+                }
+            }
+        }
+        Some("override_agent") => {
+            if let Some(Value::Array(ids)) = model.get_mut("additional_tool_ids") {
+                for id in ids {
+                    if let Value::String(value) = id {
+                        *value = map(value);
+                    }
+                }
+            }
+        }
+        _ => {}
+    }
+}
 
 /// An edge in the graph. Compared by identity (`uid`): two edges with the same fields are still two
 /// edges, as in the Python/TS references.
@@ -95,11 +216,12 @@ fn api_field(node_type: Option<&str>, key: &str) -> Option<&'static str> {
 #[derive(Default)]
 pub struct AppliedOptions {
     pub destination: Option<Destination>,
-    pub tool_ids: Option<Vec<String>>,
+    pub tool_ids: Option<Vec<ToolRef>>,
     pub schema_overrides: Option<Value>,
     pub rest: Vec<(String, Value)>,
 }
 
+#[derive(Clone)]
 pub struct WorkflowGraph {
     pub nodes: HashMap<String, WireMap>,
     pub node_order: Vec<String>,
@@ -109,6 +231,8 @@ pub struct WorkflowGraph {
     /// Each loaded node's edge_order, as edge uids.
     pub loaded_order: HashMap<String, Vec<u64>>,
     pub prevent_subagent_loops: Option<bool>,
+    /// `Tool` objects referenced by nodes, by placeholder, in the order they were first used.
+    pub tool_refs: Vec<(String, Tool)>,
     uid_counter: u64,
 }
 
@@ -122,8 +246,79 @@ impl WorkflowGraph {
             start_id: "start_node".to_string(),
             loaded_order: HashMap::new(),
             prevent_subagent_loops: None,
+            tool_refs: Vec::new(),
             uid_counter: 0,
         }
+    }
+
+    /// The `Tool` object standing under `placeholder`, if any.
+    pub fn tool_ref(&self, placeholder: &str) -> Option<&Tool> {
+        self.tool_refs
+            .iter()
+            .find(|(key, _)| key == placeholder)
+            .map(|(_, tool)| tool)
+    }
+
+    /// Remembers `tool` under `placeholder`, replacing (in place) a tool already there.
+    pub fn set_tool_ref(&mut self, placeholder: String, tool: Tool) {
+        match self
+            .tool_refs
+            .iter_mut()
+            .find(|(key, _)| *key == placeholder)
+        {
+            Some(slot) => slot.1 = tool,
+            None => self.tool_refs.push((placeholder, tool)),
+        }
+    }
+
+    /// Swaps `Tool` objects for placeholders, remembering each one. A different tool of the same
+    /// name is a `duplicate_tool_name` if this node or another node still uses that name; one left
+    /// behind by a removed or edited node doesn't count. Tools are values here, so "different"
+    /// means another definition: the same tool used twice is fine.
+    pub fn ref_tools(&mut self, node_id: &str, refs: Vec<ToolRef>) -> Vec<String> {
+        let mut in_this_node: Vec<(String, Tool)> = Vec::new();
+        let mut ids = Vec::with_capacity(refs.len());
+        for r in refs {
+            let tool = match r {
+                ToolRef::Id(id) => {
+                    ids.push(id);
+                    continue;
+                }
+                ToolRef::Tool(tool) => tool,
+            };
+            let key = tool_placeholder(tool.name());
+            let mut clash = in_this_node
+                .iter()
+                .find(|(k, _)| *k == key)
+                .map(|(_, t)| t.clone());
+            if clash.is_none() && self.uses_placeholder(&key, node_id) {
+                clash = self.tool_ref(&key).cloned();
+            }
+            if clash.as_ref().is_some_and(|other| !other.same_as(&tool)) {
+                self.issue(
+                    WorkflowIssueCode::DuplicateToolName,
+                    format!(
+                        "Node \"{node_id}\" uses a different tool also named \"{}\"",
+                        tool.name()
+                    ),
+                    Some(node_id),
+                );
+            }
+            match in_this_node.iter_mut().find(|(k, _)| *k == key) {
+                Some(slot) => slot.1 = tool.clone(),
+                None => in_this_node.push((key.clone(), tool.clone())),
+            }
+            self.set_tool_ref(key.clone(), tool);
+            ids.push(key);
+        }
+        ids
+    }
+
+    fn uses_placeholder(&self, key: &str, except_node_id: &str) -> bool {
+        self.nodes
+            .iter()
+            .filter(|(id, _)| id.as_str() != except_node_id)
+            .any(|(_, model)| node_tool_ids(model).iter().any(|id| id == key))
     }
 
     pub fn next_uid(&mut self) -> u64 {
@@ -191,6 +386,23 @@ impl WorkflowGraph {
             schema_overrides,
             mut rest,
         } = opts;
+        let tool_ids = tool_ids.map(|refs| self.ref_tools(id, refs));
+        // Overrides for a `Tool` object may be keyed by its name: key them by its placeholder.
+        let schema_overrides = schema_overrides.map(|overrides| match overrides {
+            Value::Object(map) => Value::Object(
+                map.into_iter()
+                    .map(|(key, value)| {
+                        let placeholder = tool_placeholder(&key);
+                        if self.tool_ref(&placeholder).is_some() {
+                            (placeholder, value)
+                        } else {
+                            (key, value)
+                        }
+                    })
+                    .collect(),
+            ),
+            other => other,
+        });
         let mut node = model;
 
         if let Some(dest) = destination {
@@ -241,7 +453,8 @@ impl WorkflowGraph {
                         self.issue(
                             WorkflowIssueCode::InvalidOption,
                             format!(
-                                "Node \"{id}\" has schema overrides for tool \"{tool_id}\", which it doesn't run"
+                                "Node \"{id}\" has schema overrides for tool \"{}\", which it doesn't run",
+                                display_tool(tool_id)
                             ),
                             Some(id),
                         );
@@ -297,6 +510,7 @@ impl WorkflowGraph {
         self.edges.clear();
         self.issues.clear();
         self.loaded_order.clear();
+        self.tool_refs.clear();
         self.prevent_subagent_loops = workflow
             .get("prevent_subagent_loops")
             .and_then(|v| v.as_bool());

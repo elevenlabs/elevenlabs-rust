@@ -55,14 +55,23 @@ fn whole_as_integer(f: f64) -> Option<Value> {
 
 /// `value` with 2-space indentation and a trailing newline, numbers formatted as in JavaScript.
 pub(crate) fn to_json_string(value: &Value) -> String {
+    let mut out = to_json_string_indented(value, b"  ");
+    out.push('\n');
+    out
+}
+
+/// `value` pretty-printed with `indent` and no trailing newline, numbers formatted as in
+/// JavaScript: `JSON.stringify(value, null, indent)`. The agent project files use 4 spaces.
+pub(crate) fn to_json_string_indented(value: &Value, indent: &[u8]) -> String {
     let mut out = Vec::new();
-    let mut serializer = Serializer::with_formatter(&mut out, JsFormatter(PrettyFormatter::new()));
+    let mut serializer = Serializer::with_formatter(
+        &mut out,
+        JsFormatter(PrettyFormatter::with_indent(indent)),
+    );
     value
         .serialize(&mut serializer)
         .expect("a JSON value serializes");
-    let mut out = String::from_utf8(out).expect("serde_json writes UTF-8");
-    out.push('\n');
-    out
+    String::from_utf8(out).expect("serde_json writes UTF-8")
 }
 
 /// `f` as ECMAScript's `Number::toString(f)` writes it (radix 10), for a finite `f`.

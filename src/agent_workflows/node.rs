@@ -11,15 +11,17 @@ use serde_json::{json, Map, Value};
 use super::condition::{to_condition, Condition, ConditionInput};
 use super::destination::Destination;
 use super::errors::WorkflowIssueCode;
-use super::graph::{AppliedOptions, GraphEdge, WorkflowGraph};
+use super::graph::{AppliedOptions, GraphEdge, ToolRef, WorkflowGraph};
 
 /// Options passed to a verb. `destination` is kept apart (it is a [`Destination`], not wire JSON);
 /// `raw` holds canonical snake_case keys mapped to already-wire values (including `tool_ids` and
-/// `schema_overrides`).
+/// `schema_overrides`). `tool_refs` holds tools given with [`Options::tool_ids`], which may be
+/// [`Tool`](crate::agent_tools::Tool) objects; when set, it replaces a raw `tool_ids`.
 #[derive(Default, Clone)]
 pub struct Options {
     pub destination: Option<Destination>,
     pub raw: Map<String, Value>,
+    pub tool_refs: Option<Vec<ToolRef>>,
 }
 
 impl Options {
@@ -29,6 +31,13 @@ impl Options {
     /// Set a canonical snake_case option to a wire value.
     pub fn set(mut self, key: &str, value: Value) -> Self {
         self.raw.insert(key.to_string(), value);
+        self
+    }
+    /// Subagent nodes: extra tools. Tool nodes (in `update`): the tools to run. Each is a tool id
+    /// or a [`Tool`](crate::agent_tools::Tool) object, whose id is filled in when the workflow is
+    /// built with tool ids. Replaces a `tool_ids` given with [`set`](Self::set).
+    pub fn tool_ids(mut self, tools: Vec<ToolRef>) -> Self {
+        self.tool_refs = Some(tools);
         self
     }
     /// Set the transfer destination (for `update`).
@@ -42,14 +51,16 @@ fn into_applied(opts: Options) -> AppliedOptions {
     let Options {
         destination,
         mut raw,
+        tool_refs,
     } = opts;
-    let tool_ids = raw.remove("tool_ids").and_then(|v| {
+    let raw_ids: Option<Vec<ToolRef>> = raw.remove("tool_ids").and_then(|v| {
         v.as_array().map(|a| {
             a.iter()
-                .filter_map(|x| x.as_str().map(str::to_string))
+                .filter_map(|x| x.as_str().map(ToolRef::from))
                 .collect()
         })
     });
+    let tool_ids = tool_refs.or(raw_ids);
     let schema_overrides = raw.remove("schema_overrides");
     let rest: Vec<(String, Value)> = raw.into_iter().collect();
     AppliedOptions {
@@ -120,8 +131,12 @@ pub trait Chain {
         connect(self.graph(), &self.origin(), id, None)
     }
 
-    /// Add a `tool` node that runs `tool_ids` in parallel. Branch on the result with `on_result()`.
-    fn tool(&self, id: &str, tool_ids: Vec<String>, opts: Options) -> WorkflowNode {
+    /// Add a `tool` node that runs `tools` in parallel. Branch on the result with `on_result()`.
+    /// Each tool is an id or a [`Tool`](crate::agent_tools::Tool) object, whose id is filled in
+    /// when the workflow is built with tool ids, as `agents_as_code().push()` does:
+    /// `vec!["tool_1".into(), get_order.clone().into()]`. A `schema_overrides` option may key a
+    /// `Tool` object's overrides by its name.
+    fn tool(&self, id: &str, tool_ids: Vec<ToolRef>, opts: Options) -> WorkflowNode {
         let mut base = Map::new();
         base.insert("type".to_string(), json!("tool"));
         let mut applied = into_applied(opts);
