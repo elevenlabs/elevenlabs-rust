@@ -222,7 +222,12 @@ fn run(wf: &Workflow, ops: &[Op], first: Chainish) -> Option<WorkflowNode> {
             ),
             "tool" => at.as_chain().tool(
                 op.id.as_deref().unwrap(),
-                op.tool_ids.clone().unwrap_or_default(),
+                op.tool_ids
+                    .clone()
+                    .unwrap_or_default()
+                    .into_iter()
+                    .map(Into::into)
+                    .collect(),
                 build_options(op),
             ),
             "transfer" => at.as_chain().transfer(

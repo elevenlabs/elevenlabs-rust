@@ -15,11 +15,21 @@ src/agent_tools/
 tests/agent_tools_fixtures.rs
 tests/fixtures/agent_tools/
 
+# Hand-written agents-as-code layer: the `Agent` builder, `client.agents_as_code().push()/pull()`
+# and `AgentProject` (the ElevenLabs CLI's project layout), on top of the generated agents and
+# tools endpoints and the two builders above. The generator does not emit it. Mirrors the TS/Python
+# SDKs and passes the shared project fixture (vendored under tests/fixtures/agent_builder/).
+# Declared in src/lib.rs (`pub mod agent_builder;`), which is frozen below.
+src/agent_builder/
+tests/agent_builder.rs
+tests/fixtures/agent_builder/
+
 # Frozen to protect the hand-written wiring Fern does not emit:
 #  - Cargo.toml: the serde_json `preserve_order` feature the builder needs for document-order loads,
 #    and `float_roundtrip`, which the agent_tools builder needs to reload its floats exactly.
-#  - src/lib.rs: the `pub mod agent_workflows;` declaration (a crate-root module must be declared
-#    here). See the PR description for the proper fix (a Fern custom-module extension point).
+#  - src/lib.rs: the `pub mod agent_workflows;` and `pub mod agent_builder;` declarations (a
+#    crate-root module must be declared here). See the PR description for the proper fix (a Fern
+#    custom-module extension point).
 
 # Hand-written Speech Engine inbound-server surface. The generator only emits the upstream channel
 # client (src/api/websocket/speech_engine.rs); the server side is maintained by hand to match the

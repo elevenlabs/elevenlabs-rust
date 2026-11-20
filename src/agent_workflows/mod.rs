@@ -33,5 +33,6 @@ pub use condition::{Condition, ConditionInput};
 pub use destination::Destination;
 pub use errors::{Severity, WorkflowIssue, WorkflowIssueCode, WorkflowValidationError};
 pub use expr::{Expr, ExprInput, LlmValueType};
+pub use graph::ToolRef;
 pub use node::{Chain, Options, WorkflowBranch, WorkflowNode};
 pub use workflow::Workflow;

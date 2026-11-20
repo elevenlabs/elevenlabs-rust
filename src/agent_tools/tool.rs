@@ -294,6 +294,13 @@ impl Tool {
     pub fn to_json_string(&self) -> Result<String, ToolValidationError> {
         Ok(to_json_string(&self.to_json()?))
     }
+
+    /// Whether `other` is the same tool definition: equal, or with the same `to_json()` (a tool
+    /// loaded from JSON and the same tool built in code can differ inside but write the same
+    /// config). Tools are values, so this is what "the same tool" means to the agent builder.
+    pub(crate) fn same_as(&self, other: &Tool) -> bool {
+        self == other || matches!((self.to_json(), other.to_json()), (Ok(a), Ok(b)) if a == b)
+    }
 }
 
 /// A loaded tool of a type the builder has no constructor for, such as `mcp`. Kept exactly as

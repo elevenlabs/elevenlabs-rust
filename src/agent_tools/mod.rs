@@ -21,7 +21,8 @@
 mod client;
 mod errors;
 mod header;
-mod json;
+// Shared with the agent_builder module, which writes the same JSON with a 4-space indent.
+pub(crate) mod json;
 mod options;
 mod schema;
 mod system;

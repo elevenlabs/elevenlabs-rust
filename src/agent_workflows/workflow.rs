@@ -6,11 +6,12 @@ use std::rc::Rc;
 
 use serde_json::{json, Map, Value};
 
+use crate::agent_tools::Tool;
 use crate::api::types::AgentWorkflowRequestModel;
 
 use super::condition::{Condition, ConditionInput};
 use super::errors::{Severity, WorkflowIssue, WorkflowIssueCode, WorkflowValidationError};
-use super::graph::{GraphEdge, WorkflowGraph};
+use super::graph::{map_node_tool_ids, node_tool_ids, tool_placeholder, GraphEdge, WorkflowGraph};
 use super::layout::layout;
 use super::node::{branch, Chain, EdgeOrigin, WorkflowBranch, WorkflowNode};
 use super::validate::{reverse_edge_merges, validate};
@@ -53,6 +54,55 @@ impl Workflow {
     pub fn from_json_str(data: &str) -> Result<Self, serde_json::Error> {
         let value: Value = serde_json::from_str(data)?;
         Ok(Workflow::from_json(&value))
+    }
+
+    /// Like [`from_json`](Self::from_json), with tool ids found in `tools_by_id` swapped for those
+    /// [`Tool`] objects, so the loaded workflow refers to them as a built one would. Other ids stay
+    /// as they are.
+    pub fn from_json_with_tools(data: &Value, tools_by_id: &HashMap<String, Tool>) -> Self {
+        let wf = Workflow::from_json(data);
+        {
+            let mut g = wf.graph.borrow_mut();
+            let mut bound: Vec<(String, Tool)> = Vec::new();
+            let swap = |id: &str| -> String {
+                match tools_by_id.get(id) {
+                    Some(tool) => tool_placeholder(tool.name()),
+                    None => id.to_string(),
+                }
+            };
+            for id in g.node_order.clone() {
+                if let Some(model) = g.nodes.get_mut(&id) {
+                    for tool_id in node_tool_ids(model) {
+                        if let Some(tool) = tools_by_id.get(&tool_id) {
+                            bound.push((tool_placeholder(tool.name()), tool.clone()));
+                        }
+                    }
+                    map_node_tool_ids(model, &swap);
+                }
+            }
+            for (key, tool) in bound {
+                g.set_tool_ref(key, tool);
+            }
+        }
+        wf
+    }
+
+    /// The [`Tool`] objects the workflow's nodes use, in the order they were first used.
+    pub fn tools(&self) -> Vec<Tool> {
+        let g = self.graph.borrow();
+        let used: HashSet<String> = g.nodes.values().flat_map(node_tool_ids).collect();
+        g.tool_refs
+            .iter()
+            .filter(|(key, _)| used.contains(key))
+            .map(|(_, tool)| tool.clone())
+            .collect()
+    }
+
+    /// A copy of this workflow with its own graph: editing one doesn't change the other.
+    pub(crate) fn deep_clone(&self) -> Self {
+        Self {
+            graph: Rc::new(RefCell::new(self.graph.borrow().clone())),
+        }
     }
 
     /// The id of the start node (`"start_node"` unless a loaded workflow uses another).
@@ -202,9 +252,11 @@ impl Workflow {
         Some(last)
     }
 
-    /// Validate and return the model `agents.create()` / `agents.update()` accept.
+    /// Validate and return the model `agents.create()` / `agents.update()` accept. A node that
+    /// uses a [`Tool`] object is reported as `unresolved_tool`: use
+    /// [`build_with_tool_ids`](Self::build_with_tool_ids) for those.
     pub fn build(&self) -> Result<AgentWorkflowRequestModel, WorkflowValidationError> {
-        let wire = self.to_wire::<fn(&WorkflowIssue)>(None)?;
+        let wire = self.to_wire::<fn(&WorkflowIssue)>(None, &HashMap::new())?;
         to_request_model(wire)
     }
 
@@ -213,14 +265,35 @@ impl Workflow {
         &self,
         on_warning: F,
     ) -> Result<AgentWorkflowRequestModel, WorkflowValidationError> {
-        let wire = self.to_wire(Some(on_warning))?;
+        let wire = self.to_wire(Some(on_warning), &HashMap::new())?;
+        to_request_model(wire)
+    }
+
+    /// Like [`build`](Self::build), with the id of each [`Tool`] object the nodes use, by tool
+    /// name. `agents_as_code().push()` passes these after creating the tools. Every `Tool` object
+    /// needs one.
+    pub fn build_with_tool_ids(
+        &self,
+        tool_ids: &HashMap<String, String>,
+    ) -> Result<AgentWorkflowRequestModel, WorkflowValidationError> {
+        let wire = self.to_wire::<fn(&WorkflowIssue)>(None, tool_ids)?;
         to_request_model(wire)
     }
 
     /// The workflow in API format (snake_case keys, sorted at every level). Validates like
     /// `build()`.
     pub fn to_json(&self) -> Result<Value, WorkflowValidationError> {
-        Ok(canonical(&self.to_wire::<fn(&WorkflowIssue)>(None)?))
+        self.to_json_with_tool_ids(&HashMap::new())
+    }
+
+    /// Like [`to_json`](Self::to_json), with each [`Tool`] object's id, by tool name.
+    pub fn to_json_with_tool_ids(
+        &self,
+        tool_ids: &HashMap<String, String>,
+    ) -> Result<Value, WorkflowValidationError> {
+        Ok(canonical(
+            &self.to_wire::<fn(&WorkflowIssue)>(None, tool_ids)?,
+        ))
     }
 
     /// `to_json()` as a string with 2-space indentation and a trailing newline.
@@ -228,12 +301,34 @@ impl Workflow {
         Ok(wire_to_json_string(&self.to_json()?))
     }
 
+    /// Like [`to_json_string`](Self::to_json_string), with each [`Tool`] object's id, by tool
+    /// name.
+    pub fn to_json_string_with_tool_ids(
+        &self,
+        tool_ids: &HashMap<String, String>,
+    ) -> Result<String, WorkflowValidationError> {
+        Ok(wire_to_json_string(&self.to_json_with_tool_ids(tool_ids)?))
+    }
+
+    /// The API-format workflow after the checks `build_with_tool_ids()` runs, including that it
+    /// fits the generated request model. Keeps fields the model doesn't declare.
+    pub(crate) fn build_wire(
+        &self,
+        tool_ids: &HashMap<String, String>,
+    ) -> Result<Value, WorkflowValidationError> {
+        let wire = self.to_wire::<fn(&WorkflowIssue)>(None, tool_ids)?;
+        to_request_model(wire.clone())?;
+        Ok(canonical(&wire))
+    }
+
     fn to_wire<F: FnMut(&WorkflowIssue)>(
         &self,
         mut on_warning: Option<F>,
+        tool_ids: &HashMap<String, String>,
     ) -> Result<Value, WorkflowValidationError> {
         let g = self.graph.borrow();
-        let issues = validate(&g);
+        let mut issues = validate(&g);
+        issues.extend(unresolved_tools(&g, tool_ids));
         let errors: Vec<WorkflowIssue> = issues
             .iter()
             .filter(|i| i.severity == Severity::Error)
@@ -303,8 +398,18 @@ impl Workflow {
         }
 
         let mut nodes_wire: Map<String, Value> = Map::new();
+        let resolve = |id: &str| -> String {
+            match g.tool_ref(id) {
+                Some(tool) => tool_ids
+                    .get(tool.name())
+                    .cloned()
+                    .unwrap_or_else(|| id.to_string()),
+                None => id.to_string(),
+            }
+        };
         for node_id in &g.node_order {
             let mut obj = g.nodes[node_id].clone();
+            map_node_tool_ids(&mut obj, &resolve);
             obj.insert("position".to_string(), positions[node_id].clone());
             let loaded = g.loaded_order.get(node_id).cloned().unwrap_or_default();
             let current = outgoing.get(node_id).cloned().unwrap_or_default();
@@ -352,6 +457,31 @@ fn to_request_model(wire: Value) -> Result<AgentWorkflowRequestModel, WorkflowVa
             None,
         )],
     })
+}
+
+/// A node that uses a `Tool` object with no id in `tool_ids`.
+fn unresolved_tools(g: &WorkflowGraph, tool_ids: &HashMap<String, String>) -> Vec<WorkflowIssue> {
+    let mut issues = Vec::new();
+    for node_id in &g.node_order {
+        let Some(model) = g.nodes.get(node_id) else {
+            continue;
+        };
+        for id in node_tool_ids(model) {
+            if let Some(tool) = g.tool_ref(&id) {
+                if !tool_ids.contains_key(tool.name()) {
+                    issues.push(WorkflowIssue::error(
+                        WorkflowIssueCode::UnresolvedTool,
+                        format!(
+                            "Node \"{node_id}\" uses tool \"{}\", which has no id yet. Push the agent with agents_as_code().push(), or pass build_with_tool_ids()",
+                            tool.name()
+                        ),
+                        Some(node_id.clone()),
+                    ));
+                }
+            }
+        }
+    }
+    issues
 }
 
 /// A loaded node's order for the edges it still has, then any others in edge-list order.
