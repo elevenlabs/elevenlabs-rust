@@ -21,7 +21,7 @@ pub struct PromptEvaluationCriteria {
     pub scope: Option<AnalysisScope>,
     /// LLM model to use for this evaluation criteria. If not set, uses agent's analysis_llm default.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub llm: Option<Llm>,
+    pub llm: Option<AgentMessagesOverridesLlm>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scoring_mode: Option<CriteriaScoringMode>,
     /// Maximum value of the numeric score scale (minimum is always 0). Only used when scoring_mode is 'numeric_uniform'.
@@ -49,7 +49,7 @@ pub struct PromptEvaluationCriteriaBuilder {
     conversation_goal_prompt: Option<String>,
     use_knowledge_base: Option<bool>,
     scope: Option<AnalysisScope>,
-    llm: Option<Llm>,
+    llm: Option<AgentMessagesOverridesLlm>,
     scoring_mode: Option<CriteriaScoringMode>,
     max_score: Option<i64>,
     score_instructions: Option<String>,
@@ -86,7 +86,7 @@ impl PromptEvaluationCriteriaBuilder {
         self
     }
 
-    pub fn llm(mut self, value: Llm) -> Self {
+    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.llm = Some(value);
         self
     }

@@ -56,7 +56,14 @@ impl HolidaysClient {
         let location_id = request.location_id.clone();
         let url = "/v1/reception/holidays";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_holidays_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &start_unix {
             request = request.query(&[("start_unix", &val.to_string())]);
         }
@@ -148,7 +155,14 @@ impl HolidaysClient {
     ) -> Result<HolidayResponseModel, crate::error::ApiError> {
         let url = "/v1/reception/holidays";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_holidays_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -231,7 +245,14 @@ impl HolidaysClient {
     ) -> Result<HolidayResponseModel, crate::error::ApiError> {
         let url = format!("/v1/reception/holidays/{}", holiday_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_holidays_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -309,7 +330,14 @@ impl HolidaysClient {
     ) -> Result<HolidayResponseModel, crate::error::ApiError> {
         let url = format!("/v1/reception/holidays/{}", holiday_id);
 
-        let mut request = self.http_client.put(url);
+        let base_url = self
+            .config
+            .get_holidays_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PUT, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -392,7 +420,14 @@ impl HolidaysClient {
     ) -> Result<std::collections::HashMap<String, String>, crate::error::ApiError> {
         let url = format!("/v1/reception/holidays/{}", holiday_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_holidays_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

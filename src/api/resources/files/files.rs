@@ -54,7 +54,14 @@ impl FilesClient {
             conversation_id, file_id
         );
 
-        let mut request = self.http_client.stream_request(reqwest::Method::GET, url);
+        let base_url = self
+            .config
+            .get_files_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .stream_request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -124,7 +131,14 @@ impl FilesClient {
             conversation_id, file_id
         );
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_files_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -199,7 +213,14 @@ impl FilesClient {
     ) -> Result<ConvAiFileUploadResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/conversations/{}/files", conversation_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_files_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

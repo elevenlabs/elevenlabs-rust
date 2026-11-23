@@ -19,7 +19,7 @@ pub struct TtsConversationalConfigInput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub agent_output_audio_format: Option<AsrInputFormat>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub optimize_streaming_latency: Option<TtsOptimizeStreamingLatency>,
+    pub optimize_streaming_latency: Option<OptimizeStreamingLatency>,
     /// The stability of generated speech
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -70,7 +70,7 @@ pub struct TtsConversationalConfigInputBuilder {
     expressive_mode: Option<bool>,
     suggested_audio_tags: Option<Vec<SuggestedAudioTag>>,
     agent_output_audio_format: Option<AsrInputFormat>,
-    optimize_streaming_latency: Option<TtsOptimizeStreamingLatency>,
+    optimize_streaming_latency: Option<OptimizeStreamingLatency>,
     stability: Option<f64>,
     speed: Option<f64>,
     similarity_boost: Option<f64>,
@@ -112,7 +112,7 @@ impl TtsConversationalConfigInputBuilder {
         self
     }
 
-    pub fn optimize_streaming_latency(mut self, value: TtsOptimizeStreamingLatency) -> Self {
+    pub fn optimize_streaming_latency(mut self, value: OptimizeStreamingLatency) -> Self {
         self.optimize_streaming_latency = Some(value);
         self
     }

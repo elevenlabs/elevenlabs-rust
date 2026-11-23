@@ -17425,7 +17425,7 @@ async fn main() {
                         .branch_id("branch_id")
                         .overrides(AgentMessagesOverrides {
                             prompt: Some("prompt".to_string()),
-                            llm: Some(Llm::Gpt4OMini),
+                            llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                             language: Some("language".to_string()),
                             tool_ids: Some(vec!["tool_ids".to_string()]),
                             native_mcp_server_ids: Some(vec!["native_mcp_server_ids".to_string()]),
@@ -18391,8 +18391,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(TtsModelFamily::Turbo)
-                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .model_family(ModelFamily::Turbo)
+                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                     .stability(0.42)
                                     .speed(0.78)
                                     .similarity_boost(0.33)
@@ -18426,7 +18426,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(Llm::Gpt4OMini),
+                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(false),
@@ -18582,8 +18582,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(TtsModelFamily::Turbo)
-                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .model_family(ModelFamily::Turbo)
+                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                     .stability(0.42)
                                     .speed(0.78)
                                     .similarity_boost(0.33)
@@ -18617,7 +18617,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(Llm::Gpt4OMini),
+                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(false),
@@ -18756,8 +18756,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(TtsModelFamily::Turbo)
-                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .model_family(ModelFamily::Turbo)
+                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                     .stability(0.42)
                                     .speed(0.78)
                                     .similarity_boost(0.33)
@@ -18791,7 +18791,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(Llm::Gpt4OMini),
+                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(false),
@@ -18952,8 +18952,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(TtsModelFamily::Turbo)
-                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .model_family(ModelFamily::Turbo)
+                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                     .stability(0.42)
                                     .speed(0.78)
                                     .similarity_boost(0.33)
@@ -18987,7 +18987,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(Llm::Gpt4OMini),
+                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(false),
@@ -19140,8 +19140,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(TtsModelFamily::Turbo)
-                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .model_family(ModelFamily::Turbo)
+                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                     .stability(0.42)
                                     .speed(0.78)
                                     .similarity_boost(0.33)
@@ -19175,7 +19175,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(Llm::Gpt4OMini),
+                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(false),
@@ -19341,10 +19341,8 @@ async fn main() {
                                         .voice_id("voice_id")
                                         .description("description")
                                         .language("language")
-                                        .model_family(TtsModelFamily::Turbo)
-                                        .optimize_streaming_latency(
-                                            TtsOptimizeStreamingLatency::Num0,
-                                        )
+                                        .model_family(ModelFamily::Turbo)
+                                        .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                         .stability(0.42)
                                         .speed(0.78)
                                         .similarity_boost(0.33)
@@ -19361,7 +19359,7 @@ async fn main() {
                                         .expect("Failed to build request"),
                                 ]),
                                 agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                                optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
+                                optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
                                 stability: Some(0.5),
                                 speed: Some(1_f64),
                                 similarity_boost: Some(0.8),
@@ -19526,7 +19524,7 @@ async fn main() {
                                 }),
                                 prompt: Some(PromptAgentApiModelInput {
                                     prompt: Some("prompt".to_string()),
-                                    llm: Some(Llm::Gpt4OMini),
+                                    llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                     reasoning_effort: Some(LlmReasoningEffort::None),
                                     service_tier: Some(LlmServiceTier::Standard),
                                     thinking_budget: Some(1),
@@ -19596,7 +19594,7 @@ async fn main() {
                                         .conversation_goal_prompt("conversation_goal_prompt")
                                         .use_knowledge_base(true)
                                         .scope(AnalysisScope::Conversation)
-                                        .llm(Llm::Gpt4OMini)
+                                        .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                         .scoring_mode(CriteriaScoringMode::Binary)
                                         .max_score(100)
                                         .score_instructions("score_instructions")
@@ -19913,7 +19911,7 @@ async fn main() {
                                     )
                                     .is_omitted(true)
                                     .name("name")
-                                    .llm(Llm::Gpt4OMini)
+                                    .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                     .build()
                                     .expect("Failed to build request"),
                             )])),
@@ -20091,7 +20089,7 @@ async fn main() {
                                 ..Default::default()
                             }),
                             trust_context: Some(AgentTrustContext::Unknown),
-                            analysis_llm: Some(Llm::Gpt4OMini),
+                            analysis_llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                             topic_discovery: Some(TopicDiscoverySettings::default()),
                             sentiment_analysis: Some(SentimentAnalysisSettings::default()),
                             alerting: Some(AlertingSettings {
@@ -20426,8 +20424,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(TtsModelFamily::Turbo)
-                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .model_family(ModelFamily::Turbo)
+                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                     .stability(0.42)
                                     .speed(0.78)
                                     .similarity_boost(0.33)
@@ -20444,7 +20442,7 @@ async fn main() {
                                     .expect("Failed to build request"),
                             ]),
                             agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                            optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
+                            optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
@@ -20605,7 +20603,7 @@ async fn main() {
                             }),
                             prompt: Some(PromptAgentApiModelInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(Llm::Gpt4OMini),
+                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
                                 thinking_budget: Some(1),
@@ -20673,7 +20671,7 @@ async fn main() {
                                     .conversation_goal_prompt("conversation_goal_prompt")
                                     .use_knowledge_base(true)
                                     .scope(AnalysisScope::Conversation)
-                                    .llm(Llm::Gpt4OMini)
+                                    .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
                                     .max_score(100)
                                     .score_instructions("score_instructions")
@@ -20974,7 +20972,7 @@ async fn main() {
                                 )
                                 .is_omitted(true)
                                 .name("name")
-                                .llm(Llm::Gpt4OMini)
+                                .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                 .build()
                                 .expect("Failed to build request"),
                         )])),
@@ -21152,7 +21150,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         trust_context: Some(AgentTrustContext::Unknown),
-                        analysis_llm: Some(Llm::Gpt4OMini),
+                        analysis_llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                         topic_discovery: Some(TopicDiscoverySettings::default()),
                         sentiment_analysis: Some(SentimentAnalysisSettings::default()),
                         alerting: Some(AlertingSettings {
@@ -21755,8 +21753,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(TtsModelFamily::Turbo)
-                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .model_family(ModelFamily::Turbo)
+                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                     .stability(0.42)
                                     .speed(0.78)
                                     .similarity_boost(0.33)
@@ -21773,7 +21771,7 @@ async fn main() {
                                     .expect("Failed to build request"),
                             ]),
                             agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                            optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
+                            optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
@@ -21883,7 +21881,7 @@ async fn main() {
                             }),
                             prompt: Some(PromptAgentApiModelInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(Llm::Gpt4OMini),
+                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
                                 thinking_budget: Some(1),
@@ -21917,7 +21915,7 @@ async fn main() {
                                     .conversation_goal_prompt("conversation_goal_prompt")
                                     .use_knowledge_base(true)
                                     .scope(AnalysisScope::Conversation)
-                                    .llm(Llm::Gpt4OMini)
+                                    .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
                                     .max_score(100)
                                     .score_instructions("score_instructions")
@@ -22115,7 +22113,7 @@ async fn main() {
                                 )
                                 .is_omitted(true)
                                 .name("name")
-                                .llm(Llm::Gpt4OMini)
+                                .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                 .build()
                                 .expect("Failed to build request"),
                         )])),
@@ -22253,7 +22251,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         trust_context: Some(AgentTrustContext::Unknown),
-                        analysis_llm: Some(Llm::Gpt4OMini),
+                        analysis_llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                         topic_discovery: Some(TopicDiscoverySettings::default()),
                         sentiment_analysis: Some(SentimentAnalysisSettings::default()),
                         alerting: Some(AlertingSettings {
@@ -26040,8 +26038,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(TtsModelFamily::Turbo)
-                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .model_family(ModelFamily::Turbo)
+                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                     .stability(0.42)
                                     .speed(0.78)
                                     .similarity_boost(0.33)
@@ -26058,7 +26056,7 @@ async fn main() {
                                     .expect("Failed to build request"),
                             ]),
                             agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                            optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
+                            optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
@@ -26168,7 +26166,7 @@ async fn main() {
                             }),
                             prompt: Some(PromptAgentApiModelInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(Llm::Gpt4OMini),
+                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
                                 thinking_budget: Some(1),
@@ -26202,7 +26200,7 @@ async fn main() {
                                     .conversation_goal_prompt("conversation_goal_prompt")
                                     .use_knowledge_base(true)
                                     .scope(AnalysisScope::Conversation)
-                                    .llm(Llm::Gpt4OMini)
+                                    .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
                                     .max_score(100)
                                     .score_instructions("score_instructions")
@@ -26400,7 +26398,7 @@ async fn main() {
                                 )
                                 .is_omitted(true)
                                 .name("name")
-                                .llm(Llm::Gpt4OMini)
+                                .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                 .build()
                                 .expect("Failed to build request"),
                         )])),
@@ -26538,7 +26536,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         trust_context: Some(AgentTrustContext::Unknown),
-                        analysis_llm: Some(Llm::Gpt4OMini),
+                        analysis_llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                         topic_discovery: Some(TopicDiscoverySettings::default()),
                         sentiment_analysis: Some(SentimentAnalysisSettings::default()),
                         alerting: Some(AlertingSettings {
@@ -36154,8 +36152,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(TtsModelFamily::Turbo)
-                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                                    .model_family(ModelFamily::Turbo)
+                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                                     .stability(0.42)
                                     .speed(0.78)
                                     .similarity_boost(0.33)
@@ -36189,7 +36187,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(Llm::Gpt4OMini),
+                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(false),
@@ -42313,8 +42311,8 @@ async fn main() {
                             .voice_id("voice_id")
                             .description("description")
                             .language("language")
-                            .model_family(TtsModelFamily::Turbo)
-                            .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                            .model_family(ModelFamily::Turbo)
+                            .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                             .stability(0.42)
                             .speed(0.78)
                             .similarity_boost(0.33)
@@ -42331,7 +42329,7 @@ async fn main() {
                             .expect("Failed to build request"),
                     ]),
                     agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                    optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
+                    optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
                     stability: Some(0.5),
                     speed: Some(1_f64),
                     similarity_boost: Some(0.8),
@@ -42612,8 +42610,8 @@ async fn main() {
                             .voice_id("voice_id")
                             .description("description")
                             .language("language")
-                            .model_family(TtsModelFamily::Turbo)
-                            .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
+                            .model_family(ModelFamily::Turbo)
+                            .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
                             .stability(0.42)
                             .speed(0.78)
                             .similarity_boost(0.33)
@@ -42630,7 +42628,7 @@ async fn main() {
                             .expect("Failed to build request"),
                     ]),
                     agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                    optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
+                    optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
                     stability: Some(0.5),
                     speed: Some(1_f64),
                     similarity_boost: Some(0.8),
@@ -51953,7 +51951,7 @@ async fn main() {
                     additional_instructions: Some(StrippedStr("sint aliqui".to_string())),
                     tone_traits: Some(vec![StrippedStr("in velit nu".to_string())]),
                     details_to_collect: Some(vec![StrippedStr("utdo velit".to_string())]),
-                    llm: Some(Llm::Gpt4OMini),
+                    llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                     reasoning_effort: Some(LlmReasoningEffort::None),
                     disable_rag: Some(true),
                     background_voice_detection: Some(true),

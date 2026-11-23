@@ -50,7 +50,14 @@ impl GroupsClient {
     > {
         let url = "/v1/workspace/groups";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_groups_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -127,7 +134,14 @@ impl GroupsClient {
         let name = request.name.clone();
         let url = "/v1/workspace/groups/search";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_groups_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.query(&[("name", &name.to_string())]);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

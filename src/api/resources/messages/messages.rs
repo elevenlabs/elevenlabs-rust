@@ -88,7 +88,14 @@ impl MessagesClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/conversations/messages/text-search";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_messages_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.query(&[("text_query", &text_query.to_string())]);
         if let Some(val) = &agent_id {
             request = request.query(&[("agent_id", &val.to_string())]);
@@ -317,7 +324,14 @@ impl MessagesClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/conversations/messages/smart-search";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_messages_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.query(&[("text_query", &text_query.to_string())]);
         if let Some(val) = &agent_id {
             request = request.query(&[("agent_id", &val.to_string())]);

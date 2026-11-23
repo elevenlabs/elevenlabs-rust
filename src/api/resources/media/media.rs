@@ -51,7 +51,14 @@ impl MediaClient {
     ) -> Result<RegisterMediaResponse, crate::error::ApiError> {
         let url = format!("/v1/productions/orders/{}/media", order_id.0);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_media_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -127,7 +134,14 @@ impl MediaClient {
     ) -> Result<OrderMediaResponse, crate::error::ApiError> {
         let url = format!("/v1/productions/orders/{}/media/{}", order_id.0, media_id.0);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_media_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

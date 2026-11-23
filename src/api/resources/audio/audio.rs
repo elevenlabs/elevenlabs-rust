@@ -51,7 +51,14 @@ impl AudioClient {
     ) -> Result<crate::core::ByteStream, crate::error::ApiError> {
         let url = format!("/v1/voices/{}/samples/{}/audio", voice_id, sample_id);
 
-        let mut request = self.http_client.stream_request(reqwest::Method::GET, url);
+        let base_url = self
+            .config
+            .get_audio_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .stream_request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -119,7 +126,14 @@ impl AudioClient {
     ) -> Result<crate::core::ByteStream, crate::error::ApiError> {
         let url = format!("/v1/dubbing/{}/audio/{}", dubbing_id, language_code);
 
-        let mut request = self.http_client.stream_request(reqwest::Method::GET, url);
+        let base_url = self
+            .config
+            .get_audio_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .stream_request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -184,7 +198,14 @@ impl AudioClient {
     ) -> Result<crate::core::ByteStream, crate::error::ApiError> {
         let url = format!("/v1/convai/conversations/{}/audio", conversation_id);
 
-        let mut request = self.http_client.stream_request(reqwest::Method::GET, url);
+        let base_url = self
+            .config
+            .get_audio_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .stream_request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -254,7 +275,14 @@ impl AudioClient {
         let remove_background_noise = request.remove_background_noise.clone();
         let url = format!("/v1/voices/pvc/{}/samples/{}/audio", voice_id, sample_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_audio_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &remove_background_noise {
             request = request.query(&[("remove_background_noise", &val.to_string())]);
         }
@@ -337,7 +365,14 @@ impl AudioClient {
             voice_id, sample_id, speaker_id
         );
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_audio_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

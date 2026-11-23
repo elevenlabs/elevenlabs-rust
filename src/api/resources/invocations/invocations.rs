@@ -59,7 +59,14 @@ impl InvocationsClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/test-invocations";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_invocations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &agent_id {
             request = request.query(&[("agent_id", &val.to_string())]);
         }
@@ -162,7 +169,14 @@ impl InvocationsClient {
     ) -> Result<GetTestSuiteInvocationResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/test-invocations/{}", test_invocation_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_invocations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -237,7 +251,14 @@ impl InvocationsClient {
     ) -> Result<GetTestSuiteInvocationResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/test-invocations/{}", test_invocation_id);
 
-        let mut request = self.http_client.patch(url);
+        let base_url = self
+            .config
+            .get_invocations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PATCH, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -317,7 +338,14 @@ impl InvocationsClient {
     ) -> Result<(), crate::error::ApiError> {
         let url = format!("/v1/convai/test-invocations/{}/cancel", test_invocation_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_invocations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -387,7 +415,14 @@ impl InvocationsClient {
             test_invocation_id
         );
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_invocations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

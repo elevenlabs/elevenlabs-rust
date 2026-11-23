@@ -52,7 +52,14 @@ impl VoicesClient {
         let with_settings = request.with_settings.clone();
         let url = format!("/v1/voices/{}", voice_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_voices_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &with_settings {
             request = request.query(&[("with_settings", &val.to_string())]);
         }
@@ -128,7 +135,14 @@ impl VoicesClient {
     ) -> Result<DeleteVoiceResponseModel, crate::error::ApiError> {
         let url = format!("/v1/voices/{}", voice_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_voices_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -203,7 +217,14 @@ impl VoicesClient {
     ) -> Result<EditVoiceResponseModel, crate::error::ApiError> {
         let url = format!("/v1/voices/{}/edit", voice_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_voices_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -297,7 +318,14 @@ impl VoicesClient {
         let voice_ids = request.voice_ids.clone();
         let url = "/v2/voices";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_voices_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &next_page_token {
             request = request.query(&[("next_page_token", &val.to_string())]);
         }
@@ -438,7 +466,14 @@ impl VoicesClient {
     ) -> Result<ReplicateVoiceToIsolatedEnvironmentResponseModel, crate::error::ApiError> {
         let url = format!("/v1/voices/{}/replicate-to-isolated-environment", voice_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_voices_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -521,7 +556,14 @@ impl VoicesClient {
     ) -> Result<AddVoiceResponseModel, crate::error::ApiError> {
         let url = format!("/v1/voices/add/{}/{}", public_user_id, voice_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_voices_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -601,7 +643,14 @@ impl VoicesClient {
     ) -> Result<GetLibraryVoicesResponse, crate::error::ApiError> {
         let url = "/v1/similar-voices";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_voices_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -695,7 +744,14 @@ impl VoicesClient {
         let page = request.page.clone();
         let url = "/v1/shared-voices";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_voices_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }

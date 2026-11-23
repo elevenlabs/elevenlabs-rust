@@ -6,7 +6,7 @@ pub struct PromptAgentApiModelInput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prompt: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub llm: Option<Llm>,
+    pub llm: Option<AgentMessagesOverridesLlm>,
     /// Reasoning effort of the model. Only available for some models.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reasoning_effort: Option<LlmReasoningEffort>,
@@ -94,7 +94,7 @@ impl PromptAgentApiModelInput {
 #[non_exhaustive]
 pub struct PromptAgentApiModelInputBuilder {
     prompt: Option<String>,
-    llm: Option<Llm>,
+    llm: Option<AgentMessagesOverridesLlm>,
     reasoning_effort: Option<LlmReasoningEffort>,
     service_tier: Option<LlmServiceTier>,
     thinking_budget: Option<i64>,
@@ -123,7 +123,7 @@ impl PromptAgentApiModelInputBuilder {
         self
     }
 
-    pub fn llm(mut self, value: Llm) -> Self {
+    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.llm = Some(value);
         self
     }

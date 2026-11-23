@@ -42,10 +42,10 @@ pub struct SimulationTestModel {
         Option<std::collections::HashMap<String, Vec<ToolResponseMockConfigOutput>>>,
     /// LLM model to use for evaluating simulation results.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub evaluation_model: Option<Llm>,
+    pub evaluation_model: Option<AgentMessagesOverridesLlm>,
     /// LLM model for the simulated user.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub simulated_user_model: Option<Llm>,
+    pub simulated_user_model: Option<AgentMessagesOverridesLlm>,
 }
 
 impl SimulationTestModel {
@@ -70,8 +70,8 @@ pub struct SimulationTestModelBuilder {
     tool_mock_config: Option<SimulationToolMockBehaviorConfig>,
     tool_mock_overrides:
         Option<std::collections::HashMap<String, Vec<ToolResponseMockConfigOutput>>>,
-    evaluation_model: Option<Llm>,
-    simulated_user_model: Option<Llm>,
+    evaluation_model: Option<AgentMessagesOverridesLlm>,
+    simulated_user_model: Option<AgentMessagesOverridesLlm>,
 }
 
 impl SimulationTestModelBuilder {
@@ -144,12 +144,12 @@ impl SimulationTestModelBuilder {
         self
     }
 
-    pub fn evaluation_model(mut self, value: Llm) -> Self {
+    pub fn evaluation_model(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.evaluation_model = Some(value);
         self
     }
 
-    pub fn simulated_user_model(mut self, value: Llm) -> Self {
+    pub fn simulated_user_model(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.simulated_user_model = Some(value);
         self
     }

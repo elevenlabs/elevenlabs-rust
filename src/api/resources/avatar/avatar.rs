@@ -51,7 +51,14 @@ impl AvatarClient {
     ) -> Result<PostAgentAvatarResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/agents/{}/avatar", agent_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_avatar_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

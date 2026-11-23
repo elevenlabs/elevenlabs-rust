@@ -51,7 +51,14 @@ impl CompositionPlanClient {
         let body = request.body.clone();
         let url = "/v1/music/plan";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_composition_plan_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(val) = &enable_logging {
             request = request.query(&[("enable_logging", &val.to_string())]);
         }

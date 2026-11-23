@@ -56,7 +56,14 @@ impl DependentAgentsClient {
             analysis_item_id
         );
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_dependent_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }

@@ -49,7 +49,14 @@ impl WhatsappClient {
     ) -> Result<WhatsAppOutboundCallResponse, crate::error::ApiError> {
         let url = "/v1/convai/whatsapp/outbound-call";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_whatsapp_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -129,7 +136,14 @@ impl WhatsappClient {
     ) -> Result<WhatsAppOutboundMessageResponse, crate::error::ApiError> {
         let url = "/v1/convai/whatsapp/outbound-message";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_whatsapp_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

@@ -52,7 +52,14 @@ impl TextToSoundEffectsClient {
         let body = request.body.clone();
         let url = "/v1/sound-generation";
 
-        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
+        let base_url = self
+            .config
+            .get_text_to_sound_effects_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .stream_request_at(reqwest::Method::POST, &base_url, url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }

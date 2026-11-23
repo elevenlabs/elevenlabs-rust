@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 #[non_exhaustive]
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum TtsModelFamily {
+pub enum ModelFamily {
     Turbo,
     Flash,
     Multilingual,
@@ -14,7 +14,7 @@ pub enum TtsModelFamily {
     /// it will be captured here with the raw string value.
     __Unknown(String),
 }
-impl Serialize for TtsModelFamily {
+impl Serialize for ModelFamily {
     fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         match self {
             Self::Turbo => serializer.serialize_str("turbo"),
@@ -28,7 +28,7 @@ impl Serialize for TtsModelFamily {
     }
 }
 
-impl<'de> Deserialize<'de> for TtsModelFamily {
+impl<'de> Deserialize<'de> for ModelFamily {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         let value = String::deserialize(deserializer)?;
         match value.as_str() {
@@ -43,7 +43,7 @@ impl<'de> Deserialize<'de> for TtsModelFamily {
     }
 }
 
-impl fmt::Display for TtsModelFamily {
+impl fmt::Display for ModelFamily {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Turbo => write!(f, "turbo"),

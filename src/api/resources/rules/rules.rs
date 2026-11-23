@@ -54,7 +54,14 @@ impl RulesClient {
             pronunciation_dictionary_id
         );
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_rules_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -139,7 +146,14 @@ impl RulesClient {
             pronunciation_dictionary_id
         );
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_rules_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -224,7 +238,14 @@ impl RulesClient {
             pronunciation_dictionary_id
         );
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_rules_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -308,7 +329,14 @@ impl RulesClient {
     ) -> Result<AgentRule, crate::error::ApiError> {
         let url = format!("/v1/reception/customer-facing-agents/{}/rules", agent_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_rules_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -398,7 +426,14 @@ impl RulesClient {
             agent_id, rule_id
         );
 
-        let mut request = self.http_client.put(url);
+        let base_url = self
+            .config
+            .get_rules_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PUT, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -486,7 +521,14 @@ impl RulesClient {
             agent_id, rule_id
         );
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_rules_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

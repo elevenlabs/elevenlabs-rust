@@ -7,7 +7,7 @@ pub struct PromptAgentApiModelWorkflowOverrideOutput {
     pub prompt: Option<String>,
     /// The LLM to query with the prompt and the chat history. If using data residency, the LLM must be supported in the data residency environment
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub llm: Option<Llm>,
+    pub llm: Option<AgentMessagesOverridesLlm>,
     /// Reasoning effort of the model. Only available for some models.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reasoning_effort: Option<LlmReasoningEffort>,
@@ -88,7 +88,7 @@ impl PromptAgentApiModelWorkflowOverrideOutput {
 #[non_exhaustive]
 pub struct PromptAgentApiModelWorkflowOverrideOutputBuilder {
     prompt: Option<String>,
-    llm: Option<Llm>,
+    llm: Option<AgentMessagesOverridesLlm>,
     reasoning_effort: Option<LlmReasoningEffort>,
     service_tier: Option<LlmServiceTier>,
     thinking_budget: Option<i64>,
@@ -117,7 +117,7 @@ impl PromptAgentApiModelWorkflowOverrideOutputBuilder {
         self
     }
 
-    pub fn llm(mut self, value: Llm) -> Self {
+    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.llm = Some(value);
         self
     }

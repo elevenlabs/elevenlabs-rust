@@ -51,7 +51,14 @@ impl StudioClient {
     ) -> Result<PodcastProjectResponseModel, crate::error::ApiError> {
         let url = "/v1/studio/podcasts";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_studio_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(val) = &safety_identifier {
             request = request.header("safety-identifier", &val.to_string());
         }

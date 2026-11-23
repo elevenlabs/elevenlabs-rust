@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct LlmUsageCalculatorLlmResponseModel {
-    pub llm: Llm,
+    pub llm: AgentMessagesOverridesLlm,
     #[serde(default)]
     #[serde(with = "crate::core::number_serializers::float")]
     pub price_per_minute: f64,
@@ -20,13 +20,13 @@ impl LlmUsageCalculatorLlmResponseModel {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct LlmUsageCalculatorLlmResponseModelBuilder {
-    llm: Option<Llm>,
+    llm: Option<AgentMessagesOverridesLlm>,
     price_per_minute: Option<f64>,
     price_per_message: Option<f64>,
 }
 
 impl LlmUsageCalculatorLlmResponseModelBuilder {
-    pub fn llm(mut self, value: Llm) -> Self {
+    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.llm = Some(value);
         self
     }

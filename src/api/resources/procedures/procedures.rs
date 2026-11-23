@@ -57,7 +57,14 @@ impl ProceduresClient {
             agent_id, branch_id
         );
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_procedures_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &agent_version_id {
             request = request.query(&[("agent_version_id", &val.to_string())]);
         }
@@ -140,7 +147,14 @@ impl ProceduresClient {
             agent_id, branch_id
         );
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_procedures_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -224,7 +238,14 @@ impl ProceduresClient {
             agent_id, branch_id
         );
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_procedures_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -308,7 +329,14 @@ impl ProceduresClient {
             agent_id, branch_id, procedure_id
         );
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_procedures_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &version_id {
             request = request.query(&[("version_id", &val.to_string())]);
         }
@@ -394,7 +422,14 @@ impl ProceduresClient {
             agent_id, branch_id, procedure_id
         );
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_procedures_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -473,7 +508,14 @@ impl ProceduresClient {
             agent_id
         );
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_procedures_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -555,7 +597,14 @@ impl ProceduresClient {
             agent_id
         );
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_procedures_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -645,7 +694,14 @@ impl ProceduresClient {
             agent_id, procedure_id
         );
 
-        let mut request = self.http_client.put(url);
+        let base_url = self
+            .config
+            .get_procedures_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PUT, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -733,7 +789,14 @@ impl ProceduresClient {
             agent_id, procedure_id
         );
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_procedures_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

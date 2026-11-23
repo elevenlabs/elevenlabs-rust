@@ -49,7 +49,14 @@ impl LocationsClient {
     ) -> Result<Vec<ReceptionLocationResponse>, crate::error::ApiError> {
         let url = "/v1/reception/locations";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_locations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -126,7 +133,14 @@ impl LocationsClient {
     ) -> Result<ReceptionLocationResponse, crate::error::ApiError> {
         let url = "/v1/reception/locations";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_locations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -209,7 +223,14 @@ impl LocationsClient {
     ) -> Result<ReceptionLocationResponse, crate::error::ApiError> {
         let url = format!("/v1/reception/locations/{}", location_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_locations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -287,7 +308,14 @@ impl LocationsClient {
     ) -> Result<ReceptionLocationResponse, crate::error::ApiError> {
         let url = format!("/v1/reception/locations/{}", location_id);
 
-        let mut request = self.http_client.put(url);
+        let base_url = self
+            .config
+            .get_locations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PUT, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -370,7 +398,14 @@ impl LocationsClient {
     ) -> Result<std::collections::HashMap<String, String>, crate::error::ApiError> {
         let url = format!("/v1/reception/locations/{}", location_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_locations_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

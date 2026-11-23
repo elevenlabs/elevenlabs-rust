@@ -1,5 +1,6 @@
 //! WebSocket channel clients
 
+pub mod agents;
 pub mod dubbing;
 pub mod speech_engine;
 pub mod speech_to_text;
@@ -8,6 +9,10 @@ pub mod text_to_dialogue_multi_context;
 pub mod text_to_speech;
 pub mod text_to_speech_multi_context;
 pub mod translation;
+pub use agents::AgentsClient;
+pub use agents::AgentsConnectOptions;
+pub use agents::AgentsConnector;
+pub use agents::AgentsServerMessage;
 pub use dubbing::DubbingClient;
 pub use dubbing::DubbingConnectOptions;
 pub use dubbing::DubbingConnector;

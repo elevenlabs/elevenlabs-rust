@@ -52,7 +52,14 @@ impl PhoneNumbersClient {
         let branch_id = request.branch_id.clone();
         let url = "/v1/convai/phone-numbers";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &provider {
             request = request.query(&[("provider", &val.to_string())]);
         }
@@ -135,7 +142,14 @@ impl PhoneNumbersClient {
     ) -> Result<CreatePhoneNumberResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/phone-numbers";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -216,7 +230,14 @@ impl PhoneNumbersClient {
     {
         let url = format!("/v1/convai/phone-numbers/{}", phone_number_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -293,7 +314,14 @@ impl PhoneNumbersClient {
     > {
         let url = format!("/v1/convai/phone-numbers/{}", phone_number_id);
 
-        let mut request = self.http_client.patch(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PATCH, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -372,7 +400,14 @@ impl PhoneNumbersClient {
     ) -> Result<serde_json::Value, crate::error::ApiError> {
         let url = format!("/v1/convai/phone-numbers/{}", phone_number_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -457,7 +492,14 @@ impl PhoneNumbersClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/v2/phone-numbers";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -567,7 +609,14 @@ impl PhoneNumbersClient {
         let cursor = request.cursor.clone();
         let url = format!("/v1/convai/phone-numbers/{}/sip-messages", phone_number_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -646,7 +695,14 @@ impl PhoneNumbersClient {
     ) -> Result<Vec<ReceptionPhoneAssignment>, crate::error::ApiError> {
         let url = "/v1/reception/phone-numbers/assignments";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -723,7 +779,14 @@ impl PhoneNumbersClient {
     ) -> Result<ReceptionPhoneAssignment, crate::error::ApiError> {
         let url = "/v1/reception/phone-numbers/assignments";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -811,7 +874,14 @@ impl PhoneNumbersClient {
             phone_assignment_id
         );
 
-        let mut request = self.http_client.patch(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PATCH, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -897,7 +967,14 @@ impl PhoneNumbersClient {
             phone_assignment_id
         );
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_phone_numbers_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

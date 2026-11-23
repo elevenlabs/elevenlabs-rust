@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 #[non_exhaustive]
 #[derive(Debug, Clone, Copy, PartialEq, Default)]
-pub enum TtsOptimizeStreamingLatency {
+pub enum OptimizeStreamingLatency {
     #[default]
     Num0,
     Num1,
@@ -11,7 +11,7 @@ pub enum TtsOptimizeStreamingLatency {
     Num4,
 }
 
-impl Serialize for TtsOptimizeStreamingLatency {
+impl Serialize for OptimizeStreamingLatency {
     fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         match self {
             Self::Num0 => serializer.serialize_i64(0),
@@ -23,7 +23,7 @@ impl Serialize for TtsOptimizeStreamingLatency {
     }
 }
 
-impl<'de> Deserialize<'de> for TtsOptimizeStreamingLatency {
+impl<'de> Deserialize<'de> for OptimizeStreamingLatency {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         let value = <i64 as serde::Deserialize>::deserialize(deserializer)?;
         if value == 0 {
@@ -42,12 +42,12 @@ impl<'de> Deserialize<'de> for TtsOptimizeStreamingLatency {
             return Ok(Self::Num4);
         }
         Err(serde::de::Error::custom(format!(
-            "unknown TtsOptimizeStreamingLatency value: {value}"
+            "unknown OptimizeStreamingLatency value: {value}"
         )))
     }
 }
 
-impl fmt::Display for TtsOptimizeStreamingLatency {
+impl fmt::Display for OptimizeStreamingLatency {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Num0 => write!(f, "0"),
