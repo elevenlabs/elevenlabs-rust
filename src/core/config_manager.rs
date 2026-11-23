@@ -157,6 +157,7 @@ pub struct ConfigManager {
     v_1_text_to_speech_voice_id_multi_stream_input: RwLock<ClientConfig>,
     v_1_translation_realtime: RwLock<ClientConfig>,
     v_1_dubbing_live: RwLock<ClientConfig>,
+    v_1_convai_conversation: RwLock<ClientConfig>,
 }
 
 #[allow(dead_code)]
@@ -308,7 +309,8 @@ impl ConfigManager {
             v_1_text_to_speech_voice_id_stream_input: RwLock::new(config.clone()),
             v_1_text_to_speech_voice_id_multi_stream_input: RwLock::new(config.clone()),
             v_1_translation_realtime: RwLock::new(config.clone()),
-            v_1_dubbing_live: RwLock::new(config),
+            v_1_dubbing_live: RwLock::new(config.clone()),
+            v_1_convai_conversation: RwLock::new(config),
         }
     }
 
@@ -896,6 +898,10 @@ impl ConfigManager {
         read_or_recover(&self.v_1_dubbing_live).clone()
     }
 
+    pub fn get_v_1_convai_conversation_config(&self) -> ClientConfig {
+        read_or_recover(&self.v_1_convai_conversation).clone()
+    }
+
     pub fn set_base_url(&self, base_url: impl Into<String>) {
         let val = base_url.into();
         write_or_recover(&self.history).base_url = val.clone();
@@ -1045,6 +1051,7 @@ impl ConfigManager {
             val.clone();
         write_or_recover(&self.v_1_translation_realtime).base_url = val.clone();
         write_or_recover(&self.v_1_dubbing_live).base_url = val.clone();
+        write_or_recover(&self.v_1_convai_conversation).base_url = val.clone();
     }
 
     pub fn set_timeout(&self, timeout: Duration) {
@@ -1196,6 +1203,7 @@ impl ConfigManager {
             val.clone();
         write_or_recover(&self.v_1_translation_realtime).timeout = val.clone();
         write_or_recover(&self.v_1_dubbing_live).timeout = val.clone();
+        write_or_recover(&self.v_1_convai_conversation).timeout = val.clone();
     }
 
     pub fn set_api_key(&self, api_key: impl Into<String>) {
@@ -1347,6 +1355,7 @@ impl ConfigManager {
             val.clone();
         write_or_recover(&self.v_1_translation_realtime).api_key = val.clone();
         write_or_recover(&self.v_1_dubbing_live).api_key = val.clone();
+        write_or_recover(&self.v_1_convai_conversation).api_key = val.clone();
     }
 
     pub(crate) fn set_history_base_url(&self, base_url: impl Into<String>) {
@@ -3127,5 +3136,17 @@ impl ConfigManager {
 
     pub(crate) fn set_v_1_dubbing_live_api_key(&self, api_key: impl Into<String>) {
         write_or_recover(&self.v_1_dubbing_live).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_v_1_convai_conversation_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.v_1_convai_conversation).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_v_1_convai_conversation_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.v_1_convai_conversation).timeout = timeout;
+    }
+
+    pub(crate) fn set_v_1_convai_conversation_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.v_1_convai_conversation).api_key = Some(api_key.into());
     }
 }

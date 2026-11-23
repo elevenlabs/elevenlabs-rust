@@ -53,7 +53,14 @@ impl ProjectClient {
         let sort_direction = request.sort_direction.clone();
         let url = "/v1/dubbing/project";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_project_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &cursor {
             request = request.query(&[("cursor", &val.to_string())]);
         }
@@ -144,7 +151,14 @@ impl ProjectClient {
     ) -> Result<DubbingProjectResponse, crate::error::ApiError> {
         let url = "/v1/dubbing/project";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_project_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -220,7 +234,14 @@ impl ProjectClient {
     ) -> Result<DubbingProjectResponse, crate::error::ApiError> {
         let url = format!("/v1/dubbing/project/{}", project_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_project_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -293,7 +314,14 @@ impl ProjectClient {
     ) -> Result<(), crate::error::ApiError> {
         let url = format!("/v1/dubbing/project/{}", project_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_project_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

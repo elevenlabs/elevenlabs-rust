@@ -47,7 +47,14 @@ impl ConfigClient {
     ) -> Result<WorkspaceConfigResponse, crate::error::ApiError> {
         let url = "/v1/convai/outbound-campaigns/config";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_config_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -120,7 +127,14 @@ impl ConfigClient {
     ) -> Result<WorkspaceConfigResponse, crate::error::ApiError> {
         let url = "/v1/convai/outbound-campaigns/config";
 
-        let mut request = self.http_client.put(url);
+        let base_url = self
+            .config
+            .get_config_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PUT, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

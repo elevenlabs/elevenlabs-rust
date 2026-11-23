@@ -51,7 +51,14 @@ impl LiveCountClient {
         let agent_ids = request.agent_ids.clone();
         let url = "/v1/convai/analytics/live-count";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_live_count_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &agent_id {
             request = request.query(&[("agent_id", &val.to_string())]);
         }

@@ -53,7 +53,14 @@ impl MusicClient {
         let enable_logging = request.enable_logging.clone();
         let url = "/v1/music/video-to-music";
 
-        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
+        let base_url = self
+            .config
+            .get_music_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .stream_request_at(reqwest::Method::POST, &base_url, url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }
@@ -128,7 +135,14 @@ impl MusicClient {
         let body = request.body.clone();
         let url = "/v1/music";
 
-        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
+        let base_url = self
+            .config
+            .get_music_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .stream_request_at(reqwest::Method::POST, &base_url, url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }
@@ -208,7 +222,14 @@ impl MusicClient {
         let body = request.body.clone();
         let url = "/v1/music/detailed";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_music_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }
@@ -297,7 +318,14 @@ impl MusicClient {
         let body = request.body.clone();
         let url = "/v1/music/detailed/stream";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_music_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         request = request.header("Accept", "text/event-stream");
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
@@ -378,7 +406,14 @@ impl MusicClient {
         let body = request.body.clone();
         let url = "/v1/music/stream";
 
-        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
+        let base_url = self
+            .config
+            .get_music_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .stream_request_at(reqwest::Method::POST, &base_url, url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }
@@ -455,7 +490,14 @@ impl MusicClient {
     ) -> Result<MusicUploadResponse, crate::error::ApiError> {
         let url = "/v1/music/upload";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_music_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -533,7 +575,14 @@ impl MusicClient {
         let enable_logging = request.enable_logging.clone();
         let url = "/v1/music/stem-separation";
 
-        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
+        let base_url = self
+            .config
+            .get_music_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .stream_request_at(reqwest::Method::POST, &base_url, url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }

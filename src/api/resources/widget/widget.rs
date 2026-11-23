@@ -52,7 +52,14 @@ impl WidgetClient {
         let conversation_signature = request.conversation_signature.clone();
         let url = format!("/v1/convai/agents/{}/widget", agent_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_widget_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &conversation_signature {
             request = request.query(&[("conversation_signature", &val.to_string())]);
         }

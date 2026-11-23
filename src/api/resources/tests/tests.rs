@@ -49,7 +49,14 @@ impl TestsClient {
     ) -> Result<CreateAgentTestResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/agent-testing/create";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_tests_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -129,7 +136,14 @@ impl TestsClient {
     ) -> Result<serde_json::Value, crate::error::ApiError> {
         let url = "/v1/convai/agent-testing/bulk-move";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_tests_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -211,7 +225,14 @@ impl TestsClient {
     {
         let url = format!("/v1/convai/agent-testing/{}", test_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_tests_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -286,7 +307,14 @@ impl TestsClient {
     {
         let url = format!("/v1/convai/agent-testing/{}", test_id);
 
-        let mut request = self.http_client.put(url);
+        let base_url = self
+            .config
+            .get_tests_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PUT, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -365,7 +393,14 @@ impl TestsClient {
     ) -> Result<serde_json::Value, crate::error::ApiError> {
         let url = format!("/v1/convai/agent-testing/{}", test_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_tests_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -439,7 +474,14 @@ impl TestsClient {
     ) -> Result<GetTestsSummariesByIdsResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/agent-testing/summaries";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_tests_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -528,7 +570,14 @@ impl TestsClient {
         let created_by_user_id = request.created_by_user_id.clone();
         let url = "/v1/convai/agent-testing";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_tests_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &cursor {
             request = request.query(&[("cursor", &val.to_string())]);
         }

@@ -13,7 +13,7 @@ pub struct ReceptionCustomerFacingConfigPatch {
     pub details_to_collect: Option<Vec<StrippedStr>>,
     /// Model the receptionist runs on. Null uses the default.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub llm: Option<Llm>,
+    pub llm: Option<AgentMessagesOverridesLlm>,
     /// Reasoning effort for the receptionist's model, up to `medium` and only among the efforts the model supports. Null uses the model's default.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reasoning_effort: Option<LlmReasoningEffort>,
@@ -75,7 +75,7 @@ pub struct ReceptionCustomerFacingConfigPatchBuilder {
     additional_instructions: Option<StrippedStr>,
     tone_traits: Option<Vec<StrippedStr>>,
     details_to_collect: Option<Vec<StrippedStr>>,
-    llm: Option<Llm>,
+    llm: Option<AgentMessagesOverridesLlm>,
     reasoning_effort: Option<LlmReasoningEffort>,
     disable_rag: Option<bool>,
     background_voice_detection: Option<bool>,
@@ -110,7 +110,7 @@ impl ReceptionCustomerFacingConfigPatchBuilder {
         self
     }
 
-    pub fn llm(mut self, value: Llm) -> Self {
+    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.llm = Some(value);
         self
     }

@@ -49,7 +49,14 @@ impl KnowledgeBaseClient {
     ) -> Result<GetAgentKnowledgebaseSizeResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/agent/{}/knowledge-base/size", agent_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_knowledge_base_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -133,7 +140,14 @@ impl KnowledgeBaseClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/knowledge-base";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_knowledge_base_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -244,7 +258,14 @@ impl KnowledgeBaseClient {
     > {
         let url = "/v1/convai/knowledge-base/rag-index";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_knowledge_base_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -331,7 +352,14 @@ impl KnowledgeBaseClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/knowledge-base/search";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_knowledge_base_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.query(&[("query", &query.to_string())]);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);

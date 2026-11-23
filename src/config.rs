@@ -63,6 +63,9 @@ pub struct ClientConfig {
     /// user agent); when `None` the SDK builds its own client from `timeout` and
     /// `user_agent`.
     pub reqwest_client: Option<reqwest::Client>,
+    /// The environment whose URLs requests go to, per service, unless `base_url` was set
+    /// explicitly; see `service_url`.
+    pub environment: Option<Environment>,
 }
 
 impl Default for ClientConfig {
@@ -80,8 +83,9 @@ impl Default for ClientConfig {
             custom_headers: Default::default(),
             oauth_token_endpoint: None,
             oauth_token_exchange: None,
-            user_agent: "postman-codegen/3.29.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string(),
+            user_agent: "postman-codegen/3.30.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string(),
             reqwest_client: None,
+            environment: Some(Environment::default()),
         }
     }
 }
@@ -105,11 +109,43 @@ pub struct ClientConfigBuilder {
     oauth_token_exchange: Option<OAuthTokenExchangeConfig>,
     user_agent: Option<String>,
     reqwest_client: Option<reqwest::Client>,
+    environment: Option<Environment>,
 }
 
 impl ClientConfig {
     pub fn builder() -> ClientConfigBuilder {
         ClientConfigBuilder::default()
+    }
+
+    /// Resolves the URL a request goes to.
+    ///
+    /// An explicit `base_url` wins: when it is anything other than one of the configured
+    /// `environment`'s URLs (or the default environment's URL that `Default` fills in), every
+    /// request goes there. Otherwise the request goes to the environment's URL for its service,
+    /// which `url_for` picks (`|environment| environment.<service>_url()`).
+    ///
+    /// The decision is by value, since `base_url` is a plain `String` that `Default` fills in: a
+    /// `base_url` equal to one of the environment's URLs routes per service. To send every
+    /// request to one of those URLs, set `environment` to `None`.
+    pub fn service_url<'a>(&'a self, url_for: impl FnOnce(&'a Environment) -> &'a str) -> &'a str {
+        match &self.environment {
+            Some(environment) if !self.overrides_environment(environment) => url_for(environment),
+            _ => &self.base_url,
+        }
+    }
+
+    fn overrides_environment(&self, environment: &Environment) -> bool {
+        !self.base_url.is_empty()
+            && ![
+                environment.base_url(),
+                environment.production_url(),
+                environment.production_us_url(),
+                environment.production_eu_url(),
+                environment.production_india_url(),
+                environment.production_singapore_url(),
+            ]
+            .contains(&self.base_url.as_str())
+            && self.base_url != Environment::default().url()
     }
 }
 
@@ -126,6 +162,7 @@ impl ClientConfigBuilder {
 
     pub fn environment(mut self, environment: Environment) -> Self {
         self.base_url = Some(environment.url().to_string());
+        self.environment = Some(environment);
         self
     }
 
@@ -225,9 +262,10 @@ impl ClientConfigBuilder {
             oauth_token_endpoint: self.oauth_token_endpoint,
             oauth_token_exchange: self.oauth_token_exchange,
             user_agent: self.user_agent.unwrap_or_else(|| {
-                "postman-codegen/3.29.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string()
+                "postman-codegen/3.30.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string()
             }),
             reqwest_client: self.reqwest_client,
+            environment: self.environment.or_else(|| Some(Environment::default())),
         })
     }
 }

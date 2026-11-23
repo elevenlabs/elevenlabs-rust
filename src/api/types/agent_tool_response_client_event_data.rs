@@ -18,7 +18,7 @@ pub struct AgentToolResponseClientEventData {
     #[serde(default)]
     pub is_called: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<AgentToolResponseStatus>,
+    pub status: Option<Status>,
 }
 
 impl AgentToolResponseClientEventData {
@@ -37,7 +37,7 @@ pub struct AgentToolResponseClientEventDataBuilder {
     is_blocked: Option<bool>,
     event_id: Option<i64>,
     is_called: Option<bool>,
-    status: Option<AgentToolResponseStatus>,
+    status: Option<Status>,
 }
 
 impl AgentToolResponseClientEventDataBuilder {
@@ -76,7 +76,7 @@ impl AgentToolResponseClientEventDataBuilder {
         self
     }
 
-    pub fn status(mut self, value: AgentToolResponseStatus) -> Self {
+    pub fn status(mut self, value: Status) -> Self {
         self.status = Some(value);
         self
     }

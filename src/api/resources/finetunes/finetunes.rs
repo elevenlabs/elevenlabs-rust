@@ -55,7 +55,14 @@ impl FinetunesClient {
         let sort_direction = request.sort_direction.clone();
         let url = "/v1/music/finetunes";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_finetunes_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &cursor {
             request = request.query(&[("cursor", &val.to_string())]);
         }
@@ -146,7 +153,14 @@ impl FinetunesClient {
     ) -> Result<MusicFinetuneResponseModel, crate::error::ApiError> {
         let url = "/v1/music/finetunes";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_finetunes_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -220,7 +234,14 @@ impl FinetunesClient {
     ) -> Result<MusicFinetuneResponseModel, crate::error::ApiError> {
         let url = format!("/v1/music/finetunes/{}", finetune_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_finetunes_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -295,7 +316,14 @@ impl FinetunesClient {
     ) -> Result<MusicFinetuneResponseModel, crate::error::ApiError> {
         let url = format!("/v1/music/finetunes/{}", finetune_id);
 
-        let mut request = self.http_client.patch(url);
+        let base_url = self
+            .config
+            .get_finetunes_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PATCH, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -375,7 +403,14 @@ impl FinetunesClient {
     ) -> Result<MusicFinetuneResponseModel, crate::error::ApiError> {
         let url = format!("/v1/music/finetunes/{}", finetune_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_finetunes_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

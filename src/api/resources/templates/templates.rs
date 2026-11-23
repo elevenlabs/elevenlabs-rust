@@ -53,7 +53,14 @@ impl TemplatesClient {
         let search = request.search.clone();
         let url = "/v1/flows/templates";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_templates_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &cursor {
             request = request.query(&[("cursor", &val.to_string())]);
         }
@@ -141,7 +148,14 @@ impl TemplatesClient {
         let versions_per_template = request.versions_per_template.clone();
         let url = format!("/v1/flows/templates/{}", template_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_templates_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &versions_per_template {
             request = request.query(&[("versions_per_template", &val.to_string())]);
         }

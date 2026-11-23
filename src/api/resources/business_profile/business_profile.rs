@@ -49,7 +49,14 @@ impl BusinessProfileClient {
     ) -> Result<ReceptionAgentInfoResponse, crate::error::ApiError> {
         let url = "/v1/reception/agent-info";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_business_profile_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -125,7 +132,14 @@ impl BusinessProfileClient {
     ) -> Result<ReceptionAgentInfoResponse, crate::error::ApiError> {
         let url = "/v1/reception/agent-info";
 
-        let mut request = self.http_client.put(url);
+        let base_url = self
+            .config
+            .get_business_profile_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PUT, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

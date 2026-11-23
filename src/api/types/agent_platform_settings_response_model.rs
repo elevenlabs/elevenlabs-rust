@@ -52,7 +52,7 @@ pub struct AgentPlatformSettingsResponseModel {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trust_context: Option<AgentTrustContext>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub analysis_llm: Option<Llm>,
+    pub analysis_llm: Option<AgentMessagesOverridesLlm>,
     /// Per-agent topic-discovery configuration. Cadence and analysis window are
     /// managed internally; this only exposes the customer-facing on/off toggle.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -92,7 +92,7 @@ pub struct AgentPlatformSettingsResponseModelBuilder {
     queueing_config: Option<AgentQueueingConfig>,
     privacy: Option<PrivacyConfigOutput>,
     trust_context: Option<AgentTrustContext>,
-    analysis_llm: Option<Llm>,
+    analysis_llm: Option<AgentMessagesOverridesLlm>,
     topic_discovery: Option<TopicDiscoverySettings>,
     sentiment_analysis: Option<SentimentAnalysisSettings>,
     alerting: Option<AlertingSettingsResponse>,
@@ -191,7 +191,7 @@ impl AgentPlatformSettingsResponseModelBuilder {
         self
     }
 
-    pub fn analysis_llm(mut self, value: Llm) -> Self {
+    pub fn analysis_llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.analysis_llm = Some(value);
         self
     }

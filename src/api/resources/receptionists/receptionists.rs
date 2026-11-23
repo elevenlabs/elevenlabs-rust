@@ -49,7 +49,14 @@ impl ReceptionistsClient {
     ) -> Result<Vec<ReceptionCustomerFacingAgentResponse>, crate::error::ApiError> {
         let url = "/v1/reception/customer-facing-agents";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_receptionists_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -128,7 +135,14 @@ impl ReceptionistsClient {
     ) -> Result<ReceptionCustomerFacingAgentResponse, crate::error::ApiError> {
         let url = format!("/v1/reception/customer-facing-agents/{}", agent_id);
 
-        let mut request = self.http_client.patch(url);
+        let base_url = self
+            .config
+            .get_receptionists_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PATCH, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -212,7 +226,14 @@ impl ReceptionistsClient {
     ) -> Result<ReceptionCustomerFacingAgentResponse, crate::error::ApiError> {
         let url = format!("/v1/reception/customer-facing-agents/{}/activate", agent_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_receptionists_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

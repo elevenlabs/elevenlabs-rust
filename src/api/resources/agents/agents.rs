@@ -51,7 +51,14 @@ impl AgentsClient {
         let body = request.body.clone();
         let url = "/v1/convai/agents/create";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(val) = &enable_versioning {
             request = request.query(&[("enable_versioning", &val.to_string())]);
         }
@@ -141,7 +148,14 @@ impl AgentsClient {
             .clone();
         let url = format!("/v1/convai/agents/{}", agent_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &version_id {
             request = request.query(&[("version_id", &val.to_string())]);
         }
@@ -234,7 +248,14 @@ impl AgentsClient {
         let body = request.body.clone();
         let url = format!("/v1/convai/agents/{}", agent_id);
 
-        let mut request = self.http_client.patch(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PATCH, &base_url, url);
         if let Some(val) = &enable_versioning_if_not_enabled {
             request = request.query(&[("enable_versioning_if_not_enabled", &val.to_string())]);
         }
@@ -328,7 +349,14 @@ impl AgentsClient {
         let force = request.force.clone();
         let url = format!("/v1/convai/agents/{}", agent_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(val) = &force {
             request = request.query(&[("force", &val.to_string())]);
         }
@@ -405,7 +433,14 @@ impl AgentsClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/agents";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -509,7 +544,14 @@ impl AgentsClient {
     ) -> Result<CreateAgentResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/agents/{}/duplicate", agent_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -590,7 +632,14 @@ impl AgentsClient {
     ) -> Result<GetTestSuiteInvocationResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/agents/{}/run-tests", agent_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -668,7 +717,14 @@ impl AgentsClient {
     ) -> Result<RagIndexOverviewResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/knowledge-base/rag-index";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -741,7 +797,14 @@ impl AgentsClient {
     ) -> Result<RagDocumentIndexesResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/knowledge-base/{}/rag-index", documentation_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -819,7 +882,14 @@ impl AgentsClient {
             documentation_id, rag_index_id
         );
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_agents_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

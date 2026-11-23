@@ -84265,6 +84265,1756 @@ fn dubbing_audio_output_error_round_trips_through_serde() {
 }
 
 #[test]
+fn publish_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "user_audio_chunk": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PublishEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn user_audio_chunk_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "user_audio_chunk": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UserAudioChunk =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn feedback_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "feedback",
+        "event_id": 123,
+        "score": "like"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Feedback =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn user_message_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "type": "user_message",
+        "text": "value",
+        "user_identifier": "value",
+        "source_medium": "audio"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UserMessage =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn user_activity_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "user_activity"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UserActivity =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn multimodal_message_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "multimodal_message",
+        "text": {
+            "id": "value",
+            "type": "user_message",
+            "text": "value",
+            "user_identifier": "value",
+            "source_medium": "audio"
+        },
+        "file": {
+            "type": "file_input",
+            "file_id": "value"
+        },
+        "files": [
+            {
+                "type": "file_input",
+                "file_id": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: MultimodalMessage =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn multimodal_message_text_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "type": "user_message",
+        "text": "value",
+        "user_identifier": "value",
+        "source_medium": "audio"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: MultimodalMessageText =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn file_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "file_input",
+        "file_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: File =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn files_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "file_input",
+        "file_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: FilesItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_pong_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "pong",
+        "event_id": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationPong =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn client_tool_result_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "client_tool_result",
+        "tool_call_id": "value",
+        "result": "value",
+        "is_error": true,
+        "error_type": "user_rejected"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ClientToolResult =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn mcp_tool_approval_result_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "mcp_tool_approval_result",
+        "tool_call_id": "value",
+        "is_approved": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: McpToolApprovalResult =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn contextual_update_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "contextual_update",
+        "text": "value",
+        "context_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ContextualUpdate =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_initiation_client_data_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "conversation_config_override": {
+            "asr": {
+                "keywords": [
+                    "value"
+                ]
+            },
+            "turn": {
+                "soft_timeout_config": {
+                    "message": "value",
+                    "additional_soft_timeout_messages": [
+                        "value"
+                    ]
+                },
+                "noisy_environment_message": "value"
+            },
+            "tts": {
+                "model_id": "eleven_turbo_v2",
+                "voice_id": "value",
+                "supported_voices": [
+                    {
+                        "label": "value",
+                        "voice_id": "value",
+                        "description": "value",
+                        "language": "value",
+                        "model_family": "turbo",
+                        "optimize_streaming_latency": 0,
+                        "stability": 0.5,
+                        "speed": 1.2,
+                        "similarity_boost": 0.5,
+                        "clone_strength": 0.5
+                    }
+                ],
+                "stability": 9.99,
+                "speed": 9.99,
+                "similarity_boost": 9.99,
+                "clone_strength": 9.99,
+                "pronunciation_dictionary_locators": [
+                    {
+                        "pronunciation_dictionary_id": "value",
+                        "version_id": "value"
+                    }
+                ]
+            },
+            "conversation": {
+                "text_only": true,
+                "max_duration_seconds": 123
+            },
+            "agent": {
+                "first_message": "value",
+                "language": "value",
+                "max_conversation_duration_message": "value",
+                "prompt": {
+                    "prompt": "value",
+                    "llm": "gpt-4o-mini",
+                    "reasoning_effort": "none",
+                    "tool_ids": [
+                        "value"
+                    ],
+                    "tool_ids_strict": true,
+                    "native_mcp_server_ids": [
+                        "value"
+                    ],
+                    "knowledge_base": [
+                        {
+                            "type": "file",
+                            "name": "value",
+                            "id": "value",
+                            "usage_mode": "prompt"
+                        }
+                    ]
+                }
+            }
+        },
+        "custom_llm_extra_body": {},
+        "user_id": "value",
+        "source_info": {
+            "source": "unknown",
+            "version": "value"
+        },
+        "branch_id": "value",
+        "environment": "value",
+        "starting_workflow_node_id": "value",
+        "procedure_ids": [
+            "value"
+        ],
+        "start_procedure_ids": [
+            "value"
+        ],
+        "dynamic_variables": {},
+        "type": "conversation_initiation_client_data"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationInitiationClientData =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_initiation_client_data_conversation_config_override_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "asr": {
+            "keywords": [
+                "value"
+            ]
+        },
+        "turn": {
+            "soft_timeout_config": {
+                "message": "value",
+                "additional_soft_timeout_messages": [
+                    "value"
+                ]
+            },
+            "noisy_environment_message": "value"
+        },
+        "tts": {
+            "model_id": "eleven_turbo_v2",
+            "voice_id": "value",
+            "supported_voices": [
+                {
+                    "label": "value",
+                    "voice_id": "value",
+                    "description": "value",
+                    "language": "value",
+                    "model_family": "turbo",
+                    "optimize_streaming_latency": 0,
+                    "stability": 0.5,
+                    "speed": 1.2,
+                    "similarity_boost": 0.5,
+                    "clone_strength": 0.5
+                }
+            ],
+            "stability": 9.99,
+            "speed": 9.99,
+            "similarity_boost": 9.99,
+            "clone_strength": 9.99,
+            "pronunciation_dictionary_locators": [
+                {
+                    "pronunciation_dictionary_id": "value",
+                    "version_id": "value"
+                }
+            ]
+        },
+        "conversation": {
+            "text_only": true,
+            "max_duration_seconds": 123
+        },
+        "agent": {
+            "first_message": "value",
+            "language": "value",
+            "max_conversation_duration_message": "value",
+            "prompt": {
+                "prompt": "value",
+                "llm": "gpt-4o-mini",
+                "reasoning_effort": "none",
+                "tool_ids": [
+                    "value"
+                ],
+                "tool_ids_strict": true,
+                "native_mcp_server_ids": [
+                    "value"
+                ],
+                "knowledge_base": [
+                    {
+                        "type": "file",
+                        "name": "value",
+                        "id": "value",
+                        "usage_mode": "prompt"
+                    }
+                ]
+            }
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationInitiationClientDataConversationConfigOverride =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn asr_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "keywords": [
+            "value"
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Asr = serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn turn_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "soft_timeout_config": {
+            "message": "value",
+            "additional_soft_timeout_messages": [
+                "value"
+            ]
+        },
+        "noisy_environment_message": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Turn =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn turn_soft_timeout_config_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "message": "value",
+        "additional_soft_timeout_messages": [
+            "value"
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TurnSoftTimeoutConfig =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn tts_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "model_id": "eleven_turbo_v2",
+        "voice_id": "value",
+        "supported_voices": [
+            {
+                "label": "value",
+                "voice_id": "value",
+                "description": "value",
+                "language": "value",
+                "model_family": "turbo",
+                "optimize_streaming_latency": 0,
+                "stability": 0.5,
+                "speed": 1.2,
+                "similarity_boost": 0.5,
+                "clone_strength": 0.5
+            }
+        ],
+        "stability": 9.99,
+        "speed": 9.99,
+        "similarity_boost": 9.99,
+        "clone_strength": 9.99,
+        "pronunciation_dictionary_locators": [
+            {
+                "pronunciation_dictionary_id": "value",
+                "version_id": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Tts = serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn supported_voices_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "label": "value",
+        "voice_id": "value",
+        "description": "value",
+        "language": "value",
+        "model_family": "turbo",
+        "optimize_streaming_latency": 0,
+        "stability": 0.5,
+        "speed": 1.2,
+        "similarity_boost": 0.5,
+        "clone_strength": 0.5
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SupportedVoicesItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn tts_pronunciation_dictionary_locators_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "pronunciation_dictionary_id": "value",
+        "version_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TtsPronunciationDictionaryLocatorsItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text_only": true,
+        "max_duration_seconds": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Conversation =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "first_message": "value",
+        "language": "value",
+        "max_conversation_duration_message": "value",
+        "prompt": {
+            "prompt": "value",
+            "llm": "gpt-4o-mini",
+            "reasoning_effort": "none",
+            "tool_ids": [
+                "value"
+            ],
+            "tool_ids_strict": true,
+            "native_mcp_server_ids": [
+                "value"
+            ],
+            "knowledge_base": [
+                {
+                    "type": "file",
+                    "name": "value",
+                    "id": "value",
+                    "usage_mode": "prompt"
+                }
+            ]
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Agent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn prompt_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "prompt": "value",
+        "llm": "gpt-4o-mini",
+        "reasoning_effort": "none",
+        "tool_ids": [
+            "value"
+        ],
+        "tool_ids_strict": true,
+        "native_mcp_server_ids": [
+            "value"
+        ],
+        "knowledge_base": [
+            {
+                "type": "file",
+                "name": "value",
+                "id": "value",
+                "usage_mode": "prompt"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Prompt =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn knowledge_base_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "file",
+        "name": "value",
+        "id": "value",
+        "usage_mode": "prompt"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: KnowledgeBaseItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn source_info_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "source": "unknown",
+        "version": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SourceInfo =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subscribe_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "conversation_initiation_metadata_event": {
+            "conversation_id": "value",
+            "agent_output_audio_format": "pcm_8000",
+            "user_input_audio_format": "pcm_8000"
+        },
+        "type": "conversation_initiation_metadata"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubscribeEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_initiation_metadata_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "conversation_initiation_metadata_event": {
+            "conversation_id": "value",
+            "agent_output_audio_format": "pcm_8000",
+            "user_input_audio_format": "pcm_8000"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationInitiationMetadata =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_initiation_metadata_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "conversation_id": "value",
+        "agent_output_audio_format": "pcm_8000",
+        "user_input_audio_format": "pcm_8000"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationInitiationMetadataEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_complete_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_response_complete_event": {
+            "event_id": 123
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseComplete =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_complete_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "event_id": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseCompleteEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn context_usage_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "context_usage_event": {
+            "event_id": 123,
+            "model": "value",
+            "context_tokens": 123,
+            "context_limit_tokens": 123
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ContextUsage =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn context_usage_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "event_id": 123,
+        "model": "value",
+        "context_tokens": 123,
+        "context_limit_tokens": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ContextUsageEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn mcp_tool_call_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "mcp_tool_call": {
+            "service_id": "value",
+            "tool_call_id": "value",
+            "tool_name": "value",
+            "tool_description": "value",
+            "parameters": {},
+            "timestamp": "value",
+            "state": "loading"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: McpToolCall =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn mcp_tool_call_mcp_tool_call_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "service_id": "value",
+        "tool_call_id": "value",
+        "tool_name": "value",
+        "tool_description": "value",
+        "parameters": {},
+        "timestamp": "value",
+        "state": "loading"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: McpToolCallMcpToolCall =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn loading_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "service_id": "value",
+        "tool_call_id": "value",
+        "tool_name": "value",
+        "tool_description": "value",
+        "parameters": {},
+        "timestamp": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Loading =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn awaiting_approval_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "service_id": "value",
+        "tool_call_id": "value",
+        "tool_name": "value",
+        "tool_description": "value",
+        "parameters": {},
+        "timestamp": "value",
+        "approval_timeout_secs": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AwaitingApproval =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn success_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "service_id": "value",
+        "tool_call_id": "value",
+        "tool_name": "value",
+        "tool_description": "value",
+        "parameters": {},
+        "timestamp": "value",
+        "result": [
+            {}
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Success =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn failure_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "service_id": "value",
+        "tool_call_id": "value",
+        "tool_name": "value",
+        "tool_description": "value",
+        "parameters": {},
+        "timestamp": "value",
+        "error_message": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Failure =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn client_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error_event": {
+            "code": 123,
+            "error_name": "value",
+            "message": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ClientError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn error_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "code": 123,
+        "error_name": "value",
+        "message": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ErrorEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn guardrail_triggered_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "guardrail_triggered_event": {
+            "guardrail_name": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: GuardrailTriggered =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn guardrail_triggered_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "guardrail_name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: GuardrailTriggeredEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_user_transcript_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "user_transcription_event": {
+            "user_transcript": "value",
+            "event_id": 123
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationUserTranscript =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn user_transcription_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "user_transcript": "value",
+        "event_id": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UserTranscriptionEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_agent_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_response_event": {
+            "agent_response": "value",
+            "event_id": 123,
+            "response_id": "value",
+            "in_response_to_ids": [
+                "value"
+            ],
+            "response_type": "text",
+            "attachments": [
+                {
+                    "url": "value",
+                    "name": "value",
+                    "mime_type": "value"
+                }
+            ]
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationAgentResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_response": "value",
+        "event_id": 123,
+        "response_id": "value",
+        "in_response_to_ids": [
+            "value"
+        ],
+        "response_type": "text",
+        "attachments": [
+            {
+                "url": "value",
+                "name": "value",
+                "mime_type": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn attachments_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "url": "value",
+        "name": "value",
+        "mime_type": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AttachmentsItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn queue_status_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "queue_status_event": {
+            "status": "waiting"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: QueueStatus =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn queue_status_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "status": "waiting"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: QueueStatusEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_correction_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_response_correction_event": {
+            "original_agent_response": "value",
+            "corrected_agent_response": "value",
+            "event_id": 123,
+            "response_id": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseCorrection =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_correction_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "original_agent_response": "value",
+        "corrected_agent_response": "value",
+        "event_id": 123,
+        "response_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseCorrectionEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_metadata_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_response_metadata_event": {
+            "metadata": {},
+            "event_id": 123
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseMetadata =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_response_metadata_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "metadata": {},
+        "event_id": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentResponseMetadataEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn audio_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "audio_event": {
+            "audio_base_64": "value",
+            "event_id": 123,
+            "alignment": {
+                "chars": [
+                    "value"
+                ],
+                "char_start_times_ms": [
+                    123
+                ],
+                "char_durations_ms": [
+                    123
+                ]
+            },
+            "is_final": true
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AudioResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn audio_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "audio_base_64": "value",
+        "event_id": 123,
+        "alignment": {
+            "chars": [
+                "value"
+            ],
+            "char_start_times_ms": [
+                123
+            ],
+            "char_durations_ms": [
+                123
+            ]
+        },
+        "is_final": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AudioEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn audio_event_alignment_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "chars": [
+            "value"
+        ],
+        "char_start_times_ms": [
+            123
+        ],
+        "char_durations_ms": [
+            123
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AudioEventAlignment =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn interruption_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "interruption_event": {
+            "event_id": 123
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Interruption =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn interruption_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "event_id": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: InterruptionEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn vad_score_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "vad_score_event": {
+            "vad_score": 9.99
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: VadScore =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn vad_score_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "vad_score": 9.99
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: VadScoreEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_chat_response_part_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text_response_part": {
+            "text": "value",
+            "type": "start",
+            "event_id": 123,
+            "response_id": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentChatResponsePart =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn text_response_part_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text": "value",
+        "type": "start",
+        "event_id": 123,
+        "response_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TextResponsePart =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn client_tool_call_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "client_tool_call": {
+            "tool_name": "value",
+            "tool_call_id": "value",
+            "parameters": {},
+            "event_id": 123,
+            "expects_response": true
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ClientToolCall =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn client_tool_call_client_tool_call_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tool_name": "value",
+        "tool_call_id": "value",
+        "parameters": {},
+        "event_id": 123,
+        "expects_response": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ClientToolCallClientToolCall =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_tool_response": {
+            "tool_name": "value",
+            "tool_call_id": "value",
+            "tool_type": "value",
+            "is_error": true,
+            "is_blocked": true,
+            "event_id": 123,
+            "is_called": true,
+            "status": "success"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_response_agent_tool_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tool_name": "value",
+        "tool_call_id": "value",
+        "tool_type": "value",
+        "is_error": true,
+        "is_blocked": true,
+        "event_id": 123,
+        "is_called": true,
+        "status": "success"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolResponseAgentToolResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_response_full_payload_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_tool_response_full_payload": {
+            "tool_name": "value",
+            "tool_call_id": "value",
+            "tool_type": "value",
+            "is_error": true,
+            "is_blocked": true,
+            "event_id": 123,
+            "is_called": true,
+            "full_tool_result": "value",
+            "truncated": true,
+            "status": "success"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolResponseFullPayload =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_response_full_payload_agent_tool_response_full_payload_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tool_name": "value",
+        "tool_call_id": "value",
+        "tool_type": "value",
+        "is_error": true,
+        "is_blocked": true,
+        "event_id": 123,
+        "is_called": true,
+        "full_tool_result": "value",
+        "truncated": true,
+        "status": "success"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolResponseFullPayloadAgentToolResponseFullPayload =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "agent_tool_request": {
+            "tool_name": "value",
+            "tool_call_id": "value",
+            "tool_type": "value",
+            "event_id": 123,
+            "expects_response": true,
+            "disable_interruptions": true,
+            "response_timeout_secs": 123,
+            "execution_mode": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn agent_tool_request_agent_tool_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "tool_name": "value",
+        "tool_call_id": "value",
+        "tool_type": "value",
+        "event_id": 123,
+        "expects_response": true,
+        "disable_interruptions": true,
+        "response_timeout_secs": 123,
+        "execution_mode": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AgentToolRequestAgentToolRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn conversation_ping_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "ping_event": {
+            "event_id": 123,
+            "ping_ms": 123
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ConversationPing =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ping_event_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "event_id": 123,
+        "ping_ms": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PingEvent =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn mcp_connection_status_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "mcp_connection_status": {
+            "integrations": [
+                {
+                    "integration_id": "value",
+                    "integration_type": "mcp_server",
+                    "is_connected": true,
+                    "tool_count": 123
+                }
+            ]
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: McpConnectionStatus =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn mcp_connection_status_mcp_connection_status_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "integrations": [
+            {
+                "integration_id": "value",
+                "integration_type": "mcp_server",
+                "is_connected": true,
+                "tool_count": 123
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: McpConnectionStatusMcpConnectionStatus =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn integrations_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "integration_id": "value",
+        "integration_type": "mcp_server",
+        "is_connected": true,
+        "tool_count": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: IntegrationsItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn speech_history_item_response_voice_category_variants_round_trip_through_serde() {
     let cases: Vec<(SpeechHistoryItemResponseVoiceCategory, serde_json::Value)> = vec![
         (
@@ -88527,9 +90277,9 @@ fn speech_to_text_word_response_model_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn error_type_variants_round_trip_through_serde() {
-    let cases: Vec<(ErrorType, serde_json::Value)> = vec![(
-        ErrorType::EditFailed,
+fn transcript_edit_error_error_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TranscriptEditErrorErrorType, serde_json::Value)> = vec![(
+        TranscriptEditErrorErrorType::EditFailed,
         serde_json::from_str::<serde_json::Value>(r#""edit_failed""#)
             .expect("fixture is valid JSON"),
     )];
@@ -88538,13 +90288,13 @@ fn error_type_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: ErrorType =
+        let decoded: TranscriptEditErrorErrorType =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ErrorType = serde_json::from_value(unrecognized.clone())
+    let decoded: TranscriptEditErrorErrorType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -92707,578 +94457,578 @@ fn agent_messages_persisted_agent_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn llm_variants_round_trip_through_serde() {
-    let cases: Vec<(Llm, serde_json::Value)> = vec![
+fn agent_messages_overrides_llm_variants_round_trip_through_serde() {
+    let cases: Vec<(AgentMessagesOverridesLlm, serde_json::Value)> = vec![
         (
-            Llm::Gpt4OMini,
+            AgentMessagesOverridesLlm::Gpt4OMini,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4O,
+            AgentMessagesOverridesLlm::Gpt4O,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4,
+            AgentMessagesOverridesLlm::Gpt4,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4""#).expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4Turbo,
+            AgentMessagesOverridesLlm::Gpt4Turbo,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4_1,
+            AgentMessagesOverridesLlm::Gpt4_1,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4_1Mini,
+            AgentMessagesOverridesLlm::Gpt4_1Mini,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4_1Nano,
+            AgentMessagesOverridesLlm::Gpt4_1Nano,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5,
+            AgentMessagesOverridesLlm::Gpt5,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5""#).expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_1,
+            AgentMessagesOverridesLlm::Gpt5_1,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.1""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_2,
+            AgentMessagesOverridesLlm::Gpt5_2,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.2""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_2ChatLatest,
+            AgentMessagesOverridesLlm::Gpt5_2ChatLatest,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-chat-latest""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_4,
+            AgentMessagesOverridesLlm::Gpt5_4,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_4Mini,
+            AgentMessagesOverridesLlm::Gpt5_4Mini,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_4Nano,
+            AgentMessagesOverridesLlm::Gpt5_4Nano,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_5,
+            AgentMessagesOverridesLlm::Gpt5_5,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_6Sol,
+            AgentMessagesOverridesLlm::Gpt5_6Sol,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-sol""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_6Terra,
+            AgentMessagesOverridesLlm::Gpt5_6Terra,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-terra""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_6Luna,
+            AgentMessagesOverridesLlm::Gpt5_6Luna,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-luna""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt6Astra,
+            AgentMessagesOverridesLlm::Gpt6Astra,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6-astra""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt6Sol,
+            AgentMessagesOverridesLlm::Gpt6Sol,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6-sol""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt6Luna,
+            AgentMessagesOverridesLlm::Gpt6Luna,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6-luna""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt6_1Sol,
+            AgentMessagesOverridesLlm::Gpt6_1Sol,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-sol""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt6_1Terra,
+            AgentMessagesOverridesLlm::Gpt6_1Terra,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-terra""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt6_2Astra,
+            AgentMessagesOverridesLlm::Gpt6_2Astra,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6.2-astra""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt6_2Sol,
+            AgentMessagesOverridesLlm::Gpt6_2Sol,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6.2-sol""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5Mini,
+            AgentMessagesOverridesLlm::Gpt5Mini,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5Nano,
+            AgentMessagesOverridesLlm::Gpt5Nano,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt3_5Turbo,
+            AgentMessagesOverridesLlm::Gpt3_5Turbo,
             serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini1_5Pro,
+            AgentMessagesOverridesLlm::Gemini1_5Pro,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini1_5Flash,
+            AgentMessagesOverridesLlm::Gemini1_5Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_0Flash,
+            AgentMessagesOverridesLlm::Gemini2_0Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_0FlashLite,
+            AgentMessagesOverridesLlm::Gemini2_0FlashLite,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_5FlashLite,
+            AgentMessagesOverridesLlm::Gemini2_5FlashLite,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_5Flash,
+            AgentMessagesOverridesLlm::Gemini2_5Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3ProPreview,
+            AgentMessagesOverridesLlm::Gemini3ProPreview,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3-pro-preview""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3FlashPreview,
+            AgentMessagesOverridesLlm::Gemini3FlashPreview,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3-flash-preview""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3_1ProPreview,
+            AgentMessagesOverridesLlm::Gemini3_1ProPreview,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-pro-preview""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3_1FlashLitePreview,
+            AgentMessagesOverridesLlm::Gemini3_1FlashLitePreview,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite-preview""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3_1FlashLite,
+            AgentMessagesOverridesLlm::Gemini3_1FlashLite,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3_5Flash,
+            AgentMessagesOverridesLlm::Gemini3_5Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3_5FlashLite,
+            AgentMessagesOverridesLlm::Gemini3_5FlashLite,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash-lite""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3_6Flash,
+            AgentMessagesOverridesLlm::Gemini3_6Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.6-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3_7Flash,
+            AgentMessagesOverridesLlm::Gemini3_7Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.7-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini3_8Flash,
+            AgentMessagesOverridesLlm::Gemini3_8Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.8-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini4Argon,
+            AgentMessagesOverridesLlm::Gemini4Argon,
             serde_json::from_str::<serde_json::Value>(r#""gemini-4-argon""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini4Hydrogen,
+            AgentMessagesOverridesLlm::Gemini4Hydrogen,
             serde_json::from_str::<serde_json::Value>(r#""gemini-4-hydrogen""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini4Neon,
+            AgentMessagesOverridesLlm::Gemini4Neon,
             serde_json::from_str::<serde_json::Value>(r#""gemini-4-neon""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeSonnet4_5,
+            AgentMessagesOverridesLlm::ClaudeSonnet4_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeOpus4_6,
+            AgentMessagesOverridesLlm::ClaudeOpus4_6,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-6""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeOpus4_7,
+            AgentMessagesOverridesLlm::ClaudeOpus4_7,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-7""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeOpus4_8,
+            AgentMessagesOverridesLlm::ClaudeOpus4_8,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-8""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeOpus5,
+            AgentMessagesOverridesLlm::ClaudeOpus5,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeOpus5_5,
+            AgentMessagesOverridesLlm::ClaudeOpus5_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-5-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeSonnet4_6,
+            AgentMessagesOverridesLlm::ClaudeSonnet4_6,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-6""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeSonnet5,
+            AgentMessagesOverridesLlm::ClaudeSonnet5,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeSonnet5_5,
+            AgentMessagesOverridesLlm::ClaudeSonnet5_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeSonnet4,
+            AgentMessagesOverridesLlm::ClaudeSonnet4,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeHaiku4_5,
+            AgentMessagesOverridesLlm::ClaudeHaiku4_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeHaiku5_5,
+            AgentMessagesOverridesLlm::ClaudeHaiku5_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-haiku-5-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Claude3_7Sonnet,
+            AgentMessagesOverridesLlm::Claude3_7Sonnet,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Claude3_5Sonnet,
+            AgentMessagesOverridesLlm::Claude3_5Sonnet,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Claude3_5SonnetV1,
+            AgentMessagesOverridesLlm::Claude3_5SonnetV1,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v1""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Claude3Haiku,
+            AgentMessagesOverridesLlm::Claude3Haiku,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::CustomLlm,
+            AgentMessagesOverridesLlm::CustomLlm,
             serde_json::from_str::<serde_json::Value>(r#""custom-llm""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Qwen3_4B,
+            AgentMessagesOverridesLlm::Qwen3_4B,
             serde_json::from_str::<serde_json::Value>(r#""qwen3-4b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Qwen3_30BA3B,
+            AgentMessagesOverridesLlm::Qwen3_30BA3B,
             serde_json::from_str::<serde_json::Value>(r#""qwen3-30b-a3b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Qwen36_35BA3B,
+            AgentMessagesOverridesLlm::Qwen36_35BA3B,
             serde_json::from_str::<serde_json::Value>(r#""qwen36-35b-a3b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Qwen35_397BA17B,
+            AgentMessagesOverridesLlm::Qwen35_397BA17B,
             serde_json::from_str::<serde_json::Value>(r#""qwen35-397b-a17b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::GptOss20B,
+            AgentMessagesOverridesLlm::GptOss20B,
             serde_json::from_str::<serde_json::Value>(r#""gpt-oss-20b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::GptOss120B,
+            AgentMessagesOverridesLlm::GptOss120B,
             serde_json::from_str::<serde_json::Value>(r#""gpt-oss-120b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Glm45AirFp8,
+            AgentMessagesOverridesLlm::Glm45AirFp8,
             serde_json::from_str::<serde_json::Value>(r#""glm-45-air-fp8""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Glm52,
+            AgentMessagesOverridesLlm::Glm52,
             serde_json::from_str::<serde_json::Value>(r#""glm-52""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::DeepseekV41Flash,
+            AgentMessagesOverridesLlm::DeepseekV41Flash,
             serde_json::from_str::<serde_json::Value>(r#""deepseek-v41-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Nemotron35SuperVlNvfp4,
+            AgentMessagesOverridesLlm::Nemotron35SuperVlNvfp4,
             serde_json::from_str::<serde_json::Value>(r#""nemotron-35-super-vl-nvfp4""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_5FlashPreview09_2025,
+            AgentMessagesOverridesLlm::Gemini2_5FlashPreview09_2025,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-09-2025""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_5FlashLitePreview09_2025,
+            AgentMessagesOverridesLlm::Gemini2_5FlashLitePreview09_2025,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-09-2025""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_5FlashPreview05_20,
+            AgentMessagesOverridesLlm::Gemini2_5FlashPreview05_20,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-05-20""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_5FlashPreview04_17,
+            AgentMessagesOverridesLlm::Gemini2_5FlashPreview04_17,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-04-17""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_5FlashLitePreview06_17,
+            AgentMessagesOverridesLlm::Gemini2_5FlashLitePreview06_17,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-06-17""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_0FlashLite001,
+            AgentMessagesOverridesLlm::Gemini2_0FlashLite001,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite-001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini2_0Flash001,
+            AgentMessagesOverridesLlm::Gemini2_0Flash001,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini1_5Flash002,
+            AgentMessagesOverridesLlm::Gemini1_5Flash002,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-002""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini1_5Flash001,
+            AgentMessagesOverridesLlm::Gemini1_5Flash001,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini1_5Pro002,
+            AgentMessagesOverridesLlm::Gemini1_5Pro002,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-002""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gemini1_5Pro001,
+            AgentMessagesOverridesLlm::Gemini1_5Pro001,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeSonnet4_20250514,
+            AgentMessagesOverridesLlm::ClaudeSonnet4_20250514,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4@20250514""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeSonnet4_5_20250929,
+            AgentMessagesOverridesLlm::ClaudeSonnet4_5_20250929,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5@20250929""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::ClaudeHaiku4_5_20251001,
+            AgentMessagesOverridesLlm::ClaudeHaiku4_5_20251001,
             serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5@20251001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Claude3_7Sonnet20250219,
+            AgentMessagesOverridesLlm::Claude3_7Sonnet20250219,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet@20250219""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Claude3_5Sonnet20240620,
+            AgentMessagesOverridesLlm::Claude3_5Sonnet20240620,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet@20240620""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Claude3_5SonnetV2_20241022,
+            AgentMessagesOverridesLlm::Claude3_5SonnetV2_20241022,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v2@20241022""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Claude3Haiku20240307,
+            AgentMessagesOverridesLlm::Claude3Haiku20240307,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku@20240307""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_2025_08_07,
+            AgentMessagesOverridesLlm::Gpt5_2025_08_07,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-2025-08-07""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_1_2025_11_13,
+            AgentMessagesOverridesLlm::Gpt5_1_2025_11_13,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.1-2025-11-13""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_2_2025_12_11,
+            AgentMessagesOverridesLlm::Gpt5_2_2025_12_11,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-2025-12-11""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_4_2026_03_05,
+            AgentMessagesOverridesLlm::Gpt5_4_2026_03_05,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-2026-03-05""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_4Mini2026_03_17,
+            AgentMessagesOverridesLlm::Gpt5_4Mini2026_03_17,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini-2026-03-17""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_4Nano2026_03_17,
+            AgentMessagesOverridesLlm::Gpt5_4Nano2026_03_17,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano-2026-03-17""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5_5_2026_04_23,
+            AgentMessagesOverridesLlm::Gpt5_5_2026_04_23,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.5-2026-04-23""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5Mini2025_08_07,
+            AgentMessagesOverridesLlm::Gpt5Mini2025_08_07,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini-2025-08-07""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt5Nano2025_08_07,
+            AgentMessagesOverridesLlm::Gpt5Nano2025_08_07,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano-2025-08-07""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4_1_2025_04_14,
+            AgentMessagesOverridesLlm::Gpt4_1_2025_04_14,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-2025-04-14""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4_1Mini2025_04_14,
+            AgentMessagesOverridesLlm::Gpt4_1Mini2025_04_14,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini-2025-04-14""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4_1Nano2025_04_14,
+            AgentMessagesOverridesLlm::Gpt4_1Nano2025_04_14,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano-2025-04-14""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4OMini2024_07_18,
+            AgentMessagesOverridesLlm::Gpt4OMini2024_07_18,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini-2024-07-18""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4O2024_11_20,
+            AgentMessagesOverridesLlm::Gpt4O2024_11_20,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-11-20""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4O2024_08_06,
+            AgentMessagesOverridesLlm::Gpt4O2024_08_06,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-08-06""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4O2024_05_13,
+            AgentMessagesOverridesLlm::Gpt4O2024_05_13,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-05-13""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4_0613,
+            AgentMessagesOverridesLlm::Gpt4_0613,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4-0613""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4_0314,
+            AgentMessagesOverridesLlm::Gpt4_0314,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4-0314""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt4Turbo2024_04_09,
+            AgentMessagesOverridesLlm::Gpt4Turbo2024_04_09,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo-2024-04-09""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt3_5Turbo0125,
+            AgentMessagesOverridesLlm::Gpt3_5Turbo0125,
             serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-0125""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::Gpt3_5Turbo1106,
+            AgentMessagesOverridesLlm::Gpt3_5Turbo1106,
             serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-1106""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::WattTool8B,
+            AgentMessagesOverridesLlm::WattTool8B,
             serde_json::from_str::<serde_json::Value>(r#""watt-tool-8b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Llm::WattTool70B,
+            AgentMessagesOverridesLlm::WattTool70B,
             serde_json::from_str::<serde_json::Value>(r#""watt-tool-70b""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -93288,13 +95038,13 @@ fn llm_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: Llm =
+        let decoded: AgentMessagesOverridesLlm =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Llm = serde_json::from_value(unrecognized.clone())
+    let decoded: AgentMessagesOverridesLlm = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -93869,91 +95619,6 @@ fn tts_conversational_model_variants_round_trip_through_serde() {
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
     );
-}
-
-#[test]
-fn tts_model_family_variants_round_trip_through_serde() {
-    let cases: Vec<(TtsModelFamily, serde_json::Value)> = vec![
-        (
-            TtsModelFamily::Turbo,
-            serde_json::from_str::<serde_json::Value>(r#""turbo""#).expect("fixture is valid JSON"),
-        ),
-        (
-            TtsModelFamily::Flash,
-            serde_json::from_str::<serde_json::Value>(r#""flash""#).expect("fixture is valid JSON"),
-        ),
-        (
-            TtsModelFamily::Multilingual,
-            serde_json::from_str::<serde_json::Value>(r#""multilingual""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            TtsModelFamily::V3Conversational,
-            serde_json::from_str::<serde_json::Value>(r#""v3_conversational""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            TtsModelFamily::V4,
-            serde_json::from_str::<serde_json::Value>(r#""v4""#).expect("fixture is valid JSON"),
-        ),
-        (
-            TtsModelFamily::V4Turbo,
-            serde_json::from_str::<serde_json::Value>(r#""v4_turbo""#)
-                .expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TtsModelFamily =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: TtsModelFamily = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn tts_optimize_streaming_latency_variants_round_trip_through_serde() {
-    let cases: Vec<(TtsOptimizeStreamingLatency, serde_json::Value)> = vec![
-        (
-            TtsOptimizeStreamingLatency::Num0,
-            serde_json::from_str::<serde_json::Value>(r#"0"#).expect("fixture is valid JSON"),
-        ),
-        (
-            TtsOptimizeStreamingLatency::Num1,
-            serde_json::from_str::<serde_json::Value>(r#"1"#).expect("fixture is valid JSON"),
-        ),
-        (
-            TtsOptimizeStreamingLatency::Num2,
-            serde_json::from_str::<serde_json::Value>(r#"2"#).expect("fixture is valid JSON"),
-        ),
-        (
-            TtsOptimizeStreamingLatency::Num3,
-            serde_json::from_str::<serde_json::Value>(r#"3"#).expect("fixture is valid JSON"),
-        ),
-        (
-            TtsOptimizeStreamingLatency::Num4,
-            serde_json::from_str::<serde_json::Value>(r#"4"#).expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: TtsOptimizeStreamingLatency =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
 }
 
 #[test]
@@ -94668,6 +96333,32 @@ fn text_output_item_role_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn user_message_input_item_type_variants_round_trip_through_serde() {
+    let cases: Vec<(UserMessageInputItemType, serde_json::Value)> = vec![(
+        UserMessageInputItemType::UserMessage,
+        serde_json::from_str::<serde_json::Value>(r#""user_message""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: UserMessageInputItemType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: UserMessageInputItemType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn file_input_mime_type_variants_round_trip_through_serde() {
     let cases: Vec<(FileInputMimeType, serde_json::Value)> = vec![
         (
@@ -94721,6 +96412,32 @@ fn file_input_mime_type_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn client_tool_result_item_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ClientToolResultItemType, serde_json::Value)> = vec![(
+        ClientToolResultItemType::ClientToolResult,
+        serde_json::from_str::<serde_json::Value>(r#""client_tool_result""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ClientToolResultItemType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ClientToolResultItemType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn client_tool_result_item_error_type_variants_round_trip_through_serde() {
     let cases: Vec<(ClientToolResultItemErrorType, serde_json::Value)> = vec![
         (
@@ -94766,6 +96483,32 @@ fn client_tool_result_item_error_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: ClientToolResultItemErrorType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn contextual_update_input_item_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ContextualUpdateInputItemType, serde_json::Value)> = vec![(
+        ContextualUpdateInputItemType::ContextualUpdate,
+        serde_json::from_str::<serde_json::Value>(r#""contextual_update""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ContextualUpdateInputItemType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ContextualUpdateInputItemType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -94872,24 +96615,24 @@ fn agent_response_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn agent_tool_response_status_variants_round_trip_through_serde() {
-    let cases: Vec<(AgentToolResponseStatus, serde_json::Value)> = vec![
+fn status_variants_round_trip_through_serde() {
+    let cases: Vec<(Status, serde_json::Value)> = vec![
         (
-            AgentToolResponseStatus::Success,
+            Status::Success,
             serde_json::from_str::<serde_json::Value>(r#""success""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentToolResponseStatus::Error,
+            Status::Error,
             serde_json::from_str::<serde_json::Value>(r#""error""#).expect("fixture is valid JSON"),
         ),
         (
-            AgentToolResponseStatus::Blocked,
+            Status::Blocked,
             serde_json::from_str::<serde_json::Value>(r#""blocked""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentToolResponseStatus::Skipped,
+            Status::Skipped,
             serde_json::from_str::<serde_json::Value>(r#""skipped""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -94899,13 +96642,13 @@ fn agent_tool_response_status_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: AgentToolResponseStatus =
+        let decoded: Status =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AgentToolResponseStatus = serde_json::from_value(unrecognized.clone())
+    let decoded: Status = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -97757,39 +99500,6 @@ fn astllm_node_output_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: AstllmNodeOutputType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn integration_type_variants_round_trip_through_serde() {
-    let cases: Vec<(IntegrationType, serde_json::Value)> = vec![
-        (
-            IntegrationType::McpServer,
-            serde_json::from_str::<serde_json::Value>(r#""mcp_server""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            IntegrationType::McpIntegration,
-            serde_json::from_str::<serde_json::Value>(r#""mcp_integration""#)
-                .expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: IntegrationType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: IntegrationType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -106209,6 +107919,1538 @@ fn dubbing_transcriber_error_message_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: DubbingTranscriberErrorMessageType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn feedback_type_variants_round_trip_through_serde() {
+    let cases: Vec<(FeedbackType, serde_json::Value)> = vec![(
+        FeedbackType::Feedback,
+        serde_json::from_str::<serde_json::Value>(r#""feedback""#).expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: FeedbackType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: FeedbackType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn score_variants_round_trip_through_serde() {
+    let cases: Vec<(Score, serde_json::Value)> = vec![
+        (
+            Score::Like,
+            serde_json::from_str::<serde_json::Value>(r#""like""#).expect("fixture is valid JSON"),
+        ),
+        (
+            Score::Dislike,
+            serde_json::from_str::<serde_json::Value>(r#""dislike""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: Score =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: Score = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn user_activity_type_variants_round_trip_through_serde() {
+    let cases: Vec<(UserActivityType, serde_json::Value)> = vec![(
+        UserActivityType::UserActivity,
+        serde_json::from_str::<serde_json::Value>(r#""user_activity""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: UserActivityType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: UserActivityType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn multimodal_message_type_variants_round_trip_through_serde() {
+    let cases: Vec<(MultimodalMessageType, serde_json::Value)> = vec![(
+        MultimodalMessageType::MultimodalMessage,
+        serde_json::from_str::<serde_json::Value>(r#""multimodal_message""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: MultimodalMessageType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: MultimodalMessageType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn file_type_variants_round_trip_through_serde() {
+    let cases: Vec<(FileType, serde_json::Value)> = vec![(
+        FileType::FileInput,
+        serde_json::from_str::<serde_json::Value>(r#""file_input""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: FileType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: FileType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn conversation_pong_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ConversationPongType, serde_json::Value)> = vec![(
+        ConversationPongType::Pong,
+        serde_json::from_str::<serde_json::Value>(r#""pong""#).expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ConversationPongType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ConversationPongType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn client_tool_result_error_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ClientToolResultErrorType, serde_json::Value)> = vec![
+        (
+            ClientToolResultErrorType::UserRejected,
+            serde_json::from_str::<serde_json::Value>(r#""user_rejected""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultErrorType::ExternalServer,
+            serde_json::from_str::<serde_json::Value>(r#""external_server""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultErrorType::ExternalClient,
+            serde_json::from_str::<serde_json::Value>(r#""external_client""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultErrorType::CustomerAuth,
+            serde_json::from_str::<serde_json::Value>(r#""customer_auth""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultErrorType::ClientTimeout,
+            serde_json::from_str::<serde_json::Value>(r#""client_timeout""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ClientToolResultErrorType::Unknown,
+            serde_json::from_str::<serde_json::Value>(r#""unknown""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ClientToolResultErrorType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ClientToolResultErrorType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn mcp_tool_approval_result_type_variants_round_trip_through_serde() {
+    let cases: Vec<(McpToolApprovalResultType, serde_json::Value)> = vec![(
+        McpToolApprovalResultType::McpToolApprovalResult,
+        serde_json::from_str::<serde_json::Value>(r#""mcp_tool_approval_result""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: McpToolApprovalResultType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: McpToolApprovalResultType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn tts_model_id_variants_round_trip_through_serde() {
+    let cases: Vec<(TtsModelId, serde_json::Value)> = vec![
+        (
+            TtsModelId::ElevenTurboV2,
+            serde_json::from_str::<serde_json::Value>(r#""eleven_turbo_v2""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelId::ElevenTurboV2_5,
+            serde_json::from_str::<serde_json::Value>(r#""eleven_turbo_v2_5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelId::ElevenFlashV2,
+            serde_json::from_str::<serde_json::Value>(r#""eleven_flash_v2""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelId::ElevenFlashV2_5,
+            serde_json::from_str::<serde_json::Value>(r#""eleven_flash_v2_5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelId::ElevenMultilingualV2,
+            serde_json::from_str::<serde_json::Value>(r#""eleven_multilingual_v2""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelId::ElevenV3Conversational,
+            serde_json::from_str::<serde_json::Value>(r#""eleven_v3_conversational""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelId::ElevenV4,
+            serde_json::from_str::<serde_json::Value>(r#""eleven_v4""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelId::ElevenV4Turbo,
+            serde_json::from_str::<serde_json::Value>(r#""eleven_v4_turbo""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TtsModelId =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TtsModelId = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn model_family_variants_round_trip_through_serde() {
+    let cases: Vec<(ModelFamily, serde_json::Value)> = vec![
+        (
+            ModelFamily::Turbo,
+            serde_json::from_str::<serde_json::Value>(r#""turbo""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ModelFamily::Flash,
+            serde_json::from_str::<serde_json::Value>(r#""flash""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ModelFamily::Multilingual,
+            serde_json::from_str::<serde_json::Value>(r#""multilingual""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ModelFamily::V3Conversational,
+            serde_json::from_str::<serde_json::Value>(r#""v3_conversational""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ModelFamily::V4,
+            serde_json::from_str::<serde_json::Value>(r#""v4""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ModelFamily::V4Turbo,
+            serde_json::from_str::<serde_json::Value>(r#""v4_turbo""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ModelFamily =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ModelFamily = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn optimize_streaming_latency_variants_round_trip_through_serde() {
+    let cases: Vec<(OptimizeStreamingLatency, serde_json::Value)> = vec![
+        (
+            OptimizeStreamingLatency::Num0,
+            serde_json::from_str::<serde_json::Value>(r#"0"#).expect("fixture is valid JSON"),
+        ),
+        (
+            OptimizeStreamingLatency::Num1,
+            serde_json::from_str::<serde_json::Value>(r#"1"#).expect("fixture is valid JSON"),
+        ),
+        (
+            OptimizeStreamingLatency::Num2,
+            serde_json::from_str::<serde_json::Value>(r#"2"#).expect("fixture is valid JSON"),
+        ),
+        (
+            OptimizeStreamingLatency::Num3,
+            serde_json::from_str::<serde_json::Value>(r#"3"#).expect("fixture is valid JSON"),
+        ),
+        (
+            OptimizeStreamingLatency::Num4,
+            serde_json::from_str::<serde_json::Value>(r#"4"#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: OptimizeStreamingLatency =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+}
+
+#[test]
+fn prompt_llm_variants_round_trip_through_serde() {
+    let cases: Vec<(PromptLlm, serde_json::Value)> = vec![
+        (
+            PromptLlm::Gpt4OMini,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4O,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4""#).expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4Turbo,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4_1,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4_1Mini,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4_1Nano,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5""#).expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_1,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.1""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_2,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.2""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_2ChatLatest,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-chat-latest""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_4,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_4Mini,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_4Nano,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_5,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_6Sol,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-sol""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_6Terra,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-terra""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_6Luna,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-luna""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt6Astra,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6-astra""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt6Sol,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6-sol""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt6Luna,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6-luna""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt6_1Sol,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-sol""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt6_1Terra,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-terra""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt6_2Astra,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6.2-astra""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt6_2Sol,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-6.2-sol""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5Mini,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5Nano,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt3_5Turbo,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini1_5Pro,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini1_5Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_0Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_0FlashLite,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_5FlashLite,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_5Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3ProPreview,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3-pro-preview""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3FlashPreview,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3-flash-preview""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3_1ProPreview,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-pro-preview""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3_1FlashLitePreview,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite-preview""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3_1FlashLite,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3_5Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3_5FlashLite,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash-lite""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3_6Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.6-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3_7Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.7-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini3_8Flash,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-3.8-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini4Argon,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-4-argon""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini4Hydrogen,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-4-hydrogen""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini4Neon,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-4-neon""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeSonnet4_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeOpus4_6,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-6""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeOpus4_7,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-7""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeOpus4_8,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-8""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeOpus5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeOpus5_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-opus-5-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeSonnet4_6,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-6""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeSonnet5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeSonnet5_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeSonnet4,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeHaiku4_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeHaiku5_5,
+            serde_json::from_str::<serde_json::Value>(r#""claude-haiku-5-5""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Claude3_7Sonnet,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Claude3_5Sonnet,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Claude3_5SonnetV1,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v1""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Claude3Haiku,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::CustomLlm,
+            serde_json::from_str::<serde_json::Value>(r#""custom-llm""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Qwen3_4B,
+            serde_json::from_str::<serde_json::Value>(r#""qwen3-4b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Qwen3_30BA3B,
+            serde_json::from_str::<serde_json::Value>(r#""qwen3-30b-a3b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Qwen36_35BA3B,
+            serde_json::from_str::<serde_json::Value>(r#""qwen36-35b-a3b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Qwen35_397BA17B,
+            serde_json::from_str::<serde_json::Value>(r#""qwen35-397b-a17b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::GptOss20B,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-oss-20b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::GptOss120B,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-oss-120b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Glm45AirFp8,
+            serde_json::from_str::<serde_json::Value>(r#""glm-45-air-fp8""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Glm52,
+            serde_json::from_str::<serde_json::Value>(r#""glm-52""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::DeepseekV41Flash,
+            serde_json::from_str::<serde_json::Value>(r#""deepseek-v41-flash""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Nemotron35SuperVlNvfp4,
+            serde_json::from_str::<serde_json::Value>(r#""nemotron-35-super-vl-nvfp4""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_5FlashPreview09_2025,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-09-2025""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_5FlashLitePreview09_2025,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-09-2025""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_5FlashPreview05_20,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-05-20""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_5FlashPreview04_17,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-04-17""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_5FlashLitePreview06_17,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-06-17""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_0FlashLite001,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite-001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini2_0Flash001,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini1_5Flash002,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-002""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini1_5Flash001,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini1_5Pro002,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-002""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gemini1_5Pro001,
+            serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeSonnet4_20250514,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4@20250514""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeSonnet4_5_20250929,
+            serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5@20250929""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::ClaudeHaiku4_5_20251001,
+            serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5@20251001""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Claude3_7Sonnet20250219,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet@20250219""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Claude3_5Sonnet20240620,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet@20240620""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Claude3_5SonnetV2_20241022,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v2@20241022""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Claude3Haiku20240307,
+            serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku@20240307""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_2025_08_07,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-2025-08-07""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_1_2025_11_13,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.1-2025-11-13""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_2_2025_12_11,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-2025-12-11""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_4_2026_03_05,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-2026-03-05""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_4Mini2026_03_17,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini-2026-03-17""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_4Nano2026_03_17,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano-2026-03-17""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5_5_2026_04_23,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5.5-2026-04-23""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5Mini2025_08_07,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini-2025-08-07""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt5Nano2025_08_07,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano-2025-08-07""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4_1_2025_04_14,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-2025-04-14""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4_1Mini2025_04_14,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini-2025-04-14""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4_1Nano2025_04_14,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano-2025-04-14""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4OMini2024_07_18,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini-2024-07-18""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4O2024_11_20,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-11-20""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4O2024_08_06,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-08-06""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4O2024_05_13,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-05-13""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4_0613,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4-0613""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4_0314,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4-0314""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt4Turbo2024_04_09,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo-2024-04-09""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt3_5Turbo0125,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-0125""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::Gpt3_5Turbo1106,
+            serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-1106""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::WattTool8B,
+            serde_json::from_str::<serde_json::Value>(r#""watt-tool-8b""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            PromptLlm::WattTool70B,
+            serde_json::from_str::<serde_json::Value>(r#""watt-tool-70b""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: PromptLlm =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: PromptLlm = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn reasoning_effort_variants_round_trip_through_serde() {
+    let cases: Vec<(ReasoningEffort, serde_json::Value)> = vec![
+        (
+            ReasoningEffort::None,
+            serde_json::from_str::<serde_json::Value>(r#""none""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReasoningEffort::Minimal,
+            serde_json::from_str::<serde_json::Value>(r#""minimal""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReasoningEffort::Low,
+            serde_json::from_str::<serde_json::Value>(r#""low""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReasoningEffort::Medium,
+            serde_json::from_str::<serde_json::Value>(r#""medium""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ReasoningEffort::High,
+            serde_json::from_str::<serde_json::Value>(r#""high""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReasoningEffort::Xhigh,
+            serde_json::from_str::<serde_json::Value>(r#""xhigh""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ReasoningEffort::Max,
+            serde_json::from_str::<serde_json::Value>(r#""max""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ReasoningEffort =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ReasoningEffort = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn knowledge_base_item_type_variants_round_trip_through_serde() {
+    let cases: Vec<(KnowledgeBaseItemType, serde_json::Value)> = vec![
+        (
+            KnowledgeBaseItemType::File,
+            serde_json::from_str::<serde_json::Value>(r#""file""#).expect("fixture is valid JSON"),
+        ),
+        (
+            KnowledgeBaseItemType::Url,
+            serde_json::from_str::<serde_json::Value>(r#""url""#).expect("fixture is valid JSON"),
+        ),
+        (
+            KnowledgeBaseItemType::Text,
+            serde_json::from_str::<serde_json::Value>(r#""text""#).expect("fixture is valid JSON"),
+        ),
+        (
+            KnowledgeBaseItemType::Folder,
+            serde_json::from_str::<serde_json::Value>(r#""folder""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: KnowledgeBaseItemType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: KnowledgeBaseItemType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn usage_mode_variants_round_trip_through_serde() {
+    let cases: Vec<(UsageMode, serde_json::Value)> = vec![
+        (
+            UsageMode::Prompt,
+            serde_json::from_str::<serde_json::Value>(r#""prompt""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            UsageMode::Auto,
+            serde_json::from_str::<serde_json::Value>(r#""auto""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: UsageMode =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: UsageMode = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn source_info_source_variants_round_trip_through_serde() {
+    let cases: Vec<(SourceInfoSource, serde_json::Value)> = vec![
+        (
+            SourceInfoSource::Unknown,
+            serde_json::from_str::<serde_json::Value>(r#""unknown""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::AndroidSdk,
+            serde_json::from_str::<serde_json::Value>(r#""android_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::NodeJsSdk,
+            serde_json::from_str::<serde_json::Value>(r#""node_js_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::ReactNativeSdk,
+            serde_json::from_str::<serde_json::Value>(r#""react_native_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::ReactSdk,
+            serde_json::from_str::<serde_json::Value>(r#""react_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::JsSdk,
+            serde_json::from_str::<serde_json::Value>(r#""js_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::PythonSdk,
+            serde_json::from_str::<serde_json::Value>(r#""python_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::Widget,
+            serde_json::from_str::<serde_json::Value>(r#""widget""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::SipTrunk,
+            serde_json::from_str::<serde_json::Value>(r#""sip_trunk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::Twilio,
+            serde_json::from_str::<serde_json::Value>(r#""twilio""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::Exotel,
+            serde_json::from_str::<serde_json::Value>(r#""exotel""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::Genesys,
+            serde_json::from_str::<serde_json::Value>(r#""genesys""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::Avaya,
+            serde_json::from_str::<serde_json::Value>(r#""avaya""#).expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::Audiocodes,
+            serde_json::from_str::<serde_json::Value>(r#""audiocodes""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::SwiftSdk,
+            serde_json::from_str::<serde_json::Value>(r#""swift_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::Whatsapp,
+            serde_json::from_str::<serde_json::Value>(r#""whatsapp""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::TwilioSms,
+            serde_json::from_str::<serde_json::Value>(r#""twilio_sms""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::FlutterSdk,
+            serde_json::from_str::<serde_json::Value>(r#""flutter_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::ZendeskIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""zendesk_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::SlackIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""slack_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::TelegramIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""telegram_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::IntercomIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""intercom_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::FreshdeskIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""freshdesk_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::PlainIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""plain_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::SalesforceIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""salesforce_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::TemplatePreview,
+            serde_json::from_str::<serde_json::Value>(r#""template_preview""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::GenesysBotConnector,
+            serde_json::from_str::<serde_json::Value>(r#""genesys_bot_connector""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::SubagentTool,
+            serde_json::from_str::<serde_json::Value>(r#""subagent_tool""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::AgentMessagesApi,
+            serde_json::from_str::<serde_json::Value>(r#""agent_messages_api""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: SourceInfoSource =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: SourceInfoSource = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn conversation_initiation_client_data_type_variants_round_trip_through_serde() {
+    let cases: Vec<(ConversationInitiationClientDataType, serde_json::Value)> = vec![(
+        ConversationInitiationClientDataType::ConversationInitiationClientData,
+        serde_json::from_str::<serde_json::Value>(r#""conversation_initiation_client_data""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ConversationInitiationClientDataType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ConversationInitiationClientDataType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn agent_output_audio_format_variants_round_trip_through_serde() {
+    let cases: Vec<(AgentOutputAudioFormat, serde_json::Value)> = vec![
+        (
+            AgentOutputAudioFormat::Pcm8000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_8000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputAudioFormat::Pcm16000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_16000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputAudioFormat::Pcm22050,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_22050""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputAudioFormat::Pcm24000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_24000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputAudioFormat::Pcm44100,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_44100""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputAudioFormat::Pcm48000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_48000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentOutputAudioFormat::Ulaw8000,
+            serde_json::from_str::<serde_json::Value>(r#""ulaw_8000""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: AgentOutputAudioFormat =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: AgentOutputAudioFormat = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn user_input_audio_format_variants_round_trip_through_serde() {
+    let cases: Vec<(UserInputAudioFormat, serde_json::Value)> = vec![
+        (
+            UserInputAudioFormat::Pcm8000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_8000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            UserInputAudioFormat::Pcm16000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_16000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            UserInputAudioFormat::Pcm22050,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_22050""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            UserInputAudioFormat::Pcm24000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_24000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            UserInputAudioFormat::Pcm44100,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_44100""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            UserInputAudioFormat::Pcm48000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_48000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            UserInputAudioFormat::Ulaw8000,
+            serde_json::from_str::<serde_json::Value>(r#""ulaw_8000""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: UserInputAudioFormat =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: UserInputAudioFormat = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn queue_status_event_status_variants_round_trip_through_serde() {
+    let cases: Vec<(QueueStatusEventStatus, serde_json::Value)> = vec![
+        (
+            QueueStatusEventStatus::Waiting,
+            serde_json::from_str::<serde_json::Value>(r#""waiting""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            QueueStatusEventStatus::Admitted,
+            serde_json::from_str::<serde_json::Value>(r#""admitted""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            QueueStatusEventStatus::TimedOut,
+            serde_json::from_str::<serde_json::Value>(r#""timed_out""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: QueueStatusEventStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: QueueStatusEventStatus = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn agent_tool_response_agent_tool_response_status_variants_round_trip_through_serde() {
+    let cases: Vec<(AgentToolResponseAgentToolResponseStatus, serde_json::Value)> = vec![
+        (
+            AgentToolResponseAgentToolResponseStatus::Success,
+            serde_json::from_str::<serde_json::Value>(r#""success""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentToolResponseAgentToolResponseStatus::Error,
+            serde_json::from_str::<serde_json::Value>(r#""error""#).expect("fixture is valid JSON"),
+        ),
+        (
+            AgentToolResponseAgentToolResponseStatus::Blocked,
+            serde_json::from_str::<serde_json::Value>(r#""blocked""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AgentToolResponseAgentToolResponseStatus::Skipped,
+            serde_json::from_str::<serde_json::Value>(r#""skipped""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: AgentToolResponseAgentToolResponseStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: AgentToolResponseAgentToolResponseStatus =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn integrations_item_integration_type_variants_round_trip_through_serde() {
+    let cases: Vec<(IntegrationsItemIntegrationType, serde_json::Value)> = vec![
+        (
+            IntegrationsItemIntegrationType::McpServer,
+            serde_json::from_str::<serde_json::Value>(r#""mcp_server""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IntegrationsItemIntegrationType::McpIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""mcp_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: IntegrationsItemIntegrationType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: IntegrationsItemIntegrationType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),

@@ -50,7 +50,14 @@ impl ApiKeysClient {
         let api_key_name = request.api_key_name.clone();
         let url = "/v1/workspaces/api-keys/disable";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_api_keys_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         request = request.query(&[("api_key_name", &api_key_name.to_string())]);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -125,7 +132,14 @@ impl ApiKeysClient {
     ) -> Result<WorkspaceApiKeyListResponseModel, crate::error::ApiError> {
         let url = format!("/v1/service-accounts/{}/api-keys", service_account_user_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_api_keys_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -200,7 +214,14 @@ impl ApiKeysClient {
     ) -> Result<WorkspaceCreateApiKeyResponseModel, crate::error::ApiError> {
         let url = format!("/v1/service-accounts/{}/api-keys", service_account_user_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_api_keys_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -289,7 +310,14 @@ impl ApiKeysClient {
             service_account_user_id, api_key_id
         );
 
-        let mut request = self.http_client.patch(url);
+        let base_url = self
+            .config
+            .get_api_keys_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::PATCH, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -374,7 +402,14 @@ impl ApiKeysClient {
             service_account_user_id, api_key_id
         );
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_api_keys_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -453,7 +488,14 @@ impl ApiKeysClient {
             service_account_user_id, api_key_id
         );
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_api_keys_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

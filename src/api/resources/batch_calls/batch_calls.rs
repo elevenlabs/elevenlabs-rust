@@ -49,7 +49,14 @@ impl BatchCallsClient {
     ) -> Result<BatchCallResponse, crate::error::ApiError> {
         let url = "/v1/convai/batch-calling/submit";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_batch_calls_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -132,7 +139,14 @@ impl BatchCallsClient {
         let agent_id = request.agent_id.clone();
         let url = "/v1/convai/batch-calling/workspace";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_batch_calls_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &limit {
             request = request.query(&[("limit", &val.to_string())]);
         }
@@ -214,7 +228,14 @@ impl BatchCallsClient {
     ) -> Result<BatchCallDetailedResponse, crate::error::ApiError> {
         let url = format!("/v1/convai/batch-calling/{}", batch_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_batch_calls_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -287,7 +308,14 @@ impl BatchCallsClient {
     ) -> Result<(), crate::error::ApiError> {
         let url = format!("/v1/convai/batch-calling/{}", batch_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_batch_calls_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -352,7 +380,14 @@ impl BatchCallsClient {
     ) -> Result<BatchCallResponse, crate::error::ApiError> {
         let url = format!("/v1/convai/batch-calling/{}/cancel", batch_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_batch_calls_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -425,7 +460,14 @@ impl BatchCallsClient {
     ) -> Result<BatchCallResponse, crate::error::ApiError> {
         let url = format!("/v1/convai/batch-calling/{}/retry", batch_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_batch_calls_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -501,7 +543,14 @@ impl BatchCallsClient {
         let limit = request.limit.clone();
         let url = format!("/v1/convai/batch-calling/{}/export", batch_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_batch_calls_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &limit {
             request = request.query(&[("limit", &val.to_string())]);
         }

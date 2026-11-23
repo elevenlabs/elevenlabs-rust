@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 #[non_exhaustive]
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum Llm {
+pub enum PromptLlm {
     Gpt4OMini,
     Gpt4O,
     Gpt4,
@@ -123,7 +123,7 @@ pub enum Llm {
     /// it will be captured here with the raw string value.
     __Unknown(String),
 }
-impl Serialize for Llm {
+impl Serialize for PromptLlm {
     fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         match self {
             Self::Gpt4OMini => serializer.serialize_str("gpt-4o-mini"),
@@ -262,7 +262,7 @@ impl Serialize for Llm {
     }
 }
 
-impl<'de> Deserialize<'de> for Llm {
+impl<'de> Deserialize<'de> for PromptLlm {
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         let value = String::deserialize(deserializer)?;
         match value.as_str() {
@@ -386,7 +386,7 @@ impl<'de> Deserialize<'de> for Llm {
     }
 }
 
-impl fmt::Display for Llm {
+impl fmt::Display for PromptLlm {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Gpt4OMini => write!(f, "gpt-4o-mini"),

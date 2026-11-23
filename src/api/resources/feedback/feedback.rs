@@ -51,7 +51,14 @@ impl FeedbackClient {
     ) -> Result<serde_json::Value, crate::error::ApiError> {
         let url = format!("/v1/convai/conversations/{}/feedback", conversation_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_feedback_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

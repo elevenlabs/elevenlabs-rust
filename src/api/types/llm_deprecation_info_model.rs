@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct LlmDeprecationInfoModel {
-    pub llm: Llm,
+    pub llm: AgentMessagesOverridesLlm,
     /// Whether this model is currently deprecated. True if the model is immediately deprecated or within the warning period.
     #[serde(default)]
     pub is_deprecated: bool,
@@ -24,7 +24,7 @@ pub struct LlmDeprecationInfoModel {
     pub provider_deprecation_date: Option<DateTime<FixedOffset>>,
     /// The model that replaces this deprecated model. Traffic will be automatically routed to this model.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub replacement_model: Option<Llm>,
+    pub replacement_model: Option<AgentMessagesOverridesLlm>,
     /// Custom deprecation timing configuration for this model. Null if using the default configuration.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deprecation_config: Option<LlmDeprecationConfigModel>,
@@ -39,18 +39,18 @@ impl LlmDeprecationInfoModel {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct LlmDeprecationInfoModelBuilder {
-    llm: Option<Llm>,
+    llm: Option<AgentMessagesOverridesLlm>,
     is_deprecated: Option<bool>,
     is_in_warning_period: Option<bool>,
     is_in_fallback_period: Option<bool>,
     fallback_percentage: Option<i64>,
     provider_deprecation_date: Option<DateTime<FixedOffset>>,
-    replacement_model: Option<Llm>,
+    replacement_model: Option<AgentMessagesOverridesLlm>,
     deprecation_config: Option<LlmDeprecationConfigModel>,
 }
 
 impl LlmDeprecationInfoModelBuilder {
-    pub fn llm(mut self, value: Llm) -> Self {
+    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.llm = Some(value);
         self
     }
@@ -80,7 +80,7 @@ impl LlmDeprecationInfoModelBuilder {
         self
     }
 
-    pub fn replacement_model(mut self, value: Llm) -> Self {
+    pub fn replacement_model(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.replacement_model = Some(value);
         self
     }

@@ -47,7 +47,14 @@ impl ProjectsClient {
     ) -> Result<GetProjectsResponse, crate::error::ApiError> {
         let url = "/v1/studio/projects";
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_projects_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -120,7 +127,14 @@ impl ProjectsClient {
     ) -> Result<AddProjectResponseModel, crate::error::ApiError> {
         let url = "/v1/studio/projects";
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_projects_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -197,7 +211,14 @@ impl ProjectsClient {
         let share_id = request.share_id.clone();
         let url = format!("/v1/studio/projects/{}", project_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_projects_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(val) = &share_id {
             request = request.query(&[("share_id", &val.to_string())]);
         }
@@ -275,7 +296,14 @@ impl ProjectsClient {
     ) -> Result<EditProjectResponseModel, crate::error::ApiError> {
         let url = format!("/v1/studio/projects/{}", project_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_projects_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -355,7 +383,14 @@ impl ProjectsClient {
     ) -> Result<DeleteProjectResponseModel, crate::error::ApiError> {
         let url = format!("/v1/studio/projects/{}", project_id);
 
-        let mut request = self.http_client.delete(url);
+        let base_url = self
+            .config
+            .get_projects_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::DELETE, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -428,7 +463,14 @@ impl ProjectsClient {
     ) -> Result<ConvertProjectResponseModel, crate::error::ApiError> {
         let url = format!("/v1/studio/projects/{}/convert", project_id);
 
-        let mut request = self.http_client.post(url);
+        let base_url = self
+            .config
+            .get_projects_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::POST, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -501,7 +543,14 @@ impl ProjectsClient {
     ) -> Result<ProjectMutedTracksResponseModel, crate::error::ApiError> {
         let url = format!("/v1/studio/projects/{}/muted-tracks", project_id);
 
-        let mut request = self.http_client.get(url);
+        let base_url = self
+            .config
+            .get_projects_config()
+            .service_url(|environment| environment.base_url())
+            .to_string();
+        let mut request = self
+            .http_client
+            .request_at(reqwest::Method::GET, &base_url, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

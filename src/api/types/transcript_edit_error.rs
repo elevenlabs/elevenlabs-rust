@@ -4,7 +4,7 @@ pub use crate::prelude::*;
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct TranscriptEditError {
     /// edit_failed: the edit could not be produced.
-    pub error_type: ErrorType,
+    pub error_type: TranscriptEditErrorErrorType,
     /// A short, user-facing explanation of the failure.
     #[serde(default)]
     pub message: String,
@@ -19,12 +19,12 @@ impl TranscriptEditError {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct TranscriptEditErrorBuilder {
-    error_type: Option<ErrorType>,
+    error_type: Option<TranscriptEditErrorErrorType>,
     message: Option<String>,
 }
 
 impl TranscriptEditErrorBuilder {
-    pub fn error_type(mut self, value: ErrorType) -> Self {
+    pub fn error_type(mut self, value: TranscriptEditErrorErrorType) -> Self {
         self.error_type = Some(value);
         self
     }

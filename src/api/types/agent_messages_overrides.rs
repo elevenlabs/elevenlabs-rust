@@ -7,7 +7,7 @@ pub struct AgentMessagesOverrides {
     pub prompt: Option<String>,
     /// The LLM to query with the prompt and the chat history. If using data residency, the LLM must be supported in the data residency environment
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub llm: Option<Llm>,
+    pub llm: Option<AgentMessagesOverridesLlm>,
     /// Language of the agent
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
@@ -38,7 +38,7 @@ impl AgentMessagesOverrides {
 #[non_exhaustive]
 pub struct AgentMessagesOverridesBuilder {
     prompt: Option<String>,
-    llm: Option<Llm>,
+    llm: Option<AgentMessagesOverridesLlm>,
     language: Option<String>,
     tool_ids: Option<Vec<String>>,
     native_mcp_server_ids: Option<Vec<String>>,
@@ -53,7 +53,7 @@ impl AgentMessagesOverridesBuilder {
         self
     }
 
-    pub fn llm(mut self, value: Llm) -> Self {
+    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
         self.llm = Some(value);
         self
     }

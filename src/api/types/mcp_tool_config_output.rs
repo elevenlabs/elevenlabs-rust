@@ -35,7 +35,7 @@ pub struct McpToolConfigOutput {
     /// Controls how tool errors are processed before being shared with the agent.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_error_handling_mode: Option<ToolErrorHandlingMode>,
-    pub integration_type: IntegrationType,
+    pub integration_type: IntegrationsItemIntegrationType,
     /// Schema for any parameters the LLM needs to provide to the MCP tool.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<ObjectJsonSchemaPropertyOutput>,
@@ -82,7 +82,7 @@ pub struct McpToolConfigOutputBuilder {
     tool_call_sound: Option<ToolCallSoundType>,
     tool_call_sound_behavior: Option<ToolCallSoundBehavior>,
     tool_error_handling_mode: Option<ToolErrorHandlingMode>,
-    integration_type: Option<IntegrationType>,
+    integration_type: Option<IntegrationsItemIntegrationType>,
     parameters: Option<ObjectJsonSchemaPropertyOutput>,
     approval_policy: Option<McpApprovalPolicy>,
     mcp_tool_name: Option<String>,
@@ -155,7 +155,7 @@ impl McpToolConfigOutputBuilder {
         self
     }
 
-    pub fn integration_type(mut self, value: IntegrationType) -> Self {
+    pub fn integration_type(mut self, value: IntegrationsItemIntegrationType) -> Self {
         self.integration_type = Some(value);
         self
     }
