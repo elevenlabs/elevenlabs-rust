@@ -54,14 +54,7 @@ impl BranchesClient {
         let include_commit_status = request.include_commit_status.clone();
         let url = format!("/v1/convai/agents/{}/branches", agent_id);
 
-        let base_url = self
-            .config
-            .get_branches_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &include_archived {
             request = request.query(&[("include_archived", &val.to_string())]);
         }
@@ -145,14 +138,7 @@ impl BranchesClient {
     ) -> Result<CreateAgentBranchResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/agents/{}/branches", agent_id);
 
-        let base_url = self
-            .config
-            .get_branches_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -234,14 +220,7 @@ impl BranchesClient {
     ) -> Result<AgentBranchResponse, crate::error::ApiError> {
         let url = format!("/v1/convai/agents/{}/branches/{}", agent_id, branch_id);
 
-        let base_url = self
-            .config
-            .get_branches_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -318,14 +297,7 @@ impl BranchesClient {
     ) -> Result<AgentBranchResponse, crate::error::ApiError> {
         let url = format!("/v1/convai/agents/{}/branches/{}", agent_id, branch_id);
 
-        let base_url = self
-            .config
-            .get_branches_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -416,14 +388,7 @@ impl BranchesClient {
             agent_id, source_branch_id
         );
 
-        let base_url = self
-            .config
-            .get_branches_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         request = request.query(&[("target_branch_id", &target_branch_id.to_string())]);
         if let Some(val) = &force {
             request = request.query(&[("force", &val.to_string())]);
@@ -515,14 +480,7 @@ impl BranchesClient {
             agent_id, source_branch_id
         );
 
-        let base_url = self
-            .config
-            .get_branches_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         request = request.query(&[("target_branch_id", &target_branch_id.to_string())]);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -614,14 +572,7 @@ impl BranchesClient {
             agent_id, branch_id
         );
 
-        let base_url = self
-            .config
-            .get_branches_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &source_branch_id {
             request = request.query(&[("source_branch_id", &val.to_string())]);
         }
@@ -712,14 +663,7 @@ impl BranchesClient {
             agent_id, branch_id
         );
 
-        let base_url = self
-            .config
-            .get_branches_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &source_branch_id {
             request = request.query(&[("source_branch_id", &val.to_string())]);
         }

@@ -51,14 +51,7 @@ impl SummariesClient {
         let agent_ids = request.agent_ids.clone();
         let url = "/v1/convai/agents/summaries";
 
-        let base_url = self
-            .config
-            .get_summaries_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         for item in &agent_ids {
             request = request.query(&[("agent_ids", &item.to_string())]);
         }
@@ -138,14 +131,7 @@ impl SummariesClient {
         let document_ids = request.document_ids.clone();
         let url = "/v1/convai/knowledge-base/summaries";
 
-        let base_url = self
-            .config
-            .get_summaries_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         for item in &document_ids {
             request = request.query(&[("document_ids", &item.to_string())]);
         }

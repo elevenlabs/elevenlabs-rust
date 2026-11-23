@@ -51,14 +51,7 @@ impl MembersClient {
     ) -> Result<DeleteWorkspaceGroupMemberResponseModel, crate::error::ApiError> {
         let url = format!("/v1/workspace/groups/{}/members/remove", group_id);
 
-        let base_url = self
-            .config
-            .get_members_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -140,14 +133,7 @@ impl MembersClient {
     ) -> Result<AddWorkspaceGroupMemberResponseModel, crate::error::ApiError> {
         let url = format!("/v1/workspace/groups/{}/members", group_id);
 
-        let base_url = self
-            .config
-            .get_members_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -225,14 +211,7 @@ impl MembersClient {
     ) -> Result<Vec<WorkspaceMemberResponseModel>, crate::error::ApiError> {
         let url = "/v1/workspace/members";
 
-        let base_url = self
-            .config
-            .get_members_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -306,14 +285,7 @@ impl MembersClient {
     ) -> Result<UpdateWorkspaceMemberResponseModel, crate::error::ApiError> {
         let url = "/v1/workspace/members";
 
-        let base_url = self
-            .config
-            .get_members_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -395,14 +367,7 @@ impl MembersClient {
     ) -> Result<UpdateMemberUsageLimitResponseModel, crate::error::ApiError> {
         let url = format!("/v1/workspace/members/{}/usage-limit", user_id);
 
-        let base_url = self
-            .config
-            .get_members_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PUT, &base_url, url);
+        let mut request = self.http_client.put(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -482,14 +447,7 @@ impl MembersClient {
     ) -> Result<Vec<ReceptionTeamMemberResponse>, crate::error::ApiError> {
         let url = "/v1/reception/team/members";
 
-        let base_url = self
-            .config
-            .get_members_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -568,14 +526,7 @@ impl MembersClient {
     ) -> Result<std::collections::HashMap<String, String>, crate::error::ApiError> {
         let url = format!("/v1/reception/team/members/{}", user_id);
 
-        let base_url = self
-            .config
-            .get_members_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -659,14 +610,7 @@ impl MembersClient {
     ) -> Result<std::collections::HashMap<String, String>, crate::error::ApiError> {
         let url = format!("/v1/reception/team/members/{}", user_id);
 
-        let base_url = self
-            .config
-            .get_members_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

@@ -51,14 +51,7 @@ impl LlmUsageClient {
     ) -> Result<LlmUsageCalculatorResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/agent/{}/llm-usage/calculate", agent_id);
 
-        let base_url = self
-            .config
-            .get_llm_usage_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -138,14 +131,7 @@ impl LlmUsageClient {
     ) -> Result<LlmUsageCalculatorResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/llm-usage/calculate";
 
-        let base_url = self
-            .config
-            .get_llm_usage_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

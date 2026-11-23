@@ -55,14 +55,7 @@ impl ConversationsClient {
         let debug_events_request = request.debug_events_request.clone();
         let url = "/v1/convai/conversation/get-signed-url";
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         request = request.query(&[("agent_id", &agent_id.to_string())]);
         if let Some(val) = &include_conversation_id {
             request = request.query(&[("include_conversation_id", &val.to_string())]);
@@ -157,14 +150,7 @@ impl ConversationsClient {
         let debug_events_request = request.debug_events_request.clone();
         let url = "/v1/convai/conversation/token";
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         request = request.query(&[("agent_id", &agent_id.to_string())]);
         if let Some(val) = &participant_name {
             request = request.query(&[("participant_name", &val.to_string())]);
@@ -301,14 +287,7 @@ impl ConversationsClient {
         let sort_direction = request.sort_direction.clone();
         let url = "/v1/convai/conversations";
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &cursor {
             request = request.query(&[("cursor", &val.to_string())]);
         }
@@ -571,14 +550,7 @@ impl ConversationsClient {
     ) -> Result<CreateAgentConversationResponse, crate::error::ApiError> {
         let url = "/v1/convai/conversations";
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -660,14 +632,7 @@ impl ConversationsClient {
         let reference = request.reference.clone();
         let url = "/v1/convai/conversations/resolve";
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         request = request.query(&[("agent_id", &agent_id.to_string())]);
         request = request.query(&[("reference", &reference.to_string())]);
         if let Some(opts) = &options {
@@ -745,14 +710,7 @@ impl ConversationsClient {
         let format = request.format.clone();
         let url = format!("/v1/convai/conversations/{}", conversation_id);
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &format {
             request = request.query(&[("format", &val.to_string())]);
         }
@@ -828,14 +786,7 @@ impl ConversationsClient {
     ) -> Result<serde_json::Value, crate::error::ApiError> {
         let url = format!("/v1/convai/conversations/{}", conversation_id);
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -912,14 +863,7 @@ impl ConversationsClient {
         let max_messages = request.max_messages.clone();
         let url = format!("/v1/convai/conversations/{}/summary", conversation_id);
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &max_messages {
             request = request.query(&[("max_messages", &val.to_string())]);
         }
@@ -999,14 +943,7 @@ impl ConversationsClient {
         let cursor = request.cursor.clone();
         let url = format!("/v1/convai/conversations/{}/sip-messages", conversation_id);
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -1087,14 +1024,7 @@ impl ConversationsClient {
     ) -> Result<ConversationTurn, crate::error::ApiError> {
         let url = format!("/v1/convai/conversations/{}/messages", conversation_id);
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -1179,14 +1109,7 @@ impl ConversationsClient {
             conversation_id
         );
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -1264,14 +1187,7 @@ impl ConversationsClient {
             conversation_id, turn_id
         );
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -1351,14 +1267,7 @@ impl ConversationsClient {
             conversation_id, turn_id
         );
 
-        let base_url = self
-            .config
-            .get_conversations_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &last_event_id {
             request = request.header("Last-Event-ID", &val.to_string());
         }

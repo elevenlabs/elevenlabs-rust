@@ -53,14 +53,7 @@ impl SpeechToTextClient {
         let enable_logging = request.enable_logging.clone();
         let url = "/v1/speech-to-text";
 
-        let base_url = self
-            .config
-            .get_speech_to_text_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &token {
             request = request.query(&[("token", &val.to_string())]);
         }

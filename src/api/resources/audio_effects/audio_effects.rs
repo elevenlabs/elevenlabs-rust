@@ -47,14 +47,7 @@ impl AudioEffectsClient {
     ) -> Result<AudioEffectsCatalogResponseModel, crate::error::ApiError> {
         let url = "/v1/audio-effects/catalog";
 
-        let base_url = self
-            .config
-            .get_audio_effects_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

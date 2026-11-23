@@ -49,14 +49,7 @@ impl AudioIsolationClient {
     ) -> Result<crate::core::ByteStream, crate::error::ApiError> {
         let url = "/v1/audio-isolation";
 
-        let base_url = self
-            .config
-            .get_audio_isolation_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .stream_request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -125,14 +118,7 @@ impl AudioIsolationClient {
         let search = request.search.clone();
         let url = "/v1/audio-isolation/history";
 
-        let base_url = self
-            .config
-            .get_audio_isolation_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -214,14 +200,7 @@ impl AudioIsolationClient {
     ) -> Result<(), crate::error::ApiError> {
         let url = format!("/v1/audio-isolation/history/{}", history_item_id);
 
-        let base_url = self
-            .config
-            .get_audio_isolation_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -286,14 +265,7 @@ impl AudioIsolationClient {
     ) -> Result<crate::core::ByteStream, crate::error::ApiError> {
         let url = "/v1/audio-isolation/stream";
 
-        let base_url = self
-            .config
-            .get_audio_isolation_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .stream_request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

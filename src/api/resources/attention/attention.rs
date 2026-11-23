@@ -53,14 +53,7 @@ impl AttentionClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/outbound-campaigns/attention";
 
-        let base_url = self
-            .config
-            .get_attention_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &campaign_id {
             request = request.query(&[("campaign_id", &val.to_string())]);
         }
@@ -148,14 +141,7 @@ impl AttentionClient {
             attention_id
         );
 
-        let base_url = self
-            .config
-            .get_attention_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -233,14 +219,7 @@ impl AttentionClient {
             attention_id
         );
 
-        let base_url = self
-            .config
-            .get_attention_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

@@ -57,14 +57,7 @@ impl MergeProposalsClient {
         let cursor = request.cursor.clone();
         let url = format!("/v1/convai/agents/{}/merge-proposals", agent_id);
 
-        let base_url = self
-            .config
-            .get_merge_proposals_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &status {
             request = request.query(&[("status", &val.to_string())]);
         }
@@ -157,14 +150,7 @@ impl MergeProposalsClient {
     ) -> Result<CreateAgentMergeProposalResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/agents/{}/merge-proposals", agent_id);
 
-        let base_url = self
-            .config
-            .get_merge_proposals_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -249,14 +235,7 @@ impl MergeProposalsClient {
             agent_id, merge_proposal_id
         );
 
-        let base_url = self
-            .config
-            .get_merge_proposals_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -338,14 +317,7 @@ impl MergeProposalsClient {
             agent_id, merge_proposal_id
         );
 
-        let base_url = self
-            .config
-            .get_merge_proposals_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -431,14 +403,7 @@ impl MergeProposalsClient {
             agent_id, merge_proposal_id
         );
 
-        let base_url = self
-            .config
-            .get_merge_proposals_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -525,14 +490,7 @@ impl MergeProposalsClient {
             agent_id, merge_proposal_id
         );
 
-        let base_url = self
-            .config
-            .get_merge_proposals_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -621,14 +579,7 @@ impl MergeProposalsClient {
             agent_id, merge_proposal_id
         );
 
-        let base_url = self
-            .config
-            .get_merge_proposals_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

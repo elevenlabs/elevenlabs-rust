@@ -63,14 +63,7 @@ impl TriageTicketsClient {
         let cursor = request.cursor.clone();
         let url = format!("/v1/convai/agents/{}/triage-tickets", agent_id);
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -185,14 +178,7 @@ impl TriageTicketsClient {
     ) -> Result<AgentConversationTicketResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/agents/{}/triage-tickets", agent_id);
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -284,14 +270,7 @@ impl TriageTicketsClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/triage-tickets";
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -404,14 +383,7 @@ impl TriageTicketsClient {
     ) -> Result<AgentConversationTicketResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/triage-tickets";
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -494,14 +466,7 @@ impl TriageTicketsClient {
             agent_id
         );
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -575,14 +540,7 @@ impl TriageTicketsClient {
     ) -> Result<AgentConversationTicketResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/triage-tickets/{}", agentqa_ticket_id);
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -657,14 +615,7 @@ impl TriageTicketsClient {
     ) -> Result<AgentConversationTicketResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/triage-tickets/{}", agentqa_ticket_id);
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -744,14 +695,7 @@ impl TriageTicketsClient {
     ) -> Result<(), crate::error::ApiError> {
         let url = format!("/v1/convai/triage-tickets/{}", agentqa_ticket_id);
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -818,14 +762,7 @@ impl TriageTicketsClient {
     ) -> Result<AgentConversationTicketResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/triage-tickets/{}/comments", agentqa_ticket_id);
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -907,14 +844,7 @@ impl TriageTicketsClient {
     ) -> Result<AgentConversationTicketResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/triage-tickets/{}/merge", agentqa_ticket_id);
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -999,14 +929,7 @@ impl TriageTicketsClient {
             agentqa_ticket_id
         );
 
-        let base_url = self
-            .config
-            .get_triage_tickets_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

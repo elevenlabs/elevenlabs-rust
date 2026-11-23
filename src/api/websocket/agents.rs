@@ -223,9 +223,7 @@ impl AgentsConnector {
                         ws_options.headers.insert(name.clone(), value.clone());
                     }
                 }
-                config
-                    .service_url(|environment| environment.production_url())
-                    .to_string()
+                config.base_url
             }
         };
         let url = crate::core::websocket::ws_url(&base_url, "/v1/convai/conversation");

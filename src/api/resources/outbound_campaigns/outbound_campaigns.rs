@@ -56,14 +56,7 @@ impl OutboundCampaignsClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/outbound-campaigns/campaigns";
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -157,14 +150,7 @@ impl OutboundCampaignsClient {
     ) -> Result<PauseAllCampaignsResponse, crate::error::ApiError> {
         let url = "/v1/convai/outbound-campaigns/campaigns/pause-all";
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -235,14 +221,7 @@ impl OutboundCampaignsClient {
     ) -> Result<StopAllCampaignsResponse, crate::error::ApiError> {
         let url = "/v1/convai/outbound-campaigns/campaigns/stop-all";
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -315,14 +294,7 @@ impl OutboundCampaignsClient {
     ) -> Result<SubmitCampaignResponse, crate::error::ApiError> {
         let url = "/v1/convai/outbound-campaigns/campaigns/submit";
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -402,14 +374,7 @@ impl OutboundCampaignsClient {
     ) -> Result<CampaignResponse, crate::error::ApiError> {
         let url = format!("/v1/convai/outbound-campaigns/campaigns/{}", campaign_id);
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -485,14 +450,7 @@ impl OutboundCampaignsClient {
             campaign_id
         );
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -568,14 +526,7 @@ impl OutboundCampaignsClient {
             campaign_id
         );
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -651,14 +602,7 @@ impl OutboundCampaignsClient {
             campaign_id
         );
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -734,14 +678,7 @@ impl OutboundCampaignsClient {
             campaign_id
         );
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -817,14 +754,7 @@ impl OutboundCampaignsClient {
             campaign_id
         );
 
-        let base_url = self
-            .config
-            .get_outbound_campaigns_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

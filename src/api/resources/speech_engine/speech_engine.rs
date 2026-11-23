@@ -54,14 +54,7 @@ impl SpeechEngineClient {
         let cursor = request.cursor.clone();
         let url = "/v1/speech-engine";
 
-        let base_url = self
-            .config
-            .get_speech_engine_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -149,14 +142,7 @@ impl SpeechEngineClient {
     ) -> Result<SpeechEngineResponse, crate::error::ApiError> {
         let url = "/v1/speech-engine";
 
-        let base_url = self
-            .config
-            .get_speech_engine_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -236,14 +222,7 @@ impl SpeechEngineClient {
     ) -> Result<SpeechEngineResponse, crate::error::ApiError> {
         let url = format!("/v1/speech-engine/{}", speech_engine_id);
 
-        let base_url = self
-            .config
-            .get_speech_engine_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -318,14 +297,7 @@ impl SpeechEngineClient {
     ) -> Result<SpeechEngineResponse, crate::error::ApiError> {
         let url = format!("/v1/speech-engine/{}", speech_engine_id);
 
-        let base_url = self
-            .config
-            .get_speech_engine_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -405,14 +377,7 @@ impl SpeechEngineClient {
     ) -> Result<(), crate::error::ApiError> {
         let url = format!("/v1/speech-engine/{}", speech_engine_id);
 
-        let base_url = self
-            .config
-            .get_speech_engine_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -479,14 +444,7 @@ impl SpeechEngineClient {
     ) -> Result<SpeechEngineResponse, crate::error::ApiError> {
         let url = format!("/v1/speech-engine/{}/duplicate", speech_engine_id);
 
-        let base_url = self
-            .config
-            .get_speech_engine_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

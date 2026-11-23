@@ -51,14 +51,7 @@ impl BillingClient {
         let page_size = request.page_size.clone();
         let url = "/v1/reception/reseller/billing/invoices";
 
-        let base_url = self
-            .config
-            .get_billing_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &cursor {
             request = request.query(&[("cursor", &val.to_string())]);
         }
@@ -137,14 +130,7 @@ impl BillingClient {
     ) -> Result<ResellerInvoiceDetail, crate::error::ApiError> {
         let url = format!("/v1/reception/reseller/billing/invoices/{}", invoice_id);
 
-        let base_url = self
-            .config
-            .get_billing_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -215,14 +201,7 @@ impl BillingClient {
     ) -> Result<ResellerUpcomingPaymentsResponse, crate::error::ApiError> {
         let url = "/v1/reception/reseller/billing/upcoming";
 
-        let base_url = self
-            .config
-            .get_billing_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

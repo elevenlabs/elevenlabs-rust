@@ -53,14 +53,7 @@ impl DraftsClient {
         let body = request.body.clone();
         let url = format!("/v1/convai/agents/{}/drafts", agent_id);
 
-        let base_url = self
-            .config
-            .get_drafts_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         request = request.query(&[("branch_id", &branch_id.to_string())]);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -145,14 +138,7 @@ impl DraftsClient {
         let branch_id = request.branch_id.clone();
         let url = format!("/v1/convai/agents/{}/drafts", agent_id);
 
-        let base_url = self
-            .config
-            .get_drafts_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         request = request.query(&[("branch_id", &branch_id.to_string())]);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -234,14 +220,7 @@ impl DraftsClient {
             agent_id, branch_id, procedure_id
         );
 
-        let base_url = self
-            .config
-            .get_drafts_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -323,14 +302,7 @@ impl DraftsClient {
             agent_id, branch_id, procedure_id
         );
 
-        let base_url = self
-            .config
-            .get_drafts_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -417,14 +389,7 @@ impl DraftsClient {
             agent_id, branch_id, procedure_id
         );
 
-        let base_url = self
-            .config
-            .get_drafts_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

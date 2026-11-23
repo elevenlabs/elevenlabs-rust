@@ -49,14 +49,7 @@ impl KnowledgeSourcesClient {
     ) -> Result<Vec<ReceptionKnowledgeSource>, crate::error::ApiError> {
         let url = "/v1/reception/knowledge-sources";
 
-        let base_url = self
-            .config
-            .get_knowledge_sources_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -133,14 +126,7 @@ impl KnowledgeSourcesClient {
     ) -> Result<ReceptionKnowledgeSource, crate::error::ApiError> {
         let url = "/v1/reception/knowledge-sources";
 
-        let base_url = self
-            .config
-            .get_knowledge_sources_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -217,14 +203,7 @@ impl KnowledgeSourcesClient {
     ) -> Result<ReceptionKnowledgeSource, crate::error::ApiError> {
         let url = format!("/v1/reception/knowledge-sources/{}", source_id);
 
-        let base_url = self
-            .config
-            .get_knowledge_sources_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -300,14 +279,7 @@ impl KnowledgeSourcesClient {
     ) -> Result<std::collections::HashMap<String, String>, crate::error::ApiError> {
         let url = format!("/v1/reception/knowledge-sources/{}", source_id);
 
-        let base_url = self
-            .config
-            .get_knowledge_sources_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -384,14 +356,7 @@ impl KnowledgeSourcesClient {
     ) -> Result<ReceptionKnowledgeSource, crate::error::ApiError> {
         let url = "/v1/reception/knowledge-sources/urls";
 
-        let base_url = self
-            .config
-            .get_knowledge_sources_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

@@ -58,14 +58,7 @@ impl ToolsClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/tools";
 
-        let base_url = self
-            .config
-            .get_tools_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &search {
             request = request.query(&[("search", &val.to_string())]);
         }
@@ -167,14 +160,7 @@ impl ToolsClient {
     ) -> Result<ToolResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/tools";
 
-        let base_url = self
-            .config
-            .get_tools_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -257,14 +243,7 @@ impl ToolsClient {
         let environment = request.environment.clone();
         let url = format!("/v1/convai/tools/{}", tool_id);
 
-        let base_url = self
-            .config
-            .get_tools_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &environment {
             request = request.query(&[("environment", &val.to_string())]);
         }
@@ -342,14 +321,7 @@ impl ToolsClient {
     ) -> Result<ToolResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/tools/{}", tool_id);
 
-        let base_url = self
-            .config
-            .get_tools_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -432,14 +404,7 @@ impl ToolsClient {
         let force = request.force.clone();
         let url = format!("/v1/convai/tools/{}", tool_id);
 
-        let base_url = self
-            .config
-            .get_tools_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(val) = &force {
             request = request.query(&[("force", &val.to_string())]);
         }
@@ -520,14 +485,7 @@ impl ToolsClient {
         let page_size = request.page_size.clone();
         let url = format!("/v1/convai/tools/{}/dependent-agents", tool_id);
 
-        let base_url = self
-            .config
-            .get_tools_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &cursor {
             request = request.query(&[("cursor", &val.to_string())]);
         }
@@ -609,14 +567,7 @@ impl ToolsClient {
         let environment = request.environment.clone();
         let url = format!("/v1/convai/mcp-servers/{}/tools", mcp_server_id);
 
-        let base_url = self
-            .config
-            .get_tools_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &environment {
             request = request.query(&[("environment", &val.to_string())]);
         }

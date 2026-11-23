@@ -50,14 +50,7 @@ impl WebhooksClient {
         let include_usages = request.include_usages.clone();
         let url = "/v1/workspace/webhooks";
 
-        let base_url = self
-            .config
-            .get_webhooks_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &include_usages {
             request = request.query(&[("include_usages", &val.to_string())]);
         }
@@ -133,14 +126,7 @@ impl WebhooksClient {
     ) -> Result<WorkspaceCreateWebhookResponseModel, crate::error::ApiError> {
         let url = "/v1/workspace/webhooks";
 
-        let base_url = self
-            .config
-            .get_webhooks_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -222,14 +208,7 @@ impl WebhooksClient {
     ) -> Result<PatchWorkspaceWebhookResponseModel, crate::error::ApiError> {
         let url = format!("/v1/workspace/webhooks/{}", webhook_id);
 
-        let base_url = self
-            .config
-            .get_webhooks_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -309,14 +288,7 @@ impl WebhooksClient {
     ) -> Result<DeleteWorkspaceWebhookResponseModel, crate::error::ApiError> {
         let url = format!("/v1/workspace/webhooks/{}", webhook_id);
 
-        let base_url = self
-            .config
-            .get_webhooks_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -391,14 +363,7 @@ impl WebhooksClient {
     ) -> Result<WebhookSendResultResponseModel, crate::error::ApiError> {
         let url = format!("/v1/workspace/webhooks/{}/test", webhook_id);
 
-        let base_url = self
-            .config
-            .get_webhooks_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -483,14 +448,7 @@ impl WebhooksClient {
             webhook_id, delivery_id
         );
 
-        let base_url = self
-            .config
-            .get_webhooks_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

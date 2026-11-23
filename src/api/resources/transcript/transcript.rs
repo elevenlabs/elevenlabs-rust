@@ -49,14 +49,7 @@ impl TranscriptClient {
     ) -> Result<DubbingSourceTranscriptResponse, crate::error::ApiError> {
         let url = format!("/v1/dubbing/project/{}/transcript", project_id);
 
-        let base_url = self
-            .config
-            .get_transcript_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -136,14 +129,7 @@ impl TranscriptClient {
             project_id, segment_id
         );
 
-        let base_url = self
-            .config
-            .get_transcript_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -228,14 +214,7 @@ impl TranscriptClient {
             project_id, segment_id
         );
 
-        let base_url = self
-            .config
-            .get_transcript_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -310,14 +289,7 @@ impl TranscriptClient {
     ) -> Result<DubbingBulkSourceSegmentUpdateResponse, crate::error::ApiError> {
         let url = format!("/v1/dubbing/project/{}/transcript/segments", project_id);
 
-        let base_url = self
-            .config
-            .get_transcript_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -399,14 +371,7 @@ impl TranscriptClient {
     ) -> Result<DubbingSourceSegmentUpdateResponse, crate::error::ApiError> {
         let url = format!("/v1/dubbing/project/{}/transcript/segment", project_id);
 
-        let base_url = self
-            .config
-            .get_transcript_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -491,14 +456,7 @@ impl TranscriptClient {
             project_id, language_id
         );
 
-        let base_url = self
-            .config
-            .get_transcript_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -580,14 +538,7 @@ impl TranscriptClient {
             project_id, language_id, segment_id
         );
 
-        let base_url = self
-            .config
-            .get_transcript_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -674,14 +625,7 @@ impl TranscriptClient {
             project_id, language_id
         );
 
-        let base_url = self
-            .config
-            .get_transcript_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -766,14 +710,7 @@ impl TranscriptClient {
             project_id, language_id
         );
 
-        let base_url = self
-            .config
-            .get_transcript_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

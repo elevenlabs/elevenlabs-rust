@@ -54,14 +54,7 @@ impl PronunciationDictionariesClient {
             project_id
         );
 
-        let base_url = self
-            .config
-            .get_pronunciation_dictionaries_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -141,14 +134,7 @@ impl PronunciationDictionariesClient {
     ) -> Result<AddPronunciationDictionaryResponseModel, crate::error::ApiError> {
         let url = "/v1/pronunciation-dictionaries/add-from-file";
 
-        let base_url = self
-            .config
-            .get_pronunciation_dictionaries_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -222,14 +208,7 @@ impl PronunciationDictionariesClient {
     ) -> Result<AddPronunciationDictionaryResponseModel, crate::error::ApiError> {
         let url = "/v1/pronunciation-dictionaries/add-from-rules";
 
-        let base_url = self
-            .config
-            .get_pronunciation_dictionaries_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -312,14 +291,7 @@ impl PronunciationDictionariesClient {
             pronunciation_dictionary_id
         );
 
-        let base_url = self
-            .config
-            .get_pronunciation_dictionaries_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -396,14 +368,7 @@ impl PronunciationDictionariesClient {
             pronunciation_dictionary_id
         );
 
-        let base_url = self
-            .config
-            .get_pronunciation_dictionaries_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -487,14 +452,7 @@ impl PronunciationDictionariesClient {
             dictionary_id, version_id
         );
 
-        let base_url = self
-            .config
-            .get_pronunciation_dictionaries_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -564,14 +522,7 @@ impl PronunciationDictionariesClient {
         let include_archived = request.include_archived.clone();
         let url = "/v1/pronunciation-dictionaries";
 
-        let base_url = self
-            .config
-            .get_pronunciation_dictionaries_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &cursor {
             request = request.query(&[("cursor", &val.to_string())]);
         }
