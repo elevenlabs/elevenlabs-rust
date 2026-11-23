@@ -56,14 +56,7 @@ impl AnalysisItemsClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/analysis-items";
 
-        let base_url = self
-            .config
-            .get_analysis_items_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &search {
             request = request.query(&[("search", &val.to_string())]);
         }
@@ -159,14 +152,7 @@ impl AnalysisItemsClient {
     ) -> Result<AnalysisItemResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/analysis-items";
 
-        let base_url = self
-            .config
-            .get_analysis_items_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -248,14 +234,7 @@ impl AnalysisItemsClient {
     ) -> Result<UpdateAnalysisItemAttachmentsResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/analysis-items/{}/attachments", analysis_item_id);
 
-        let base_url = self
-            .config
-            .get_analysis_items_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -335,14 +314,7 @@ impl AnalysisItemsClient {
     ) -> Result<AnalysisItemResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/analysis-items/{}", analysis_item_id);
 
-        let base_url = self
-            .config
-            .get_analysis_items_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -417,14 +389,7 @@ impl AnalysisItemsClient {
     ) -> Result<AnalysisItemResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/analysis-items/{}", analysis_item_id);
 
-        let base_url = self
-            .config
-            .get_analysis_items_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -507,14 +472,7 @@ impl AnalysisItemsClient {
         let force = request.force.clone();
         let url = format!("/v1/convai/analysis-items/{}", analysis_item_id);
 
-        let base_url = self
-            .config
-            .get_analysis_items_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(val) = &force {
             request = request.query(&[("force", &val.to_string())]);
         }
@@ -595,14 +553,7 @@ impl AnalysisItemsClient {
         let cursor = request.cursor.clone();
         let url = format!("/v1/convai/analysis-items/{}/versions", analysis_item_id);
 
-        let base_url = self
-            .config
-            .get_analysis_items_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -681,14 +632,7 @@ impl AnalysisItemsClient {
     ) -> Result<AnalysisItemResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/analysis-items/{}/copy", analysis_item_id);
 
-        let base_url = self
-            .config
-            .get_analysis_items_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

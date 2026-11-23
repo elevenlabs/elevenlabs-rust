@@ -55,14 +55,7 @@ impl TextToSpeechClient {
         let body = request.body.clone();
         let url = format!("/v1/text-to-speech/{}", voice_id);
 
-        let base_url = self
-            .config
-            .get_text_to_speech_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .stream_request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
         if let Some(val) = &enable_logging {
             request = request.query(&[("enable_logging", &val.to_string())]);
         }
@@ -149,14 +142,7 @@ impl TextToSpeechClient {
         let body = request.body.clone();
         let url = format!("/v1/text-to-speech/{}/with-timestamps", voice_id);
 
-        let base_url = self
-            .config
-            .get_text_to_speech_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &enable_logging {
             request = request.query(&[("enable_logging", &val.to_string())]);
         }
@@ -251,14 +237,7 @@ impl TextToSpeechClient {
         let body = request.body.clone();
         let url = format!("/v1/text-to-speech/{}/stream", voice_id);
 
-        let base_url = self
-            .config
-            .get_text_to_speech_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .stream_request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
         if let Some(val) = &enable_logging {
             request = request.query(&[("enable_logging", &val.to_string())]);
         }
@@ -346,14 +325,7 @@ impl TextToSpeechClient {
         let body = request.body.clone();
         let url = format!("/v1/text-to-speech/{}/stream/with-timestamps", voice_id);
 
-        let base_url = self
-            .config
-            .get_text_to_speech_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &enable_logging {
             request = request.query(&[("enable_logging", &val.to_string())]);
         }
@@ -440,14 +412,7 @@ impl TextToSpeechClient {
         let model_id = request.model_id.clone();
         let url = "/v1/flows/text-to-speech";
 
-        let base_url = self
-            .config
-            .get_text_to_speech_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &cursor {
             request = request.query(&[("cursor", &val.to_string())]);
         }
@@ -532,14 +497,7 @@ impl TextToSpeechClient {
     ) -> Result<MediaGenerationCreateResponse, crate::error::ApiError> {
         let url = "/v1/flows/text-to-speech";
 
-        let base_url = self
-            .config
-            .get_text_to_speech_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -619,14 +577,7 @@ impl TextToSpeechClient {
     ) -> Result<MediaGenerationResponse, crate::error::ApiError> {
         let url = format!("/v1/flows/text-to-speech/{}", generation_id);
 
-        let base_url = self
-            .config
-            .get_text_to_speech_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

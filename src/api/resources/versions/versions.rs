@@ -51,14 +51,7 @@ impl VersionsClient {
     ) -> Result<AgentVersionMetadata, crate::error::ApiError> {
         let url = format!("/v1/convai/agents/{}/versions/{}", agent_id, version_id);
 
-        let base_url = self
-            .config
-            .get_versions_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

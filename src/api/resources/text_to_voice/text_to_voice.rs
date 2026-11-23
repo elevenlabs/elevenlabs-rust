@@ -49,14 +49,7 @@ impl TextToVoiceClient {
     ) -> Result<Voice, crate::error::ApiError> {
         let url = "/v1/text-to-voice";
 
-        let base_url = self
-            .config
-            .get_text_to_voice_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -138,14 +131,7 @@ impl TextToVoiceClient {
         let body = request.body.clone();
         let url = "/v1/text-to-voice/design";
 
-        let base_url = self
-            .config
-            .get_text_to_voice_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }
@@ -232,14 +218,7 @@ impl TextToVoiceClient {
         let body = request.body.clone();
         let url = format!("/v1/text-to-voice/{}/remix", voice_id);
 
-        let base_url = self
-            .config
-            .get_text_to_voice_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }

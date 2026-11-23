@@ -52,14 +52,7 @@ impl SingleUseClient {
         let max_session_duration_seconds = request.max_session_duration_seconds.clone();
         let url = format!("/v1/single-use-token/{}", token_type);
 
-        let base_url = self
-            .config
-            .get_single_use_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &max_session_duration_seconds {
             request = request.query(&[("max_session_duration_seconds", &val.to_string())]);
         }

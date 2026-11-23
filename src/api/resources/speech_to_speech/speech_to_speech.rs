@@ -56,14 +56,7 @@ impl SpeechToSpeechClient {
         let output_format = request.output_format.clone();
         let url = format!("/v1/voice-changer/{}", voice_id);
 
-        let base_url = self
-            .config
-            .get_speech_to_speech_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .stream_request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
         if let Some(val) = &enable_logging {
             request = request.query(&[("enable_logging", &val.to_string())]);
         }
@@ -147,14 +140,7 @@ impl SpeechToSpeechClient {
         let output_format = request.output_format.clone();
         let url = format!("/v1/voice-changer/{}/stream", voice_id);
 
-        let base_url = self
-            .config
-            .get_speech_to_speech_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .stream_request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
         if let Some(val) = &enable_logging {
             request = request.query(&[("enable_logging", &val.to_string())]);
         }

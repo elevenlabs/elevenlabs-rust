@@ -49,14 +49,7 @@ impl DocumentsClient {
     ) -> Result<AddKnowledgeBaseResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/knowledge-base/url";
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -136,14 +129,7 @@ impl DocumentsClient {
     ) -> Result<AddKnowledgeBaseResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/knowledge-base/file";
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -217,14 +203,7 @@ impl DocumentsClient {
     ) -> Result<AddKnowledgeBaseResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/knowledge-base/text";
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -304,14 +283,7 @@ impl DocumentsClient {
     ) -> Result<AddKnowledgeBaseResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/knowledge-base/folder";
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -397,14 +369,7 @@ impl DocumentsClient {
         let agent_id = request.agent_id.clone();
         let url = format!("/v1/convai/knowledge-base/{}", documentation_id);
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &agent_id {
             request = request.query(&[("agent_id", &val.to_string())]);
         }
@@ -483,14 +448,7 @@ impl DocumentsClient {
     > {
         let url = format!("/v1/convai/knowledge-base/{}", documentation_id);
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -571,14 +529,7 @@ impl DocumentsClient {
         let force = request.force.clone();
         let url = format!("/v1/convai/knowledge-base/{}", documentation_id);
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         if let Some(val) = &force {
             request = request.query(&[("force", &val.to_string())]);
         }
@@ -658,14 +609,7 @@ impl DocumentsClient {
             documentation_id
         );
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -743,14 +687,7 @@ impl DocumentsClient {
             documentation_id
         );
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -838,14 +775,7 @@ impl DocumentsClient {
             documentation_id
         );
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &dependent_type {
             request = request.query(&[("dependent_type", &val.to_string())]);
         }
@@ -931,14 +861,7 @@ impl DocumentsClient {
         let body = request.body.clone();
         let url = "/v1/convai/knowledge-base/dependent-agents";
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &dependent_type {
             request = request.query(&[("dependent_type", &val.to_string())]);
         }
@@ -1027,14 +950,7 @@ impl DocumentsClient {
     ) -> Result<String, crate::error::ApiError> {
         let url = format!("/v1/convai/knowledge-base/{}/content", documentation_id);
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -1102,14 +1018,7 @@ impl DocumentsClient {
             documentation_id
         );
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -1184,14 +1093,7 @@ impl DocumentsClient {
     ) -> Result<(), crate::error::ApiError> {
         let url = format!("/v1/convai/knowledge-base/{}/move", document_id);
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -1262,14 +1164,7 @@ impl DocumentsClient {
     ) -> Result<(), crate::error::ApiError> {
         let url = "/v1/convai/knowledge-base/bulk-move";
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -1342,14 +1237,7 @@ impl DocumentsClient {
     {
         let url = "/v1/convai/knowledge-base/bulk-delete";
 
-        let base_url = self
-            .config
-            .get_documents_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

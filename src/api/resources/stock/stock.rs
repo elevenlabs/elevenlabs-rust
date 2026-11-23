@@ -53,14 +53,7 @@ impl StockClient {
     ) -> Result<ReceptionProduct, crate::error::ApiError> {
         let url = format!("/v1/reception/products/{}/stock", product_id);
 
-        let base_url = self
-            .config
-            .get_stock_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -145,14 +138,7 @@ impl StockClient {
     ) -> Result<ReceptionProduct, crate::error::ApiError> {
         let url = format!("/v1/reception/products/{}/stock/adjust", product_id);
 
-        let base_url = self
-            .config
-            .get_stock_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

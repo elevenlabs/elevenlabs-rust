@@ -52,14 +52,7 @@ impl CrawlJobsClient {
         let cursor = request.cursor.clone();
         let url = "/v1/convai/knowledge-base/crawl";
 
-        let base_url = self
-            .config
-            .get_crawl_jobs_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &include_job_ids {
             for item in val.iter() {
                 request = request.query(&[("include_job_ids", &item.to_string())]);
@@ -143,14 +136,7 @@ impl CrawlJobsClient {
     ) -> Result<CreateCrawlJobResponseModel, crate::error::ApiError> {
         let url = "/v1/convai/knowledge-base/crawl";
 
-        let base_url = self
-            .config
-            .get_crawl_jobs_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -230,14 +216,7 @@ impl CrawlJobsClient {
     ) -> Result<GetCrawlJobResponseModel, crate::error::ApiError> {
         let url = format!("/v1/convai/knowledge-base/crawl/{}", crawl_job_id);
 
-        let base_url = self
-            .config
-            .get_crawl_jobs_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -310,14 +289,7 @@ impl CrawlJobsClient {
     ) -> Result<serde_json::Value, crate::error::ApiError> {
         let url = format!("/v1/convai/knowledge-base/crawl/{}/cancel", crawl_job_id);
 
-        let base_url = self
-            .config
-            .get_crawl_jobs_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

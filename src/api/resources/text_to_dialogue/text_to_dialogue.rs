@@ -52,14 +52,7 @@ impl TextToDialogueClient {
         let body = request.body.clone();
         let url = "/v1/text-to-dialogue";
 
-        let base_url = self
-            .config
-            .get_text_to_dialogue_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .stream_request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }
@@ -140,14 +133,7 @@ impl TextToDialogueClient {
         let body = request.body.clone();
         let url = "/v1/text-to-dialogue/stream";
 
-        let base_url = self
-            .config
-            .get_text_to_dialogue_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .stream_request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.stream_request(reqwest::Method::POST, url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }
@@ -231,14 +217,7 @@ impl TextToDialogueClient {
         let body = request.body.clone();
         let url = "/v1/text-to-dialogue/stream/with-timestamps";
 
-        let base_url = self
-            .config
-            .get_text_to_dialogue_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }
@@ -321,14 +300,7 @@ impl TextToDialogueClient {
         let body = request.body.clone();
         let url = "/v1/text-to-dialogue/with-timestamps";
 
-        let base_url = self
-            .config
-            .get_text_to_dialogue_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(val) = &output_format {
             request = request.query(&[("output_format", &val.to_string())]);
         }

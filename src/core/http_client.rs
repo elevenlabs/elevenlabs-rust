@@ -103,27 +103,6 @@ impl HttpClient {
         format!("{}{}", base.trim_end_matches('/'), path)
     }
 
-    /// A request to `path` under `base_url` rather than the client-wide base URL, for an endpoint
-    /// routed to its own URL in a multi-URL environment.
-    pub fn request_at(
-        &self,
-        method: reqwest::Method,
-        base_url: &str,
-        path: impl AsRef<str>,
-    ) -> RequestBuilder {
-        {
-            let request = self.client.request(
-                method,
-                format!("{}{}", base_url.trim_end_matches('/'), path.as_ref()),
-            );
-            if self.apply_timeout {
-                request.timeout(self.timeout)
-            } else {
-                request
-            }
-        }
-    }
-
     pub fn get(&self, path: impl AsRef<str>) -> RequestBuilder {
         {
             let request = self.client.get(self.url(path.as_ref()));
@@ -184,19 +163,6 @@ impl HttpClient {
     /// still bounds the connection, the response headers, and any stall between chunks.
     pub fn stream_request(&self, method: reqwest::Method, path: impl AsRef<str>) -> RequestBuilder {
         self.client.request(method, self.url(path.as_ref()))
-    }
-
-    /// `stream_request` for an endpoint routed to its own URL in a multi-URL environment.
-    pub fn stream_request_at(
-        &self,
-        method: reqwest::Method,
-        base_url: &str,
-        path: impl AsRef<str>,
-    ) -> RequestBuilder {
-        self.client.request(
-            method,
-            format!("{}{}", base_url.trim_end_matches('/'), path.as_ref()),
-        )
     }
 
     pub async fn send_with_retry(

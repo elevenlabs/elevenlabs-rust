@@ -56,14 +56,7 @@ impl TransferRulesClient {
             agent_id
         );
 
-        let base_url = self
-            .config
-            .get_transfer_rules_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -153,14 +146,7 @@ impl TransferRulesClient {
             agent_id, rule_id
         );
 
-        let base_url = self
-            .config
-            .get_transfer_rules_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PUT, &base_url, url);
+        let mut request = self.http_client.put(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
@@ -248,14 +234,7 @@ impl TransferRulesClient {
             agent_id, rule_id
         );
 
-        let base_url = self
-            .config
-            .get_transfer_rules_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::DELETE, &base_url, url);
+        let mut request = self.http_client.delete(url);
         request = request.header("xi-workspace-id", &xi_workspace_id.to_string());
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

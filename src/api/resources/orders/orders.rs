@@ -54,14 +54,7 @@ impl OrdersClient {
         let end_date = request.end_date.clone();
         let url = "/v1/productions/orders";
 
-        let base_url = self
-            .config
-            .get_orders_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(val) = &page_size {
             request = request.query(&[("page_size", &val.to_string())]);
         }
@@ -151,14 +144,7 @@ impl OrdersClient {
     ) -> Result<CreateOrderResponse, crate::error::ApiError> {
         let url = "/v1/productions/orders";
 
-        let base_url = self
-            .config
-            .get_orders_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -239,14 +225,7 @@ impl OrdersClient {
     ) -> Result<OrderResponse, crate::error::ApiError> {
         let url = format!("/v1/productions/orders/{}", order_id.0);
 
-        let base_url = self
-            .config
-            .get_orders_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::GET, &base_url, url);
+        let mut request = self.http_client.get(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -321,14 +300,7 @@ impl OrdersClient {
     ) -> Result<UpdateOrderResponse, crate::error::ApiError> {
         let url = format!("/v1/productions/orders/{}", order_id.0);
 
-        let base_url = self
-            .config
-            .get_orders_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::PATCH, &base_url, url);
+        let mut request = self.http_client.patch(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
@@ -410,14 +382,7 @@ impl OrdersClient {
     ) -> Result<SubmitOrderResponse, crate::error::ApiError> {
         let url = format!("/v1/productions/orders/{}/submit", order_id.0);
 
-        let base_url = self
-            .config
-            .get_orders_config()
-            .service_url(|environment| environment.base_url())
-            .to_string();
-        let mut request = self
-            .http_client
-            .request_at(reqwest::Method::POST, &base_url, url);
+        let mut request = self.http_client.post(url);
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());
