@@ -64,3 +64,6 @@ tests/flows_create_and_wait.rs
 # src/lib.rs (`pub mod music_detailed;`), which is already frozen above.
 src/music_detailed/
 tests/music_detailed.rs
+
+# The org allowlist only permits actions-rust-lang/setup-rust-toolchain pinned to a commit hash.
+.github/workflows/ci.yml
