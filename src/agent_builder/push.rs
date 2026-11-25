@@ -446,12 +446,7 @@ struct Transport {
 
 impl Transport {
     fn new(config: ClientConfig) -> Result<Self, ApiError> {
-        let http = HttpClient::new(
-            config.base_url.clone(),
-            config.timeout.as_millis() as u64,
-            config.max_retries,
-        )
-        .map_err(ApiError::Network)?;
+        let http = HttpClient::new(config.clone())?;
         Ok(Self { http, config })
     }
 }

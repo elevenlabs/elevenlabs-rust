@@ -157,7 +157,11 @@ impl SystemTool {
         SystemTool::create("transfer_to_agent", json!({ "transfers": [] }))
     }
 
-    tool_methods!(ToolKind::System, System, SystemToolConfigInput);
+    tool_methods!(
+        ToolKind::System,
+        SystemToolConfigInput,
+        SystemToolConfigInput
+    );
 
     /// The API's `system_tool_type`, e.g. `"end_call"`.
     pub fn system_tool_type(&self) -> &str {

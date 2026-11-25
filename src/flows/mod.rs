@@ -434,12 +434,7 @@ impl poll::Polled for TemplateRunResponse {
 /// carry the root client's API key or custom headers to another sub-client's base URL. Each status
 /// check re-reads the base URL with the credentials, so `set_base_url` during a wait applies to both.
 fn transport(config: &ClientConfig) -> Result<HttpClient, ApiError> {
-    HttpClient::new(
-        config.base_url.clone(),
-        config.timeout.as_millis() as u64,
-        config.max_retries,
-    )
-    .map_err(ApiError::Network)
+    HttpClient::new(config.clone())
 }
 
 /// The caller's options for the status checks: everything except body parameters, which only the

@@ -126,7 +126,11 @@ impl WebhookTool {
         tool
     }
 
-    tool_methods!(ToolKind::Webhook, Webhook, WebhookToolConfigInput);
+    tool_methods!(
+        ToolKind::Webhook,
+        WebhookToolConfigInput,
+        WebhookToolConfigInput
+    );
 
     /// Sends a `GET` to `url`. `{name}` placeholders in the URL are filled from path params.
     pub fn get(self, url: impl Into<String>) -> Self {

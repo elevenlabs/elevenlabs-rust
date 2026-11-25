@@ -11,8 +11,9 @@ use crate::agent_tools::json::js_canonical;
 use crate::agent_tools::{Schema, SystemTool, Tool};
 use crate::agent_workflows::{Chain, Options, Workflow};
 use crate::api::types::{
-    AgentConfig, AgentPlatformSettingsRequestModel, ConversationalConfig, Llm, PrivacyConfigInput,
-    PromptAgentApiModelInput, TtsConversationalModel, TurnConfig,
+    AgentConfig, AgentMessagesOverridesLlm as Llm, AgentPlatformSettingsRequestModel,
+    ConversationalConfig, PrivacyConfigInput, PromptAgentApiModelInput, TtsConversationalModel,
+    TurnConfig,
 };
 
 fn fixture_dir() -> PathBuf {

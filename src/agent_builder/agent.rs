@@ -10,9 +10,9 @@ use crate::agent_tools::json::js_canonical;
 use crate::agent_tools::{Tool, ToolKind};
 use crate::agent_workflows::Workflow;
 use crate::api::types::{
-    AgentConfig, AgentPlatformSettingsRequestModel, BodyCreateAgentV1ConvaiAgentsCreatePost,
-    ConversationalConfig, Llm, PromptAgentApiModelInput, TtsConversationalConfigInput,
-    TtsConversationalModel,
+    AgentConfig, AgentMessagesOverridesLlm as Llm, AgentPlatformSettingsRequestModel,
+    BodyCreateAgentV1ConvaiAgentsCreatePost, ConversationalConfig, PromptAgentApiModelInput,
+    TtsConversationalConfigInput, TtsConversationalModel,
 };
 
 use super::errors::{AgentIssue, AgentIssueCode, AgentValidationError, Severity};
@@ -686,7 +686,13 @@ impl Agent {
                     }
                 }
                 None => {
-                    if let Err(err) = tool.build_config() {
+                    // Push sends `to_json()`. Only an editable tool must also fit the generated model.
+                    let checked = if tool.kind() == ToolKind::Other {
+                        tool.to_json().map(|_| ())
+                    } else {
+                        tool.build_config().map(|_| ())
+                    };
+                    if let Err(err) = checked {
                         issues.push(AgentIssue::error(
                             AgentIssueCode::InvalidTool,
                             err.to_string(),
