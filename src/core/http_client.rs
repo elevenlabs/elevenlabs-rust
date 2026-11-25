@@ -262,15 +262,12 @@ impl HttpClient {
             // Strict delta format (\d+(\.\d+)?) — no sign/exponent, matching
             // Retry-After parsing and the other SDKs so every language agrees.
             .filter(|v| {
-                let (int_part, frac) = match v.split_once('.') {
-                    Some((i, f)) => (i, Some(f)),
-                    None => (*v, None),
-                };
-                !int_part.is_empty()
-                    && int_part.bytes().all(|b| b.is_ascii_digit())
-                    && frac.map_or(true, |f| {
-                        !f.is_empty() && f.bytes().all(|b| b.is_ascii_digit())
-                    })
+                let digits =
+                    |part: &str| !part.is_empty() && part.bytes().all(|b| b.is_ascii_digit());
+                match v.split_once('.') {
+                    Some((int_part, frac)) => digits(int_part) && digits(frac),
+                    None => digits(v),
+                }
             })
             .and_then(|v| v.parse::<f64>().ok())
             .filter(|ms| *ms >= 0.0)

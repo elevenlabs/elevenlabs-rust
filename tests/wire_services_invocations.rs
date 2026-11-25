@@ -167,6 +167,10 @@ async fn get_sends_the_real_wire_request() {
                                             "output_total": {
                                                 "tokens": 123,
                                                 "price": 9.99
+                                            },
+                                            "output_total_reasoning_portion": {
+                                                "tokens": 123,
+                                                "price": 9.99
                                             }
                                         }
                                     }
@@ -322,6 +326,10 @@ async fn get_sends_the_real_wire_request() {
                                             "price": 9.99
                                         },
                                         "output_total": {
+                                            "tokens": 123,
+                                            "price": 9.99
+                                        },
+                                        "output_total_reasoning_portion": {
                                             "tokens": 123,
                                             "price": 9.99
                                         }
@@ -503,6 +511,10 @@ async fn get_sends_the_real_wire_request() {
                                     "output_total": {
                                         "tokens": 123,
                                         "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
+                                        "tokens": 123,
+                                        "price": 9.99
                                     }
                                 }
                             }
@@ -594,6 +606,10 @@ async fn get_sends_the_real_wire_request() {
                                     "output_total": {
                                         "tokens": 123,
                                         "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
+                                        "tokens": 123,
+                                        "price": 9.99
                                     }
                                 }
                             }
@@ -614,6 +630,10 @@ async fn get_sends_the_real_wire_request() {
                                         "price": 9.99
                                     },
                                     "output_total": {
+                                        "tokens": 123,
+                                        "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
                                         "tokens": 123,
                                         "price": 9.99
                                     }
@@ -942,6 +962,10 @@ async fn update_sends_the_real_wire_request() {
                                             "output_total": {
                                                 "tokens": 123,
                                                 "price": 9.99
+                                            },
+                                            "output_total_reasoning_portion": {
+                                                "tokens": 123,
+                                                "price": 9.99
                                             }
                                         }
                                     }
@@ -1097,6 +1121,10 @@ async fn update_sends_the_real_wire_request() {
                                             "price": 9.99
                                         },
                                         "output_total": {
+                                            "tokens": 123,
+                                            "price": 9.99
+                                        },
+                                        "output_total_reasoning_portion": {
                                             "tokens": 123,
                                             "price": 9.99
                                         }
@@ -1278,6 +1306,10 @@ async fn update_sends_the_real_wire_request() {
                                     "output_total": {
                                         "tokens": 123,
                                         "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
+                                        "tokens": 123,
+                                        "price": 9.99
                                     }
                                 }
                             }
@@ -1369,6 +1401,10 @@ async fn update_sends_the_real_wire_request() {
                                     "output_total": {
                                         "tokens": 123,
                                         "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
+                                        "tokens": 123,
+                                        "price": 9.99
                                     }
                                 }
                             }
@@ -1389,6 +1425,10 @@ async fn update_sends_the_real_wire_request() {
                                         "price": 9.99
                                     },
                                     "output_total": {
+                                        "tokens": 123,
+                                        "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
                                         "tokens": 123,
                                         "price": 9.99
                                     }
@@ -1713,6 +1753,7 @@ async fn resubmit_sends_the_real_wire_request() {
                         "use_llm_generated_message": true,
                         "randomize_fillers": true,
                         "max_soft_timeouts_per_generation": 8,
+                        "pause_after_filler": true,
                         "llm_generated_message_prompt_override": "value",
                         "disable_until_first_user_message": true
                     },
@@ -2170,6 +2211,9 @@ async fn resubmit_sends_the_real_wire_request() {
                                 "secret_id": "value"
                             },
                             "auth_connection": {
+                                "auth_connection_id": "value"
+                            },
+                            "mtls_auth_connection": {
                                 "auth_connection_id": "value"
                             },
                             "request_headers": {
@@ -3017,6 +3061,7 @@ async fn resubmit_surfaces_the_declared_422() {
                         "use_llm_generated_message": true,
                         "randomize_fillers": true,
                         "max_soft_timeouts_per_generation": 8,
+                        "pause_after_filler": true,
                         "llm_generated_message_prompt_override": "value",
                         "disable_until_first_user_message": true
                     },
@@ -3474,6 +3519,9 @@ async fn resubmit_surfaces_the_declared_422() {
                                 "secret_id": "value"
                             },
                             "auth_connection": {
+                                "auth_connection_id": "value"
+                            },
+                            "mtls_auth_connection": {
                                 "auth_connection_id": "value"
                             },
                             "request_headers": {

@@ -80,56 +80,56 @@ pub struct BodyCreateStudioProjectV1StudioProjectsPost {
     /// A url that will be called by our service when the Studio project is converted. Request will contain a json blob containing the status of the conversion
     /// Messages:
     /// 1. When project was converted successfully:
-    /// {
-    /// type: "project_conversion_status",
-    /// event_timestamp: 1234567890,
-    /// data: {
-    /// request_id: "1234567890",
-    /// project_id: "21m00Tcm4TlvDq8ikWAM",
-    /// conversion_status: "success",
-    /// project_snapshot_id: "22m00Tcm4TlvDq8ikMAT",
-    /// error_details: None,
-    /// }
-    /// }
+    ///    {
+    ///    type: "project_conversion_status",
+    ///    event_timestamp: 1234567890,
+    ///    data: {
+    ///    request_id: "1234567890",
+    ///    project_id: "21m00Tcm4TlvDq8ikWAM",
+    ///    conversion_status: "success",
+    ///    project_snapshot_id: "22m00Tcm4TlvDq8ikMAT",
+    ///    error_details: None,
+    ///    }
+    ///    }
     /// 2. When project conversion failed:
-    /// {
-    /// type: "project_conversion_status",
-    /// event_timestamp: 1234567890,
-    /// data: {
-    /// request_id: "1234567890",
-    /// project_id: "21m00Tcm4TlvDq8ikWAM",
-    /// conversion_status: "error",
-    /// project_snapshot_id: None,
-    /// error_details: "Error details if conversion failed"
-    /// }
-    /// }
+    ///    {
+    ///    type: "project_conversion_status",
+    ///    event_timestamp: 1234567890,
+    ///    data: {
+    ///    request_id: "1234567890",
+    ///    project_id: "21m00Tcm4TlvDq8ikWAM",
+    ///    conversion_status: "error",
+    ///    project_snapshot_id: None,
+    ///    error_details: "Error details if conversion failed"
+    ///    }
+    ///    }
     ///
     /// 3. When chapter was converted successfully:
-    /// {
-    /// type: "chapter_conversion_status",
-    /// event_timestamp: 1234567890,
-    /// data: {
-    /// request_id: "1234567890",
-    /// project_id: "21m00Tcm4TlvDq8ikWAM",
-    /// chapter_id: "22m00Tcm4TlvDq8ikMAT",
-    /// conversion_status: "success",
-    /// chapter_snapshot_id: "23m00Tcm4TlvDq8ikMAV",
-    /// error_details: None,
-    /// }
-    /// }
+    ///    {
+    ///    type: "chapter_conversion_status",
+    ///    event_timestamp: 1234567890,
+    ///    data: {
+    ///    request_id: "1234567890",
+    ///    project_id: "21m00Tcm4TlvDq8ikWAM",
+    ///    chapter_id: "22m00Tcm4TlvDq8ikMAT",
+    ///    conversion_status: "success",
+    ///    chapter_snapshot_id: "23m00Tcm4TlvDq8ikMAV",
+    ///    error_details: None,
+    ///    }
+    ///    }
     /// 4. When chapter conversion failed:
-    /// {
-    /// type: "chapter_conversion_status",
-    /// event_timestamp: 1234567890,
-    /// data: {
-    /// request_id: "1234567890",
-    /// project_id: "21m00Tcm4TlvDq8ikWAM",
-    /// chapter_id: "22m00Tcm4TlvDq8ikMAT",
-    /// conversion_status: "error",
-    /// chapter_snapshot_id: None,
-    /// error_details: "Error details if conversion failed"
-    /// }
-    /// }
+    ///    {
+    ///    type: "chapter_conversion_status",
+    ///    event_timestamp: 1234567890,
+    ///    data: {
+    ///    request_id: "1234567890",
+    ///    project_id: "21m00Tcm4TlvDq8ikWAM",
+    ///    chapter_id: "22m00Tcm4TlvDq8ikMAT",
+    ///    conversion_status: "error",
+    ///    chapter_snapshot_id: None,
+    ///    error_details: "Error details if conversion failed"
+    ///    }
+    ///    }
     ///
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_url: Option<String>,
@@ -164,6 +164,9 @@ pub struct BodyCreateStudioProjectV1StudioProjectsPost {
     /// If true, creates a corresponding read for direct publishing in draft state
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_publishing_read: Option<bool>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub from_document_file_name: Option<String>,
 }
 
 impl BodyCreateStudioProjectV1StudioProjectsPost {
@@ -204,6 +207,7 @@ pub struct BodyCreateStudioProjectV1StudioProjectsPostBuilder {
     source_type: Option<BodyCreateStudioProjectV1StudioProjectsPostSourceType>,
     voice_settings: Option<Vec<String>>,
     create_publishing_read: Option<bool>,
+    from_document_file_name: Option<String>,
 }
 
 impl BodyCreateStudioProjectV1StudioProjectsPostBuilder {
@@ -361,6 +365,11 @@ impl BodyCreateStudioProjectV1StudioProjectsPostBuilder {
         self
     }
 
+    pub fn from_document_file_name(mut self, value: impl Into<String>) -> Self {
+        self.from_document_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyCreateStudioProjectV1StudioProjectsPost`].
     /// This method will fail if any of the following fields are not set:
     /// - [`name`](BodyCreateStudioProjectV1StudioProjectsPostBuilder::name)
@@ -395,6 +404,7 @@ impl BodyCreateStudioProjectV1StudioProjectsPostBuilder {
             source_type: self.source_type,
             voice_settings: self.voice_settings,
             create_publishing_read: self.create_publishing_read,
+            from_document_file_name: self.from_document_file_name,
         })
     }
 }
@@ -416,13 +426,16 @@ impl BodyCreateStudioProjectV1StudioProjectsPost {
             form = form.text("from_url", value.to_string());
         }
         if let Some(value) = self.from_document {
-            form = form.part(
-                "from_document",
+            form = form.part("from_document", {
+                let file_name = self
+                    .from_document_file_name
+                    .unwrap_or_else(|| "from_document".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("from_document")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.from_content_json {
             form = form.text("from_content_json", value.to_string());

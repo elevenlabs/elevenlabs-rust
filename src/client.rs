@@ -2,7 +2,8 @@ use std::sync::Arc;
 
 #[cfg(feature = "websocket")]
 use crate::api::websocket::{
-    TextToDialogueMultiContextConnector, TextToSpeechMultiContextConnector, TranslationConnector,
+    SubtitlingConnector, TextToDialogueMultiContextConnector, TextToSpeechMultiContextConnector,
+    TranslationConnector,
 };
 use crate::api::AccentsClient;
 use crate::api::AgentsClient;
@@ -176,13 +177,13 @@ pub struct ApiClient {
     pub content: ContentClient,
     pub snapshots: SnapshotsClient,
     pub chapters: ChaptersClient,
+    pub audio_native: AudioNativeClient,
     pub project: ProjectClient,
     pub language: LanguageClient,
     pub transcript: TranscriptClient,
     pub dubbing: DubbingClient,
     pub transcripts: TranscriptsClient,
     pub models: ModelsClient,
-    pub audio_native: AudioNativeClient,
     pub content_provenance: ContentProvenanceClient,
     pub rules: RulesClient,
     pub api_keys: ApiKeysClient,
@@ -296,6 +297,8 @@ pub struct ApiClient {
     pub text_to_speech_multi_context: TextToSpeechMultiContextConnector,
     #[cfg(feature = "websocket")]
     pub translation: TranslationConnector,
+    #[cfg(feature = "websocket")]
+    pub subtitling: SubtitlingConnector,
 }
 
 impl ApiClient {
@@ -338,6 +341,8 @@ impl ApiClient {
         let content = ContentClient::with_shared(http_client.clone(), config_manager.clone());
         let snapshots = SnapshotsClient::with_shared(http_client.clone(), config_manager.clone());
         let chapters = ChaptersClient::with_shared(http_client.clone(), config_manager.clone());
+        let audio_native =
+            AudioNativeClient::with_shared(http_client.clone(), config_manager.clone());
         let project = ProjectClient::with_shared(http_client.clone(), config_manager.clone());
         let language = LanguageClient::with_shared(http_client.clone(), config_manager.clone());
         let transcript = TranscriptClient::with_shared(http_client.clone(), config_manager.clone());
@@ -345,8 +350,6 @@ impl ApiClient {
         let transcripts =
             TranscriptsClient::with_shared(http_client.clone(), config_manager.clone());
         let models = ModelsClient::with_shared(http_client.clone(), config_manager.clone());
-        let audio_native =
-            AudioNativeClient::with_shared(http_client.clone(), config_manager.clone());
         let content_provenance =
             ContentProvenanceClient::with_shared(http_client.clone(), config_manager.clone());
         let rules = RulesClient::with_shared(http_client.clone(), config_manager.clone());
@@ -493,6 +496,8 @@ impl ApiClient {
             TextToSpeechMultiContextConnector::with_shared(config_manager.clone());
         #[cfg(feature = "websocket")]
         let translation = TranslationConnector::with_shared(config_manager.clone());
+        #[cfg(feature = "websocket")]
+        let subtitling = SubtitlingConnector::with_shared(config_manager.clone());
         Ok(Self {
             config: config_manager,
             http_client,
@@ -520,13 +525,13 @@ impl ApiClient {
             content,
             snapshots,
             chapters,
+            audio_native,
             project,
             language,
             transcript,
             dubbing,
             transcripts,
             models,
-            audio_native,
             content_provenance,
             rules,
             api_keys,
@@ -640,6 +645,8 @@ impl ApiClient {
             text_to_speech_multi_context,
             #[cfg(feature = "websocket")]
             translation,
+            #[cfg(feature = "websocket")]
+            subtitling,
         })
     }
 

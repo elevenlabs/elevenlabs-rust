@@ -52,6 +52,9 @@ pub struct BodyCreatesAudioNativeEnabledProjectV1AudioNativePost {
     /// A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators="{\"pronunciation_dictionary_id\":\"Vmd4Zor6fplcA7WrINey\",\"version_id\":\"hRPaxjlTdR7wFMhV4w0b\"}"' --form 'pronunciation_dictionary_locators="{\"pronunciation_dictionary_id\":\"JzWtcGQMJ6bnlWwyMo7e\",\"version_id\":\"lbmwxiLu4q6txYxgdZqn\"}"'.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pronunciation_dictionary_locators: Option<Vec<String>>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub file_file_name: Option<String>,
 }
 
 impl BodyCreatesAudioNativeEnabledProjectV1AudioNativePost {
@@ -77,6 +80,7 @@ pub struct BodyCreatesAudioNativeEnabledProjectV1AudioNativePostBuilder {
     auto_convert: Option<bool>,
     apply_text_normalization: Option<BodyCreatePodcastV1StudioPodcastsPostApplyTextNormalization>,
     pronunciation_dictionary_locators: Option<Vec<String>>,
+    file_file_name: Option<String>,
 }
 
 impl BodyCreatesAudioNativeEnabledProjectV1AudioNativePostBuilder {
@@ -153,6 +157,11 @@ impl BodyCreatesAudioNativeEnabledProjectV1AudioNativePostBuilder {
         self
     }
 
+    pub fn file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.file_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyCreatesAudioNativeEnabledProjectV1AudioNativePost`].
     /// This method will fail if any of the following fields are not set:
     /// - [`name`](BodyCreatesAudioNativeEnabledProjectV1AudioNativePostBuilder::name)
@@ -174,6 +183,7 @@ impl BodyCreatesAudioNativeEnabledProjectV1AudioNativePostBuilder {
             auto_convert: self.auto_convert,
             apply_text_normalization: self.apply_text_normalization,
             pronunciation_dictionary_locators: self.pronunciation_dictionary_locators,
+            file_file_name: self.file_file_name,
         })
     }
 }
@@ -210,13 +220,14 @@ impl BodyCreatesAudioNativeEnabledProjectV1AudioNativePost {
             form = form.text("model_id", value.to_string());
         }
         if let Some(value) = self.file {
-            form = form.part(
-                "file",
+            form = form.part("file", {
+                let file_name = self.file_file_name.unwrap_or_else(|| "file".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("file")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.auto_convert {
             form = form.text("auto_convert", value.to_string());

@@ -19,6 +19,9 @@ pub struct BodyUpdateStudioProjectContentV1StudioProjectsProjectIdContentPost {
     /// Whether to auto convert the Studio project to audio or not.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_convert: Option<bool>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub from_document_file_name: Option<String>,
 }
 
 impl BodyUpdateStudioProjectContentV1StudioProjectsProjectIdContentPost {
@@ -34,6 +37,7 @@ pub struct BodyUpdateStudioProjectContentV1StudioProjectsProjectIdContentPostBui
     from_document: Option<Vec<u8>>,
     from_content_json: Option<String>,
     auto_convert: Option<bool>,
+    from_document_file_name: Option<String>,
 }
 
 impl BodyUpdateStudioProjectContentV1StudioProjectsProjectIdContentPostBuilder {
@@ -57,6 +61,11 @@ impl BodyUpdateStudioProjectContentV1StudioProjectsProjectIdContentPostBuilder {
         self
     }
 
+    pub fn from_document_file_name(mut self, value: impl Into<String>) -> Self {
+        self.from_document_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyUpdateStudioProjectContentV1StudioProjectsProjectIdContentPost`].
     pub fn build(
         self,
@@ -68,6 +77,7 @@ impl BodyUpdateStudioProjectContentV1StudioProjectsProjectIdContentPostBuilder {
                 from_document: self.from_document,
                 from_content_json: self.from_content_json,
                 auto_convert: self.auto_convert,
+                from_document_file_name: self.from_document_file_name,
             },
         )
     }
@@ -80,13 +90,16 @@ impl BodyUpdateStudioProjectContentV1StudioProjectsProjectIdContentPost {
             form = form.text("from_url", value.to_string());
         }
         if let Some(value) = self.from_document {
-            form = form.part(
-                "from_document",
+            form = form.part("from_document", {
+                let file_name = self
+                    .from_document_file_name
+                    .unwrap_or_else(|| "from_document".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("from_document")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.from_content_json {
             form = form.text("from_content_json", value.to_string());

@@ -30,6 +30,9 @@ pub struct BodyVideoToMusicV1MusicVideoToMusicPost {
     #[serde(rename = "sign_with_c2pa")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sign_with_c_2_pa: Option<bool>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub videos_file_names: Option<Vec<Option<String>>>,
 }
 
 impl BodyVideoToMusicV1MusicVideoToMusicPost {
@@ -49,6 +52,7 @@ pub struct BodyVideoToMusicV1MusicVideoToMusicPostBuilder {
     separate_tracks: Option<bool>,
     use_audio_as_reference: Option<bool>,
     sign_with_c_2_pa: Option<bool>,
+    videos_file_names: Option<Vec<Option<String>>>,
 }
 
 impl BodyVideoToMusicV1MusicVideoToMusicPostBuilder {
@@ -92,6 +96,11 @@ impl BodyVideoToMusicV1MusicVideoToMusicPostBuilder {
         self
     }
 
+    pub fn videos_file_names(mut self, value: Vec<Option<String>>) -> Self {
+        self.videos_file_names = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyVideoToMusicV1MusicVideoToMusicPost`].
     /// This method will fail if any of the following fields are not set:
     /// - [`videos`](BodyVideoToMusicV1MusicVideoToMusicPostBuilder::videos)
@@ -107,6 +116,7 @@ impl BodyVideoToMusicV1MusicVideoToMusicPostBuilder {
             separate_tracks: self.separate_tracks,
             use_audio_as_reference: self.use_audio_as_reference,
             sign_with_c_2_pa: self.sign_with_c_2_pa,
+            videos_file_names: self.videos_file_names,
         })
     }
 }
@@ -114,14 +124,19 @@ impl BodyVideoToMusicV1MusicVideoToMusicPostBuilder {
 impl BodyVideoToMusicV1MusicVideoToMusicPost {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
+        let mut videos_file_names_iter = self.videos_file_names.unwrap_or_default().into_iter();
         for part_value in self.videos {
-            form = form.part(
-                "videos",
+            form = form.part("videos", {
+                let file_name = videos_file_names_iter
+                    .next()
+                    .flatten()
+                    .unwrap_or_else(|| "videos".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(part_value)
-                    .file_name("videos")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.description {
             form = form.text("description", value.to_string());

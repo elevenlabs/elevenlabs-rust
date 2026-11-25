@@ -24,6 +24,7 @@ async fn create_sends_the_real_wire_request() {
             "pending_downgrade_tier": "value",
             "pending_downgrade_at_unix": 123
         },
+        "charge_customer": true,
         "has_payment_issue": true,
         "onboarding_completed_at_unix": 123,
         "member_results": [
@@ -40,6 +41,7 @@ async fn create_sends_the_real_wire_request() {
         r#"{
         "business_name": "value",
         "vertical": "salon_barbershop",
+        "charge_customer": true,
         "subscription": {
             "tier_id": "value",
             "billing_period": "monthly_period"
@@ -129,6 +131,7 @@ async fn create_surfaces_the_declared_422() {
         r#"{
         "business_name": "value",
         "vertical": "salon_barbershop",
+        "charge_customer": true,
         "subscription": {
             "tier_id": "value",
             "billing_period": "monthly_period"

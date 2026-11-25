@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum Environment {
     #[serde(rename = "default")]
+    #[default]
     Default,
     #[serde(rename = "PRODUCTION")]
     Production,
@@ -26,11 +27,5 @@ impl Environment {
             Environment::ProductionIndia => "https://api.in.residency.elevenlabs.io",
             Environment::ProductionSingapore => "https://api.sg.residency.elevenlabs.io",
         }
-    }
-}
-
-impl Default for Environment {
-    fn default() -> Self {
-        Environment::Default
     }
 }

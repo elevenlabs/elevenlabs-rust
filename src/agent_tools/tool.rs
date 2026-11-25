@@ -265,15 +265,15 @@ impl Tool {
         on_warning: F,
     ) -> Result<ToolRequestModelToolConfig, ToolValidationError> {
         Ok(match self {
-            Tool::Webhook(t) => ToolRequestModelToolConfig::Webhook {
-                data: t.build_config_with_warnings(on_warning)?,
-            },
-            Tool::Client(t) => ToolRequestModelToolConfig::Client {
-                data: t.build_config_with_warnings(on_warning)?,
-            },
-            Tool::System(t) => ToolRequestModelToolConfig::System {
-                data: t.build_config_with_warnings(on_warning)?,
-            },
+            Tool::Webhook(t) => ToolRequestModelToolConfig::WebhookToolConfigInput(
+                t.build_config_with_warnings(on_warning)?,
+            ),
+            Tool::Client(t) => ToolRequestModelToolConfig::ClientToolConfigInput(
+                t.build_config_with_warnings(on_warning)?,
+            ),
+            Tool::System(t) => ToolRequestModelToolConfig::SystemToolConfigInput(
+                t.build_config_with_warnings(on_warning)?,
+            ),
             Tool::Other(t) => t.build_config_with_warnings(on_warning)?,
         })
     }
@@ -304,7 +304,8 @@ impl Tool {
 }
 
 /// A loaded tool of a type the builder has no constructor for, such as `mcp`. Kept exactly as
-/// loaded; `build()` warns with `unknown_tool_type`.
+/// loaded; `build()` warns with `unknown_tool_type`, and fails with `invalid_model` when no
+/// generated variant can hold the tool unchanged.
 #[derive(Debug, Clone, PartialEq)]
 pub struct OtherTool {
     raw: WireMap,
@@ -342,8 +343,8 @@ impl OtherTool {
         Ok(request_model(self.build_config_with_warnings(on_warning)?))
     }
 
-    /// The loaded config as the generated tool config: its own variant if the generated types
-    /// model it, else the catch-all variant holding the loaded JSON.
+    /// The loaded config as the generated tool config, if a generated variant holds it unchanged;
+    /// otherwise an `invalid_model` error (the generated enum has no catch-all variant).
     pub fn build_config(&self) -> Result<ToolRequestModelToolConfig, ToolValidationError> {
         self.build_config_with_warnings(|_| {})
     }
@@ -355,9 +356,23 @@ impl OtherTool {
         on_warning: F,
     ) -> Result<ToolRequestModelToolConfig, ToolValidationError> {
         check(self.name(), self.all_issues(), on_warning)?;
-        let raw = Value::Object(self.raw.clone());
-        Ok(serde_json::from_value(canonical(&raw))
-            .unwrap_or(ToolRequestModelToolConfig::__Unknown(raw)))
+        let raw = canonical(&Value::Object(self.raw.clone()));
+        // The generated enum has no catch-all variant, and it decodes an unknown `type` into the
+        // first variant whose fields fit, dropping the rest. Accept it only if nothing is lost.
+        serde_json::from_value::<ToolRequestModelToolConfig>(raw.clone())
+            .ok()
+            .filter(|config| serde_json::to_value(config).is_ok_and(|sent| same_value(&sent, &raw)))
+            .ok_or_else(|| ToolValidationError {
+                tool_name: self.name().to_string(),
+                issues: vec![ToolIssue::error(
+                    ToolIssueCode::InvalidModel,
+                    None,
+                    format!(
+                        "The generated tool config model can't represent a tool of type \"{}\" without changing it; send to_json() or attach the tool by id",
+                        self.tool_type().unwrap_or("other")
+                    ),
+                )],
+            })
     }
 
     /// The loaded config in API format, keys sorted. Validates like `build()`.
@@ -470,11 +485,9 @@ pub(crate) fn check<F: FnMut(&ToolIssue)>(
 /// here; that is reported as a validation error, never a panic.
 pub(crate) fn to_model<T: DeserializeOwned + Serialize>(
     name: &str,
-    mut wire: WireMap,
+    wire: WireMap,
 ) -> Result<T, ToolValidationError> {
-    // The generated config structs are the variants of a `type`-tagged enum, so they have no
-    // `type` field of their own.
-    wire.remove("type");
+    // The generated tool config enum is untagged: each config struct carries its own `type`.
     // Whole floats become integers here (and only here, not in `to_json()`), since the generated
     // integer fields don't accept a float such as 5.0.
     let wire = canonical(&Value::Object(wire));
@@ -676,7 +689,7 @@ macro_rules! tool_methods {
         {
             let data = self.build_config_with_warnings(on_warning)?;
             Ok($crate::agent_tools::tool::request_model(
-                $crate::api::types::ToolRequestModelToolConfig::$variant { data },
+                $crate::api::types::ToolRequestModelToolConfig::$variant(data),
             ))
         }
 

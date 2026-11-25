@@ -589,6 +589,7 @@ impl VoicesClient {
     /// # Arguments
     ///
     /// * `body`
+    /// * `request` - Query parameters for this request
     /// * `options` - Per-call overrides
     ///
     /// # Returns
@@ -597,11 +598,46 @@ impl VoicesClient {
     pub async fn find_similar_voices(
         &self,
         body: Option<&ListSimilarVoicesRequest>,
+        request: &FindSimilarVoicesQueryRequest,
         options: Option<RequestOptions>,
     ) -> Result<GetLibraryVoicesResponse, crate::error::ApiError> {
+        let category = request.category.clone();
+        let gender = request.gender.clone();
+        let age = request.age.clone();
+        let use_cases = request.use_cases.clone();
+        let min_notice_period_days = request.min_notice_period_days.clone();
+        let include_custom_rates = request.include_custom_rates.clone();
+        let include_live_moderated = request.include_live_moderated.clone();
+        let owner_id = request.owner_id.clone();
         let url = "/v1/similar-voices";
 
         let mut request = self.http_client.post(url);
+        if let Some(val) = &category {
+            request = request.query(&[("category", &val.to_string())]);
+        }
+        if let Some(val) = &gender {
+            request = request.query(&[("gender", &val.to_string())]);
+        }
+        if let Some(val) = &age {
+            request = request.query(&[("age", &val.to_string())]);
+        }
+        if let Some(val) = &use_cases {
+            for item in val.iter() {
+                request = request.query(&[("use_cases", &item.to_string())]);
+            }
+        }
+        if let Some(val) = &min_notice_period_days {
+            request = request.query(&[("min_notice_period_days", &val.to_string())]);
+        }
+        if let Some(val) = &include_custom_rates {
+            request = request.query(&[("include_custom_rates", &val.to_string())]);
+        }
+        if let Some(val) = &include_live_moderated {
+            request = request.query(&[("include_live_moderated", &val.to_string())]);
+        }
+        if let Some(val) = &owner_id {
+            request = request.query(&[("owner_id", &val.to_string())]);
+        }
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {
                 request = request.header(key.as_str(), value.as_str());

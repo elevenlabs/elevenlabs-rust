@@ -55,7 +55,11 @@ impl ClientTool {
         }
     }
 
-    tool_methods!(ToolKind::Client, Client, ClientToolConfigInput);
+    tool_methods!(
+        ToolKind::Client,
+        ClientToolConfigInput,
+        ClientToolConfigInput
+    );
 
     /// Sets the param `name`, or replaces it in place. Required unless the schema is
     /// `optional()`. Any schema kind. Loaded params that aren't an object are left as they are,

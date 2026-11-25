@@ -13,6 +13,7 @@ async fn list_sends_the_real_wire_request() {
         {
             "tier_id": "value",
             "display_name": "value",
+            "currency": "USD",
             "tier_economics": {
                 "monthly_price_usd": 9.99,
                 "annual_price_usd": 9.99,

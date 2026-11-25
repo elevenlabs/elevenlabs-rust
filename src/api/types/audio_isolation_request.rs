@@ -12,6 +12,9 @@ pub struct AudioIsolationRequest {
     #[serde(rename = "preview_b64")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preview_b_64: Option<String>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub audio_file_name: Option<String>,
 }
 
 impl AudioIsolationRequest {
@@ -26,6 +29,7 @@ pub struct AudioIsolationRequestBuilder {
     audio: Option<Vec<u8>>,
     file_format: Option<AudioIsolationRequestFileFormat>,
     preview_b_64: Option<String>,
+    audio_file_name: Option<String>,
 }
 
 impl AudioIsolationRequestBuilder {
@@ -44,6 +48,11 @@ impl AudioIsolationRequestBuilder {
         self
     }
 
+    pub fn audio_file_name(mut self, value: impl Into<String>) -> Self {
+        self.audio_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`AudioIsolationRequest`].
     /// This method will fail if any of the following fields are not set:
     /// - [`audio`](AudioIsolationRequestBuilder::audio)
@@ -54,6 +63,7 @@ impl AudioIsolationRequestBuilder {
                 .ok_or_else(|| BuildError::missing_field("audio"))?,
             file_format: self.file_format,
             preview_b_64: self.preview_b_64,
+            audio_file_name: self.audio_file_name,
         })
     }
 }
@@ -61,13 +71,14 @@ impl AudioIsolationRequestBuilder {
 impl AudioIsolationRequest {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
-        form = form.part(
-            "audio",
+        form = form.part("audio", {
+            let file_name = self.audio_file_name.unwrap_or_else(|| "audio".to_string());
+            let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
             reqwest::multipart::Part::bytes(self.audio)
-                .file_name("audio")
-                .mime_str("application/octet-stream")
-                .expect("application/octet-stream is a valid MIME type"),
-        );
+                .file_name(file_name)
+                .mime_str(mime.as_ref())
+                .expect("a guessed MIME type is valid")
+        });
         if let Some(value) = self.file_format {
             form = form.text("file_format", value.to_string());
         }

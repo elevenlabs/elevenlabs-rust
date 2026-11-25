@@ -22,6 +22,9 @@ pub struct SpeechToSpeechRequest {
     /// The format of input audio. Options are 'pcm_s16le_16' or 'other' For `pcm_s16le_16`, the input audio must be 16-bit PCM at a 16kHz sample rate, single channel (mono), and little-endian byte order. Latency will be lower than with passing an encoded waveform.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_format: Option<AudioIsolationRequestFileFormat>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub audio_file_name: Option<String>,
 }
 
 impl SpeechToSpeechRequest {
@@ -39,6 +42,7 @@ pub struct SpeechToSpeechRequestBuilder {
     seed: Option<i64>,
     remove_background_noise: Option<bool>,
     file_format: Option<AudioIsolationRequestFileFormat>,
+    audio_file_name: Option<String>,
 }
 
 impl SpeechToSpeechRequestBuilder {
@@ -72,6 +76,11 @@ impl SpeechToSpeechRequestBuilder {
         self
     }
 
+    pub fn audio_file_name(mut self, value: impl Into<String>) -> Self {
+        self.audio_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`SpeechToSpeechRequest`].
     /// This method will fail if any of the following fields are not set:
     /// - [`audio`](SpeechToSpeechRequestBuilder::audio)
@@ -85,6 +94,7 @@ impl SpeechToSpeechRequestBuilder {
             seed: self.seed,
             remove_background_noise: self.remove_background_noise,
             file_format: self.file_format,
+            audio_file_name: self.audio_file_name,
         })
     }
 }
@@ -92,13 +102,14 @@ impl SpeechToSpeechRequestBuilder {
 impl SpeechToSpeechRequest {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
-        form = form.part(
-            "audio",
+        form = form.part("audio", {
+            let file_name = self.audio_file_name.unwrap_or_else(|| "audio".to_string());
+            let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
             reqwest::multipart::Part::bytes(self.audio)
-                .file_name("audio")
-                .mime_str("application/octet-stream")
-                .expect("application/octet-stream is a valid MIME type"),
-        );
+                .file_name(file_name)
+                .mime_str(mime.as_ref())
+                .expect("a guessed MIME type is valid")
+        });
         if let Some(value) = self.model_id {
             form = form.text("model_id", value.to_string());
         }

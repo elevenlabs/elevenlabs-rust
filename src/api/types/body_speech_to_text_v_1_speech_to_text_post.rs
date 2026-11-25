@@ -93,6 +93,9 @@ pub struct BodySpeechToTextV1SpeechToTextPost {
     /// A list of keyterms to bias the transcription towards.           The keyterms are words or phrases you want the model to recognise more accurately.           The number of keyterms cannot exceed 1000.           The length of each keyterm must be at most 50 characters.           Keyterms can contain at most 5 words (after normalisation).           For example ["hello", "world", "technical term"].           The following characters are not supported: `<`, `>`, `{`, `}`, `[`, `]`, ``.           Usage of this parameter will incur an additional 20% surcharge on the base transcription cost.           When more than 100 keyterms are provided, a minimum billable duration of 20 seconds applies per request.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub keyterms: Option<Vec<String>>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub file_file_name: Option<String>,
 }
 
 impl BodySpeechToTextV1SpeechToTextPost {
@@ -132,6 +135,7 @@ pub struct BodySpeechToTextV1SpeechToTextPostBuilder {
     entity_redaction: Option<EntityRedaction>,
     entity_redaction_mode: Option<String>,
     keyterms: Option<Vec<String>>,
+    file_file_name: Option<String>,
 }
 
 impl BodySpeechToTextV1SpeechToTextPostBuilder {
@@ -278,6 +282,11 @@ impl BodySpeechToTextV1SpeechToTextPostBuilder {
         self
     }
 
+    pub fn file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.file_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodySpeechToTextV1SpeechToTextPost`].
     /// This method will fail if any of the following fields are not set:
     /// - [`model_id`](BodySpeechToTextV1SpeechToTextPostBuilder::model_id)
@@ -313,6 +322,7 @@ impl BodySpeechToTextV1SpeechToTextPostBuilder {
             entity_redaction: self.entity_redaction,
             entity_redaction_mode: self.entity_redaction_mode,
             keyterms: self.keyterms,
+            file_file_name: self.file_file_name,
         })
     }
 }
@@ -322,13 +332,14 @@ impl BodySpeechToTextV1SpeechToTextPost {
         let mut form = reqwest::multipart::Form::new();
         form = form.text("model_id", self.model_id.to_string());
         if let Some(value) = self.file {
-            form = form.part(
-                "file",
+            form = form.part("file", {
+                let file_name = self.file_file_name.unwrap_or_else(|| "file".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("file")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.language_code {
             form = form.text("language_code", value.to_string());

@@ -106,7 +106,10 @@ fn webhook_builds_the_sdk_request_model() {
         .build()
         .unwrap();
     assert!(request.response_mocks.is_none());
-    let config = request.tool_config.as_webhook().expect("a webhook config");
+    let config = request
+        .tool_config
+        .as_webhook_tool_config_input()
+        .expect("a webhook config");
     assert_eq!(config.name, "get_order");
     assert_eq!(config.description, "Look up an order");
     assert_eq!(config.response_timeout_secs, Some(10));
@@ -573,7 +576,7 @@ fn system_builds_an_entry_for_prompt_built_in_tools() {
     };
     assert_eq!(
         serde_json::to_value(built_in.end_call.unwrap()).unwrap(),
-        json!({ "name": "end_call", "params": { "system_tool_type": "end_call" } })
+        json!({ "name": "end_call", "params": { "system_tool_type": "end_call" }, "type": "system" })
     );
 }
 
@@ -648,7 +651,11 @@ fn system_constructor_options_are_typed() {
         skip.to_json().unwrap()["params"]["wait_timeout_secs"],
         json!(15)
     );
-    assert!(skip.build().unwrap().tool_config.is_system());
+    assert!(skip
+        .build()
+        .unwrap()
+        .tool_config
+        .is_system_tool_config_input());
 }
 
 // ---- loading -----------------------------------------------------------------------------------
@@ -741,9 +748,10 @@ fn keeps_a_tool_of_an_unknown_type_and_warns_when_built() {
     assert_eq!(tool.kind(), ToolKind::Other);
     assert!(tool.as_webhook().is_none());
     let mut warnings = Vec::new();
-    tool.build_with_warnings(|issue| warnings.push(issue.code))
-        .unwrap();
+    let built = tool.build_with_warnings(|issue| warnings.push(issue.code));
     assert_eq!(warnings, [ToolIssueCode::UnknownToolType]);
+    // The generated enum has no variant that holds it unchanged.
+    assert_eq!(codes_of(built), ["invalid_model"]);
     assert_eq!(tool.to_json().unwrap(), raw);
     // Nothing can be set on it.
     assert_eq!(
@@ -753,10 +761,11 @@ fn keeps_a_tool_of_an_unknown_type_and_warns_when_built() {
 }
 
 #[test]
-fn builds_a_tool_of_a_type_the_generated_types_do_not_model() {
-    let raw = json!({ "name": "lookup", "type": "api_integration_webhook", "x": 1 });
-    let request = Tool::from_json(&raw).build().unwrap();
-    assert_eq!(serde_json::to_value(&request.tool_config).unwrap(), raw);
+fn refuses_to_build_a_tool_the_generated_types_would_change() {
+    let raw = json!({ "name": "lookup", "description": "Look up", "type": "api_integration_webhook", "x": 1 });
+    let tool = Tool::from_json(&raw);
+    assert_eq!(codes_of(tool.build()), ["invalid_model"]);
+    assert_eq!(tool.to_json().unwrap(), raw);
 }
 
 #[test]
@@ -782,10 +791,14 @@ fn tool_build_config_wraps_each_kind_in_its_variant() {
     let webhook: Tool = get_order().into();
     assert!(matches!(
         webhook.build_config().unwrap(),
-        ToolRequestModelToolConfig::Webhook { .. }
+        ToolRequestModelToolConfig::WebhookToolConfigInput(_)
     ));
     let client: Tool = Tool::client("ping", "Ping").into();
-    assert!(client.build().unwrap().tool_config.is_client());
+    assert!(client
+        .build()
+        .unwrap()
+        .tool_config
+        .is_client_tool_config_input());
 }
 
 #[test]

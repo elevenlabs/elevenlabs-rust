@@ -16,6 +16,9 @@ pub struct AddPronunciationDictionaryRequest {
     pub workspace_access: Option<
         AddAPronunciationDictionaryV1PronunciationDictionariesAddFromRulesPostWorkspaceAccess,
     >,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub file_file_name: Option<String>,
 }
 
 impl AddPronunciationDictionaryRequest {
@@ -33,6 +36,7 @@ pub struct AddPronunciationDictionaryRequestBuilder {
     workspace_access: Option<
         AddAPronunciationDictionaryV1PronunciationDictionariesAddFromRulesPostWorkspaceAccess,
     >,
+    file_file_name: Option<String>,
 }
 
 impl AddPronunciationDictionaryRequestBuilder {
@@ -59,6 +63,11 @@ impl AddPronunciationDictionaryRequestBuilder {
         self
     }
 
+    pub fn file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.file_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`AddPronunciationDictionaryRequest`].
     /// This method will fail if any of the following fields are not set:
     /// - [`name`](AddPronunciationDictionaryRequestBuilder::name)
@@ -68,6 +77,7 @@ impl AddPronunciationDictionaryRequestBuilder {
             file: self.file,
             description: self.description,
             workspace_access: self.workspace_access,
+            file_file_name: self.file_file_name,
         })
     }
 }
@@ -77,13 +87,14 @@ impl AddPronunciationDictionaryRequest {
         let mut form = reqwest::multipart::Form::new();
         form = form.text("name", self.name.to_string());
         if let Some(value) = self.file {
-            form = form.part(
-                "file",
+            form = form.part("file", {
+                let file_name = self.file_file_name.unwrap_or_else(|| "file".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("file")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.description {
             form = form.text("description", value.to_string());

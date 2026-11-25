@@ -17,6 +17,7 @@ async fn main() {
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 search: Some("search".to_string()),
                 source: Some(ListSource::Tts),
+                sources: Some(vec![ListSource::Tts]),
                 ..Default::default()
             },
             None,

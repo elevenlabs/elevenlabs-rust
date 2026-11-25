@@ -11,6 +11,9 @@ pub struct BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePost {
     /// If set, the created document or folder will be placed inside the given folder.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_folder_id: Option<String>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub file_file_name: Option<String>,
 }
 
 impl BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePost {
@@ -25,6 +28,7 @@ pub struct BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePostBuilder {
     file: Option<Vec<u8>>,
     name: Option<String>,
     parent_folder_id: Option<String>,
+    file_file_name: Option<String>,
 }
 
 impl BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePostBuilder {
@@ -43,6 +47,11 @@ impl BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePostBuilder {
         self
     }
 
+    pub fn file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.file_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePost`].
     /// This method will fail if any of the following fields are not set:
     /// - [`file`](BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePostBuilder::file)
@@ -51,6 +60,7 @@ impl BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePostBuilder {
             file: self.file.ok_or_else(|| BuildError::missing_field("file"))?,
             name: self.name,
             parent_folder_id: self.parent_folder_id,
+            file_file_name: self.file_file_name,
         })
     }
 }
@@ -58,13 +68,14 @@ impl BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePostBuilder {
 impl BodyCreateFileDocumentV1ConvaiKnowledgeBaseFilePost {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
-        form = form.part(
-            "file",
+        form = form.part("file", {
+            let file_name = self.file_file_name.unwrap_or_else(|| "file".to_string());
+            let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
             reqwest::multipart::Part::bytes(self.file)
-                .file_name("file")
-                .mime_str("application/octet-stream")
-                .expect("application/octet-stream is a valid MIME type"),
-        );
+                .file_name(file_name)
+                .mime_str(mime.as_ref())
+                .expect("a guessed MIME type is valid")
+        });
         if let Some(value) = self.name {
             form = form.text("name", value.to_string());
         }

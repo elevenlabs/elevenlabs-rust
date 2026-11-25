@@ -17,6 +17,9 @@ pub struct LeadDetailResponse {
     #[serde(default)]
     #[serde(with = "crate::core::number_serializers::int")]
     pub phone_numbers_index: i64,
+    /// The timezone the recipient's calling windows are read in; unset when the lead follows the campaign's.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timezone_override: Option<String>,
     /// The contact's identity: the `user_id` submitted in `conversation_initiation_client_data`, else the lead's phone number.
     #[serde(default)]
     pub user_id: String,
@@ -72,6 +75,7 @@ pub struct LeadDetailResponseBuilder {
     phone_number: Option<String>,
     phone_numbers: Option<Vec<String>>,
     phone_numbers_index: Option<i64>,
+    timezone_override: Option<String>,
     user_id: Option<String>,
     attempt_count: Option<i64>,
     failure_count: Option<i64>,
@@ -109,6 +113,11 @@ impl LeadDetailResponseBuilder {
 
     pub fn phone_numbers_index(mut self, value: i64) -> Self {
         self.phone_numbers_index = Some(value);
+        self
+    }
+
+    pub fn timezone_override(mut self, value: impl Into<String>) -> Self {
+        self.timezone_override = Some(value.into());
         self
     }
 
@@ -199,6 +208,7 @@ impl LeadDetailResponseBuilder {
             phone_numbers_index: self
                 .phone_numbers_index
                 .ok_or_else(|| BuildError::missing_field("phone_numbers_index"))?,
+            timezone_override: self.timezone_override,
             user_id: self
                 .user_id
                 .ok_or_else(|| BuildError::missing_field("user_id"))?,

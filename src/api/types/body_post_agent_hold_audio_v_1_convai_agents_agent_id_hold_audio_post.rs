@@ -5,6 +5,9 @@ pub struct BodyPostAgentHoldAudioV1ConvaiAgentsAgentIdHoldAudioPost {
     /// An MP3 or WAV file played on loop to callers waiting in the agent's concurrency wait queue. Maximum size 40 MB, maximum duration 180 seconds.
     #[serde(default)]
     pub hold_audio_file: Vec<u8>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub hold_audio_file_file_name: Option<String>,
 }
 
 impl BodyPostAgentHoldAudioV1ConvaiAgentsAgentIdHoldAudioPost {
@@ -17,11 +20,17 @@ impl BodyPostAgentHoldAudioV1ConvaiAgentsAgentIdHoldAudioPost {
 #[non_exhaustive]
 pub struct BodyPostAgentHoldAudioV1ConvaiAgentsAgentIdHoldAudioPostBuilder {
     hold_audio_file: Option<Vec<u8>>,
+    hold_audio_file_file_name: Option<String>,
 }
 
 impl BodyPostAgentHoldAudioV1ConvaiAgentsAgentIdHoldAudioPostBuilder {
     pub fn hold_audio_file(mut self, value: Vec<u8>) -> Self {
         self.hold_audio_file = Some(value);
+        self
+    }
+
+    pub fn hold_audio_file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.hold_audio_file_file_name = Some(value.into());
         self
     }
 
@@ -35,6 +44,7 @@ impl BodyPostAgentHoldAudioV1ConvaiAgentsAgentIdHoldAudioPostBuilder {
             hold_audio_file: self
                 .hold_audio_file
                 .ok_or_else(|| BuildError::missing_field("hold_audio_file"))?,
+            hold_audio_file_file_name: self.hold_audio_file_file_name,
         })
     }
 }
@@ -42,13 +52,16 @@ impl BodyPostAgentHoldAudioV1ConvaiAgentsAgentIdHoldAudioPostBuilder {
 impl BodyPostAgentHoldAudioV1ConvaiAgentsAgentIdHoldAudioPost {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
-        form = form.part(
-            "hold_audio_file",
+        form = form.part("hold_audio_file", {
+            let file_name = self
+                .hold_audio_file_file_name
+                .unwrap_or_else(|| "hold_audio_file".to_string());
+            let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
             reqwest::multipart::Part::bytes(self.hold_audio_file)
-                .file_name("hold_audio_file")
-                .mime_str("application/octet-stream")
-                .expect("application/octet-stream is a valid MIME type"),
-        );
+                .file_name(file_name)
+                .mime_str(mime.as_ref())
+                .expect("a guessed MIME type is valid")
+        });
         form
     }
 }

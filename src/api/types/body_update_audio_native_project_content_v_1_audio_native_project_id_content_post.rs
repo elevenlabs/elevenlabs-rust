@@ -11,6 +11,9 @@ pub struct BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost 
     /// Whether to auto publish the new project snapshot after it's converted.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_publish: Option<bool>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub file_file_name: Option<String>,
 }
 
 impl BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost {
@@ -26,6 +29,7 @@ pub struct BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPostB
     file: Option<Vec<u8>>,
     auto_convert: Option<bool>,
     auto_publish: Option<bool>,
+    file_file_name: Option<String>,
 }
 
 impl BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPostBuilder {
@@ -44,6 +48,11 @@ impl BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPostBuilder
         self
     }
 
+    pub fn file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.file_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost`].
     pub fn build(
         self,
@@ -54,6 +63,7 @@ impl BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPostBuilder
                 file: self.file,
                 auto_convert: self.auto_convert,
                 auto_publish: self.auto_publish,
+                file_file_name: self.file_file_name,
             },
         )
     }
@@ -63,13 +73,14 @@ impl BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
         if let Some(value) = self.file {
-            form = form.part(
-                "file",
+            form = form.part("file", {
+                let file_name = self.file_file_name.unwrap_or_else(|| "file".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("file")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.auto_convert {
             form = form.text("auto_convert", value.to_string());

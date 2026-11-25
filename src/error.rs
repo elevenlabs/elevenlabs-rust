@@ -36,35 +36,32 @@ impl ApiError {
     pub fn from_response(status_code: u16, body: Option<&str>) -> Self {
         match status_code {
             400 => {
-                if let Some(body_str) = body {
-                    if let Some(parsed) = serde_json::from_str::<
-                        crate::api::types::DownloadBadRequestResponse,
-                    >(body_str)
-                    .ok()
-                    .filter(|parsed| keeps_response_fields(parsed, body_str))
-                    {
-                        return Self::BadRequestError(parsed);
+                if let Some(parsed) = body.and_then(|body_str| {
+                    serde_json::from_str::<crate::api::types::DownloadBadRequestResponse>(body_str)
+                        .ok()
+                        .filter(|parsed| keeps_response_fields(parsed, body_str))
+                }) {
+                    Self::BadRequestError(parsed)
+                } else {
+                    Self::Http {
+                        status: status_code,
+                        message: body.unwrap_or("Unknown error").to_string(),
                     }
                 }
-                return Self::Http {
-                    status: status_code,
-                    message: body.unwrap_or("Unknown error").to_string(),
-                };
             }
             422 => {
-                if let Some(body_str) = body {
-                    if let Some(parsed) =
-                        serde_json::from_str::<crate::api::types::HttpValidationError>(body_str)
-                            .ok()
-                            .filter(|parsed| keeps_response_fields(parsed, body_str))
-                    {
-                        return Self::UnprocessableEntityError(parsed);
+                if let Some(parsed) = body.and_then(|body_str| {
+                    serde_json::from_str::<crate::api::types::HttpValidationError>(body_str)
+                        .ok()
+                        .filter(|parsed| keeps_response_fields(parsed, body_str))
+                }) {
+                    Self::UnprocessableEntityError(parsed)
+                } else {
+                    Self::Http {
+                        status: status_code,
+                        message: body.unwrap_or("Unknown error").to_string(),
                     }
                 }
-                return Self::Http {
-                    status: status_code,
-                    message: body.unwrap_or("Unknown error").to_string(),
-                };
             }
             _ => Self::Http {
                 status: status_code,

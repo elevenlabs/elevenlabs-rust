@@ -10,6 +10,8 @@ pub struct LlmInputOutputTokensUsage {
     pub input_cache_write: Option<LlmTokensCategoryUsage>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_total: Option<LlmTokensCategoryUsage>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_total_reasoning_portion: Option<LlmTokensCategoryUsage>,
 }
 
 impl LlmInputOutputTokensUsage {
@@ -25,6 +27,7 @@ pub struct LlmInputOutputTokensUsageBuilder {
     input_cache_read: Option<LlmTokensCategoryUsage>,
     input_cache_write: Option<LlmTokensCategoryUsage>,
     output_total: Option<LlmTokensCategoryUsage>,
+    output_total_reasoning_portion: Option<LlmTokensCategoryUsage>,
 }
 
 impl LlmInputOutputTokensUsageBuilder {
@@ -48,6 +51,11 @@ impl LlmInputOutputTokensUsageBuilder {
         self
     }
 
+    pub fn output_total_reasoning_portion(mut self, value: LlmTokensCategoryUsage) -> Self {
+        self.output_total_reasoning_portion = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`LlmInputOutputTokensUsage`].
     pub fn build(self) -> Result<LlmInputOutputTokensUsage, BuildError> {
         Ok(LlmInputOutputTokensUsage {
@@ -55,6 +63,7 @@ impl LlmInputOutputTokensUsageBuilder {
             input_cache_read: self.input_cache_read,
             input_cache_write: self.input_cache_write,
             output_total: self.output_total,
+            output_total_reasoning_portion: self.output_total_reasoning_portion,
         })
     }
 }
