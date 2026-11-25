@@ -17,6 +17,9 @@ pub struct AddVoiceRequest {
     /// Labels for the voice. Keys can be language, accent, gender, or age.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<AddVoiceRequestLabels>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub files_file_names: Option<Vec<Option<String>>>,
 }
 
 impl AddVoiceRequest {
@@ -33,6 +36,7 @@ pub struct AddVoiceRequestBuilder {
     remove_background_noise: Option<bool>,
     description: Option<String>,
     labels: Option<AddVoiceRequestLabels>,
+    files_file_names: Option<Vec<Option<String>>>,
 }
 
 impl AddVoiceRequestBuilder {
@@ -61,6 +65,11 @@ impl AddVoiceRequestBuilder {
         self
     }
 
+    pub fn files_file_names(mut self, value: Vec<Option<String>>) -> Self {
+        self.files_file_names = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`AddVoiceRequest`].
     /// This method will fail if any of the following fields are not set:
     /// - [`name`](AddVoiceRequestBuilder::name)
@@ -74,6 +83,7 @@ impl AddVoiceRequestBuilder {
             remove_background_noise: self.remove_background_noise,
             description: self.description,
             labels: self.labels,
+            files_file_names: self.files_file_names,
         })
     }
 }
@@ -82,14 +92,19 @@ impl AddVoiceRequest {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
         form = form.text("name", self.name.to_string());
+        let mut files_file_names_iter = self.files_file_names.unwrap_or_default().into_iter();
         for part_value in self.files {
-            form = form.part(
-                "files",
+            form = form.part("files", {
+                let file_name = files_file_names_iter
+                    .next()
+                    .flatten()
+                    .unwrap_or_else(|| "files".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(part_value)
-                    .file_name("files")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.remove_background_noise {
             form = form.text("remove_background_noise", value.to_string());

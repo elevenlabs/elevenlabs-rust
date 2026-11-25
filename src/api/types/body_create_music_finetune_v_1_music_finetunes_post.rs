@@ -19,6 +19,9 @@ pub struct BodyCreateMusicFinetuneV1MusicFinetunesPost {
     pub visibility: Option<BodyCreateMusicFinetuneV1MusicFinetunesPostVisibility>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_id: Option<MusicModelId>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub files_file_names: Option<Vec<Option<String>>>,
 }
 
 impl BodyCreateMusicFinetuneV1MusicFinetunesPost {
@@ -36,6 +39,7 @@ pub struct BodyCreateMusicFinetuneV1MusicFinetunesPostBuilder {
     tags: Option<Vec<String>>,
     visibility: Option<BodyCreateMusicFinetuneV1MusicFinetunesPostVisibility>,
     model_id: Option<MusicModelId>,
+    files_file_names: Option<Vec<Option<String>>>,
 }
 
 impl BodyCreateMusicFinetuneV1MusicFinetunesPostBuilder {
@@ -72,6 +76,11 @@ impl BodyCreateMusicFinetuneV1MusicFinetunesPostBuilder {
         self
     }
 
+    pub fn files_file_names(mut self, value: Vec<Option<String>>) -> Self {
+        self.files_file_names = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyCreateMusicFinetuneV1MusicFinetunesPost`].
     /// This method will fail if any of the following fields are not set:
     /// - [`name`](BodyCreateMusicFinetuneV1MusicFinetunesPostBuilder::name)
@@ -86,6 +95,7 @@ impl BodyCreateMusicFinetuneV1MusicFinetunesPostBuilder {
             tags: self.tags,
             visibility: self.visibility,
             model_id: self.model_id,
+            files_file_names: self.files_file_names,
         })
     }
 }
@@ -96,14 +106,19 @@ impl BodyCreateMusicFinetuneV1MusicFinetunesPost {
         form = form.text("name", self.name.to_string());
         form = form.text("primary_genre", self.primary_genre.to_string());
         if let Some(value) = self.files {
+            let mut files_file_names_iter = self.files_file_names.unwrap_or_default().into_iter();
             for part_value in value {
-                form = form.part(
-                    "files",
+                form = form.part("files", {
+                    let file_name = files_file_names_iter
+                        .next()
+                        .flatten()
+                        .unwrap_or_else(|| "files".to_string());
+                    let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                     reqwest::multipart::Part::bytes(part_value)
-                        .file_name("files")
-                        .mime_str("application/octet-stream")
-                        .expect("application/octet-stream is a valid MIME type"),
-                );
+                        .file_name(file_name)
+                        .mime_str(mime.as_ref())
+                        .expect("a guessed MIME type is valid")
+                });
             }
         }
         if let Some(value) = self.tags {

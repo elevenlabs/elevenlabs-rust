@@ -338,6 +338,7 @@ async fn create_sends_the_real_wire_request() {
                 ],
                 "whatsapp_user_id": "value",
                 "id": "value",
+                "timezone_override": "value",
                 "conversation_initiation_client_data": {
                     "conversation_config_override": {
                         "asr": {
@@ -585,6 +586,7 @@ async fn create_surfaces_the_declared_422() {
                 ],
                 "whatsapp_user_id": "value",
                 "id": "value",
+                "timezone_override": "value",
                 "conversation_initiation_client_data": {
                     "conversation_config_override": {
                         "asr": {

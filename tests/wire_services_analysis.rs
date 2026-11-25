@@ -63,6 +63,10 @@ async fn run_sends_the_real_wire_request() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -83,6 +87,10 @@ async fn run_sends_the_real_wire_request() {
                                     "price": 9.99
                                 },
                                 "output_total": {
+                                    "tokens": 123,
+                                    "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
                                     "tokens": 123,
                                     "price": 9.99
                                 }
@@ -673,6 +681,10 @@ async fn run_sends_the_real_wire_request() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -891,6 +903,10 @@ async fn run_evaluation_sends_the_real_wire_request() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -911,6 +927,10 @@ async fn run_evaluation_sends_the_real_wire_request() {
                                     "price": 9.99
                                 },
                                 "output_total": {
+                                    "tokens": 123,
+                                    "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
                                     "tokens": 123,
                                     "price": 9.99
                                 }
@@ -1501,6 +1521,10 @@ async fn run_evaluation_sends_the_real_wire_request() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }

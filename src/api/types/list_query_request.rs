@@ -30,6 +30,9 @@ pub struct ListQueryRequest {
     /// Source of the generated history item
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<ListSource>,
+    /// Sources of the generated history items, matching any of them. Cannot be combined with source.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<ListSource>>,
 }
 
 impl ListQueryRequest {
@@ -50,6 +53,7 @@ pub struct ListQueryRequestBuilder {
     sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
     search: Option<String>,
     source: Option<ListSource>,
+    sources: Option<Vec<ListSource>>,
 }
 
 impl ListQueryRequestBuilder {
@@ -101,6 +105,11 @@ impl ListQueryRequestBuilder {
         self
     }
 
+    pub fn sources(mut self, value: Vec<ListSource>) -> Self {
+        self.sources = Some(value);
+        self
+    }
+
     /// Consumes the builder and constructs a [`ListQueryRequest`].
     pub fn build(self) -> Result<ListQueryRequest, BuildError> {
         Ok(ListQueryRequest {
@@ -113,6 +122,7 @@ impl ListQueryRequestBuilder {
             sort_direction: self.sort_direction,
             search: self.search,
             source: self.source,
+            sources: self.sources,
         })
     }
 }

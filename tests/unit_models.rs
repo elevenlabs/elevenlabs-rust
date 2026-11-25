@@ -8747,6 +8747,164 @@ fn convert_chapter_response_model_round_trips_through_serde() {
 }
 
 #[test]
+fn audio_native_create_project_response_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "project_id": "value",
+        "converting": true,
+        "html_snippet": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AudioNativeCreateProjectResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn body_creates_audio_native_enabled_project_v1_audio_native_post_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "image": "value",
+        "author": "value",
+        "title": "value",
+        "small": true,
+        "text_color": "value",
+        "background_color": "value",
+        "sessionization": 123,
+        "voice_id": "value",
+        "model_id": "value",
+        "auto_convert": true,
+        "apply_text_normalization": "auto",
+        "pronunciation_dictionary_locators": [
+            "value"
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: BodyCreatesAudioNativeEnabledProjectV1AudioNativePost =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn get_audio_native_project_settings_response_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "enabled": true,
+        "snapshot_id": "value",
+        "settings": {
+            "title": "value",
+            "image": "value",
+            "author": "value",
+            "small": true,
+            "text_color": "value",
+            "background_color": "value",
+            "sessionization": 123,
+            "audio_path": "value",
+            "audio_url": "value",
+            "status": "processing"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: GetAudioNativeProjectSettingsResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn audio_native_project_settings_response_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "title": "value",
+        "image": "value",
+        "author": "value",
+        "small": true,
+        "text_color": "value",
+        "background_color": "value",
+        "sessionization": 123,
+        "audio_path": "value",
+        "audio_url": "value",
+        "status": "processing"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AudioNativeProjectSettingsResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn audio_native_edit_content_response_model_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "project_id": "value",
+        "converting": true,
+        "publishing": true,
+        "html_snippet": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AudioNativeEditContentResponseModel =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn body_update_audio_native_project_content_v1_audio_native_project_id_content_post_round_trips_through_serde(
+) {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "auto_convert": true,
+        "auto_publish": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn body_update_audio_native_content_from_url_v1_audio_native_content_post_round_trips_through_serde(
+) {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "url": "value",
+        "author": "value",
+        "title": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: BodyUpdateAudioNativeContentFromUrlV1AudioNativeContentPost =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn dubbing_project_list_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -10127,164 +10285,6 @@ fn model_rates_response_model_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: ModelRatesResponseModel =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn audio_native_create_project_response_model_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "project_id": "value",
-        "converting": true,
-        "html_snippet": "value"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: AudioNativeCreateProjectResponseModel =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn body_creates_audio_native_enabled_project_v1_audio_native_post_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "name": "value",
-        "image": "value",
-        "author": "value",
-        "title": "value",
-        "small": true,
-        "text_color": "value",
-        "background_color": "value",
-        "sessionization": 123,
-        "voice_id": "value",
-        "model_id": "value",
-        "auto_convert": true,
-        "apply_text_normalization": "auto",
-        "pronunciation_dictionary_locators": [
-            "value"
-        ]
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: BodyCreatesAudioNativeEnabledProjectV1AudioNativePost =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn get_audio_native_project_settings_response_model_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "enabled": true,
-        "snapshot_id": "value",
-        "settings": {
-            "title": "value",
-            "image": "value",
-            "author": "value",
-            "small": true,
-            "text_color": "value",
-            "background_color": "value",
-            "sessionization": 123,
-            "audio_path": "value",
-            "audio_url": "value",
-            "status": "processing"
-        }
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: GetAudioNativeProjectSettingsResponseModel =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn audio_native_project_settings_response_model_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "title": "value",
-        "image": "value",
-        "author": "value",
-        "small": true,
-        "text_color": "value",
-        "background_color": "value",
-        "sessionization": 123,
-        "audio_path": "value",
-        "audio_url": "value",
-        "status": "processing"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: AudioNativeProjectSettingsResponseModel =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn audio_native_edit_content_response_model_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "project_id": "value",
-        "converting": true,
-        "publishing": true,
-        "html_snippet": "value"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: AudioNativeEditContentResponseModel =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn body_update_audio_native_project_content_v1_audio_native_project_id_content_post_round_trips_through_serde(
-) {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "auto_convert": true,
-        "auto_publish": true
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn body_update_audio_native_content_from_url_v1_audio_native_content_post_round_trips_through_serde(
-) {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "url": "value",
-        "author": "value",
-        "title": "value"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: BodyUpdateAudioNativeContentFromUrlV1AudioNativeContentPost =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -15324,6 +15324,10 @@ fn get_conversation_response_model_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -15344,6 +15348,10 @@ fn get_conversation_response_model_round_trips_through_serde() {
                                     "price": 9.99
                                 },
                                 "output_total": {
+                                    "tokens": 123,
+                                    "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
                                     "tokens": 123,
                                     "price": 9.99
                                 }
@@ -15936,6 +15944,10 @@ fn get_conversation_response_model_round_trips_through_serde() {
                             "output_total": {
                                 "tokens": 123,
                                 "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
+                                "tokens": 123,
+                                "price": 9.99
                             }
                         }
                     }
@@ -16054,6 +16066,10 @@ fn conversation_history_metadata_common_model_round_trips_through_serde() {
                             "output_total": {
                                 "tokens": 123,
                                 "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
+                                "tokens": 123,
+                                "price": 9.99
                             }
                         }
                     }
@@ -16074,6 +16090,10 @@ fn conversation_history_metadata_common_model_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -16405,6 +16425,10 @@ fn conversation_charging_common_model_round_trips_through_serde() {
                         "output_total": {
                             "tokens": 123,
                             "price": 9.99
+                        },
+                        "output_total_reasoning_portion": {
+                            "tokens": 123,
+                            "price": 9.99
                         }
                     }
                 }
@@ -16425,6 +16449,10 @@ fn conversation_charging_common_model_round_trips_through_serde() {
                             "price": 9.99
                         },
                         "output_total": {
+                            "tokens": 123,
+                            "price": 9.99
+                        },
+                        "output_total_reasoning_portion": {
                             "tokens": 123,
                             "price": 9.99
                         }
@@ -16521,6 +16549,10 @@ fn llm_category_usage_round_trips_through_serde() {
                     "output_total": {
                         "tokens": 123,
                         "price": 9.99
+                    },
+                    "output_total_reasoning_portion": {
+                        "tokens": 123,
+                        "price": 9.99
                     }
                 }
             }
@@ -16541,6 +16573,10 @@ fn llm_category_usage_round_trips_through_serde() {
                         "price": 9.99
                     },
                     "output_total": {
+                        "tokens": 123,
+                        "price": 9.99
+                    },
+                    "output_total_reasoning_portion": {
                         "tokens": 123,
                         "price": 9.99
                     }
@@ -16579,6 +16615,10 @@ fn llm_usage_output_round_trips_through_serde() {
                 "output_total": {
                     "tokens": 123,
                     "price": 9.99
+                },
+                "output_total_reasoning_portion": {
+                    "tokens": 123,
+                    "price": 9.99
                 }
             }
         }
@@ -16610,6 +16650,10 @@ fn llm_input_output_tokens_usage_round_trips_through_serde() {
             "price": 9.99
         },
         "output_total": {
+            "tokens": 123,
+            "price": 9.99
+        },
+        "output_total_reasoning_portion": {
             "tokens": 123,
             "price": 9.99
         }
@@ -18294,6 +18338,10 @@ fn conversation_history_transcript_response_model_round_trips_through_serde() {
                         "price": 9.99
                     },
                     "output_total": {
+                        "tokens": 123,
+                        "price": 9.99
+                    },
+                    "output_total_reasoning_portion": {
                         "tokens": 123,
                         "price": 9.99
                     }
@@ -21924,6 +21972,7 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                     "use_llm_generated_message": true,
                     "randomize_fillers": true,
                     "max_soft_timeouts_per_generation": 8,
+                    "pause_after_filler": true,
                     "llm_generated_message_prompt_override": "value",
                     "disable_until_first_user_message": true
                 },
@@ -22381,6 +22430,9 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                             "secret_id": "value"
                         },
                         "auth_connection": {
+                            "auth_connection_id": "value"
+                        },
+                        "mtls_auth_connection": {
                             "auth_connection_id": "value"
                         },
                         "request_headers": {
@@ -23165,6 +23217,7 @@ fn conversational_config_round_trips_through_serde() {
                 "use_llm_generated_message": true,
                 "randomize_fillers": true,
                 "max_soft_timeouts_per_generation": 8,
+                "pause_after_filler": true,
                 "llm_generated_message_prompt_override": "value",
                 "disable_until_first_user_message": true
             },
@@ -23624,6 +23677,9 @@ fn conversational_config_round_trips_through_serde() {
                     "auth_connection": {
                         "auth_connection_id": "value"
                     },
+                    "mtls_auth_connection": {
+                        "auth_connection_id": "value"
+                    },
                     "request_headers": {
                         "key": "value"
                     },
@@ -23893,6 +23949,7 @@ fn turn_config_round_trips_through_serde() {
             "use_llm_generated_message": true,
             "randomize_fillers": true,
             "max_soft_timeouts_per_generation": 8,
+            "pause_after_filler": true,
             "llm_generated_message_prompt_override": "value",
             "disable_until_first_user_message": true
         },
@@ -23921,6 +23978,7 @@ fn soft_timeout_config_round_trips_through_serde() {
         "use_llm_generated_message": true,
         "randomize_fillers": true,
         "max_soft_timeouts_per_generation": 8,
+        "pause_after_filler": true,
         "llm_generated_message_prompt_override": "value",
         "disable_until_first_user_message": true
     }"#,
@@ -24515,6 +24573,9 @@ fn agent_config_round_trips_through_serde() {
                 "auth_connection": {
                     "auth_connection_id": "value"
                 },
+                "mtls_auth_connection": {
+                    "auth_connection_id": "value"
+                },
                 "request_headers": {
                     "key": "value"
                 },
@@ -25040,6 +25101,69 @@ fn array_json_schema_property_input_items_round_trips_through_serde() {
 }
 
 #[test]
+fn any_of_json_schema_property_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "any_of": [
+            {
+                "property_kind": "array",
+                "description": "value",
+                "dynamic_variable": "value",
+                "constant_value": {},
+                "is_omitted": true,
+                "type": "object",
+                "required": [
+                    "value"
+                ],
+                "properties": {
+                    "key": {
+                        "type": "boolean",
+                        "description": "value",
+                        "enum": [
+                            "value"
+                        ],
+                        "is_system_provided": true,
+                        "dynamic_variable": "value",
+                        "allowed_values": {
+                            "dynamic_variable": "value"
+                        },
+                        "allowed_values_dynamic_variable": "value",
+                        "constant_value": "value",
+                        "is_omitted": true
+                    }
+                },
+                "required_constraints": {
+                    "any_of": [
+                        {
+                            "required": [
+                                "value"
+                            ]
+                        }
+                    ],
+                    "all_of": [
+                        {
+                            "required": [
+                                "value"
+                            ]
+                        }
+                    ]
+                }
+            }
+        ],
+        "discriminator": "value",
+        "description": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AnyOfJsonSchemaPropertyInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn required_constraints_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -25319,6 +25443,9 @@ fn prompt_agent_api_model_input_round_trips_through_serde() {
                 "secret_id": "value"
             },
             "auth_connection": {
+                "auth_connection_id": "value"
+            },
+            "mtls_auth_connection": {
                 "auth_connection_id": "value"
             },
             "request_headers": {
@@ -26911,6 +27038,9 @@ fn custom_llm_round_trips_through_serde() {
         "auth_connection": {
             "auth_connection_id": "value"
         },
+        "mtls_auth_connection": {
+            "auth_connection_id": "value"
+        },
         "request_headers": {
             "key": "value"
         },
@@ -26984,6 +27114,22 @@ fn environment_auth_connection_locator_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: EnvironmentAuthConnectionLocator =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn mtls_auth_connection_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "auth_connection_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: MtlsAuthConnection =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -31626,6 +31772,7 @@ fn workflow_override_agent_node_model_input_round_trips_through_serde() {
                     "use_llm_generated_message": true,
                     "randomize_fillers": true,
                     "max_soft_timeouts_per_generation": 123,
+                    "pause_after_filler": true,
                     "llm_generated_message_prompt_override": "value",
                     "disable_until_first_user_message": true
                 },
@@ -32026,6 +32173,9 @@ fn workflow_override_agent_node_model_input_round_trips_through_serde() {
                         "auth_connection": {
                             "auth_connection_id": "value"
                         },
+                        "mtls_auth_connection": {
+                            "auth_connection_id": "value"
+                        },
                         "request_headers": {
                             "key": "value"
                         },
@@ -32299,6 +32449,7 @@ fn conversational_config_api_model_workflow_override_input_round_trips_through_s
                 "use_llm_generated_message": true,
                 "randomize_fillers": true,
                 "max_soft_timeouts_per_generation": 123,
+                "pause_after_filler": true,
                 "llm_generated_message_prompt_override": "value",
                 "disable_until_first_user_message": true
             },
@@ -32699,6 +32850,9 @@ fn conversational_config_api_model_workflow_override_input_round_trips_through_s
                     "auth_connection": {
                         "auth_connection_id": "value"
                     },
+                    "mtls_auth_connection": {
+                        "auth_connection_id": "value"
+                    },
                     "request_headers": {
                         "key": "value"
                     },
@@ -32968,6 +33122,7 @@ fn turn_config_workflow_override_round_trips_through_serde() {
             "use_llm_generated_message": true,
             "randomize_fillers": true,
             "max_soft_timeouts_per_generation": 123,
+            "pause_after_filler": true,
             "llm_generated_message_prompt_override": "value",
             "disable_until_first_user_message": true
         },
@@ -32995,6 +33150,7 @@ fn soft_timeout_config_workflow_override_round_trips_through_serde() {
         "use_llm_generated_message": true,
         "randomize_fillers": true,
         "max_soft_timeouts_per_generation": 123,
+        "pause_after_filler": true,
         "llm_generated_message_prompt_override": "value",
         "disable_until_first_user_message": true
     }"#,
@@ -33377,6 +33533,9 @@ fn agent_config_api_model_workflow_override_input_round_trips_through_serde() {
                     "secret_id": "value"
                 },
                 "auth_connection": {
+                    "auth_connection_id": "value"
+                },
+                "mtls_auth_connection": {
                     "auth_connection_id": "value"
                 },
                 "request_headers": {
@@ -33828,6 +33987,9 @@ fn prompt_agent_api_model_workflow_override_input_round_trips_through_serde() {
                 "secret_id": "value"
             },
             "auth_connection": {
+                "auth_connection_id": "value"
+            },
+            "mtls_auth_connection": {
                 "auth_connection_id": "value"
             },
             "request_headers": {
@@ -34574,6 +34736,29 @@ fn workflow_tool_locator_schema_overrides_round_trips_through_serde() {
 }
 
 #[test]
+fn workflow_start_procedure_node_model_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "position": {
+            "x": 9.99,
+            "y": 9.99
+        },
+        "edge_order": [
+            "value"
+        ],
+        "procedure_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WorkflowStartProcedureNodeModelInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn workflow_say_node_model_input_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -34619,6 +34804,7 @@ fn workflow_say_node_model_input_round_trips_through_serde() {
                     "use_llm_generated_message": true,
                     "randomize_fillers": true,
                     "max_soft_timeouts_per_generation": 123,
+                    "pause_after_filler": true,
                     "llm_generated_message_prompt_override": "value",
                     "disable_until_first_user_message": true
                 },
@@ -35019,6 +35205,9 @@ fn workflow_say_node_model_input_round_trips_through_serde() {
                         "auth_connection": {
                             "auth_connection_id": "value"
                         },
+                        "mtls_auth_connection": {
+                            "auth_connection_id": "value"
+                        },
                         "request_headers": {
                             "key": "value"
                         },
@@ -35395,29 +35584,6 @@ fn workflow_state_update_input_round_trips_through_serde() {
 }
 
 #[test]
-fn workflow_start_procedure_node_model_input_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "position": {
-            "x": 9.99,
-            "y": 9.99
-        },
-        "edge_order": [
-            "value"
-        ],
-        "procedure_id": "value"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: WorkflowStartProcedureNodeModelInput =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn get_agent_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -35458,6 +35624,7 @@ fn get_agent_response_model_round_trips_through_serde() {
                     "use_llm_generated_message": true,
                     "randomize_fillers": true,
                     "max_soft_timeouts_per_generation": 8,
+                    "pause_after_filler": true,
                     "llm_generated_message_prompt_override": "value",
                     "disable_until_first_user_message": true
                 },
@@ -35915,6 +36082,9 @@ fn get_agent_response_model_round_trips_through_serde() {
                             "secret_id": "value"
                         },
                         "auth_connection": {
+                            "auth_connection_id": "value"
+                        },
+                        "mtls_auth_connection": {
                             "auth_connection_id": "value"
                         },
                         "request_headers": {
@@ -39464,6 +39634,7 @@ fn workflow_override_agent_node_model_output_round_trips_through_serde() {
                     "use_llm_generated_message": true,
                     "randomize_fillers": true,
                     "max_soft_timeouts_per_generation": 123,
+                    "pause_after_filler": true,
                     "llm_generated_message_prompt_override": "value",
                     "disable_until_first_user_message": true
                 },
@@ -39864,6 +40035,9 @@ fn workflow_override_agent_node_model_output_round_trips_through_serde() {
                         "auth_connection": {
                             "auth_connection_id": "value"
                         },
+                        "mtls_auth_connection": {
+                            "auth_connection_id": "value"
+                        },
                         "request_headers": {
                             "key": "value"
                         },
@@ -40135,6 +40309,7 @@ fn conversational_config_api_model_workflow_override_output_round_trips_through_
                 "use_llm_generated_message": true,
                 "randomize_fillers": true,
                 "max_soft_timeouts_per_generation": 123,
+                "pause_after_filler": true,
                 "llm_generated_message_prompt_override": "value",
                 "disable_until_first_user_message": true
             },
@@ -40533,6 +40708,9 @@ fn conversational_config_api_model_workflow_override_output_round_trips_through_
                         "secret_id": "value"
                     },
                     "auth_connection": {
+                        "auth_connection_id": "value"
+                    },
+                    "mtls_auth_connection": {
                         "auth_connection_id": "value"
                     },
                     "request_headers": {
@@ -41207,6 +41385,9 @@ fn agent_config_api_model_workflow_override_output_round_trips_through_serde() {
                 "auth_connection": {
                     "auth_connection_id": "value"
                 },
+                "mtls_auth_connection": {
+                    "auth_connection_id": "value"
+                },
                 "request_headers": {
                     "key": "value"
                 },
@@ -41638,6 +41819,9 @@ fn prompt_agent_api_model_workflow_override_output_round_trips_through_serde() {
                 "secret_id": "value"
             },
             "auth_connection": {
+                "auth_connection_id": "value"
+            },
+            "mtls_auth_connection": {
                 "auth_connection_id": "value"
             },
             "request_headers": {
@@ -43147,6 +43331,68 @@ fn array_json_schema_property_output_items_round_trips_through_serde() {
 }
 
 #[test]
+fn any_of_json_schema_property_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "any_of": [
+            {
+                "description": "value",
+                "dynamic_variable": "value",
+                "constant_value": {},
+                "is_omitted": true,
+                "type": "object",
+                "required": [
+                    "value"
+                ],
+                "properties": {
+                    "key": {
+                        "type": "boolean",
+                        "description": "value",
+                        "enum": [
+                            "value"
+                        ],
+                        "is_system_provided": true,
+                        "dynamic_variable": "value",
+                        "allowed_values": {
+                            "dynamic_variable": "value"
+                        },
+                        "allowed_values_dynamic_variable": "value",
+                        "constant_value": "value",
+                        "is_omitted": true
+                    }
+                },
+                "required_constraints": {
+                    "any_of": [
+                        {
+                            "required": [
+                                "value"
+                            ]
+                        }
+                    ],
+                    "all_of": [
+                        {
+                            "required": [
+                                "value"
+                            ]
+                        }
+                    ]
+                }
+            }
+        ],
+        "discriminator": "value",
+        "description": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: AnyOfJsonSchemaPropertyOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn webhook_tool_api_schema_config_output_auth_connection_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -43475,6 +43721,29 @@ fn workflow_tool_node_model_output_round_trips_through_serde() {
 }
 
 #[test]
+fn workflow_start_procedure_node_model_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "position": {
+            "x": 9.99,
+            "y": 9.99
+        },
+        "edge_order": [
+            "value"
+        ],
+        "procedure_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: WorkflowStartProcedureNodeModelOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn workflow_say_node_model_output_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -43520,6 +43789,7 @@ fn workflow_say_node_model_output_round_trips_through_serde() {
                     "use_llm_generated_message": true,
                     "randomize_fillers": true,
                     "max_soft_timeouts_per_generation": 123,
+                    "pause_after_filler": true,
                     "llm_generated_message_prompt_override": "value",
                     "disable_until_first_user_message": true
                 },
@@ -43920,6 +44190,9 @@ fn workflow_say_node_model_output_round_trips_through_serde() {
                         "auth_connection": {
                             "auth_connection_id": "value"
                         },
+                        "mtls_auth_connection": {
+                            "auth_connection_id": "value"
+                        },
                         "request_headers": {
                             "key": "value"
                         },
@@ -44278,29 +44551,6 @@ fn workflow_state_update_output_round_trips_through_serde() {
 }
 
 #[test]
-fn workflow_start_procedure_node_model_output_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "position": {
-            "x": 9.99,
-            "y": 9.99
-        },
-        "edge_order": [
-            "value"
-        ],
-        "procedure_id": "value"
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: WorkflowStartProcedureNodeModelOutput =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
 fn resource_access_info_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -44396,6 +44646,7 @@ fn update_agent_request_round_trips_through_serde() {
                     "use_llm_generated_message": true,
                     "randomize_fillers": true,
                     "max_soft_timeouts_per_generation": 8,
+                    "pause_after_filler": true,
                     "llm_generated_message_prompt_override": "value",
                     "disable_until_first_user_message": true
                 },
@@ -44853,6 +45104,9 @@ fn update_agent_request_round_trips_through_serde() {
                             "secret_id": "value"
                         },
                         "auth_connection": {
+                            "auth_connection_id": "value"
+                        },
+                        "mtls_auth_connection": {
                             "auth_connection_id": "value"
                         },
                         "request_headers": {
@@ -45855,6 +46109,10 @@ fn get_test_suite_invocation_response_model_round_trips_through_serde() {
                                             "output_total": {
                                                 "tokens": 123,
                                                 "price": 9.99
+                                            },
+                                            "output_total_reasoning_portion": {
+                                                "tokens": 123,
+                                                "price": 9.99
                                             }
                                         }
                                     }
@@ -46010,6 +46268,10 @@ fn get_test_suite_invocation_response_model_round_trips_through_serde() {
                                             "price": 9.99
                                         },
                                         "output_total": {
+                                            "tokens": 123,
+                                            "price": 9.99
+                                        },
+                                        "output_total_reasoning_portion": {
                                             "tokens": 123,
                                             "price": 9.99
                                         }
@@ -46191,6 +46453,10 @@ fn get_test_suite_invocation_response_model_round_trips_through_serde() {
                                     "output_total": {
                                         "tokens": 123,
                                         "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
+                                        "tokens": 123,
+                                        "price": 9.99
                                     }
                                 }
                             }
@@ -46282,6 +46548,10 @@ fn get_test_suite_invocation_response_model_round_trips_through_serde() {
                                     "output_total": {
                                         "tokens": 123,
                                         "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
+                                        "tokens": 123,
+                                        "price": 9.99
                                     }
                                 }
                             }
@@ -46302,6 +46572,10 @@ fn get_test_suite_invocation_response_model_round_trips_through_serde() {
                                         "price": 9.99
                                     },
                                     "output_total": {
+                                        "tokens": 123,
+                                        "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
                                         "tokens": 123,
                                         "price": 9.99
                                     }
@@ -46559,6 +46833,10 @@ fn unit_test_run_response_model_round_trips_through_serde() {
                                     "output_total": {
                                         "tokens": 123,
                                         "price": 9.99
+                                    },
+                                    "output_total_reasoning_portion": {
+                                        "tokens": 123,
+                                        "price": 9.99
                                     }
                                 }
                             }
@@ -46714,6 +46992,10 @@ fn unit_test_run_response_model_round_trips_through_serde() {
                                     "price": 9.99
                                 },
                                 "output_total": {
+                                    "tokens": 123,
+                                    "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
                                     "tokens": 123,
                                     "price": 9.99
                                 }
@@ -46895,6 +47177,10 @@ fn unit_test_run_response_model_round_trips_through_serde() {
                             "output_total": {
                                 "tokens": 123,
                                 "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
+                                "tokens": 123,
+                                "price": 9.99
                             }
                         }
                     }
@@ -46986,6 +47272,10 @@ fn unit_test_run_response_model_round_trips_through_serde() {
                             "output_total": {
                                 "tokens": 123,
                                 "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
+                                "tokens": 123,
+                                "price": 9.99
                             }
                         }
                     }
@@ -47006,6 +47296,10 @@ fn unit_test_run_response_model_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -47210,6 +47504,10 @@ fn test_info_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -47365,6 +47663,10 @@ fn test_info_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -47558,6 +47860,10 @@ fn response_unit_test_model_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -47713,6 +48019,10 @@ fn response_unit_test_model_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -47904,6 +48214,10 @@ fn test_from_conversation_metadata_output_round_trips_through_serde() {
                             "output_total": {
                                 "tokens": 123,
                                 "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
+                                "tokens": 123,
+                                "price": 9.99
                             }
                         }
                     }
@@ -48070,6 +48384,10 @@ fn conversation_history_transcript_common_model_output_round_trips_through_serde
                         "price": 9.99
                     },
                     "output_total": {
+                        "tokens": 123,
+                        "price": 9.99
+                    },
+                    "output_total_reasoning_portion": {
                         "tokens": 123,
                         "price": 9.99
                     }
@@ -48316,6 +48634,10 @@ fn tool_call_unit_test_model_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -48471,6 +48793,10 @@ fn tool_call_unit_test_model_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -48848,6 +49174,10 @@ fn simulation_test_model_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -49003,6 +49333,10 @@ fn simulation_test_model_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -49241,6 +49575,7 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                         "use_llm_generated_message": true,
                         "randomize_fillers": true,
                         "max_soft_timeouts_per_generation": 8,
+                        "pause_after_filler": true,
                         "llm_generated_message_prompt_override": "value",
                         "disable_until_first_user_message": true
                     },
@@ -49698,6 +50033,9 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                                 "secret_id": "value"
                             },
                             "auth_connection": {
+                                "auth_connection_id": "value"
+                            },
+                            "mtls_auth_connection": {
                                 "auth_connection_id": "value"
                             },
                             "request_headers": {
@@ -50501,6 +50839,7 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                     "use_llm_generated_message": true,
                     "randomize_fillers": true,
                     "max_soft_timeouts_per_generation": 8,
+                    "pause_after_filler": true,
                     "llm_generated_message_prompt_override": "value",
                     "disable_until_first_user_message": true
                 },
@@ -50958,6 +51297,9 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                             "secret_id": "value"
                         },
                         "auth_connection": {
+                            "auth_connection_id": "value"
+                        },
+                        "mtls_auth_connection": {
                             "auth_connection_id": "value"
                         },
                         "request_headers": {
@@ -54084,6 +54426,10 @@ fn tests_create_request_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -54239,6 +54585,10 @@ fn tests_create_request_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -54434,6 +54784,10 @@ fn create_response_unit_test_request_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -54589,6 +54943,10 @@ fn create_response_unit_test_request_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -54782,6 +55140,10 @@ fn test_from_conversation_metadata_input_round_trips_through_serde() {
                             "output_total": {
                                 "tokens": 123,
                                 "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
+                                "tokens": 123,
+                                "price": 9.99
                             }
                         }
                     }
@@ -54948,6 +55310,10 @@ fn conversation_history_transcript_common_model_input_round_trips_through_serde(
                         "price": 9.99
                     },
                     "output_total": {
+                        "tokens": 123,
+                        "price": 9.99
+                    },
+                    "output_total_reasoning_portion": {
                         "tokens": 123,
                         "price": 9.99
                     }
@@ -55499,6 +55865,10 @@ fn llm_usage_input_round_trips_through_serde() {
                 "output_total": {
                     "tokens": 123,
                     "price": 9.99
+                },
+                "output_total_reasoning_portion": {
+                    "tokens": 123,
+                    "price": 9.99
                 }
             }
         }
@@ -55640,6 +56010,10 @@ fn create_tool_call_unit_test_request_round_trips_through_serde() {
                                     "price": 9.99
                                 },
                                 "output_total": {
+                                    "tokens": 123,
+                                    "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
                                     "tokens": 123,
                                     "price": 9.99
                                 }
@@ -55797,6 +56171,10 @@ fn create_tool_call_unit_test_request_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -56040,6 +56418,10 @@ fn create_simulation_test_request_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -56195,6 +56577,10 @@ fn create_simulation_test_request_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -56464,6 +56850,10 @@ fn response_get_agent_response_test_by_id_v1_convai_agent_testing_test_id_get_ro
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -56619,6 +57009,10 @@ fn response_get_agent_response_test_by_id_v1_convai_agent_testing_test_id_get_ro
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -56822,6 +57216,10 @@ fn get_response_unit_test_response_model_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -56977,6 +57375,10 @@ fn get_response_unit_test_response_model_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -57179,6 +57581,10 @@ fn get_tool_call_unit_test_response_model_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -57334,6 +57740,10 @@ fn get_tool_call_unit_test_response_model_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -57548,6 +57958,10 @@ fn get_simulation_test_response_model_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -57703,6 +58117,10 @@ fn get_simulation_test_response_model_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -57926,6 +58344,10 @@ fn response_update_agent_response_test_v1_convai_agent_testing_test_id_put_round
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -58081,6 +58503,10 @@ fn response_update_agent_response_test_v1_convai_agent_testing_test_id_put_round
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -58276,6 +58702,10 @@ fn tests_update_request_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -58431,6 +58861,10 @@ fn tests_update_request_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -58626,6 +59060,10 @@ fn update_response_unit_test_request_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -58781,6 +59219,10 @@ fn update_response_unit_test_request_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -58975,6 +59417,10 @@ fn update_tool_call_unit_test_request_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -59130,6 +59576,10 @@ fn update_tool_call_unit_test_request_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -59336,6 +59786,10 @@ fn update_simulation_test_request_round_trips_through_serde() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -59491,6 +59945,10 @@ fn update_simulation_test_request_round_trips_through_serde() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -59980,6 +60438,7 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                         "use_llm_generated_message": true,
                         "randomize_fillers": true,
                         "max_soft_timeouts_per_generation": 8,
+                        "pause_after_filler": true,
                         "llm_generated_message_prompt_override": "value",
                         "disable_until_first_user_message": true
                     },
@@ -60437,6 +60896,9 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                                 "secret_id": "value"
                             },
                             "auth_connection": {
+                                "auth_connection_id": "value"
+                            },
+                            "mtls_auth_connection": {
                                 "auth_connection_id": "value"
                             },
                             "request_headers": {
@@ -69107,6 +69569,7 @@ fn merge_preview_response_model_round_trips_through_serde() {
                     "use_llm_generated_message": true,
                     "randomize_fillers": true,
                     "max_soft_timeouts_per_generation": 8,
+                    "pause_after_filler": true,
                     "llm_generated_message_prompt_override": "value",
                     "disable_until_first_user_message": true
                 },
@@ -69564,6 +70027,9 @@ fn merge_preview_response_model_round_trips_through_serde() {
                             "secret_id": "value"
                         },
                         "auth_connection": {
+                            "auth_connection_id": "value"
+                        },
+                        "mtls_auth_connection": {
                             "auth_connection_id": "value"
                         },
                         "request_headers": {
@@ -72833,6 +73299,7 @@ fn submit_campaign_request_round_trips_through_serde() {
                 ],
                 "whatsapp_user_id": "value",
                 "id": "value",
+                "timezone_override": "value",
                 "conversation_initiation_client_data": {
                     "conversation_config_override": {
                         "asr": {
@@ -73017,6 +73484,7 @@ fn submit_campaign_recipient_round_trips_through_serde() {
         ],
         "whatsapp_user_id": "value",
         "id": "value",
+        "timezone_override": "value",
         "conversation_initiation_client_data": {
             "conversation_config_override": {
                 "asr": {
@@ -73430,6 +73898,7 @@ fn campaign_leads_response_round_trips_through_serde() {
                     "value"
                 ],
                 "phone_numbers_index": 123,
+                "timezone_override": "value",
                 "user_id": "value",
                 "attempt_count": 123,
                 "failure_count": 123,
@@ -73482,6 +73951,7 @@ fn lead_view_round_trips_through_serde() {
             "value"
         ],
         "phone_numbers_index": 123,
+        "timezone_override": "value",
         "user_id": "value",
         "attempt_count": 123,
         "failure_count": 123,
@@ -73572,6 +74042,7 @@ fn lead_detail_response_round_trips_through_serde() {
             "value"
         ],
         "phone_numbers_index": 123,
+        "timezone_override": "value",
         "user_id": "value",
         "attempt_count": 123,
         "failure_count": 123,
@@ -80911,6 +81382,7 @@ fn reseller_workspaces_response_round_trips_through_serde() {
                     "pending_downgrade_tier": "value",
                     "pending_downgrade_at_unix": 123
                 },
+                "charge_customer": true,
                 "has_payment_issue": true,
                 "onboarding_completed_at_unix": 123
             }
@@ -80946,6 +81418,7 @@ fn reseller_workspace_summary_round_trips_through_serde() {
             "pending_downgrade_tier": "value",
             "pending_downgrade_at_unix": 123
         },
+        "charge_customer": true,
         "has_payment_issue": true,
         "onboarding_completed_at_unix": 123
     }"#,
@@ -80998,6 +81471,7 @@ fn provision_reseller_workspace_response_round_trips_through_serde() {
             "pending_downgrade_tier": "value",
             "pending_downgrade_at_unix": 123
         },
+        "charge_customer": true,
         "has_payment_issue": true,
         "onboarding_completed_at_unix": 123,
         "member_results": [
@@ -81042,6 +81516,7 @@ fn reception_provision_reseller_workspace_request_round_trips_through_serde() {
         r#"{
         "business_name": "value",
         "vertical": "salon_barbershop",
+        "charge_customer": true,
         "subscription": {
             "tier_id": "value",
             "billing_period": "monthly_period"
@@ -81159,6 +81634,7 @@ fn reseller_tier_response_round_trips_through_serde() {
         r#"{
         "tier_id": "value",
         "display_name": "value",
+        "currency": "USD",
         "tier_economics": {
             "monthly_price_usd": 9.99,
             "annual_price_usd": 9.99,
@@ -82408,6 +82884,25 @@ fn speakers_merged_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: SpeakersMerged =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn speaker_names_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "message_type": "speaker_names",
+        "speaker_names": {
+            "key": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SpeakerNames =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -84257,6 +84752,323 @@ fn dubbing_audio_output_error_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: DubbingAudioOutputError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn send_subtitling_stream_message_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "message_type": "input_audio_chunk",
+        "audio_base_64": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SendSubtitlingStreamMessage =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_input_audio_chunk_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "audio_base_64": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingInputAudioChunk =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn receive_subtitling_stream_message_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "message_type": "session_started",
+        "session_id": "value",
+        "client_session_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: ReceiveSubtitlingStreamMessage =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_session_started_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "session_id": "value",
+        "client_session_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingSessionStarted =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_status_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "status": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingStatus =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_partial_transcript_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingPartialTranscript =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_final_transcript_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "text": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingFinalTranscript =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_partial_subtitle_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "cue_index": 123,
+        "lines": [
+            "value"
+        ],
+        "start_ms": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingPartialSubtitle =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_committed_subtitle_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "cue_index": 123,
+        "lines": [
+            "value"
+        ],
+        "start_ms": 123,
+        "end_ms": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingCommittedSubtitle =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_auth_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingAuthError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_rate_limited_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingRateLimitedError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_queue_overflow_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingQueueOverflowError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_input_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingInputError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_transcriber_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingTranscriberError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_translation_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingTranslationError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_quota_exceeded_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingQuotaExceededError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_payment_issue_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingPaymentIssueError =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn subtitling_unaccepted_terms_error_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "error": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SubtitlingUnacceptedTermsError =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -87811,20 +88623,20 @@ fn library_voice_response_category_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn get_shared_category_variants_round_trip_through_serde() {
-    let cases: Vec<(GetSharedCategory, serde_json::Value)> = vec![
+fn find_similar_voices_category_variants_round_trip_through_serde() {
+    let cases: Vec<(FindSimilarVoicesCategory, serde_json::Value)> = vec![
         (
-            GetSharedCategory::Professional,
+            FindSimilarVoicesCategory::Professional,
             serde_json::from_str::<serde_json::Value>(r#""professional""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            GetSharedCategory::Famous,
+            FindSimilarVoicesCategory::Famous,
             serde_json::from_str::<serde_json::Value>(r#""famous""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            GetSharedCategory::HighQuality,
+            FindSimilarVoicesCategory::HighQuality,
             serde_json::from_str::<serde_json::Value>(r#""high_quality""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -87834,13 +88646,13 @@ fn get_shared_category_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: GetSharedCategory =
+        let decoded: FindSimilarVoicesCategory =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: GetSharedCategory = serde_json::from_value(unrecognized.clone())
+    let decoded: FindSimilarVoicesCategory = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -89723,6 +90535,42 @@ fn sub_type_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn audio_native_project_settings_response_model_status_variants_round_trip_through_serde() {
+    let cases: Vec<(
+        AudioNativeProjectSettingsResponseModelStatus,
+        serde_json::Value,
+    )> = vec![
+        (
+            AudioNativeProjectSettingsResponseModelStatus::Processing,
+            serde_json::from_str::<serde_json::Value>(r#""processing""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AudioNativeProjectSettingsResponseModelStatus::Ready,
+            serde_json::from_str::<serde_json::Value>(r#""ready""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: AudioNativeProjectSettingsResponseModelStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: AudioNativeProjectSettingsResponseModelStatus =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn dubbing_project_response_status_variants_round_trip_through_serde() {
     let cases: Vec<(DubbingProjectResponseStatus, serde_json::Value)> = vec![
         (
@@ -90296,42 +91144,6 @@ fn transcript_edit_error_error_type_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: TranscriptEditErrorErrorType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn audio_native_project_settings_response_model_status_variants_round_trip_through_serde() {
-    let cases: Vec<(
-        AudioNativeProjectSettingsResponseModelStatus,
-        serde_json::Value,
-    )> = vec![
-        (
-            AudioNativeProjectSettingsResponseModelStatus::Processing,
-            serde_json::from_str::<serde_json::Value>(r#""processing""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            AudioNativeProjectSettingsResponseModelStatus::Ready,
-            serde_json::from_str::<serde_json::Value>(r#""ready""#).expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: AudioNativeProjectSettingsResponseModelStatus =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AudioNativeProjectSettingsResponseModelStatus =
-        serde_json::from_value(unrecognized.clone())
-            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -94100,6 +94912,11 @@ fn list_conversation_initiation_source_variants_round_trip_through_serde() {
         (
             ListConversationInitiationSource::FlutterSdk,
             serde_json::from_str::<serde_json::Value>(r#""flutter_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            ListConversationInitiationSource::UnitySdk,
+            serde_json::from_str::<serde_json::Value>(r#""unity_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
@@ -106474,6 +107291,225 @@ fn assign_reseller_tier_request_billing_period_variants_round_trip_through_serde
 }
 
 #[test]
+fn reseller_tier_response_currency_variants_round_trip_through_serde() {
+    let cases: Vec<(ResellerTierResponseCurrency, serde_json::Value)> = vec![
+        (
+            ResellerTierResponseCurrency::Usd,
+            serde_json::from_str::<serde_json::Value>(r#""USD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Eur,
+            serde_json::from_str::<serde_json::Value>(r#""EUR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Gbp,
+            serde_json::from_str::<serde_json::Value>(r#""GBP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Pln,
+            serde_json::from_str::<serde_json::Value>(r#""PLN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Cad,
+            serde_json::from_str::<serde_json::Value>(r#""CAD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Aud,
+            serde_json::from_str::<serde_json::Value>(r#""AUD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Chf,
+            serde_json::from_str::<serde_json::Value>(r#""CHF""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Sek,
+            serde_json::from_str::<serde_json::Value>(r#""SEK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Nok,
+            serde_json::from_str::<serde_json::Value>(r#""NOK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Dkk,
+            serde_json::from_str::<serde_json::Value>(r#""DKK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Isk,
+            serde_json::from_str::<serde_json::Value>(r#""ISK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Czk,
+            serde_json::from_str::<serde_json::Value>(r#""CZK""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Huf,
+            serde_json::from_str::<serde_json::Value>(r#""HUF""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Ron,
+            serde_json::from_str::<serde_json::Value>(r#""RON""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Bgn,
+            serde_json::from_str::<serde_json::Value>(r#""BGN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Jpy,
+            serde_json::from_str::<serde_json::Value>(r#""JPY""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Cny,
+            serde_json::from_str::<serde_json::Value>(r#""CNY""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Twd,
+            serde_json::from_str::<serde_json::Value>(r#""TWD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Inr,
+            serde_json::from_str::<serde_json::Value>(r#""INR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Brl,
+            serde_json::from_str::<serde_json::Value>(r#""BRL""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Mxn,
+            serde_json::from_str::<serde_json::Value>(r#""MXN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Krw,
+            serde_json::from_str::<serde_json::Value>(r#""KRW""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Sgd,
+            serde_json::from_str::<serde_json::Value>(r#""SGD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Hkd,
+            serde_json::from_str::<serde_json::Value>(r#""HKD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Nzd,
+            serde_json::from_str::<serde_json::Value>(r#""NZD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Zar,
+            serde_json::from_str::<serde_json::Value>(r#""ZAR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Aed,
+            serde_json::from_str::<serde_json::Value>(r#""AED""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Sar,
+            serde_json::from_str::<serde_json::Value>(r#""SAR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Qar,
+            serde_json::from_str::<serde_json::Value>(r#""QAR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Kwd,
+            serde_json::from_str::<serde_json::Value>(r#""KWD""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Ils,
+            serde_json::from_str::<serde_json::Value>(r#""ILS""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Try,
+            serde_json::from_str::<serde_json::Value>(r#""TRY""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Thb,
+            serde_json::from_str::<serde_json::Value>(r#""THB""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Idr,
+            serde_json::from_str::<serde_json::Value>(r#""IDR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Myr,
+            serde_json::from_str::<serde_json::Value>(r#""MYR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Php,
+            serde_json::from_str::<serde_json::Value>(r#""PHP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Vnd,
+            serde_json::from_str::<serde_json::Value>(r#""VND""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Bdt,
+            serde_json::from_str::<serde_json::Value>(r#""BDT""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Rub,
+            serde_json::from_str::<serde_json::Value>(r#""RUB""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Uah,
+            serde_json::from_str::<serde_json::Value>(r#""UAH""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Clp,
+            serde_json::from_str::<serde_json::Value>(r#""CLP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Cop,
+            serde_json::from_str::<serde_json::Value>(r#""COP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Ars,
+            serde_json::from_str::<serde_json::Value>(r#""ARS""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Pen,
+            serde_json::from_str::<serde_json::Value>(r#""PEN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Egp,
+            serde_json::from_str::<serde_json::Value>(r#""EGP""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Ngn,
+            serde_json::from_str::<serde_json::Value>(r#""NGN""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Kes,
+            serde_json::from_str::<serde_json::Value>(r#""KES""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Pkr,
+            serde_json::from_str::<serde_json::Value>(r#""PKR""#).expect("fixture is valid JSON"),
+        ),
+        (
+            ResellerTierResponseCurrency::Gel,
+            serde_json::from_str::<serde_json::Value>(r#""GEL""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: ResellerTierResponseCurrency =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: ResellerTierResponseCurrency = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn reseller_invoice_status_variants_round_trip_through_serde() {
     let cases: Vec<(ResellerInvoiceStatus, serde_json::Value)> = vec![
         (
@@ -106866,6 +107902,32 @@ fn speakers_merged_message_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: SpeakersMergedMessageType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn speaker_names_message_type_variants_round_trip_through_serde() {
+    let cases: Vec<(SpeakerNamesMessageType, serde_json::Value)> = vec![(
+        SpeakerNamesMessageType::SpeakerNames,
+        serde_json::from_str::<serde_json::Value>(r#""speaker_names""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: SpeakerNamesMessageType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: SpeakerNamesMessageType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -107919,6 +108981,100 @@ fn dubbing_transcriber_error_message_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: DubbingTranscriberErrorMessageType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn subtitling_realtime_input_format_variants_round_trip_through_serde() {
+    let cases: Vec<(SubtitlingRealtimeInputFormat, serde_json::Value)> = vec![
+        (
+            SubtitlingRealtimeInputFormat::Pcm8000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_8000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SubtitlingRealtimeInputFormat::Pcm16000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_16000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SubtitlingRealtimeInputFormat::Pcm22050,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_22050""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SubtitlingRealtimeInputFormat::Pcm24000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_24000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SubtitlingRealtimeInputFormat::Pcm44100,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_44100""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SubtitlingRealtimeInputFormat::Pcm48000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_48000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SubtitlingRealtimeInputFormat::Ulaw8000,
+            serde_json::from_str::<serde_json::Value>(r#""ulaw_8000""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: SubtitlingRealtimeInputFormat =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: SubtitlingRealtimeInputFormat = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn subtitling_realtime_eagerness_variants_round_trip_through_serde() {
+    let cases: Vec<(SubtitlingRealtimeEagerness, serde_json::Value)> = vec![
+        (
+            SubtitlingRealtimeEagerness::Low,
+            serde_json::from_str::<serde_json::Value>(r#""low""#).expect("fixture is valid JSON"),
+        ),
+        (
+            SubtitlingRealtimeEagerness::Medium,
+            serde_json::from_str::<serde_json::Value>(r#""medium""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SubtitlingRealtimeEagerness::High,
+            serde_json::from_str::<serde_json::Value>(r#""high""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: SubtitlingRealtimeEagerness =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: SubtitlingRealtimeEagerness = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -109124,6 +110280,11 @@ fn source_info_source_variants_round_trip_through_serde() {
         (
             SourceInfoSource::FlutterSdk,
             serde_json::from_str::<serde_json::Value>(r#""flutter_sdk""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SourceInfoSource::UnitySdk,
+            serde_json::from_str::<serde_json::Value>(r#""unity_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (

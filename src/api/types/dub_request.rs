@@ -70,6 +70,18 @@ pub struct DubRequest {
     #[serde(default)]
     #[serde(with = "crate::core::number_serializers::float::option")]
     pub csv_fps: Option<f64>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub file_file_name: Option<String>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub csv_file_file_name: Option<String>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub foreground_audio_file_file_name: Option<String>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub background_audio_file_file_name: Option<String>,
 }
 
 impl DubRequest {
@@ -101,6 +113,10 @@ pub struct DubRequestBuilder {
     disable_voice_cloning: Option<bool>,
     mode: Option<DubRequestMode>,
     csv_fps: Option<f64>,
+    file_file_name: Option<String>,
+    csv_file_file_name: Option<String>,
+    foreground_audio_file_file_name: Option<String>,
+    background_audio_file_file_name: Option<String>,
 }
 
 impl DubRequestBuilder {
@@ -204,6 +220,26 @@ impl DubRequestBuilder {
         self
     }
 
+    pub fn file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.file_file_name = Some(value.into());
+        self
+    }
+
+    pub fn csv_file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.csv_file_file_name = Some(value.into());
+        self
+    }
+
+    pub fn foreground_audio_file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.foreground_audio_file_file_name = Some(value.into());
+        self
+    }
+
+    pub fn background_audio_file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.background_audio_file_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`DubRequest`].
     pub fn build(self) -> Result<DubRequest, BuildError> {
         Ok(DubRequest {
@@ -227,6 +263,10 @@ impl DubRequestBuilder {
             disable_voice_cloning: self.disable_voice_cloning,
             mode: self.mode,
             csv_fps: self.csv_fps,
+            file_file_name: self.file_file_name,
+            csv_file_file_name: self.csv_file_file_name,
+            foreground_audio_file_file_name: self.foreground_audio_file_file_name,
+            background_audio_file_file_name: self.background_audio_file_file_name,
         })
     }
 }
@@ -235,40 +275,50 @@ impl DubRequest {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
         if let Some(value) = self.file {
-            form = form.part(
-                "file",
+            form = form.part("file", {
+                let file_name = self.file_file_name.unwrap_or_else(|| "file".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("file")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.csv_file {
-            form = form.part(
-                "csv_file",
+            form = form.part("csv_file", {
+                let file_name = self
+                    .csv_file_file_name
+                    .unwrap_or_else(|| "csv_file".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("csv_file")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.foreground_audio_file {
-            form = form.part(
-                "foreground_audio_file",
+            form = form.part("foreground_audio_file", {
+                let file_name = self
+                    .foreground_audio_file_file_name
+                    .unwrap_or_else(|| "foreground_audio_file".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("foreground_audio_file")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.background_audio_file {
-            form = form.part(
-                "background_audio_file",
+            form = form.part("background_audio_file", {
+                let file_name = self
+                    .background_audio_file_file_name
+                    .unwrap_or_else(|| "background_audio_file".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("background_audio_file")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.name {
             form = form.text("name", value.to_string());

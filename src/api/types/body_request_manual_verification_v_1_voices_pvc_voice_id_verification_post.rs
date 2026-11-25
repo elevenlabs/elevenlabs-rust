@@ -8,6 +8,9 @@ pub struct BodyRequestManualVerificationV1VoicesPvcVoiceIdVerificationPost {
     /// Extra text to be used in the manual verification process.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_text: Option<String>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub files_file_names: Option<Vec<Option<String>>>,
 }
 
 impl BodyRequestManualVerificationV1VoicesPvcVoiceIdVerificationPost {
@@ -22,6 +25,7 @@ impl BodyRequestManualVerificationV1VoicesPvcVoiceIdVerificationPost {
 pub struct BodyRequestManualVerificationV1VoicesPvcVoiceIdVerificationPostBuilder {
     files: Option<Vec<Vec<u8>>>,
     extra_text: Option<String>,
+    files_file_names: Option<Vec<Option<String>>>,
 }
 
 impl BodyRequestManualVerificationV1VoicesPvcVoiceIdVerificationPostBuilder {
@@ -32,6 +36,11 @@ impl BodyRequestManualVerificationV1VoicesPvcVoiceIdVerificationPostBuilder {
 
     pub fn extra_text(mut self, value: impl Into<String>) -> Self {
         self.extra_text = Some(value.into());
+        self
+    }
+
+    pub fn files_file_names(mut self, value: Vec<Option<String>>) -> Self {
+        self.files_file_names = Some(value);
         self
     }
 
@@ -47,6 +56,7 @@ impl BodyRequestManualVerificationV1VoicesPvcVoiceIdVerificationPostBuilder {
                     .files
                     .ok_or_else(|| BuildError::missing_field("files"))?,
                 extra_text: self.extra_text,
+                files_file_names: self.files_file_names,
             },
         )
     }
@@ -55,14 +65,19 @@ impl BodyRequestManualVerificationV1VoicesPvcVoiceIdVerificationPostBuilder {
 impl BodyRequestManualVerificationV1VoicesPvcVoiceIdVerificationPost {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
+        let mut files_file_names_iter = self.files_file_names.unwrap_or_default().into_iter();
         for part_value in self.files {
-            form = form.part(
-                "files",
+            form = form.part("files", {
+                let file_name = files_file_names_iter
+                    .next()
+                    .flatten()
+                    .unwrap_or_else(|| "files".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(part_value)
-                    .file_name("files")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.extra_text {
             form = form.text("extra_text", value.to_string());

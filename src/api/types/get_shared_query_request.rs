@@ -8,7 +8,7 @@ pub struct GetSharedQueryRequest {
     pub page_size: Option<i64>,
     /// Voice category used for filtering
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub category: Option<GetSharedCategory>,
+    pub category: Option<FindSimilarVoicesCategory>,
     /// Gender used for filtering
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gender: Option<String>,
@@ -68,7 +68,7 @@ impl GetSharedQueryRequest {
 #[non_exhaustive]
 pub struct GetSharedQueryRequestBuilder {
     page_size: Option<i64>,
-    category: Option<GetSharedCategory>,
+    category: Option<FindSimilarVoicesCategory>,
     gender: Option<String>,
     age: Option<String>,
     accent: Option<String>,
@@ -93,7 +93,7 @@ impl GetSharedQueryRequestBuilder {
         self
     }
 
-    pub fn category(mut self, value: GetSharedCategory) -> Self {
+    pub fn category(mut self, value: FindSimilarVoicesCategory) -> Self {
         self.category = Some(value);
         self
     }

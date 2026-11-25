@@ -29,6 +29,12 @@ pub struct BodyCreateDubbingProjectV1DubbingProjectPost {
     /// Enterprise only. Optional JSON transcript to use instead of transcribing the source: a `{"segments": [...]}` document, at most 20,000 segments and 4 MiB. See [Bring your own transcript](https://elevenlabs.io/docs/eleven-api/guides/how-to/dubbing/bring-your-own-transcript) for the segment fields and their constraints. `source_language` is required whenever a transcript is provided. If any segment carries a `translation`, `target_language` is required and every segment must carry one; those translations seed the target created via `target_language`, which then skips machine translation.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transcript: Option<Vec<u8>>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub file_file_name: Option<String>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub transcript_file_name: Option<String>,
 }
 
 impl BodyCreateDubbingProjectV1DubbingProjectPost {
@@ -49,6 +55,8 @@ pub struct BodyCreateDubbingProjectV1DubbingProjectPostBuilder {
     webhook_ids: Option<Vec<String>>,
     target_language: Option<String>,
     transcript: Option<Vec<u8>>,
+    file_file_name: Option<String>,
+    transcript_file_name: Option<String>,
 }
 
 impl BodyCreateDubbingProjectV1DubbingProjectPostBuilder {
@@ -97,6 +105,16 @@ impl BodyCreateDubbingProjectV1DubbingProjectPostBuilder {
         self
     }
 
+    pub fn file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.file_file_name = Some(value.into());
+        self
+    }
+
+    pub fn transcript_file_name(mut self, value: impl Into<String>) -> Self {
+        self.transcript_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyCreateDubbingProjectV1DubbingProjectPost`].
     pub fn build(self) -> Result<BodyCreateDubbingProjectV1DubbingProjectPost, BuildError> {
         Ok(BodyCreateDubbingProjectV1DubbingProjectPost {
@@ -109,6 +127,8 @@ impl BodyCreateDubbingProjectV1DubbingProjectPostBuilder {
             webhook_ids: self.webhook_ids,
             target_language: self.target_language,
             transcript: self.transcript,
+            file_file_name: self.file_file_name,
+            transcript_file_name: self.transcript_file_name,
         })
     }
 }
@@ -117,13 +137,14 @@ impl BodyCreateDubbingProjectV1DubbingProjectPost {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
         if let Some(value) = self.file {
-            form = form.part(
-                "file",
+            form = form.part("file", {
+                let file_name = self.file_file_name.unwrap_or_else(|| "file".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("file")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.source_url {
             form = form.text("source_url", value.to_string());
@@ -154,13 +175,16 @@ impl BodyCreateDubbingProjectV1DubbingProjectPost {
             form = form.text("target_language", value.to_string());
         }
         if let Some(value) = self.transcript {
-            form = form.part(
-                "transcript",
+            form = form.part("transcript", {
+                let file_name = self
+                    .transcript_file_name
+                    .unwrap_or_else(|| "transcript".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("transcript")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         form
     }

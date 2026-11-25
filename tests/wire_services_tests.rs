@@ -141,6 +141,10 @@ async fn create_sends_the_real_wire_request() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -296,6 +300,10 @@ async fn create_sends_the_real_wire_request() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -549,6 +557,10 @@ async fn create_surfaces_the_declared_422() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -704,6 +716,10 @@ async fn create_surfaces_the_declared_422() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -1058,6 +1074,10 @@ async fn get_sends_the_real_wire_request() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -1213,6 +1233,10 @@ async fn get_sends_the_real_wire_request() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -1505,6 +1529,10 @@ async fn update_sends_the_real_wire_request() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -1660,6 +1688,10 @@ async fn update_sends_the_real_wire_request() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -1845,6 +1877,10 @@ async fn update_sends_the_real_wire_request() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -2000,6 +2036,10 @@ async fn update_sends_the_real_wire_request() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }
@@ -2253,6 +2293,10 @@ async fn update_surfaces_the_declared_422() {
                                 "output_total": {
                                     "tokens": 123,
                                     "price": 9.99
+                                },
+                                "output_total_reasoning_portion": {
+                                    "tokens": 123,
+                                    "price": 9.99
                                 }
                             }
                         }
@@ -2408,6 +2452,10 @@ async fn update_surfaces_the_declared_422() {
                                 "price": 9.99
                             },
                             "output_total": {
+                                "tokens": 123,
+                                "price": 9.99
+                            },
+                            "output_total_reasoning_portion": {
                                 "tokens": 123,
                                 "price": 9.99
                             }

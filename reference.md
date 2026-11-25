@@ -46,6 +46,7 @@ async fn main() {
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 search: Some("search".to_string()),
                 source: Some(ListSource::Tts),
+                sources: Some(vec![ListSource::Tts]),
                 ..Default::default()
             },
             None,
@@ -139,6 +140,14 @@ async fn main() {
 <dd>
 
 **request.source:** `Option<ListSource>` — Source of the generated history item
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.sources:** `Option<Vec<ListSource>>` — Sources of the generated history items, matching any of them. Cannot be combined with source.
     
 </dd>
 </dl>
@@ -1176,7 +1185,7 @@ async fn main() {
             Some(&BodyUpdatePvcVoiceSampleV1VoicesPvcVoiceIdSamplesSampleIdPost {
                 remove_background_noise: Some(true),
                 selected_speaker_ids: Some(vec!["selected_speaker_ids".to_string()]),
-                trim_start_time: Some(6),
+                trim_start_time: Some(0),
                 trim_end_time: Some(10),
                 file_name: Some("file_name".to_string()),
                 ..Default::default()
@@ -2611,9 +2620,9 @@ async fn main() {
                     ])
                     .language_code("language_code")
                     .voice_settings(ElevenFlashV2_5VoiceSettings {
-                        stability: Some(0.17),
-                        similarity_boost: Some(0.76),
-                        speed: Some(1_f64),
+                        stability: Some(0.77),
+                        similarity_boost: Some(0.67),
+                        speed: Some(0.83),
                         ..Default::default()
                     })
                     .build()
@@ -5014,7 +5023,7 @@ async fn main() {
                 }),
                 can_use_mcp_servers: Some(true),
                 rag_retention_period_days: Some(10),
-                conversation_embedding_retention_days: Some(126),
+                conversation_embedding_retention_days: Some(359),
                 default_livekit_stack: Some(LivekitStackType::Standard),
                 ..Default::default()
             },
@@ -5607,15 +5616,15 @@ async fn main() {
                 collection_id: Some("collection_id".to_string()),
                 gender: Some("gender".to_string()),
                 age: Some("age".to_string()),
-                language: Some(vec![]),
+                language: Some(vec!["language".to_string()]),
                 accent: Some("accent".to_string()),
-                use_cases: Some(vec![]),
+                use_cases: Some(vec!["use_cases".to_string()]),
                 min_notice_period_days: Some(1),
                 include_custom_rates: Some(false),
                 include_live_moderated: Some(true),
                 high_quality: Some(false),
                 include_total_count: Some(true),
-                voice_ids: Some(vec![]),
+                voice_ids: Some(vec!["voice_ids".to_string()]),
                 ..Default::default()
             },
             None,
@@ -6004,7 +6013,7 @@ async fn main() {
 </dl>
 </details>
 
-<details><summary><code>client.voices.<a href="/src/api/resources/voices/voices.rs">find_similar_voices</a>(body: Option&lt;&amp;ListSimilarVoicesRequest&gt;, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetLibraryVoicesResponse, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.voices.<a href="/src/api/resources/voices/voices.rs">find_similar_voices</a>(body: Option&lt;&amp;ListSimilarVoicesRequest&gt;, request: &amp;FindSimilarVoicesQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetLibraryVoicesResponse, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -6042,10 +6051,21 @@ async fn main() {
         .find_similar_voices(
             Some(&ListSimilarVoicesRequest {
                 audio_file: Some(vec![]),
-                similarity_threshold: Some(1.25),
-                top_k: Some(4),
+                similarity_threshold: Some(4.24),
+                top_k: Some(1),
                 ..Default::default()
             }),
+            &FindSimilarVoicesQueryRequest {
+                category: Some(FindSimilarVoicesCategory::Professional),
+                gender: Some("gender".to_string()),
+                age: Some("age".to_string()),
+                use_cases: Some(vec!["use_cases".to_string()]),
+                min_notice_period_days: Some(4),
+                include_custom_rates: Some(true),
+                include_live_moderated: Some(false),
+                owner_id: Some("owner_id".to_string()),
+                ..Default::default()
+            },
             None,
         )
         .await;
@@ -6065,6 +6085,78 @@ async fn main() {
 <dd>
 
 **body:** `Option<&ListSimilarVoicesRequest>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `&FindSimilarVoicesQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.category:** `Option<FindSimilarVoicesCategory>` — Voice category used for filtering
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.gender:** `Option<String>` — Gender used for filtering
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.age:** `Option<String>` — Age used for filtering
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.use_cases:** `Option<Vec<String>>` — Use-case used for filtering
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.min_notice_period_days:** `Option<i64>` — Filter voices with a minimum notice period of the given number of days.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.include_custom_rates:** `Option<bool>` — Include/exclude voices with custom rates
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.include_live_moderated:** `Option<bool>` — Include/exclude voices that are live moderated
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.owner_id:** `Option<String>` — Filter voices by public owner ID
     
 </dd>
 </dl>
@@ -6123,23 +6215,23 @@ async fn main() {
         .get_shared(
             &GetSharedQueryRequest {
                 page_size: Some(30),
-                category: Some(GetSharedCategory::Professional),
+                category: Some(FindSimilarVoicesCategory::Professional),
                 gender: Some("gender".to_string()),
                 age: Some("age".to_string()),
                 accent: Some("accent".to_string()),
                 language: Some("language".to_string()),
                 locale: Some("locale".to_string()),
                 search: Some("search".to_string()),
-                use_cases: Some(vec![]),
-                descriptives: Some(vec![]),
+                use_cases: Some(vec!["use_cases".to_string()]),
+                descriptives: Some(vec!["descriptives".to_string()]),
                 featured: Some(true),
-                min_notice_period_days: Some(6),
-                include_custom_rates: Some(false),
-                include_live_moderated: Some(true),
+                min_notice_period_days: Some(2),
+                include_custom_rates: Some(true),
+                include_live_moderated: Some(false),
                 reader_app_enabled: Some(true),
                 owner_id: Some("owner_id".to_string()),
                 sort: Some(GetSharedSort::CreatedDate),
-                page: Some(10),
+                page: Some(8),
                 ..Default::default()
             },
             None,
@@ -6176,7 +6268,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.category:** `Option<GetSharedCategory>` — Voice category used for filtering
+**request.category:** `Option<FindSimilarVoicesCategory>` — Voice category used for filtering
     
 </dd>
 </dl>
@@ -7047,7 +7139,7 @@ async fn main() {
                 page_size: Some(30),
                 sort: Some(ListSortParameter::CreationTimeUnix),
                 sort_direction: Some("sort_direction".to_string()),
-                include_archived: Some(true),
+                include_archived: Some(false),
                 ..Default::default()
             },
             None,
@@ -8937,6 +9029,344 @@ async fn main() {
 </dl>
 </details>
 
+## AudioNative
+<details><summary><code>client.audio_native.<a href="/src/api/resources/audio_native/audio_native.rs">create</a>(body: &amp;BodyCreatesAudioNativeEnabledProjectV1AudioNativePost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;AudioNativeCreateProjectResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Creates Audio Native enabled project, optionally starts conversion and returns project ID and embeddable HTML snippet.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .audio_native
+        .create(
+            &BodyCreatesAudioNativeEnabledProjectV1AudioNativePost::builder()
+                .name("name")
+                .author("author")
+                .title("title")
+                .text_color("text_color")
+                .background_color("background_color")
+                .voice_id("voice_id")
+                .model_id("model_id")
+                .file(vec![])
+                .auto_convert(false)
+                .apply_text_normalization(
+                    BodyCreatePodcastV1StudioPodcastsPostApplyTextNormalization::Auto,
+                )
+                .pronunciation_dictionary_locators(vec![
+                    "pronunciation_dictionary_locators".to_string(),
+                ])
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&BodyCreatesAudioNativeEnabledProjectV1AudioNativePost`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.audio_native.<a href="/src/api/resources/audio_native/audio_native.rs">get_settings</a>(project_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetAudioNativeProjectSettingsResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get player settings for the specific project.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .audio_native
+        .get_settings("21m00Tcm4TlvDq8ikWAM", None)
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `&str` — The ID of the Studio project.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.audio_native.<a href="/src/api/resources/audio_native/audio_native.rs">update</a>(project_id: &amp;str, body: Option&lt;&amp;BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost&gt;, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;AudioNativeEditContentResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Updates content for the specific AudioNative Project.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .audio_native
+        .update(
+            "21m00Tcm4TlvDq8ikWAM",
+            Some(&BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost {
+                file: Some(vec![]),
+                auto_convert: Some(false),
+                auto_publish: Some(false),
+                ..Default::default()
+            }),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**project_id:** `&str` — The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `Option<&BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.audio_native.<a href="/src/api/resources/audio_native/audio_native.rs">update_content_from_url</a>(body: &amp;BodyUpdateAudioNativeContentFromUrlV1AudioNativeContentPost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;AudioNativeEditContentResponseModel, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Finds an AudioNative project matching the provided URL, extracts content from the URL, updates the project content, and queues it for conversion and auto-publishing.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .audio_native
+        .update_content_from_url(
+            &BodyUpdateAudioNativeContentFromUrlV1AudioNativeContentPost::builder()
+                .url("https://elevenlabs.io/blog/the_first_ai_that_can_laugh/")
+                .author("author")
+                .title("title")
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&BodyUpdateAudioNativeContentFromUrlV1AudioNativeContentPost`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Project
 <details><summary><code>client.project.<a href="/src/api/resources/project/project.rs">list</a>(request: &amp;ProjectListQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;DubbingProjectListResponse, crate::error::ApiError&gt;</code></summary>
 <dl>
@@ -9777,8 +10207,8 @@ async fn main() {
             &DubbingSegmentUpdateRequest {
                 text: Some("Welcome to our latest product demo.".to_string()),
                 speaker_id: Some("speaker_id".to_string()),
-                start_s: Some(2.07),
-                end_s: Some(4.59),
+                start_s: Some(9.82),
+                end_s: Some(9.28),
                 ..Default::default()
             },
             None,
@@ -9965,8 +10395,8 @@ async fn main() {
                         DubbingSegmentUpdateRequest {
                             text: Some("Welcome to our latest product demo.".to_string()),
                             speaker_id: Some("speaker_id".to_string()),
-                            start_s: Some(2.07),
-                            end_s: Some(4.59),
+                            start_s: Some(9.82),
+                            end_s: Some(9.28),
                             ..Default::default()
                         },
                     ),
@@ -9975,8 +10405,8 @@ async fn main() {
                         DubbingSegmentUpdateRequest {
                             text: Some("text".to_string()),
                             speaker_id: Some("narrator".to_string()),
-                            start_s: Some(2.07),
-                            end_s: Some(4.59),
+                            start_s: Some(9.82),
+                            end_s: Some(9.28),
                             ..Default::default()
                         },
                     ),
@@ -10554,10 +10984,10 @@ async fn main() {
                 cursor: Some("cursor".to_string()),
                 page_size: Some(100),
                 dubbing_status: Some(ListDubbingStatus::Dubbing),
-                dubbing_statuses: Some(vec![]),
-                dubbing_models: Some(vec![]),
-                target_language_codes: Some(vec![]),
-                creation_sources: Some(vec![]),
+                dubbing_statuses: Some(vec![DubbingStatuses::Queued]),
+                dubbing_models: Some(vec![DubbingModels::DubbingV1]),
+                target_language_codes: Some(vec!["target_language_codes".to_string()]),
+                creation_sources: Some(vec![CreationSources::FlowNode]),
                 filter_by_creator: Some(FilterByCreator::Personal),
                 order_by: Some(OrderBy::CreatedAt),
                 order_direction: Some(OrderDirection::Descending),
@@ -10729,17 +11159,17 @@ async fn main() {
                     .source_lang("auto")
                     .target_lang("target_lang")
                     .target_accent("target_accent")
-                    .num_speakers(8)
+                    .num_speakers(10)
                     .watermark(false)
-                    .start_time(8)
-                    .end_time(8)
+                    .start_time(5)
+                    .end_time(9)
                     .highest_resolution(true)
-                    .drop_background_audio(false)
+                    .drop_background_audio(true)
                     .use_profanity_filter(false)
                     .dubbing_studio(false)
-                    .disable_voice_cloning(true)
+                    .disable_voice_cloning(false)
                     .mode(DubRequestMode::Automatic)
-                    .csv_fps(7.54)
+                    .csv_fps(5.51)
                     .build()
                     .expect("Failed to build request"),
             ),
@@ -11215,344 +11645,6 @@ async fn main() {
 </dl>
 </details>
 
-## AudioNative
-<details><summary><code>client.audio_native.<a href="/src/api/resources/audio_native/audio_native.rs">create</a>(body: &amp;BodyCreatesAudioNativeEnabledProjectV1AudioNativePost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;AudioNativeCreateProjectResponseModel, crate::error::ApiError&gt;</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Creates Audio Native enabled project, optionally starts conversion and returns project ID and embeddable HTML snippet.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```rust
-use elevenlabs_rust_sdk::prelude::*;
-
-#[tokio::main]
-async fn main() {
-    let config = ClientConfig::default();
-    let client = ApiClient::new(config).expect("Failed to build client");
-    client
-        .audio_native
-        .create(
-            &BodyCreatesAudioNativeEnabledProjectV1AudioNativePost::builder()
-                .name("name")
-                .author("author")
-                .title("title")
-                .text_color("text_color")
-                .background_color("background_color")
-                .voice_id("voice_id")
-                .model_id("model_id")
-                .file(vec![])
-                .auto_convert(false)
-                .apply_text_normalization(
-                    BodyCreatePodcastV1StudioPodcastsPostApplyTextNormalization::Auto,
-                )
-                .pronunciation_dictionary_locators(vec![
-                    "pronunciation_dictionary_locators".to_string(),
-                ])
-                .build()
-                .expect("Failed to build request"),
-            None,
-        )
-        .await;
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**body:** `&BodyCreatesAudioNativeEnabledProjectV1AudioNativePost`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**options:** `Option<RequestOptions>` — Per-call overrides
-    
-</dd>
-</dl>
-
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.audio_native.<a href="/src/api/resources/audio_native/audio_native.rs">get_settings</a>(project_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetAudioNativeProjectSettingsResponseModel, crate::error::ApiError&gt;</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get player settings for the specific project.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```rust
-use elevenlabs_rust_sdk::prelude::*;
-
-#[tokio::main]
-async fn main() {
-    let config = ClientConfig::default();
-    let client = ApiClient::new(config).expect("Failed to build client");
-    client
-        .audio_native
-        .get_settings("21m00Tcm4TlvDq8ikWAM", None)
-        .await;
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `&str` — The ID of the Studio project.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**options:** `Option<RequestOptions>` — Per-call overrides
-    
-</dd>
-</dl>
-
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.audio_native.<a href="/src/api/resources/audio_native/audio_native.rs">update</a>(project_id: &amp;str, body: Option&lt;&amp;BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost&gt;, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;AudioNativeEditContentResponseModel, crate::error::ApiError&gt;</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Updates content for the specific AudioNative Project.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```rust
-use elevenlabs_rust_sdk::prelude::*;
-
-#[tokio::main]
-async fn main() {
-    let config = ClientConfig::default();
-    let client = ApiClient::new(config).expect("Failed to build client");
-    client
-        .audio_native
-        .update(
-            "21m00Tcm4TlvDq8ikWAM",
-            Some(&BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost {
-                file: Some(vec![]),
-                auto_convert: Some(true),
-                auto_publish: Some(true),
-                ..Default::default()
-            }),
-            None,
-        )
-        .await;
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**project_id:** `&str` — The ID of the project to be used. You can use the [List projects](/docs/api-reference/studio/get-projects) endpoint to list all the available projects.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**body:** `Option<&BodyUpdateAudioNativeProjectContentV1AudioNativeProjectIdContentPost>`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**options:** `Option<RequestOptions>` — Per-call overrides
-    
-</dd>
-</dl>
-
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.audio_native.<a href="/src/api/resources/audio_native/audio_native.rs">update_content_from_url</a>(body: &amp;BodyUpdateAudioNativeContentFromUrlV1AudioNativeContentPost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;AudioNativeEditContentResponseModel, crate::error::ApiError&gt;</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Finds an AudioNative project matching the provided URL, extracts content from the URL, updates the project content, and queues it for conversion and auto-publishing.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```rust
-use elevenlabs_rust_sdk::prelude::*;
-
-#[tokio::main]
-async fn main() {
-    let config = ClientConfig::default();
-    let client = ApiClient::new(config).expect("Failed to build client");
-    client
-        .audio_native
-        .update_content_from_url(
-            &BodyUpdateAudioNativeContentFromUrlV1AudioNativeContentPost::builder()
-                .url("https://elevenlabs.io/blog/the_first_ai_that_can_laugh/")
-                .author("author")
-                .title("title")
-                .build()
-                .expect("Failed to build request"),
-            None,
-        )
-        .await;
-}
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**body:** `&BodyUpdateAudioNativeContentFromUrlV1AudioNativeContentPost`
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**options:** `Option<RequestOptions>` — Per-call overrides
-    
-</dd>
-</dl>
-
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
 ## ContentProvenance
 <details><summary><code>client.content_provenance.<a href="/src/api/resources/content_provenance/content_provenance.rs">watermark</a>(body: &amp;BodyCheckWatermarkV1ContentProvenanceWatermarkPost, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;WatermarkCheck, crate::error::ApiError&gt;</code></summary>
 <dl>
@@ -11953,8 +12045,8 @@ async fn main() {
         .create(
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionCreateAgentRuleRequest::builder()
-                .title(StrippedStr("ea volupta".to_string()))
-                .description(StrippedStr("anim ut".to_string()))
+                .title(StrippedStr("estLo".to_string()))
+                .description(StrippedStr("anim nu".to_string()))
                 .priority(RulePriority::Strict)
                 .build()
                 .expect("Failed to build request"),
@@ -12053,8 +12145,8 @@ async fn main() {
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             "rule_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionUpdateAgentRuleRequest::builder()
-                .title(StrippedStr("elit velit ips".to_string()))
-                .description(StrippedStr("ut ullamco".to_string()))
+                .title(StrippedStr("magna irure r".to_string()))
+                .description(StrippedStr("estdeserunt ".to_string()))
                 .priority(RulePriority::Strict)
                 .build()
                 .expect("Failed to build request"),
@@ -12753,7 +12845,7 @@ async fn main() {
         .workspace
         .set_third_party_disabling_policy(
             Some(&BodySetWorkspaceThirdPartyDisablingPolicyV1WorkspacesApiKeysThirdPartyDisablingPost {
-                third_party_disable_allowed: Some(true),
+                third_party_disable_allowed: Some(false),
                 ..Default::default()
             }),
             None,
@@ -12835,8 +12927,8 @@ async fn main() {
             &AuditLogsListQueryRequest {
                 limit: Some(50),
                 cursor: Some("cursor".to_string()),
-                time_from_unix_ms: Some(8),
-                time_to_unix_ms: Some(9),
+                time_from_unix_ms: Some(9),
+                time_to_unix_ms: Some(1),
                 actor_uid: Some("actor_uid".to_string()),
                 class_name: Some(AuditClassName::AccountChange),
                 activity_name: Some(AuditActivityName::AccountSecurityChange),
@@ -13044,7 +13136,7 @@ async fn main() {
                     .token_url("token_url")
                     .scopes(vec!["scopes".to_string()])
                     .extra_params(HashMap::from([("key".to_string(), "extra_params".to_string())]))
-                    .basic_auth_in_header(false)
+                    .basic_auth_in_header(true)
                     .client_secret("client_secret")
                     .custom_headers(HashMap::from([(
                         "key".to_string(),
@@ -13138,7 +13230,7 @@ async fn main() {
                         "key".to_string(),
                         "extra_params".to_string(),
                     )])),
-                    basic_auth_in_header: Some(false),
+                    basic_auth_in_header: Some(true),
                     client_secret: Some("client_secret".to_string()),
                     custom_headers: Some(HashMap::from([(
                         "key".to_string(),
@@ -13922,7 +14014,7 @@ async fn main() {
         .update_usage_limit(
             "user_id",
             &UpdateMemberUsageLimitRequestModel::builder()
-                .usage_limit(10)
+                .usage_limit(9)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -14261,7 +14353,7 @@ async fn main() {
                 .email("john.doe@testmail.com")
                 .seat_type(SeatType::WorkspaceAdmin)
                 .group_ids(vec!["group_ids".to_string()])
-                .usage_limit(0)
+                .usage_limit(2)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -14343,7 +14435,7 @@ async fn main() {
                 .emails(vec!["emails".to_string()])
                 .seat_type(SeatType::WorkspaceAdmin)
                 .group_ids(vec!["group_ids".to_string()])
-                .usage_limit(4)
+                .usage_limit(9)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -15552,7 +15644,7 @@ async fn main() {
                 .model_id(MusicModelId::MusicV1)
                 .add_sfx(true)
                 .separate_tracks(true)
-                .use_audio_as_reference(false)
+                .use_audio_as_reference(true)
                 .sign_with_c_2_pa(true)
                 .build()
                 .expect("Failed to build request"),
@@ -15665,10 +15757,10 @@ async fn main() {
                 enable_logging: Some(true),
                 body: Some(BodyComposeMusicV1MusicPost {
                     prompt: Some("prompt".to_string()),
-                    music_length_ms: Some(531345),
+                    music_length_ms: Some(359140),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(1781324345),
-                    force_instrumental: Some(true),
+                    seed: Some(343402192),
+                    force_instrumental: Some(false),
                     finetune_id: Some("finetune_id".to_string()),
                     respect_sections_durations: Some(true),
                     store_for_inpainting: Some(false),
@@ -15783,14 +15875,14 @@ async fn main() {
                     prompt: Some("A prompt for music generation".to_string()),
                     music_length_ms: Some(10000),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(1833397780),
+                    seed: Some(883366474),
                     force_instrumental: Some(false),
                     finetune_id: Some("finetune_id".to_string()),
                     respect_sections_durations: Some(true),
-                    store_for_inpainting: Some(true),
+                    store_for_inpainting: Some(false),
                     with_timestamps: Some(true),
-                    with_waveform_visual: Some(true),
-                    sign_with_c_2_pa: Some(false),
+                    with_waveform_visual: Some(false),
+                    sign_with_c_2_pa: Some(true),
                     ..Default::default()
                 }),
                 ..Default::default()
@@ -15900,13 +15992,13 @@ async fn main() {
                 enable_logging: Some(true),
                 body: Some(BodyStreamComposedMusicWithADetailedResponseV1MusicDetailedStreamPost {
                     prompt: Some("prompt".to_string()),
-                    music_length_ms: Some(449782),
+                    music_length_ms: Some(550877),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(401661069),
+                    seed: Some(558884580),
                     force_instrumental: Some(false),
                     finetune_id: Some("finetune_id".to_string()),
-                    store_for_inpainting: Some(true),
-                    with_timestamps: Some(false),
+                    store_for_inpainting: Some(false),
+                    with_timestamps: Some(true),
                     with_waveform_visual: Some(true),
                     ..Default::default()
                 }),
@@ -16020,9 +16112,9 @@ async fn main() {
                 enable_logging: Some(true),
                 body: Some(BodyStreamComposedMusicV1MusicStreamPost {
                     prompt: Some("prompt".to_string()),
-                    music_length_ms: Some(64550),
+                    music_length_ms: Some(409105),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(1107124270),
+                    seed: Some(1057215319),
                     force_instrumental: Some(true),
                     finetune_id: Some("finetune_id".to_string()),
                     store_for_inpainting: Some(true),
@@ -16131,7 +16223,7 @@ async fn main() {
         .upload(
             &BodyUploadMusicV1MusicUploadPost::builder()
                 .file(vec![])
-                .with_timestamps(true)
+                .with_timestamps(false)
                 .with_waveform_visual(true)
                 .build()
                 .expect("Failed to build request"),
@@ -16213,7 +16305,7 @@ async fn main() {
             &BodyStemSeparationV1MusicStemSeparationPost::builder()
                 .file(vec![])
                 .stem_variation_id(StemVariationId::TwoStemsV1)
-                .sign_with_c_2_pa(false)
+                .sign_with_c_2_pa(true)
                 .build()
                 .expect("Failed to build request"),
             &SeparateStemsQueryRequest {
@@ -16329,19 +16421,19 @@ async fn main() {
                 .numbers_format(NumbersFormat::Digits)
                 .transcript_edit("transcript_edit")
                 .tag_audio_events(true)
-                .num_speakers(6)
+                .num_speakers(10)
                 .timestamps_granularity(
                     BodySpeechToTextV1SpeechToTextPostTimestampsGranularity::None,
                 )
-                .diarize(false)
+                .diarize(true)
                 .diarization_threshold(0.17)
                 .additional_formats(AdditionalFormats(vec![ExportOptions::Docx {
                     data: DocxExportOptions::builder()
                         .include_speakers(true)
                         .include_timestamps(true)
-                        .segment_on_silence_longer_than_s(4.35)
-                        .max_segment_duration_s(7.21)
-                        .max_segment_chars(1)
+                        .segment_on_silence_longer_than_s(6.62)
+                        .max_segment_duration_s(1.25)
+                        .max_segment_chars(10)
                         .build()
                         .expect("Failed to build request"),
                 }]))
@@ -16349,13 +16441,13 @@ async fn main() {
                 .source_url("source_url")
                 .webhook(true)
                 .webhook_id("webhook_id")
-                .temperature(1.66)
-                .seed(1876947786)
+                .temperature(0.01)
+                .seed(67691410)
                 .use_multi_channel(false)
                 .multichannel_output_style(MultichannelOutputStyle::Separate)
-                .no_verbatim(true)
-                .use_speaker_library(false)
-                .detect_speaker_roles(false)
+                .no_verbatim(false)
+                .use_speaker_library(true)
+                .detect_speaker_roles(true)
                 .entity_redaction_mode("enumerated_entity_type")
                 .keyterms(vec!["keyterms".to_string()])
                 .build()
@@ -16467,7 +16559,7 @@ async fn main() {
         .create(
             &SingleUseTokenType::RealtimeScribe,
             &CreateQueryRequest {
-                max_session_duration_seconds: Some(9),
+                max_session_duration_seconds: Some(6),
                 ..Default::default()
             },
             None,
@@ -16645,7 +16737,7 @@ async fn main() {
         .get_signed_url(
             &GetSignedUrlQueryRequest::builder()
                 .agent_id("agent_3701k3ttaq12ewp8b7qv5rfyszkz")
-                .include_conversation_id(false)
+                .include_conversation_id(true)
                 .branch_id("branch_id")
                 .version_id("version_id")
                 .environment("environment")
@@ -16910,35 +17002,35 @@ async fn main() {
             &ConversationsListQueryRequest {
                 cursor: Some("cursor".to_string()),
                 agent_id: Some("agent_id".to_string()),
-                visited_agent_ids: Some(vec![]),
-                visited_agent_branch_ids: Some(vec![]),
-                triggered_procedure_ids: Some(vec![]),
+                visited_agent_ids: Some(vec!["visited_agent_ids".to_string()]),
+                visited_agent_branch_ids: Some(vec!["visited_agent_branch_ids".to_string()]),
+                triggered_procedure_ids: Some(vec!["triggered_procedure_ids".to_string()]),
                 call_successful: Some(EvaluationResultFilter::Success),
-                call_start_before_unix: Some(6),
-                call_start_after_unix: Some(2),
-                call_duration_min_secs: Some(5),
-                call_duration_max_secs: Some(10),
-                rating_max: Some(2),
-                rating_min: Some(2),
-                has_feedback_comment: Some(false),
+                call_start_before_unix: Some(5),
+                call_start_after_unix: Some(5),
+                call_duration_min_secs: Some(10),
+                call_duration_max_secs: Some(0),
+                rating_max: Some(1),
+                rating_min: Some(4),
+                has_feedback_comment: Some(true),
                 user_id: Some("user_id".to_string()),
-                evaluation_params: Some(vec![]),
-                data_collection_params: Some(vec![]),
-                dynamic_variable_params: Some(vec![]),
+                evaluation_params: Some(vec!["evaluation_params".to_string()]),
+                data_collection_params: Some(vec!["data_collection_params".to_string()]),
+                dynamic_variable_params: Some(vec!["dynamic_variable_params".to_string()]),
                 data_collection_filter: Some("data_collection_filter".to_string()),
                 dynamic_variable_filter: Some("dynamic_variable_filter".to_string()),
-                data_collection_ids: Some(vec![]),
-                evaluation_criteria_ids: Some(vec![]),
-                tool_names: Some(vec![]),
-                tool_names_successful: Some(vec![]),
-                tool_names_errored: Some(vec![]),
-                tool_ids: Some(vec![]),
-                tool_ids_successful: Some(vec![]),
-                tool_ids_errored: Some(vec![]),
-                include_invalid_tool_calls: Some(false),
-                main_languages: Some(vec![]),
-                phone_number_ids: Some(vec![]),
-                whatsapp_phone_number_ids: Some(vec![]),
+                data_collection_ids: Some(vec!["data_collection_ids".to_string()]),
+                evaluation_criteria_ids: Some(vec!["evaluation_criteria_ids".to_string()]),
+                tool_names: Some(vec!["tool_names".to_string()]),
+                tool_names_successful: Some(vec!["tool_names_successful".to_string()]),
+                tool_names_errored: Some(vec!["tool_names_errored".to_string()]),
+                tool_ids: Some(vec!["tool_ids".to_string()]),
+                tool_ids_successful: Some(vec!["tool_ids_successful".to_string()]),
+                tool_ids_errored: Some(vec!["tool_ids_errored".to_string()]),
+                include_invalid_tool_calls: Some(true),
+                main_languages: Some(vec!["main_languages".to_string()]),
+                phone_number_ids: Some(vec!["phone_number_ids".to_string()]),
+                whatsapp_phone_number_ids: Some(vec!["whatsapp_phone_number_ids".to_string()]),
                 page_size: Some(30),
                 summary_mode: Some(ListSummaryMode::Exclude),
                 search: Some("search".to_string()),
@@ -16948,13 +17040,13 @@ async fn main() {
                 branch_id: Some("branch_id".to_string()),
                 version_id: Some("version_id".to_string()),
                 parent_conversation_id: Some("parent_conversation_id".to_string()),
-                topic_ids: Some(vec![]),
-                exclude_statuses: Some(vec![]),
-                tag_ids: Some(vec![]),
+                topic_ids: Some(vec!["topic_ids".to_string()]),
+                exclude_statuses: Some(vec![ConversationSummaryResponseModelStatus::Initiated]),
+                tag_ids: Some(vec!["tag_ids".to_string()]),
                 workflow_node_entered_id: Some("workflow_node_entered_id".to_string()),
-                termination_reasons: Some(vec![]),
-                guardrail_types: Some(vec![]),
-                custom_guardrail_names: Some(vec![]),
+                termination_reasons: Some(vec!["termination_reasons".to_string()]),
+                guardrail_types: Some(vec![GuardrailType::Custom]),
+                custom_guardrail_names: Some(vec!["custom_guardrail_names".to_string()]),
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 ..Default::default()
             },
@@ -17986,12 +18078,12 @@ async fn main() {
                     data: ClientToolResultItem::builder()
                         .tool_call_id("tool_call_id")
                         .result("result")
-                        .is_error(true)
+                        .is_error(false)
                         .error_type(ClientToolResultItemErrorType::UserRejected)
                         .build()
                         .expect("Failed to build request"),
                 }])
-                .background(true)
+                .background(false)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -18084,7 +18176,7 @@ async fn main() {
                     data: ClientToolResultItem::builder()
                         .tool_call_id("tool_call_id")
                         .result("result")
-                        .is_error(true)
+                        .is_error(false)
                         .error_type(ClientToolResultItemErrorType::UserRejected)
                         .build()
                         .expect("Failed to build request"),
@@ -18177,7 +18269,7 @@ async fn main() {
     let client = ApiClient::new(config).expect("Failed to build client");
     client
         .conversations
-        .get_turn("conversation_id", "3247", None)
+        .get_turn("conversation_id", "5611470", None)
         .await;
 }
 ```
@@ -18261,7 +18353,7 @@ async fn main() {
         .conversations
         .stream_turn_events(
             "conversation_id",
-            "34",
+            "64022979775",
             Some("Last-Event-ID".to_string()),
             None,
         )
@@ -18393,17 +18485,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(ModelFamily::Turbo)
                                     .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                    .stability(0.42)
-                                    .speed(0.78)
-                                    .similarity_boost(0.33)
-                                    .clone_strength(0.41)
+                                    .stability(0.56)
+                                    .speed(0.83)
+                                    .similarity_boost(0.04)
+                                    .clone_strength(0.3)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(6.57),
-                            speed: Some(1.8),
-                            similarity_boost: Some(6.48),
-                            clone_strength: Some(1.49),
+                            stability: Some(4.99),
+                            speed: Some(7.29),
+                            similarity_boost: Some(5.75),
+                            clone_strength: Some(5.08),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -18414,8 +18506,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(false),
-                            max_duration_seconds: Some(5),
+                            text_only: Some(true),
+                            max_duration_seconds: Some(9),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -18429,7 +18521,7 @@ async fn main() {
                                 llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(false),
+                                tool_ids_strict: Some(true),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -18455,7 +18547,7 @@ async fn main() {
                     dynamic_variables: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     ..Default::default()
                 })
-                .call_recording_enabled(true)
+                .call_recording_enabled(false)
                 .telephony_call_config(TelephonyCallConfigInput {
                     ringing_timeout_secs: Some(60),
                     twilio_call_recording_enabled: Some(false),
@@ -18584,17 +18676,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(ModelFamily::Turbo)
                                     .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                    .stability(0.42)
-                                    .speed(0.78)
-                                    .similarity_boost(0.33)
-                                    .clone_strength(0.41)
+                                    .stability(0.56)
+                                    .speed(0.83)
+                                    .similarity_boost(0.04)
+                                    .clone_strength(0.3)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(6.57),
-                            speed: Some(1.8),
-                            similarity_boost: Some(6.48),
-                            clone_strength: Some(1.49),
+                            stability: Some(4.99),
+                            speed: Some(7.29),
+                            similarity_boost: Some(5.75),
+                            clone_strength: Some(5.08),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -18605,8 +18697,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(false),
-                            max_duration_seconds: Some(5),
+                            text_only: Some(true),
+                            max_duration_seconds: Some(9),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -18620,7 +18712,7 @@ async fn main() {
                                 llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(false),
+                                tool_ids_strict: Some(true),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -18758,17 +18850,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(ModelFamily::Turbo)
                                     .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                    .stability(0.42)
-                                    .speed(0.78)
-                                    .similarity_boost(0.33)
-                                    .clone_strength(0.41)
+                                    .stability(0.56)
+                                    .speed(0.83)
+                                    .similarity_boost(0.04)
+                                    .clone_strength(0.3)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(6.57),
-                            speed: Some(1.8),
-                            similarity_boost: Some(6.48),
-                            clone_strength: Some(1.49),
+                            stability: Some(4.99),
+                            speed: Some(7.29),
+                            similarity_boost: Some(5.75),
+                            clone_strength: Some(5.08),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -18779,8 +18871,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(false),
-                            max_duration_seconds: Some(5),
+                            text_only: Some(true),
+                            max_duration_seconds: Some(9),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -18794,7 +18886,7 @@ async fn main() {
                                 llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(false),
+                                tool_ids_strict: Some(true),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -18954,17 +19046,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(ModelFamily::Turbo)
                                     .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                    .stability(0.42)
-                                    .speed(0.78)
-                                    .similarity_boost(0.33)
-                                    .clone_strength(0.41)
+                                    .stability(0.56)
+                                    .speed(0.83)
+                                    .similarity_boost(0.04)
+                                    .clone_strength(0.3)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(6.57),
-                            speed: Some(1.8),
-                            similarity_boost: Some(6.48),
-                            clone_strength: Some(1.49),
+                            stability: Some(4.99),
+                            speed: Some(7.29),
+                            similarity_boost: Some(5.75),
+                            clone_strength: Some(5.08),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -18975,8 +19067,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(false),
-                            max_duration_seconds: Some(5),
+                            text_only: Some(true),
+                            max_duration_seconds: Some(9),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -18990,7 +19082,7 @@ async fn main() {
                                 llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(false),
+                                tool_ids_strict: Some(true),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -19142,17 +19234,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(ModelFamily::Turbo)
                                     .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                    .stability(0.42)
-                                    .speed(0.78)
-                                    .similarity_boost(0.33)
-                                    .clone_strength(0.41)
+                                    .stability(0.56)
+                                    .speed(0.83)
+                                    .similarity_boost(0.04)
+                                    .clone_strength(0.3)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(6.57),
-                            speed: Some(1.8),
-                            similarity_boost: Some(6.48),
-                            clone_strength: Some(1.49),
+                            stability: Some(4.99),
+                            speed: Some(7.29),
+                            similarity_boost: Some(5.75),
+                            clone_strength: Some(5.08),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -19163,8 +19255,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(false),
-                            max_duration_seconds: Some(5),
+                            text_only: Some(true),
+                            max_duration_seconds: Some(9),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -19178,7 +19270,7 @@ async fn main() {
                                 llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(false),
+                                tool_ids_strict: Some(true),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -19296,12 +19388,12 @@ async fn main() {
                             }),
                             turn: Some(TurnConfig {
                                 turn_timeout: Some(7_f64),
-                                initial_wait_time: Some(0.63),
+                                initial_wait_time: Some(9.4),
                                 silence_end_call_timeout: Some(-1_f64),
                                 turn_eagerness: Some(TurnEagerness::Patient),
                                 spelling_patience: Some(SpellingPatience::Auto),
                                 speculative_turn: Some(false),
-                                retranscribe_on_turn_timeout: Some(true),
+                                retranscribe_on_turn_timeout: Some(false),
                                 turn_model: Some(TurnModel::TurnV2),
                                 interruption_ignore_terms: Some(vec![
                                     "interruption_ignore_terms".to_string(),
@@ -19309,8 +19401,8 @@ async fn main() {
                                 interruption_ignore_term_languages: Some(vec![
                                     "interruption_ignore_term_languages".to_string(),
                                 ]),
-                                merge_with_default_ignore_terms: Some(false),
-                                transcribe_on_disabled_interruptions: Some(true),
+                                merge_with_default_ignore_terms: Some(true),
+                                transcribe_on_disabled_interruptions: Some(false),
                                 soft_timeout_config: Some(SoftTimeoutConfig {
                                     timeout_seconds: Some(-1_f64),
                                     message: Some("Hhmmmm...yeah.".to_string()),
@@ -19318,8 +19410,9 @@ async fn main() {
                                         "additional_soft_timeout_messages".to_string(),
                                     ]),
                                     use_llm_generated_message: Some(true),
-                                    randomize_fillers: Some(false),
+                                    randomize_fillers: Some(true),
                                     max_soft_timeouts_per_generation: Some(1),
+                                    pause_after_filler: Some(true),
                                     llm_generated_message_prompt_override: Some(
                                         "llm_generated_message_prompt_override".to_string(),
                                     ),
@@ -19343,10 +19436,10 @@ async fn main() {
                                         .language("language")
                                         .model_family(ModelFamily::Turbo)
                                         .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                        .stability(0.42)
-                                        .speed(0.78)
-                                        .similarity_boost(0.33)
-                                        .clone_strength(0.41)
+                                        .stability(0.56)
+                                        .speed(0.83)
+                                        .similarity_boost(0.04)
+                                        .clone_strength(0.3)
                                         .build()
                                         .expect("Failed to build request"),
                                 ]),
@@ -19363,7 +19456,7 @@ async fn main() {
                                 stability: Some(0.5),
                                 speed: Some(1_f64),
                                 similarity_boost: Some(0.8),
-                                clone_strength: Some(0.91),
+                                clone_strength: Some(0.03),
                                 text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                                 pronunciation_dictionary_locators: Some(vec![
                                     PydanticPronunciationDictionaryVersionLocator::builder()
@@ -19385,7 +19478,7 @@ async fn main() {
                                 ..Default::default()
                             }),
                             conversation: Some(ConversationConfigInput {
-                                text_only: Some(false),
+                                text_only: Some(true),
                                 max_duration_seconds: Some(600),
                                 client_events: Some(vec![
                                     ClientEvent::ConversationInitiationMetadata,
@@ -19396,14 +19489,14 @@ async fn main() {
                                     max_files_per_conversation: Some(10),
                                     ..Default::default()
                                 }),
-                                monitoring_enabled: Some(false),
+                                monitoring_enabled: Some(true),
                                 monitoring_events: Some(vec![
                                     ClientEvent::ConversationInitiationMetadata,
                                 ]),
                                 dtmf_input_settings: Some(DtmfInputConfig {
                                     dtmf_input_timeout: Some(2_f64),
                                     hash_terminator: Some(true),
-                                    redact_input: Some(false),
+                                    redact_input: Some(true),
                                     ..Default::default()
                                 }),
                                 background_sound: Some(BackgroundSoundConfig {
@@ -19413,7 +19506,7 @@ async fn main() {
                                     crossfade_loop: Some(true),
                                     ..Default::default()
                                 }),
-                                source_attribution: Some(true),
+                                source_attribution: Some(false),
                                 ..Default::default()
                             }),
                             language_presets: Some(HashMap::from([(
@@ -19434,16 +19527,16 @@ async fn main() {
                                             model_id: Some(TtsConversationalModel::ElevenTurboV2),
                                             voice_id: Some("voice_id".to_string()),
                                             supported_voices: Some(vec![]),
-                                            stability: Some(6.57),
-                                            speed: Some(1.8),
-                                            similarity_boost: Some(6.48),
-                                            clone_strength: Some(1.49),
+                                            stability: Some(4.99),
+                                            speed: Some(7.29),
+                                            similarity_boost: Some(5.75),
+                                            clone_strength: Some(5.08),
                                             pronunciation_dictionary_locators: Some(vec![]),
                                             ..Default::default()
                                         }),
                                         conversation: Some(ConversationConfigOverride {
-                                            text_only: Some(false),
-                                            max_duration_seconds: Some(5),
+                                            text_only: Some(true),
+                                            max_duration_seconds: Some(9),
                                             ..Default::default()
                                         }),
                                         agent: Some(AgentConfigOverrideInput {
@@ -19484,7 +19577,7 @@ async fn main() {
                             agent: Some(AgentConfig {
                                 first_message: Some("first_message".to_string()),
                                 language: Some("en".to_string()),
-                                hinglish_mode: Some(false),
+                                hinglish_mode: Some(true),
                                 dynamic_variables: Some(DynamicVariablesConfigInput(
                                     elevenlabs_rust_sdk::serde_json::json!({}),
                                 )),
@@ -19527,12 +19620,12 @@ async fn main() {
                                     llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                     reasoning_effort: Some(LlmReasoningEffort::None),
                                     service_tier: Some(LlmServiceTier::Standard),
-                                    thinking_budget: Some(1),
-                                    enable_reasoning_summary: Some(true),
-                                    temperature: Some(6.94),
+                                    thinking_budget: Some(5),
+                                    enable_reasoning_summary: Some(false),
+                                    temperature: Some(3.74),
                                     max_tokens: Some(-1),
                                     tool_ids: Some(vec!["tool_ids".to_string()]),
-                                    tool_ids_strict: Some(false),
+                                    tool_ids_strict: Some(true),
                                     built_in_tools: Some(BuiltInToolsInput::default()),
                                     enable_parallel_tool_calls: Some(true),
                                     mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
@@ -19567,7 +19660,7 @@ async fn main() {
                                         max_vector_distance: Some(0.5),
                                         max_documents_length: Some(50000),
                                         max_retrieved_rag_chunks_count: Some(5),
-                                        num_candidates: Some(1200),
+                                        num_candidates: Some(2244),
                                         query_rewrite_prompt_override: Some(
                                             "query_rewrite_prompt_override".to_string(),
                                         ),
@@ -19592,7 +19685,7 @@ async fn main() {
                                         .name("name")
                                         .r#type(PromptEvaluationCriteriaType::Prompt)
                                         .conversation_goal_prompt("conversation_goal_prompt")
-                                        .use_knowledge_base(true)
+                                        .use_knowledge_base(false)
                                         .scope(AnalysisScope::Conversation)
                                         .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                         .scoring_mode(CriteriaScoringMode::Binary)
@@ -19625,8 +19718,8 @@ async fn main() {
                                 btn_text_color: Some("#ffffff".to_string()),
                                 border_color: Some("#e1e1e1".to_string()),
                                 focus_color: Some("#000000".to_string()),
-                                border_radius: Some(4),
-                                btn_radius: Some(6),
+                                border_radius: Some(5),
+                                btn_radius: Some(1),
                                 action_text: Some("action_text".to_string()),
                                 start_call_text: Some("start_call_text".to_string()),
                                 end_call_text: Some("end_call_text".to_string()),
@@ -19638,7 +19731,7 @@ async fn main() {
                                 terms_text: Some("terms_text".to_string()),
                                 terms_html: Some("terms_html".to_string()),
                                 terms_key: Some("terms_key".to_string()),
-                                show_avatar_when_collapsed: Some(true),
+                                show_avatar_when_collapsed: Some(false),
                                 disable_banner: Some(true),
                                 override_link: Some("override_link".to_string()),
                                 markdown_link_allowed_hosts: Some(vec![
@@ -19652,10 +19745,10 @@ async fn main() {
                                 mic_muting_enabled: Some(true),
                                 transcript_enabled: Some(true),
                                 text_input_enabled: Some(true),
-                                conversation_mode_toggle_enabled: Some(true),
-                                default_expanded: Some(true),
+                                conversation_mode_toggle_enabled: Some(false),
+                                default_expanded: Some(false),
                                 always_expanded: Some(true),
-                                dismissible: Some(true),
+                                dismissible: Some(false),
                                 show_agent_status: Some(true),
                                 show_conversation_id: Some(true),
                                 strip_audio_tags: Some(true),
@@ -19755,13 +19848,13 @@ async fn main() {
                                     accent_border: Some("accent_border".to_string()),
                                     accent_subtle: Some("accent_subtle".to_string()),
                                     accent_primary: Some("accent_primary".to_string()),
-                                    overlay_padding: Some(4.09),
-                                    button_radius: Some(8.35),
-                                    input_radius: Some(7.58),
-                                    bubble_radius: Some(7.16),
-                                    sheet_radius: Some(7_f64),
-                                    compact_sheet_radius: Some(6.75),
-                                    dropdown_sheet_radius: Some(2.4),
+                                    overlay_padding: Some(8.84),
+                                    button_radius: Some(0.16),
+                                    input_radius: Some(0.52),
+                                    bubble_radius: Some(7.96),
+                                    sheet_radius: Some(3.89),
+                                    compact_sheet_radius: Some(2.86),
+                                    dropdown_sheet_radius: Some(8.46),
                                     ..Default::default()
                                 }),
                                 show_resize_button: Some(true),
@@ -19901,7 +19994,7 @@ async fn main() {
                                     .r#type(AnalysisPropertyType::Boolean)
                                     .description("description")
                                     .r#enum(vec!["enum".to_string()])
-                                    .is_system_provided(true)
+                                    .is_system_provided(false)
                                     .dynamic_variable("dynamic_variable")
                                     .allowed_values(
                                         AllowedValues::builder()
@@ -19909,7 +20002,7 @@ async fn main() {
                                             .build()
                                             .expect("Failed to build request"),
                                     )
-                                    .is_omitted(true)
+                                    .is_omitted(false)
                                     .name("name")
                                     .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                     .build()
@@ -19926,7 +20019,7 @@ async fn main() {
                                             SystemEvaluationId::SystemEvalCriteriaSentiment,
                                         )
                                         .scope(AnalysisScope::Conversation)
-                                        .weight(2.45)
+                                        .weight(4.38)
                                         .build()
                                         .expect("Failed to build request"),
                                 }]),
@@ -19944,16 +20037,16 @@ async fn main() {
                             overrides: Some(ConversationInitiationClientDataConfigInput {
                                 conversation_config_override: Some(ConversationConfigClientOverrideConfigInput {
                                     asr: Some(AsrConversationalConfigOverrideConfig {
-                                        keywords: Some(false),
+                                        keywords: Some(true),
                                         ..Default::default()
                                     }),
                                     turn: Some(TurnConfigOverrideConfig {
-                                        noisy_environment_message: Some(false),
+                                        noisy_environment_message: Some(true),
                                         ..Default::default()
                                     }),
                                     tts: Some(TtsConversationalConfigOverrideConfig {
                                         model_id: Some(true),
-                                        voice_id: Some(false),
+                                        voice_id: Some(true),
                                         supported_voices: Some(false),
                                         stability: Some(true),
                                         speed: Some(true),
@@ -19964,20 +20057,22 @@ async fn main() {
                                     }),
                                     conversation: Some(ConversationConfigOverrideConfig {
                                         text_only: Some(true),
-                                        max_duration_seconds: Some(false),
+                                        max_duration_seconds: Some(true),
                                         ..Default::default()
                                     }),
                                     agent: Some(AgentConfigOverrideConfig {
                                         first_message: Some(false),
-                                        language: Some(false),
+                                        language: Some(true),
                                         max_conversation_duration_message: Some(true),
                                         ..Default::default()
                                     }),
                                     ..Default::default()
                                 }),
-                                custom_llm_extra_body: Some(false),
-                                enable_conversation_initiation_client_data_from_webhook: Some(true),
-                                enable_starting_workflow_node_id_from_client: Some(false),
+                                custom_llm_extra_body: Some(true),
+                                enable_conversation_initiation_client_data_from_webhook: Some(
+                                    false,
+                                ),
+                                enable_starting_workflow_node_id_from_client: Some(true),
                                 enable_procedure_ids_from_client: Some(false),
                                 ..Default::default()
                             }),
@@ -20008,7 +20103,7 @@ async fn main() {
                                 ]),
                                 ..Default::default()
                             }),
-                            archived: Some(false),
+                            archived: Some(true),
                             guardrails: Some(GuardrailsV1Input {
                                 version: Some(GuardrailsV1InputVersion::Num1),
                                 focus: Some(FocusGuardrail {
@@ -20039,14 +20134,14 @@ async fn main() {
                             summary_language: Some("summary_language".to_string()),
                             auto_translate_transcript_to_app_language: Some(true),
                             auth: Some(AuthSettings {
-                                enable_auth: Some(false),
+                                enable_auth: Some(true),
                                 allowlist: Some(vec![
                                     AllowlistItem::builder()
                                         .hostname("hostname")
                                         .build()
                                         .expect("Failed to build request"),
                                 ]),
-                                require_origin_header: Some(false),
+                                require_origin_header: Some(true),
                                 shareable_token: Some("shareable_token".to_string()),
                                 ..Default::default()
                             }),
@@ -20057,15 +20152,15 @@ async fn main() {
                                 ..Default::default()
                             }),
                             queueing_config: Some(AgentQueueingConfig {
-                                enabled: Some(false),
+                                enabled: Some(true),
                                 wait_timeout_seconds: Some(180),
                                 hold_audio: Some(
                                     AgentHoldAudioConfig::builder()
                                         .audio_path("audio_path")
                                         .audio_url("audio_url")
                                         .original_filename("original_filename")
-                                        .duration_secs(2.19)
-                                        .size_bytes(2)
+                                        .duration_secs(8.18)
+                                        .size_bytes(5)
                                         .build()
                                         .expect("Failed to build request"),
                                 ),
@@ -20074,10 +20169,10 @@ async fn main() {
                             privacy: Some(PrivacyConfigInput {
                                 record_voice: Some(true),
                                 retention_days: Some(-1),
-                                delete_transcript_and_pii: Some(true),
-                                delete_audio: Some(false),
-                                apply_to_existing_conversations: Some(false),
-                                zero_retention_mode: Some(false),
+                                delete_transcript_and_pii: Some(false),
+                                delete_audio: Some(true),
+                                apply_to_existing_conversations: Some(true),
+                                zero_retention_mode: Some(true),
                                 conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                                     enabled: Some(true),
                                     entities: Some(vec![ConfigEntityType::Name]),
@@ -20097,17 +20192,17 @@ async fn main() {
                                     "key".to_string(),
                                     AlertingMonitorConfig {
                                         enabled: Some(true),
-                                        threshold: Some(0.31),
-                                        relative_increase_threshold: Some(4.56),
-                                        min_failure_count: Some(7),
+                                        threshold: Some(0.24),
+                                        relative_increase_threshold: Some(5.61),
+                                        min_failure_count: Some(5),
                                         min_history_bucket_count: Some(9),
-                                        min_sample_count: Some(5),
-                                        suspect_trigger_threshold: Some(8),
-                                        auto_resolve_after_inactive_minutes: Some(7),
+                                        min_sample_count: Some(8),
+                                        suspect_trigger_threshold: Some(3),
+                                        auto_resolve_after_inactive_minutes: Some(2),
                                         ..Default::default()
                                     },
                                 )])),
-                                auto_resolve_after_inactive_minutes: Some(2),
+                                auto_resolve_after_inactive_minutes: Some(7),
                                 environments: Some(vec!["environments".to_string()]),
                                 notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
                                     data: AlertingWebhookNotifier::builder()
@@ -20126,8 +20221,8 @@ async fn main() {
                                     .source("source")
                                     .target("target")
                                     .reroutes(vec![PositionInput {
-                                        x: Some(1.15),
-                                        y: Some(5.14),
+                                        x: Some(8.84),
+                                        y: Some(0.92),
                                         ..Default::default()
                                     }])
                                     .build()
@@ -20138,8 +20233,8 @@ async fn main() {
                                 AgentWorkflowRequestModelNodes::End {
                                     data: WorkflowEndNodeModelInput {
                                         position: Some(PositionInput {
-                                            x: Some(1.15),
-                                            y: Some(5.14),
+                                            x: Some(8.84),
+                                            y: Some(0.92),
                                             ..Default::default()
                                         }),
                                         edge_order: Some(vec!["edge_order".to_string()]),
@@ -20379,12 +20474,12 @@ async fn main() {
                         }),
                         turn: Some(TurnConfig {
                             turn_timeout: Some(7_f64),
-                            initial_wait_time: Some(0.63),
+                            initial_wait_time: Some(9.4),
                             silence_end_call_timeout: Some(-1_f64),
                             turn_eagerness: Some(TurnEagerness::Patient),
                             spelling_patience: Some(SpellingPatience::Auto),
                             speculative_turn: Some(false),
-                            retranscribe_on_turn_timeout: Some(true),
+                            retranscribe_on_turn_timeout: Some(false),
                             turn_model: Some(TurnModel::TurnV2),
                             interruption_ignore_terms: Some(vec![
                                 "interruption_ignore_terms".to_string(),
@@ -20392,8 +20487,8 @@ async fn main() {
                             interruption_ignore_term_languages: Some(vec![
                                 "interruption_ignore_term_languages".to_string(),
                             ]),
-                            merge_with_default_ignore_terms: Some(false),
-                            transcribe_on_disabled_interruptions: Some(true),
+                            merge_with_default_ignore_terms: Some(true),
+                            transcribe_on_disabled_interruptions: Some(false),
                             soft_timeout_config: Some(SoftTimeoutConfig {
                                 timeout_seconds: Some(-1_f64),
                                 message: Some("Hhmmmm...yeah.".to_string()),
@@ -20401,8 +20496,9 @@ async fn main() {
                                     "additional_soft_timeout_messages".to_string(),
                                 ]),
                                 use_llm_generated_message: Some(true),
-                                randomize_fillers: Some(false),
+                                randomize_fillers: Some(true),
                                 max_soft_timeouts_per_generation: Some(1),
+                                pause_after_filler: Some(true),
                                 llm_generated_message_prompt_override: Some(
                                     "llm_generated_message_prompt_override".to_string(),
                                 ),
@@ -20426,10 +20522,10 @@ async fn main() {
                                     .language("language")
                                     .model_family(ModelFamily::Turbo)
                                     .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                    .stability(0.42)
-                                    .speed(0.78)
-                                    .similarity_boost(0.33)
-                                    .clone_strength(0.41)
+                                    .stability(0.56)
+                                    .speed(0.83)
+                                    .similarity_boost(0.04)
+                                    .clone_strength(0.3)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
@@ -20446,7 +20542,7 @@ async fn main() {
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
-                            clone_strength: Some(0.91),
+                            clone_strength: Some(0.03),
                             text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
@@ -20468,7 +20564,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigInput {
-                            text_only: Some(false),
+                            text_only: Some(true),
                             max_duration_seconds: Some(600),
                             client_events: Some(vec![ClientEvent::ConversationInitiationMetadata]),
                             file_input: Some(FileInputConfig {
@@ -20477,14 +20573,14 @@ async fn main() {
                                 max_files_per_conversation: Some(10),
                                 ..Default::default()
                             }),
-                            monitoring_enabled: Some(false),
+                            monitoring_enabled: Some(true),
                             monitoring_events: Some(vec![
                                 ClientEvent::ConversationInitiationMetadata,
                             ]),
                             dtmf_input_settings: Some(DtmfInputConfig {
                                 dtmf_input_timeout: Some(2_f64),
                                 hash_terminator: Some(true),
-                                redact_input: Some(false),
+                                redact_input: Some(true),
                                 ..Default::default()
                             }),
                             background_sound: Some(BackgroundSoundConfig {
@@ -20494,7 +20590,7 @@ async fn main() {
                                 crossfade_loop: Some(true),
                                 ..Default::default()
                             }),
-                            source_attribution: Some(true),
+                            source_attribution: Some(false),
                             ..Default::default()
                         }),
                         language_presets: Some(HashMap::from([(
@@ -20515,16 +20611,16 @@ async fn main() {
                                         model_id: Some(TtsConversationalModel::ElevenTurboV2),
                                         voice_id: Some("voice_id".to_string()),
                                         supported_voices: Some(vec![]),
-                                        stability: Some(6.57),
-                                        speed: Some(1.8),
-                                        similarity_boost: Some(6.48),
-                                        clone_strength: Some(1.49),
+                                        stability: Some(4.99),
+                                        speed: Some(7.29),
+                                        similarity_boost: Some(5.75),
+                                        clone_strength: Some(5.08),
                                         pronunciation_dictionary_locators: Some(vec![]),
                                         ..Default::default()
                                     }),
                                     conversation: Some(ConversationConfigOverride {
-                                        text_only: Some(false),
-                                        max_duration_seconds: Some(5),
+                                        text_only: Some(true),
+                                        max_duration_seconds: Some(9),
                                         ..Default::default()
                                     }),
                                     agent: Some(AgentConfigOverrideInput {
@@ -20565,7 +20661,7 @@ async fn main() {
                         agent: Some(AgentConfig {
                             first_message: Some("first_message".to_string()),
                             language: Some("en".to_string()),
-                            hinglish_mode: Some(false),
+                            hinglish_mode: Some(true),
                             dynamic_variables: Some(DynamicVariablesConfigInput(
                                 elevenlabs_rust_sdk::serde_json::json!({}),
                             )),
@@ -20606,12 +20702,12 @@ async fn main() {
                                 llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
-                                thinking_budget: Some(1),
-                                enable_reasoning_summary: Some(true),
-                                temperature: Some(6.94),
+                                thinking_budget: Some(5),
+                                enable_reasoning_summary: Some(false),
+                                temperature: Some(3.74),
                                 max_tokens: Some(-1),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(false),
+                                tool_ids_strict: Some(true),
                                 built_in_tools: Some(BuiltInToolsInput::default()),
                                 enable_parallel_tool_calls: Some(true),
                                 mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
@@ -20644,7 +20740,7 @@ async fn main() {
                                     max_vector_distance: Some(0.5),
                                     max_documents_length: Some(50000),
                                     max_retrieved_rag_chunks_count: Some(5),
-                                    num_candidates: Some(1200),
+                                    num_candidates: Some(2244),
                                     query_rewrite_prompt_override: Some(
                                         "query_rewrite_prompt_override".to_string(),
                                     ),
@@ -20669,7 +20765,7 @@ async fn main() {
                                     .name("name")
                                     .r#type(PromptEvaluationCriteriaType::Prompt)
                                     .conversation_goal_prompt("conversation_goal_prompt")
-                                    .use_knowledge_base(true)
+                                    .use_knowledge_base(false)
                                     .scope(AnalysisScope::Conversation)
                                     .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
@@ -20702,8 +20798,8 @@ async fn main() {
                             btn_text_color: Some("#ffffff".to_string()),
                             border_color: Some("#e1e1e1".to_string()),
                             focus_color: Some("#000000".to_string()),
-                            border_radius: Some(4),
-                            btn_radius: Some(6),
+                            border_radius: Some(5),
+                            btn_radius: Some(1),
                             action_text: Some("action_text".to_string()),
                             start_call_text: Some("start_call_text".to_string()),
                             end_call_text: Some("end_call_text".to_string()),
@@ -20715,7 +20811,7 @@ async fn main() {
                             terms_text: Some("terms_text".to_string()),
                             terms_html: Some("terms_html".to_string()),
                             terms_key: Some("terms_key".to_string()),
-                            show_avatar_when_collapsed: Some(true),
+                            show_avatar_when_collapsed: Some(false),
                             disable_banner: Some(true),
                             override_link: Some("override_link".to_string()),
                             markdown_link_allowed_hosts: Some(vec![
@@ -20729,10 +20825,10 @@ async fn main() {
                             mic_muting_enabled: Some(true),
                             transcript_enabled: Some(true),
                             text_input_enabled: Some(true),
-                            conversation_mode_toggle_enabled: Some(true),
-                            default_expanded: Some(true),
+                            conversation_mode_toggle_enabled: Some(false),
+                            default_expanded: Some(false),
                             always_expanded: Some(true),
-                            dismissible: Some(true),
+                            dismissible: Some(false),
                             show_agent_status: Some(true),
                             show_conversation_id: Some(true),
                             strip_audio_tags: Some(true),
@@ -20826,13 +20922,13 @@ async fn main() {
                                 accent_border: Some("accent_border".to_string()),
                                 accent_subtle: Some("accent_subtle".to_string()),
                                 accent_primary: Some("accent_primary".to_string()),
-                                overlay_padding: Some(4.09),
-                                button_radius: Some(8.35),
-                                input_radius: Some(7.58),
-                                bubble_radius: Some(7.16),
-                                sheet_radius: Some(7_f64),
-                                compact_sheet_radius: Some(6.75),
-                                dropdown_sheet_radius: Some(2.4),
+                                overlay_padding: Some(8.84),
+                                button_radius: Some(0.16),
+                                input_radius: Some(0.52),
+                                bubble_radius: Some(7.96),
+                                sheet_radius: Some(3.89),
+                                compact_sheet_radius: Some(2.86),
+                                dropdown_sheet_radius: Some(8.46),
                                 ..Default::default()
                             }),
                             show_resize_button: Some(true),
@@ -20962,7 +21058,7 @@ async fn main() {
                                 .r#type(AnalysisPropertyType::Boolean)
                                 .description("description")
                                 .r#enum(vec!["enum".to_string()])
-                                .is_system_provided(true)
+                                .is_system_provided(false)
                                 .dynamic_variable("dynamic_variable")
                                 .allowed_values(
                                     AllowedValues::builder()
@@ -20970,7 +21066,7 @@ async fn main() {
                                         .build()
                                         .expect("Failed to build request"),
                                 )
-                                .is_omitted(true)
+                                .is_omitted(false)
                                 .name("name")
                                 .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                 .build()
@@ -20987,7 +21083,7 @@ async fn main() {
                                         SystemEvaluationId::SystemEvalCriteriaSentiment,
                                     )
                                     .scope(AnalysisScope::Conversation)
-                                    .weight(2.45)
+                                    .weight(4.38)
                                     .build()
                                     .expect("Failed to build request"),
                             }]),
@@ -21005,16 +21101,16 @@ async fn main() {
                         overrides: Some(ConversationInitiationClientDataConfigInput {
                             conversation_config_override: Some(ConversationConfigClientOverrideConfigInput {
                                 asr: Some(AsrConversationalConfigOverrideConfig {
-                                    keywords: Some(false),
+                                    keywords: Some(true),
                                     ..Default::default()
                                 }),
                                 turn: Some(TurnConfigOverrideConfig {
-                                    noisy_environment_message: Some(false),
+                                    noisy_environment_message: Some(true),
                                     ..Default::default()
                                 }),
                                 tts: Some(TtsConversationalConfigOverrideConfig {
                                     model_id: Some(true),
-                                    voice_id: Some(false),
+                                    voice_id: Some(true),
                                     supported_voices: Some(false),
                                     stability: Some(true),
                                     speed: Some(true),
@@ -21025,20 +21121,20 @@ async fn main() {
                                 }),
                                 conversation: Some(ConversationConfigOverrideConfig {
                                     text_only: Some(true),
-                                    max_duration_seconds: Some(false),
+                                    max_duration_seconds: Some(true),
                                     ..Default::default()
                                 }),
                                 agent: Some(AgentConfigOverrideConfig {
                                     first_message: Some(false),
-                                    language: Some(false),
+                                    language: Some(true),
                                     max_conversation_duration_message: Some(true),
                                     ..Default::default()
                                 }),
                                 ..Default::default()
                             }),
-                            custom_llm_extra_body: Some(false),
-                            enable_conversation_initiation_client_data_from_webhook: Some(true),
-                            enable_starting_workflow_node_id_from_client: Some(false),
+                            custom_llm_extra_body: Some(true),
+                            enable_conversation_initiation_client_data_from_webhook: Some(false),
+                            enable_starting_workflow_node_id_from_client: Some(true),
                             enable_procedure_ids_from_client: Some(false),
                             ..Default::default()
                         }),
@@ -21069,7 +21165,7 @@ async fn main() {
                             ]),
                             ..Default::default()
                         }),
-                        archived: Some(false),
+                        archived: Some(true),
                         guardrails: Some(GuardrailsV1Input {
                             version: Some(GuardrailsV1InputVersion::Num1),
                             focus: Some(FocusGuardrail {
@@ -21100,14 +21196,14 @@ async fn main() {
                         summary_language: Some("summary_language".to_string()),
                         auto_translate_transcript_to_app_language: Some(true),
                         auth: Some(AuthSettings {
-                            enable_auth: Some(false),
+                            enable_auth: Some(true),
                             allowlist: Some(vec![
                                 AllowlistItem::builder()
                                     .hostname("hostname")
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            require_origin_header: Some(false),
+                            require_origin_header: Some(true),
                             shareable_token: Some("shareable_token".to_string()),
                             ..Default::default()
                         }),
@@ -21118,15 +21214,15 @@ async fn main() {
                             ..Default::default()
                         }),
                         queueing_config: Some(AgentQueueingConfig {
-                            enabled: Some(false),
+                            enabled: Some(true),
                             wait_timeout_seconds: Some(180),
                             hold_audio: Some(
                                 AgentHoldAudioConfig::builder()
                                     .audio_path("audio_path")
                                     .audio_url("audio_url")
                                     .original_filename("original_filename")
-                                    .duration_secs(2.19)
-                                    .size_bytes(2)
+                                    .duration_secs(8.18)
+                                    .size_bytes(5)
                                     .build()
                                     .expect("Failed to build request"),
                             ),
@@ -21135,10 +21231,10 @@ async fn main() {
                         privacy: Some(PrivacyConfigInput {
                             record_voice: Some(true),
                             retention_days: Some(-1),
-                            delete_transcript_and_pii: Some(true),
-                            delete_audio: Some(false),
-                            apply_to_existing_conversations: Some(false),
-                            zero_retention_mode: Some(false),
+                            delete_transcript_and_pii: Some(false),
+                            delete_audio: Some(true),
+                            apply_to_existing_conversations: Some(true),
+                            zero_retention_mode: Some(true),
                             conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                                 enabled: Some(true),
                                 entities: Some(vec![ConfigEntityType::Name]),
@@ -21158,17 +21254,17 @@ async fn main() {
                                 "key".to_string(),
                                 AlertingMonitorConfig {
                                     enabled: Some(true),
-                                    threshold: Some(0.31),
-                                    relative_increase_threshold: Some(4.56),
-                                    min_failure_count: Some(7),
+                                    threshold: Some(0.24),
+                                    relative_increase_threshold: Some(5.61),
+                                    min_failure_count: Some(5),
                                     min_history_bucket_count: Some(9),
-                                    min_sample_count: Some(5),
-                                    suspect_trigger_threshold: Some(8),
-                                    auto_resolve_after_inactive_minutes: Some(7),
+                                    min_sample_count: Some(8),
+                                    suspect_trigger_threshold: Some(3),
+                                    auto_resolve_after_inactive_minutes: Some(2),
                                     ..Default::default()
                                 },
                             )])),
-                            auto_resolve_after_inactive_minutes: Some(2),
+                            auto_resolve_after_inactive_minutes: Some(7),
                             environments: Some(vec!["environments".to_string()]),
                             notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
                                 data: AlertingWebhookNotifier::builder()
@@ -21187,8 +21283,8 @@ async fn main() {
                                 .source("source")
                                 .target("target")
                                 .reroutes(vec![PositionInput {
-                                    x: Some(1.15),
-                                    y: Some(5.14),
+                                    x: Some(8.84),
+                                    y: Some(0.92),
                                     ..Default::default()
                                 }])
                                 .build()
@@ -21199,8 +21295,8 @@ async fn main() {
                             AgentWorkflowRequestModelNodes::End {
                                 data: WorkflowEndNodeModelInput {
                                     position: Some(PositionInput {
-                                        x: Some(1.15),
-                                        y: Some(5.14),
+                                        x: Some(8.84),
+                                        y: Some(0.92),
                                         ..Default::default()
                                     }),
                                     edge_order: Some(vec!["edge_order".to_string()]),
@@ -21344,7 +21440,7 @@ async fn main() {
         .delete(
             "agent_3701k3ttaq12ewp8b7qv5rfyszkz",
             &DeleteQueryRequest {
-                force: Some(false),
+                force: Some(true),
                 ..Default::default()
             },
             None,
@@ -21441,10 +21537,10 @@ async fn main() {
             &AgentsListQueryRequest {
                 page_size: Some(30),
                 search: Some("search".to_string()),
-                archived: Some(true),
+                archived: Some(false),
                 show_only_owned_agents: Some(false),
                 created_by_user_id: Some("created_by_user_id".to_string()),
-                tags: Some(vec![]),
+                tags: Some(vec!["tags".to_string()]),
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 sort_by: Some(AgentSortBy::Name),
                 cursor: Some("cursor".to_string()),
@@ -21708,12 +21804,12 @@ async fn main() {
                         }),
                         turn: Some(TurnConfig {
                             turn_timeout: Some(7_f64),
-                            initial_wait_time: Some(0.63),
+                            initial_wait_time: Some(9.4),
                             silence_end_call_timeout: Some(-1_f64),
                             turn_eagerness: Some(TurnEagerness::Patient),
                             spelling_patience: Some(SpellingPatience::Auto),
                             speculative_turn: Some(false),
-                            retranscribe_on_turn_timeout: Some(true),
+                            retranscribe_on_turn_timeout: Some(false),
                             turn_model: Some(TurnModel::TurnV2),
                             interruption_ignore_terms: Some(vec![
                                 "interruption_ignore_terms".to_string(),
@@ -21721,8 +21817,8 @@ async fn main() {
                             interruption_ignore_term_languages: Some(vec![
                                 "interruption_ignore_term_languages".to_string(),
                             ]),
-                            merge_with_default_ignore_terms: Some(false),
-                            transcribe_on_disabled_interruptions: Some(true),
+                            merge_with_default_ignore_terms: Some(true),
+                            transcribe_on_disabled_interruptions: Some(false),
                             soft_timeout_config: Some(SoftTimeoutConfig {
                                 timeout_seconds: Some(-1_f64),
                                 message: Some("Hhmmmm...yeah.".to_string()),
@@ -21730,8 +21826,9 @@ async fn main() {
                                     "additional_soft_timeout_messages".to_string(),
                                 ]),
                                 use_llm_generated_message: Some(true),
-                                randomize_fillers: Some(false),
+                                randomize_fillers: Some(true),
                                 max_soft_timeouts_per_generation: Some(1),
+                                pause_after_filler: Some(true),
                                 llm_generated_message_prompt_override: Some(
                                     "llm_generated_message_prompt_override".to_string(),
                                 ),
@@ -21755,10 +21852,10 @@ async fn main() {
                                     .language("language")
                                     .model_family(ModelFamily::Turbo)
                                     .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                    .stability(0.42)
-                                    .speed(0.78)
-                                    .similarity_boost(0.33)
-                                    .clone_strength(0.41)
+                                    .stability(0.56)
+                                    .speed(0.83)
+                                    .similarity_boost(0.04)
+                                    .clone_strength(0.3)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
@@ -21775,7 +21872,7 @@ async fn main() {
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
-                            clone_strength: Some(0.91),
+                            clone_strength: Some(0.03),
                             text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
@@ -21797,7 +21894,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigInput {
-                            text_only: Some(false),
+                            text_only: Some(true),
                             max_duration_seconds: Some(600),
                             client_events: Some(vec![ClientEvent::ConversationInitiationMetadata]),
                             file_input: Some(FileInputConfig {
@@ -21806,14 +21903,14 @@ async fn main() {
                                 max_files_per_conversation: Some(10),
                                 ..Default::default()
                             }),
-                            monitoring_enabled: Some(false),
+                            monitoring_enabled: Some(true),
                             monitoring_events: Some(vec![
                                 ClientEvent::ConversationInitiationMetadata,
                             ]),
                             dtmf_input_settings: Some(DtmfInputConfig {
                                 dtmf_input_timeout: Some(2_f64),
                                 hash_terminator: Some(true),
-                                redact_input: Some(false),
+                                redact_input: Some(true),
                                 ..Default::default()
                             }),
                             background_sound: Some(BackgroundSoundConfig {
@@ -21823,7 +21920,7 @@ async fn main() {
                                 crossfade_loop: Some(true),
                                 ..Default::default()
                             }),
-                            source_attribution: Some(true),
+                            source_attribution: Some(false),
                             ..Default::default()
                         }),
                         language_presets: Some(HashMap::from([(
@@ -21858,7 +21955,7 @@ async fn main() {
                         agent: Some(AgentConfig {
                             first_message: Some("first_message".to_string()),
                             language: Some("en".to_string()),
-                            hinglish_mode: Some(false),
+                            hinglish_mode: Some(true),
                             dynamic_variables: Some(DynamicVariablesConfigInput(
                                 elevenlabs_rust_sdk::serde_json::json!({}),
                             )),
@@ -21884,12 +21981,12 @@ async fn main() {
                                 llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
-                                thinking_budget: Some(1),
-                                enable_reasoning_summary: Some(true),
-                                temperature: Some(6.94),
+                                thinking_budget: Some(5),
+                                enable_reasoning_summary: Some(false),
+                                temperature: Some(3.74),
                                 max_tokens: Some(-1),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(false),
+                                tool_ids_strict: Some(true),
                                 enable_parallel_tool_calls: Some(true),
                                 mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
                                 native_mcp_server_ids: Some(vec![
@@ -21913,7 +22010,7 @@ async fn main() {
                                     .name("name")
                                     .r#type(PromptEvaluationCriteriaType::Prompt)
                                     .conversation_goal_prompt("conversation_goal_prompt")
-                                    .use_knowledge_base(true)
+                                    .use_knowledge_base(false)
                                     .scope(AnalysisScope::Conversation)
                                     .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
@@ -21946,8 +22043,8 @@ async fn main() {
                             btn_text_color: Some("#ffffff".to_string()),
                             border_color: Some("#e1e1e1".to_string()),
                             focus_color: Some("#000000".to_string()),
-                            border_radius: Some(4),
-                            btn_radius: Some(6),
+                            border_radius: Some(5),
+                            btn_radius: Some(1),
                             action_text: Some("action_text".to_string()),
                             start_call_text: Some("start_call_text".to_string()),
                             end_call_text: Some("end_call_text".to_string()),
@@ -21959,7 +22056,7 @@ async fn main() {
                             terms_text: Some("terms_text".to_string()),
                             terms_html: Some("terms_html".to_string()),
                             terms_key: Some("terms_key".to_string()),
-                            show_avatar_when_collapsed: Some(true),
+                            show_avatar_when_collapsed: Some(false),
                             disable_banner: Some(true),
                             override_link: Some("override_link".to_string()),
                             markdown_link_allowed_hosts: Some(vec![
@@ -21973,10 +22070,10 @@ async fn main() {
                             mic_muting_enabled: Some(true),
                             transcript_enabled: Some(true),
                             text_input_enabled: Some(true),
-                            conversation_mode_toggle_enabled: Some(true),
-                            default_expanded: Some(true),
+                            conversation_mode_toggle_enabled: Some(false),
+                            default_expanded: Some(false),
                             always_expanded: Some(true),
-                            dismissible: Some(true),
+                            dismissible: Some(false),
                             show_agent_status: Some(true),
                             show_conversation_id: Some(true),
                             strip_audio_tags: Some(true),
@@ -22070,13 +22167,13 @@ async fn main() {
                                 accent_border: Some("accent_border".to_string()),
                                 accent_subtle: Some("accent_subtle".to_string()),
                                 accent_primary: Some("accent_primary".to_string()),
-                                overlay_padding: Some(4.09),
-                                button_radius: Some(8.35),
-                                input_radius: Some(7.58),
-                                bubble_radius: Some(7.16),
-                                sheet_radius: Some(7_f64),
-                                compact_sheet_radius: Some(6.75),
-                                dropdown_sheet_radius: Some(2.4),
+                                overlay_padding: Some(8.84),
+                                button_radius: Some(0.16),
+                                input_radius: Some(0.52),
+                                bubble_radius: Some(7.96),
+                                sheet_radius: Some(3.89),
+                                compact_sheet_radius: Some(2.86),
+                                dropdown_sheet_radius: Some(8.46),
                                 ..Default::default()
                             }),
                             show_resize_button: Some(true),
@@ -22103,7 +22200,7 @@ async fn main() {
                                 .r#type(AnalysisPropertyType::Boolean)
                                 .description("description")
                                 .r#enum(vec!["enum".to_string()])
-                                .is_system_provided(true)
+                                .is_system_provided(false)
                                 .dynamic_variable("dynamic_variable")
                                 .allowed_values(
                                     AllowedValues::builder()
@@ -22111,7 +22208,7 @@ async fn main() {
                                         .build()
                                         .expect("Failed to build request"),
                                 )
-                                .is_omitted(true)
+                                .is_omitted(false)
                                 .name("name")
                                 .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                 .build()
@@ -22128,7 +22225,7 @@ async fn main() {
                                         SystemEvaluationId::SystemEvalCriteriaSentiment,
                                     )
                                     .scope(AnalysisScope::Conversation)
-                                    .weight(2.45)
+                                    .weight(4.38)
                                     .build()
                                     .expect("Failed to build request"),
                             }]),
@@ -22147,9 +22244,9 @@ async fn main() {
                             conversation_config_override: Some(
                                 ConversationConfigClientOverrideConfigInput::default(),
                             ),
-                            custom_llm_extra_body: Some(false),
-                            enable_conversation_initiation_client_data_from_webhook: Some(true),
-                            enable_starting_workflow_node_id_from_client: Some(false),
+                            custom_llm_extra_body: Some(true),
+                            enable_conversation_initiation_client_data_from_webhook: Some(false),
+                            enable_starting_workflow_node_id_from_client: Some(true),
                             enable_procedure_ids_from_client: Some(false),
                             ..Default::default()
                         }),
@@ -22180,7 +22277,7 @@ async fn main() {
                             ]),
                             ..Default::default()
                         }),
-                        archived: Some(false),
+                        archived: Some(true),
                         guardrails: Some(GuardrailsV1Input {
                             version: Some(GuardrailsV1InputVersion::Num1),
                             focus: Some(FocusGuardrail {
@@ -22201,14 +22298,14 @@ async fn main() {
                         summary_language: Some("summary_language".to_string()),
                         auto_translate_transcript_to_app_language: Some(true),
                         auth: Some(AuthSettings {
-                            enable_auth: Some(false),
+                            enable_auth: Some(true),
                             allowlist: Some(vec![
                                 AllowlistItem::builder()
                                     .hostname("hostname")
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            require_origin_header: Some(false),
+                            require_origin_header: Some(true),
                             shareable_token: Some("shareable_token".to_string()),
                             ..Default::default()
                         }),
@@ -22219,15 +22316,15 @@ async fn main() {
                             ..Default::default()
                         }),
                         queueing_config: Some(AgentQueueingConfig {
-                            enabled: Some(false),
+                            enabled: Some(true),
                             wait_timeout_seconds: Some(180),
                             hold_audio: Some(
                                 AgentHoldAudioConfig::builder()
                                     .audio_path("audio_path")
                                     .audio_url("audio_url")
                                     .original_filename("original_filename")
-                                    .duration_secs(2.19)
-                                    .size_bytes(2)
+                                    .duration_secs(8.18)
+                                    .size_bytes(5)
                                     .build()
                                     .expect("Failed to build request"),
                             ),
@@ -22236,10 +22333,10 @@ async fn main() {
                         privacy: Some(PrivacyConfigInput {
                             record_voice: Some(true),
                             retention_days: Some(-1),
-                            delete_transcript_and_pii: Some(true),
-                            delete_audio: Some(false),
-                            apply_to_existing_conversations: Some(false),
-                            zero_retention_mode: Some(false),
+                            delete_transcript_and_pii: Some(false),
+                            delete_audio: Some(true),
+                            apply_to_existing_conversations: Some(true),
+                            zero_retention_mode: Some(true),
                             conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                                 enabled: Some(true),
                                 entities: Some(vec![ConfigEntityType::Name]),
@@ -22259,17 +22356,17 @@ async fn main() {
                                 "key".to_string(),
                                 AlertingMonitorConfig {
                                     enabled: Some(true),
-                                    threshold: Some(0.31),
-                                    relative_increase_threshold: Some(4.56),
-                                    min_failure_count: Some(7),
+                                    threshold: Some(0.24),
+                                    relative_increase_threshold: Some(5.61),
+                                    min_failure_count: Some(5),
                                     min_history_bucket_count: Some(9),
-                                    min_sample_count: Some(5),
-                                    suspect_trigger_threshold: Some(8),
-                                    auto_resolve_after_inactive_minutes: Some(7),
+                                    min_sample_count: Some(8),
+                                    suspect_trigger_threshold: Some(3),
+                                    auto_resolve_after_inactive_minutes: Some(2),
                                     ..Default::default()
                                 },
                             )])),
-                            auto_resolve_after_inactive_minutes: Some(2),
+                            auto_resolve_after_inactive_minutes: Some(7),
                             environments: Some(vec!["environments".to_string()]),
                             notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
                                 data: AlertingWebhookNotifier::builder()
@@ -22288,8 +22385,8 @@ async fn main() {
                                 .source("source")
                                 .target("target")
                                 .reroutes(vec![PositionInput {
-                                    x: Some(1.15),
-                                    y: Some(5.14),
+                                    x: Some(8.84),
+                                    y: Some(0.92),
                                     ..Default::default()
                                 }])
                                 .build()
@@ -22300,8 +22397,8 @@ async fn main() {
                             AgentWorkflowRequestModelNodes::End {
                                 data: WorkflowEndNodeModelInput {
                                     position: Some(PositionInput {
-                                        x: Some(1.15),
-                                        y: Some(5.14),
+                                        x: Some(8.84),
+                                        y: Some(0.92),
                                         ..Default::default()
                                     }),
                                     edge_order: Some(vec!["edge_order".to_string()]),
@@ -22620,7 +22717,7 @@ async fn main() {
         .summaries
         .get(
             &SummariesGetQueryRequest::builder()
-                .agent_ids(vec![])
+                .agent_ids(vec!["agent_ids".to_string()])
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -22707,7 +22804,7 @@ async fn main() {
         .summaries
         .get_2(
             &SummariesGetQueryRequest2::builder()
-                .document_ids(vec![])
+                .document_ids(vec!["document_ids".to_string()])
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -23392,12 +23489,12 @@ async fn main() {
             &KnowledgeBaseListQueryRequest {
                 page_size: Some(30),
                 search: Some("search".to_string()),
-                show_only_owned_documents: Some(true),
+                show_only_owned_documents: Some(false),
                 created_by_user_id: Some("created_by_user_id".to_string()),
-                types: Some(vec![]),
+                types: Some(vec![KnowledgeBaseDocumentType::File]),
                 parent_folder_id: Some("parent_folder_id".to_string()),
                 ancestor_folder_id: Some("ancestor_folder_id".to_string()),
-                folders_first: Some(true),
+                folders_first: Some(false),
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 sort_by: Some(KnowledgeBaseSortBy::Name),
                 cursor: Some("cursor".to_string()),
@@ -23570,7 +23667,7 @@ async fn main() {
                 .items(vec![
                     GetOrCreateRagIndexRequestModel::builder()
                         .document_id("document_id")
-                        .create_if_missing(false)
+                        .create_if_missing(true)
                         .model(EmbeddingModelEnum::E5Mistral7BInstruct)
                         .build()
                         .expect("Failed to build request"),
@@ -23655,7 +23752,7 @@ async fn main() {
             &KnowledgeBaseSearchQueryRequest::builder()
                 .query("query")
                 .page_size(30)
-                .types(vec![])
+                .types(vec![KnowledgeBaseDocumentType::File])
                 .cursor("cursor")
                 .build()
                 .expect("Failed to build request"),
@@ -23769,8 +23866,8 @@ async fn main() {
         .calculate_for_agent(
             "agent_id",
             &LlmUsageCalculatorRequestModel {
-                prompt_length: Some(7),
-                number_of_pages: Some(10),
+                prompt_length: Some(6),
+                number_of_pages: Some(4),
                 rag_enabled: Some(false),
                 service_tier: Some(LlmServiceTier::Standard),
                 ..Default::default()
@@ -23859,9 +23956,9 @@ async fn main() {
         .llm_usage
         .calculate(
             &LlmUsageCalculatorPublicRequestModel::builder()
-                .prompt_length(3)
-                .number_of_pages(8)
-                .rag_enabled(true)
+                .prompt_length(1)
+                .number_of_pages(2)
+                .rag_enabled(false)
                 .service_tier(LlmServiceTier::Standard)
                 .build()
                 .expect("Failed to build request"),
@@ -23968,7 +24065,7 @@ async fn main() {
                                                 ConversationHistoryMultivoiceMessagePartModel::builder()
                                                     .text("text")
                                                     .voice_label("voice_label")
-                                                    .time_in_call_secs(6)
+                                                    .time_in_call_secs(2)
                                                     .build()
                                                     .expect("Failed to build request"),
                                             ])
@@ -23982,7 +24079,7 @@ async fn main() {
                                             .tool_name("tool_name")
                                             .tool_id("tool_id")
                                             .params_as_json("params_as_json")
-                                            .tool_has_been_called(true)
+                                            .tool_has_been_called(false)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
@@ -23990,18 +24087,18 @@ async fn main() {
                                     .feedback(
                                         UserFeedback::builder()
                                             .score(UserFeedbackScore::Like)
-                                            .time_in_call_secs(0)
+                                            .time_in_call_secs(7)
                                             .build()
                                             .expect("Failed to build request"),
                                     )
                                     .llm_override("llm_override")
                                     .producing_llm("producing_llm")
-                                    .time_in_call_secs(7)
+                                    .time_in_call_secs(0)
                                     .conversation_turn_metrics(ConversationTurnMetrics {
                                         metrics: Some(HashMap::from([(
                                             "key".to_string(),
                                             MetricRecord::builder()
-                                                .elapsed_time(3.08)
+                                                .elapsed_time(3.59)
                                                 .build()
                                                 .expect("Failed to build request"),
                                         )])),
@@ -24019,7 +24116,7 @@ async fn main() {
                                                 RagChunkMetadata::builder()
                                                     .document_id("document_id")
                                                     .chunk_id("chunk_id")
-                                                    .vector_distance(9.64)
+                                                    .vector_distance(4.81)
                                                     .build()
                                                     .expect("Failed to build request"),
                                             ])
@@ -24027,7 +24124,7 @@ async fn main() {
                                                 EmbeddingModelEnum::E5Mistral7BInstruct,
                                             )
                                             .retrieval_query("retrieval_query")
-                                            .rag_latency_secs(2.02)
+                                            .rag_latency_secs(0.97)
                                             .used_chunk_ids(vec!["used_chunk_ids".to_string()])
                                             .build()
                                             .expect("Failed to build request"),
@@ -24039,17 +24136,17 @@ async fn main() {
                                         )])),
                                         ..Default::default()
                                     })
-                                    .interrupted(false)
+                                    .interrupted(true)
                                     .ignored_as_backchannel(false)
                                     .platform_event(TranscriptPlatformEvent::UserTurnTimeout)
                                     .original_message("original_message")
                                     .reasoning(vec![ConversationReasoningModel {
                                         summary: Some("summary".to_string()),
-                                        provider_redact: Some(true),
+                                        provider_redact: Some(false),
                                         ..Default::default()
                                     }])
                                     .source_medium(ChatSourceMedium::Audio)
-                                    .source_event_id(9)
+                                    .source_event_id(10)
                                     .used_static_kb_document_ids(vec![
                                         "used_static_kb_document_ids".to_string(),
                                     ])
@@ -24096,7 +24193,7 @@ async fn main() {
                                         ConversationHistoryMultivoiceMessagePartModel::builder()
                                             .text("text")
                                             .voice_label("voice_label")
-                                            .time_in_call_secs(6)
+                                            .time_in_call_secs(2)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
@@ -24110,7 +24207,7 @@ async fn main() {
                                     .tool_name("tool_name")
                                     .tool_id("tool_id")
                                     .params_as_json("params_as_json")
-                                    .tool_has_been_called(true)
+                                    .tool_has_been_called(false)
                                     .tool_details(ConversationHistoryTranscriptToolCallCommonModelInputToolDetails::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput(
                                         ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput::builder()
                                             .r#type(
@@ -24161,18 +24258,18 @@ async fn main() {
                             .feedback(
                                 UserFeedback::builder()
                                     .score(UserFeedbackScore::Like)
-                                    .time_in_call_secs(0)
+                                    .time_in_call_secs(7)
                                     .build()
                                     .expect("Failed to build request"),
                             )
                             .llm_override("llm_override")
                             .producing_llm("producing_llm")
-                            .time_in_call_secs(7)
+                            .time_in_call_secs(0)
                             .conversation_turn_metrics(ConversationTurnMetrics {
                                 metrics: Some(HashMap::from([(
                                     "key".to_string(),
                                     MetricRecord::builder()
-                                        .elapsed_time(3.08)
+                                        .elapsed_time(3.59)
                                         .build()
                                         .expect("Failed to build request"),
                                 )])),
@@ -24188,13 +24285,13 @@ async fn main() {
                                         RagChunkMetadata::builder()
                                             .document_id("document_id")
                                             .chunk_id("chunk_id")
-                                            .vector_distance(9.64)
+                                            .vector_distance(4.81)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
                                     .embedding_model(EmbeddingModelEnum::E5Mistral7BInstruct)
                                     .retrieval_query("retrieval_query")
-                                    .rag_latency_secs(2.02)
+                                    .rag_latency_secs(0.97)
                                     .used_chunk_ids(vec!["used_chunk_ids".to_string()])
                                     .build()
                                     .expect("Failed to build request"),
@@ -24204,23 +24301,28 @@ async fn main() {
                                     "key".to_string(),
                                     LlmInputOutputTokensUsage {
                                         input: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(4),
-                                            price: Some(0.91),
+                                            tokens: Some(6),
+                                            price: Some(5.35),
                                             ..Default::default()
                                         }),
                                         input_cache_read: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(4),
-                                            price: Some(0.91),
+                                            tokens: Some(6),
+                                            price: Some(5.35),
                                             ..Default::default()
                                         }),
                                         input_cache_write: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(4),
-                                            price: Some(0.91),
+                                            tokens: Some(6),
+                                            price: Some(5.35),
                                             ..Default::default()
                                         }),
                                         output_total: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(4),
-                                            price: Some(0.91),
+                                            tokens: Some(6),
+                                            price: Some(5.35),
+                                            ..Default::default()
+                                        }),
+                                        output_total_reasoning_portion: Some(LlmTokensCategoryUsage {
+                                            tokens: Some(6),
+                                            price: Some(5.35),
                                             ..Default::default()
                                         }),
                                         ..Default::default()
@@ -24228,17 +24330,17 @@ async fn main() {
                                 )])),
                                 ..Default::default()
                             })
-                            .interrupted(false)
+                            .interrupted(true)
                             .ignored_as_backchannel(false)
                             .platform_event(TranscriptPlatformEvent::UserTurnTimeout)
                             .original_message("original_message")
                             .reasoning(vec![ConversationReasoningModel {
                                 summary: Some("summary".to_string()),
-                                provider_redact: Some(true),
+                                provider_redact: Some(false),
                                 ..Default::default()
                             }])
                             .source_medium(ChatSourceMedium::Audio)
-                            .source_event_id(9)
+                            .source_event_id(10)
                             .used_static_kb_document_ids(vec![
                                 "used_static_kb_document_ids".to_string(),
                             ])
@@ -24537,7 +24639,7 @@ async fn main() {
                                                 ConversationHistoryMultivoiceMessagePartModel::builder()
                                                     .text("text")
                                                     .voice_label("voice_label")
-                                                    .time_in_call_secs(6)
+                                                    .time_in_call_secs(2)
                                                     .build()
                                                     .expect("Failed to build request"),
                                             ])
@@ -24551,7 +24653,7 @@ async fn main() {
                                             .tool_name("tool_name")
                                             .tool_id("tool_id")
                                             .params_as_json("params_as_json")
-                                            .tool_has_been_called(true)
+                                            .tool_has_been_called(false)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
@@ -24559,18 +24661,18 @@ async fn main() {
                                     .feedback(
                                         UserFeedback::builder()
                                             .score(UserFeedbackScore::Like)
-                                            .time_in_call_secs(0)
+                                            .time_in_call_secs(7)
                                             .build()
                                             .expect("Failed to build request"),
                                     )
                                     .llm_override("llm_override")
                                     .producing_llm("producing_llm")
-                                    .time_in_call_secs(7)
+                                    .time_in_call_secs(0)
                                     .conversation_turn_metrics(ConversationTurnMetrics {
                                         metrics: Some(HashMap::from([(
                                             "key".to_string(),
                                             MetricRecord::builder()
-                                                .elapsed_time(3.08)
+                                                .elapsed_time(3.59)
                                                 .build()
                                                 .expect("Failed to build request"),
                                         )])),
@@ -24588,7 +24690,7 @@ async fn main() {
                                                 RagChunkMetadata::builder()
                                                     .document_id("document_id")
                                                     .chunk_id("chunk_id")
-                                                    .vector_distance(9.64)
+                                                    .vector_distance(4.81)
                                                     .build()
                                                     .expect("Failed to build request"),
                                             ])
@@ -24596,7 +24698,7 @@ async fn main() {
                                                 EmbeddingModelEnum::E5Mistral7BInstruct,
                                             )
                                             .retrieval_query("retrieval_query")
-                                            .rag_latency_secs(2.02)
+                                            .rag_latency_secs(0.97)
                                             .used_chunk_ids(vec!["used_chunk_ids".to_string()])
                                             .build()
                                             .expect("Failed to build request"),
@@ -24608,17 +24710,17 @@ async fn main() {
                                         )])),
                                         ..Default::default()
                                     })
-                                    .interrupted(false)
+                                    .interrupted(true)
                                     .ignored_as_backchannel(false)
                                     .platform_event(TranscriptPlatformEvent::UserTurnTimeout)
                                     .original_message("original_message")
                                     .reasoning(vec![ConversationReasoningModel {
                                         summary: Some("summary".to_string()),
-                                        provider_redact: Some(true),
+                                        provider_redact: Some(false),
                                         ..Default::default()
                                     }])
                                     .source_medium(ChatSourceMedium::Audio)
-                                    .source_event_id(9)
+                                    .source_event_id(10)
                                     .used_static_kb_document_ids(vec![
                                         "used_static_kb_document_ids".to_string(),
                                     ])
@@ -24665,7 +24767,7 @@ async fn main() {
                                         ConversationHistoryMultivoiceMessagePartModel::builder()
                                             .text("text")
                                             .voice_label("voice_label")
-                                            .time_in_call_secs(6)
+                                            .time_in_call_secs(2)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
@@ -24679,7 +24781,7 @@ async fn main() {
                                     .tool_name("tool_name")
                                     .tool_id("tool_id")
                                     .params_as_json("params_as_json")
-                                    .tool_has_been_called(true)
+                                    .tool_has_been_called(false)
                                     .tool_details(ConversationHistoryTranscriptToolCallCommonModelInputToolDetails::ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput(
                                         ConversationHistoryTranscriptToolCallApiIntegrationWebhookDetailsInput::builder()
                                             .r#type(
@@ -24730,18 +24832,18 @@ async fn main() {
                             .feedback(
                                 UserFeedback::builder()
                                     .score(UserFeedbackScore::Like)
-                                    .time_in_call_secs(0)
+                                    .time_in_call_secs(7)
                                     .build()
                                     .expect("Failed to build request"),
                             )
                             .llm_override("llm_override")
                             .producing_llm("producing_llm")
-                            .time_in_call_secs(7)
+                            .time_in_call_secs(0)
                             .conversation_turn_metrics(ConversationTurnMetrics {
                                 metrics: Some(HashMap::from([(
                                     "key".to_string(),
                                     MetricRecord::builder()
-                                        .elapsed_time(3.08)
+                                        .elapsed_time(3.59)
                                         .build()
                                         .expect("Failed to build request"),
                                 )])),
@@ -24757,13 +24859,13 @@ async fn main() {
                                         RagChunkMetadata::builder()
                                             .document_id("document_id")
                                             .chunk_id("chunk_id")
-                                            .vector_distance(9.64)
+                                            .vector_distance(4.81)
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
                                     .embedding_model(EmbeddingModelEnum::E5Mistral7BInstruct)
                                     .retrieval_query("retrieval_query")
-                                    .rag_latency_secs(2.02)
+                                    .rag_latency_secs(0.97)
                                     .used_chunk_ids(vec!["used_chunk_ids".to_string()])
                                     .build()
                                     .expect("Failed to build request"),
@@ -24773,23 +24875,28 @@ async fn main() {
                                     "key".to_string(),
                                     LlmInputOutputTokensUsage {
                                         input: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(4),
-                                            price: Some(0.91),
+                                            tokens: Some(6),
+                                            price: Some(5.35),
                                             ..Default::default()
                                         }),
                                         input_cache_read: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(4),
-                                            price: Some(0.91),
+                                            tokens: Some(6),
+                                            price: Some(5.35),
                                             ..Default::default()
                                         }),
                                         input_cache_write: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(4),
-                                            price: Some(0.91),
+                                            tokens: Some(6),
+                                            price: Some(5.35),
                                             ..Default::default()
                                         }),
                                         output_total: Some(LlmTokensCategoryUsage {
-                                            tokens: Some(4),
-                                            price: Some(0.91),
+                                            tokens: Some(6),
+                                            price: Some(5.35),
+                                            ..Default::default()
+                                        }),
+                                        output_total_reasoning_portion: Some(LlmTokensCategoryUsage {
+                                            tokens: Some(6),
+                                            price: Some(5.35),
                                             ..Default::default()
                                         }),
                                         ..Default::default()
@@ -24797,17 +24904,17 @@ async fn main() {
                                 )])),
                                 ..Default::default()
                             })
-                            .interrupted(false)
+                            .interrupted(true)
                             .ignored_as_backchannel(false)
                             .platform_event(TranscriptPlatformEvent::UserTurnTimeout)
                             .original_message("original_message")
                             .reasoning(vec![ConversationReasoningModel {
                                 summary: Some("summary".to_string()),
-                                provider_redact: Some(true),
+                                provider_redact: Some(false),
                                 ..Default::default()
                             }])
                             .source_medium(ChatSourceMedium::Audio)
-                            .source_event_id(9)
+                            .source_event_id(10)
                             .used_static_kb_document_ids(vec![
                                 "used_static_kb_document_ids".to_string(),
                             ])
@@ -25090,8 +25197,8 @@ async fn main() {
                 page_size: Some(30),
                 search: Some("search".to_string()),
                 parent_folder_id: Some("parent_folder_id".to_string()),
-                types: Some(vec![]),
-                include_folders: Some(false),
+                types: Some(vec![UnitTestSummaryResponseModelType::Llm]),
+                include_folders: Some(true),
                 sort_mode: Some(SortMode::Default),
                 sharing_mode: Some(TestSharingMode::All),
                 created_by_user_id: Some("created_by_user_id".to_string()),
@@ -25588,8 +25695,8 @@ async fn main() {
                 branch_id: Some("branch_id".to_string()),
                 created_by_user_id: Some("created_by_user_id".to_string()),
                 test_id: Some("test_id".to_string()),
-                start_time: Some(0),
-                end_time: Some(8),
+                start_time: Some(6),
+                end_time: Some(0),
                 version_id: Some("version_id".to_string()),
                 page_size: Some(30),
                 search: Some("search".to_string()),
@@ -25993,12 +26100,12 @@ async fn main() {
                         }),
                         turn: Some(TurnConfig {
                             turn_timeout: Some(7_f64),
-                            initial_wait_time: Some(0.63),
+                            initial_wait_time: Some(9.4),
                             silence_end_call_timeout: Some(-1_f64),
                             turn_eagerness: Some(TurnEagerness::Patient),
                             spelling_patience: Some(SpellingPatience::Auto),
                             speculative_turn: Some(false),
-                            retranscribe_on_turn_timeout: Some(true),
+                            retranscribe_on_turn_timeout: Some(false),
                             turn_model: Some(TurnModel::TurnV2),
                             interruption_ignore_terms: Some(vec![
                                 "interruption_ignore_terms".to_string(),
@@ -26006,8 +26113,8 @@ async fn main() {
                             interruption_ignore_term_languages: Some(vec![
                                 "interruption_ignore_term_languages".to_string(),
                             ]),
-                            merge_with_default_ignore_terms: Some(false),
-                            transcribe_on_disabled_interruptions: Some(true),
+                            merge_with_default_ignore_terms: Some(true),
+                            transcribe_on_disabled_interruptions: Some(false),
                             soft_timeout_config: Some(SoftTimeoutConfig {
                                 timeout_seconds: Some(-1_f64),
                                 message: Some("Hhmmmm...yeah.".to_string()),
@@ -26015,8 +26122,9 @@ async fn main() {
                                     "additional_soft_timeout_messages".to_string(),
                                 ]),
                                 use_llm_generated_message: Some(true),
-                                randomize_fillers: Some(false),
+                                randomize_fillers: Some(true),
                                 max_soft_timeouts_per_generation: Some(1),
+                                pause_after_filler: Some(true),
                                 llm_generated_message_prompt_override: Some(
                                     "llm_generated_message_prompt_override".to_string(),
                                 ),
@@ -26040,10 +26148,10 @@ async fn main() {
                                     .language("language")
                                     .model_family(ModelFamily::Turbo)
                                     .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                    .stability(0.42)
-                                    .speed(0.78)
-                                    .similarity_boost(0.33)
-                                    .clone_strength(0.41)
+                                    .stability(0.56)
+                                    .speed(0.83)
+                                    .similarity_boost(0.04)
+                                    .clone_strength(0.3)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
@@ -26060,7 +26168,7 @@ async fn main() {
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
-                            clone_strength: Some(0.91),
+                            clone_strength: Some(0.03),
                             text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
@@ -26082,7 +26190,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigInput {
-                            text_only: Some(false),
+                            text_only: Some(true),
                             max_duration_seconds: Some(600),
                             client_events: Some(vec![ClientEvent::ConversationInitiationMetadata]),
                             file_input: Some(FileInputConfig {
@@ -26091,14 +26199,14 @@ async fn main() {
                                 max_files_per_conversation: Some(10),
                                 ..Default::default()
                             }),
-                            monitoring_enabled: Some(false),
+                            monitoring_enabled: Some(true),
                             monitoring_events: Some(vec![
                                 ClientEvent::ConversationInitiationMetadata,
                             ]),
                             dtmf_input_settings: Some(DtmfInputConfig {
                                 dtmf_input_timeout: Some(2_f64),
                                 hash_terminator: Some(true),
-                                redact_input: Some(false),
+                                redact_input: Some(true),
                                 ..Default::default()
                             }),
                             background_sound: Some(BackgroundSoundConfig {
@@ -26108,7 +26216,7 @@ async fn main() {
                                 crossfade_loop: Some(true),
                                 ..Default::default()
                             }),
-                            source_attribution: Some(true),
+                            source_attribution: Some(false),
                             ..Default::default()
                         }),
                         language_presets: Some(HashMap::from([(
@@ -26143,7 +26251,7 @@ async fn main() {
                         agent: Some(AgentConfig {
                             first_message: Some("first_message".to_string()),
                             language: Some("en".to_string()),
-                            hinglish_mode: Some(false),
+                            hinglish_mode: Some(true),
                             dynamic_variables: Some(DynamicVariablesConfigInput(
                                 elevenlabs_rust_sdk::serde_json::json!({}),
                             )),
@@ -26169,12 +26277,12 @@ async fn main() {
                                 llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
-                                thinking_budget: Some(1),
-                                enable_reasoning_summary: Some(true),
-                                temperature: Some(6.94),
+                                thinking_budget: Some(5),
+                                enable_reasoning_summary: Some(false),
+                                temperature: Some(3.74),
                                 max_tokens: Some(-1),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(false),
+                                tool_ids_strict: Some(true),
                                 enable_parallel_tool_calls: Some(true),
                                 mcp_server_ids: Some(vec!["mcp_server_ids".to_string()]),
                                 native_mcp_server_ids: Some(vec![
@@ -26198,7 +26306,7 @@ async fn main() {
                                     .name("name")
                                     .r#type(PromptEvaluationCriteriaType::Prompt)
                                     .conversation_goal_prompt("conversation_goal_prompt")
-                                    .use_knowledge_base(true)
+                                    .use_knowledge_base(false)
                                     .scope(AnalysisScope::Conversation)
                                     .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
@@ -26231,8 +26339,8 @@ async fn main() {
                             btn_text_color: Some("#ffffff".to_string()),
                             border_color: Some("#e1e1e1".to_string()),
                             focus_color: Some("#000000".to_string()),
-                            border_radius: Some(4),
-                            btn_radius: Some(6),
+                            border_radius: Some(5),
+                            btn_radius: Some(1),
                             action_text: Some("action_text".to_string()),
                             start_call_text: Some("start_call_text".to_string()),
                             end_call_text: Some("end_call_text".to_string()),
@@ -26244,7 +26352,7 @@ async fn main() {
                             terms_text: Some("terms_text".to_string()),
                             terms_html: Some("terms_html".to_string()),
                             terms_key: Some("terms_key".to_string()),
-                            show_avatar_when_collapsed: Some(true),
+                            show_avatar_when_collapsed: Some(false),
                             disable_banner: Some(true),
                             override_link: Some("override_link".to_string()),
                             markdown_link_allowed_hosts: Some(vec![
@@ -26258,10 +26366,10 @@ async fn main() {
                             mic_muting_enabled: Some(true),
                             transcript_enabled: Some(true),
                             text_input_enabled: Some(true),
-                            conversation_mode_toggle_enabled: Some(true),
-                            default_expanded: Some(true),
+                            conversation_mode_toggle_enabled: Some(false),
+                            default_expanded: Some(false),
                             always_expanded: Some(true),
-                            dismissible: Some(true),
+                            dismissible: Some(false),
                             show_agent_status: Some(true),
                             show_conversation_id: Some(true),
                             strip_audio_tags: Some(true),
@@ -26355,13 +26463,13 @@ async fn main() {
                                 accent_border: Some("accent_border".to_string()),
                                 accent_subtle: Some("accent_subtle".to_string()),
                                 accent_primary: Some("accent_primary".to_string()),
-                                overlay_padding: Some(4.09),
-                                button_radius: Some(8.35),
-                                input_radius: Some(7.58),
-                                bubble_radius: Some(7.16),
-                                sheet_radius: Some(7_f64),
-                                compact_sheet_radius: Some(6.75),
-                                dropdown_sheet_radius: Some(2.4),
+                                overlay_padding: Some(8.84),
+                                button_radius: Some(0.16),
+                                input_radius: Some(0.52),
+                                bubble_radius: Some(7.96),
+                                sheet_radius: Some(3.89),
+                                compact_sheet_radius: Some(2.86),
+                                dropdown_sheet_radius: Some(8.46),
                                 ..Default::default()
                             }),
                             show_resize_button: Some(true),
@@ -26388,7 +26496,7 @@ async fn main() {
                                 .r#type(AnalysisPropertyType::Boolean)
                                 .description("description")
                                 .r#enum(vec!["enum".to_string()])
-                                .is_system_provided(true)
+                                .is_system_provided(false)
                                 .dynamic_variable("dynamic_variable")
                                 .allowed_values(
                                     AllowedValues::builder()
@@ -26396,7 +26504,7 @@ async fn main() {
                                         .build()
                                         .expect("Failed to build request"),
                                 )
-                                .is_omitted(true)
+                                .is_omitted(false)
                                 .name("name")
                                 .llm(AgentMessagesOverridesLlm::Gpt4OMini)
                                 .build()
@@ -26413,7 +26521,7 @@ async fn main() {
                                         SystemEvaluationId::SystemEvalCriteriaSentiment,
                                     )
                                     .scope(AnalysisScope::Conversation)
-                                    .weight(2.45)
+                                    .weight(4.38)
                                     .build()
                                     .expect("Failed to build request"),
                             }]),
@@ -26432,9 +26540,9 @@ async fn main() {
                             conversation_config_override: Some(
                                 ConversationConfigClientOverrideConfigInput::default(),
                             ),
-                            custom_llm_extra_body: Some(false),
-                            enable_conversation_initiation_client_data_from_webhook: Some(true),
-                            enable_starting_workflow_node_id_from_client: Some(false),
+                            custom_llm_extra_body: Some(true),
+                            enable_conversation_initiation_client_data_from_webhook: Some(false),
+                            enable_starting_workflow_node_id_from_client: Some(true),
                             enable_procedure_ids_from_client: Some(false),
                             ..Default::default()
                         }),
@@ -26465,7 +26573,7 @@ async fn main() {
                             ]),
                             ..Default::default()
                         }),
-                        archived: Some(false),
+                        archived: Some(true),
                         guardrails: Some(GuardrailsV1Input {
                             version: Some(GuardrailsV1InputVersion::Num1),
                             focus: Some(FocusGuardrail {
@@ -26486,14 +26594,14 @@ async fn main() {
                         summary_language: Some("summary_language".to_string()),
                         auto_translate_transcript_to_app_language: Some(true),
                         auth: Some(AuthSettings {
-                            enable_auth: Some(false),
+                            enable_auth: Some(true),
                             allowlist: Some(vec![
                                 AllowlistItem::builder()
                                     .hostname("hostname")
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            require_origin_header: Some(false),
+                            require_origin_header: Some(true),
                             shareable_token: Some("shareable_token".to_string()),
                             ..Default::default()
                         }),
@@ -26504,15 +26612,15 @@ async fn main() {
                             ..Default::default()
                         }),
                         queueing_config: Some(AgentQueueingConfig {
-                            enabled: Some(false),
+                            enabled: Some(true),
                             wait_timeout_seconds: Some(180),
                             hold_audio: Some(
                                 AgentHoldAudioConfig::builder()
                                     .audio_path("audio_path")
                                     .audio_url("audio_url")
                                     .original_filename("original_filename")
-                                    .duration_secs(2.19)
-                                    .size_bytes(2)
+                                    .duration_secs(8.18)
+                                    .size_bytes(5)
                                     .build()
                                     .expect("Failed to build request"),
                             ),
@@ -26521,10 +26629,10 @@ async fn main() {
                         privacy: Some(PrivacyConfigInput {
                             record_voice: Some(true),
                             retention_days: Some(-1),
-                            delete_transcript_and_pii: Some(true),
-                            delete_audio: Some(false),
-                            apply_to_existing_conversations: Some(false),
-                            zero_retention_mode: Some(false),
+                            delete_transcript_and_pii: Some(false),
+                            delete_audio: Some(true),
+                            apply_to_existing_conversations: Some(true),
+                            zero_retention_mode: Some(true),
                             conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                                 enabled: Some(true),
                                 entities: Some(vec![ConfigEntityType::Name]),
@@ -26544,17 +26652,17 @@ async fn main() {
                                 "key".to_string(),
                                 AlertingMonitorConfig {
                                     enabled: Some(true),
-                                    threshold: Some(0.31),
-                                    relative_increase_threshold: Some(4.56),
-                                    min_failure_count: Some(7),
+                                    threshold: Some(0.24),
+                                    relative_increase_threshold: Some(5.61),
+                                    min_failure_count: Some(5),
                                     min_history_bucket_count: Some(9),
-                                    min_sample_count: Some(5),
-                                    suspect_trigger_threshold: Some(8),
-                                    auto_resolve_after_inactive_minutes: Some(7),
+                                    min_sample_count: Some(8),
+                                    suspect_trigger_threshold: Some(3),
+                                    auto_resolve_after_inactive_minutes: Some(2),
                                     ..Default::default()
                                 },
                             )])),
-                            auto_resolve_after_inactive_minutes: Some(2),
+                            auto_resolve_after_inactive_minutes: Some(7),
                             environments: Some(vec!["environments".to_string()]),
                             notifiers: Some(vec![AlertingSettingsNotifiersItem::Webhook {
                                 data: AlertingWebhookNotifier::builder()
@@ -26573,8 +26681,8 @@ async fn main() {
                                 .source("source")
                                 .target("target")
                                 .reroutes(vec![PositionInput {
-                                    x: Some(1.15),
-                                    y: Some(5.14),
+                                    x: Some(8.84),
+                                    y: Some(0.92),
                                     ..Default::default()
                                 }])
                                 .build()
@@ -26585,8 +26693,8 @@ async fn main() {
                             AgentWorkflowRequestModelNodes::End {
                                 data: WorkflowEndNodeModelInput {
                                     position: Some(PositionInput {
-                                        x: Some(1.15),
-                                        y: Some(5.14),
+                                        x: Some(8.84),
+                                        y: Some(0.92),
                                         ..Default::default()
                                     }),
                                     edge_order: Some(vec!["edge_order".to_string()]),
@@ -26691,8 +26799,8 @@ async fn main() {
             &UsersListQueryRequest {
                 agent_id: Some("agent_id".to_string()),
                 branch_id: Some("branch_id".to_string()),
-                call_start_before_unix: Some(8),
-                call_start_after_unix: Some(9),
+                call_start_before_unix: Some(2),
+                call_start_after_unix: Some(3),
                 search: Some("search".to_string()),
                 page_size: Some(30),
                 sort_by: Some(UsersSortBy::LastContactUnixSecs),
@@ -27185,33 +27293,33 @@ async fn main() {
             &TextSearchQueryRequest::builder()
                 .text_query("refund policy")
                 .agent_id("agent_id")
-                .visited_agent_ids(vec![])
-                .visited_agent_branch_ids(vec![])
-                .triggered_procedure_ids(vec![])
+                .visited_agent_ids(vec!["visited_agent_ids".to_string()])
+                .visited_agent_branch_ids(vec!["visited_agent_branch_ids".to_string()])
+                .triggered_procedure_ids(vec!["triggered_procedure_ids".to_string()])
                 .call_successful(EvaluationResultFilter::Success)
-                .call_start_before_unix(1)
-                .call_start_after_unix(0)
-                .call_duration_min_secs(8)
-                .call_duration_max_secs(6)
+                .call_start_before_unix(0)
+                .call_start_after_unix(3)
+                .call_duration_min_secs(7)
+                .call_duration_max_secs(8)
                 .rating_max(5)
                 .rating_min(5)
                 .has_feedback_comment(false)
                 .user_id("user_id")
-                .evaluation_params(vec![])
-                .data_collection_params(vec![])
-                .dynamic_variable_params(vec![])
-                .tool_names(vec![])
-                .tool_names_successful(vec![])
-                .tool_names_errored(vec![])
-                .tool_ids(vec![])
-                .tool_ids_successful(vec![])
-                .tool_ids_errored(vec![])
-                .include_invalid_tool_calls(false)
-                .main_languages(vec![])
-                .phone_number_ids(vec![])
-                .whatsapp_phone_number_ids(vec![])
-                .exclude_statuses(vec![])
-                .termination_reasons(vec![])
+                .evaluation_params(vec!["evaluation_params".to_string()])
+                .data_collection_params(vec!["data_collection_params".to_string()])
+                .dynamic_variable_params(vec!["dynamic_variable_params".to_string()])
+                .tool_names(vec!["tool_names".to_string()])
+                .tool_names_successful(vec!["tool_names_successful".to_string()])
+                .tool_names_errored(vec!["tool_names_errored".to_string()])
+                .tool_ids(vec!["tool_ids".to_string()])
+                .tool_ids_successful(vec!["tool_ids_successful".to_string()])
+                .tool_ids_errored(vec!["tool_ids_errored".to_string()])
+                .include_invalid_tool_calls(true)
+                .main_languages(vec!["main_languages".to_string()])
+                .phone_number_ids(vec!["phone_number_ids".to_string()])
+                .whatsapp_phone_number_ids(vec!["whatsapp_phone_number_ids".to_string()])
+                .exclude_statuses(vec![ConversationSummaryResponseModelStatus::Initiated])
+                .termination_reasons(vec!["termination_reasons".to_string()])
                 .page_size(20)
                 .summary_mode(ListSummaryMode::Exclude)
                 .conversation_initiation_source(ListConversationInitiationSource::Unknown)
@@ -27219,7 +27327,7 @@ async fn main() {
                 .conversation_product_type(ConversationProduct::Agents)
                 .branch_id("branch_id")
                 .version_id("version_id")
-                .topic_ids(vec![])
+                .topic_ids(vec!["topic_ids".to_string()])
                 .sort_by(MessageSearchSortBy::SearchScore)
                 .cursor("cursor")
                 .build()
@@ -28312,8 +28420,8 @@ async fn main() {
                 page_size: Some(100),
                 conversation_id: Some("conversation_id".to_string()),
                 status: Some(AgentConversationTicketStatus::Open),
-                sources: Some(vec![]),
-                priorities: Some(vec![]),
+                sources: Some(vec![AgentConversationTicketSource::Qa]),
+                priorities: Some(vec![AgentConversationTicketPriority::Low]),
                 sort_by: Some(AgentConversationTicketSortBy::CreatedAt),
                 owner_user_id: Some("owner_user_id".to_string()),
                 assignee_user_id: Some("assignee_user_id".to_string()),
@@ -28596,8 +28704,8 @@ async fn main() {
                 page_size: Some(100),
                 agent_id: Some("agent_id".to_string()),
                 status: Some(AgentConversationTicketStatus::Open),
-                sources: Some(vec![]),
-                priorities: Some(vec![]),
+                sources: Some(vec![AgentConversationTicketSource::Qa]),
+                priorities: Some(vec![AgentConversationTicketPriority::Low]),
                 sort_by: Some(AgentConversationTicketSortBy::CreatedAt),
                 owner_user_id: Some("owner_user_id".to_string()),
                 assignee_user_id: Some("assignee_user_id".to_string()),
@@ -28784,7 +28892,7 @@ async fn main() {
                 .qa_comment("qa_comment")
                 .turn_comments(vec![
                     TurnCommentRequestModel::builder()
-                        .turn_index(3)
+                        .turn_index(10)
                         .comment("comment")
                         .build()
                         .expect("Failed to build request"),
@@ -29350,7 +29458,7 @@ async fn main() {
         .add_turn_comment(
             "agentqa_ticket_id",
             &AddTurnCommentRequestModel::builder()
-                .turn_index(1)
+                .turn_index(8)
                 .comment("comment")
                 .build()
                 .expect("Failed to build request"),
@@ -29752,7 +29860,7 @@ async fn main() {
                         .expect("Failed to build request"),
                 ),
                 livekit_stack: Some(LivekitStackType::Standard),
-                store_sip_messages: Some(false),
+                store_sip_messages: Some(true),
                 environment: Some("environment".to_string()),
                 branch_id: Some("branch_id".to_string()),
                 ..Default::default()
@@ -29916,7 +30024,7 @@ async fn main() {
                 label: Some("label".to_string()),
                 phone_number: Some("phone_number".to_string()),
                 provider: Some(TelephonyProvider::Twilio),
-                supports_outbound: Some(false),
+                supports_outbound: Some(true),
                 agent_id: Some("agent_id".to_string()),
                 branch_id: Some("branch_id".to_string()),
                 sort_by: Some(PhoneNumberSortBy::Label),
@@ -30604,7 +30712,7 @@ async fn main() {
         .get(
             &LiveCountGetQueryRequest {
                 agent_id: Some("agent_id".to_string()),
-                agent_ids: Some(vec![]),
+                agent_ids: Some(vec!["agent_ids".to_string()]),
                 ..Default::default()
             },
             None,
@@ -30703,9 +30811,9 @@ async fn main() {
                 .url("url")
                 .name("name")
                 .parent_folder_id("parent_folder_id")
-                .enable_auto_sync(false)
+                .enable_auto_sync(true)
                 .auto_remove(true)
-                .minimum_frequency_days(151)
+                .minimum_frequency_days(48)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -30948,9 +31056,9 @@ async fn main() {
             &BodyCreateFolderV1ConvaiKnowledgeBaseFolderPost::builder()
                 .name("name")
                 .parent_folder_id("parent_folder_id")
-                .enable_auto_sync(true)
-                .auto_remove(true)
-                .minimum_frequency_days(166)
+                .enable_auto_sync(false)
+                .auto_remove(false)
+                .minimum_frequency_days(113)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -31129,9 +31237,9 @@ async fn main() {
                 name: Some("name".to_string()),
                 content: Some("content".to_string()),
                 enable_auto_sync: Some(false),
-                auto_remove: Some(true),
-                minimum_frequency_days: Some(102),
-                tighten_only: Some(false),
+                auto_remove: Some(false),
+                minimum_frequency_days: Some(7),
+                tighten_only: Some(true),
                 ..Default::default()
             }),
             None,
@@ -31389,8 +31497,8 @@ async fn main() {
             "21m00Tcm4TlvDq8ikWAM",
             &UpdateDocumentChunkingOverrideRequestModel::builder()
                 .chunking_override(ChunkingOverrideRequestModel {
-                    max_chunk_size: Some(7073163792333902),
-                    overlap_percentage: Some(20),
+                    max_chunk_size: Some(1248481635029014),
+                    overlap_percentage: Some(7),
                     custom_separators: Some(vec!["custom_separators".to_string()]),
                     ..Default::default()
                 })
@@ -32105,7 +32213,7 @@ async fn main() {
         .crawl_jobs
         .list(
             &CrawlJobsListQueryRequest {
-                include_job_ids: Some(vec![]),
+                include_job_ids: Some(vec!["include_job_ids".to_string()]),
                 page_size: Some(30),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -32216,10 +32324,10 @@ async fn main() {
                 .exclude_patterns(vec!["exclude_patterns".to_string()])
                 .sitemap_urls(vec!["sitemap_urls".to_string()])
                 .parent_folder_id("parent_folder_id")
-                .enable_auto_sync(true)
+                .enable_auto_sync(false)
                 .auto_remove(true)
-                .auto_discover(true)
-                .minimum_frequency_days(94)
+                .auto_discover(false)
+                .minimum_frequency_days(62)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -32908,11 +33016,11 @@ async fn main() {
         .get(
             "agent_id",
             &TopicsGetQueryRequest {
-                page_size: Some(78),
+                page_size: Some(37),
                 sort_by: Some(TopicSortBy::Conversations),
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
-                from_unix_secs: Some(9),
-                to_unix_secs: Some(1),
+                from_unix_secs: Some(0),
+                to_unix_secs: Some(4),
                 include_evaluation_criteria: Some(true),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -33059,10 +33167,10 @@ async fn main() {
         .list(
             &ToolsListQueryRequest {
                 search: Some("search".to_string()),
-                page_size: Some(80),
-                show_only_owned_documents: Some(true),
+                page_size: Some(77),
+                show_only_owned_documents: Some(false),
                 created_by_user_id: Some("created_by_user_id".to_string()),
-                types: Some(vec![]),
+                types: Some(vec![ToolTypeFilter::Webhook]),
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 sort_by: Some(ToolSortBy::Name),
                 used_by_agent_id: Some("used_by_agent_id".to_string()),
@@ -33230,8 +33338,8 @@ async fn main() {
                                 .source(DynamicVariableAssignmentSource::Response)
                                 .dynamic_variable("dynamic_variable")
                                 .value_path("value_path")
-                                .sanitize(true)
-                                .preserve_native_type(true)
+                                .sanitize(false)
+                                .preserve_native_type(false)
                                 .build()
                                 .expect("Failed to build request"),
                         ])
@@ -33289,7 +33397,7 @@ async fn main() {
                                 .expect("Failed to build request"),
                         ])
                         .mock_result("mock_result")
-                        .is_error(true)
+                        .is_error(false)
                         .build()
                         .expect("Failed to build request"),
                 ])
@@ -33481,8 +33589,8 @@ async fn main() {
                                 .source(DynamicVariableAssignmentSource::Response)
                                 .dynamic_variable("dynamic_variable")
                                 .value_path("value_path")
-                                .sanitize(true)
-                                .preserve_native_type(true)
+                                .sanitize(false)
+                                .preserve_native_type(false)
                                 .build()
                                 .expect("Failed to build request"),
                         ])
@@ -33540,7 +33648,7 @@ async fn main() {
                                 .expect("Failed to build request"),
                         ])
                         .mock_result("mock_result")
-                        .is_error(true)
+                        .is_error(false)
                         .build()
                         .expect("Failed to build request"),
                 ])
@@ -33934,8 +34042,8 @@ async fn main() {
                 is_error: Some(true),
                 agent_id: Some("agent_id".to_string()),
                 branch_id: Some("branch_id".to_string()),
-                start_time: Some(3.61),
-                end_time: Some(3.3),
+                start_time: Some(7.59),
+                end_time: Some(4.24),
                 ..Default::default()
             },
             None,
@@ -34080,9 +34188,9 @@ async fn main() {
         .list(
             &AnalysisItemsListQueryRequest {
                 search: Some("search".to_string()),
-                page_size: Some(13),
+                page_size: Some(68),
                 kind: Some(AnalysisItemKind::Evaluation),
-                analysis_item_ids: Some(vec![]),
+                analysis_item_ids: Some(vec!["analysis_item_ids".to_string()]),
                 created_by_user_id: Some("created_by_user_id".to_string()),
                 sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 cursor: Some("cursor".to_string()),
@@ -34926,8 +35034,8 @@ async fn main() {
         .secrets
         .list(
             &SecretsListQueryRequest {
-                page_size: Some(2),
-                dependency_limit: Some(18),
+                page_size: Some(76),
+                dependency_limit: Some(51),
                 search: Some("search".to_string()),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -35488,16 +35596,16 @@ async fn main() {
                                 model_id: Some(TtsConversationalModel::ElevenTurboV2),
                                 voice_id: Some("voice_id".to_string()),
                                 supported_voices: Some(vec![]),
-                                stability: Some(6.57),
-                                speed: Some(1.8),
-                                similarity_boost: Some(6.48),
-                                clone_strength: Some(1.49),
+                                stability: Some(4.99),
+                                speed: Some(7.29),
+                                similarity_boost: Some(5.75),
+                                clone_strength: Some(5.08),
                                 pronunciation_dictionary_locators: Some(vec![]),
                                 ..Default::default()
                             }),
                             conversation: Some(ConversationConfigOverride {
-                                text_only: Some(false),
-                                max_duration_seconds: Some(5),
+                                text_only: Some(true),
+                                max_duration_seconds: Some(9),
                                 ..Default::default()
                             }),
                             agent: Some(AgentConfigOverrideInput {
@@ -35527,7 +35635,7 @@ async fn main() {
                     }),
                     ..Default::default()
                 }])
-                .scheduled_time_unix(5)
+                .scheduled_time_unix(2)
                 .agent_phone_number_id("agent_phone_number_id")
                 .whatsapp_params(
                     BatchCallWhatsAppParams::builder()
@@ -35560,7 +35668,7 @@ async fn main() {
                     }),
                     ..Default::default()
                 })
-                .target_concurrency_limit(2)
+                .target_concurrency_limit(6)
                 .build()
                 .expect("Failed to build request"),
             None,
@@ -36025,7 +36133,7 @@ async fn main() {
         .export(
             "batch_id",
             &ExportQueryRequest {
-                limit: Some(7),
+                limit: Some(4),
                 ..Default::default()
             },
             None,
@@ -36154,17 +36262,17 @@ async fn main() {
                                     .language("language")
                                     .model_family(ModelFamily::Turbo)
                                     .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                                    .stability(0.42)
-                                    .speed(0.78)
-                                    .similarity_boost(0.33)
-                                    .clone_strength(0.41)
+                                    .stability(0.56)
+                                    .speed(0.83)
+                                    .similarity_boost(0.04)
+                                    .clone_strength(0.3)
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            stability: Some(6.57),
-                            speed: Some(1.8),
-                            similarity_boost: Some(6.48),
-                            clone_strength: Some(1.49),
+                            stability: Some(4.99),
+                            speed: Some(7.29),
+                            similarity_boost: Some(5.75),
+                            clone_strength: Some(5.08),
                             pronunciation_dictionary_locators: Some(vec![
                                 PydanticPronunciationDictionaryVersionLocator::builder()
                                     .pronunciation_dictionary_id("pronunciation_dictionary_id")
@@ -36175,8 +36283,8 @@ async fn main() {
                             ..Default::default()
                         }),
                         conversation: Some(ConversationConfigOverride {
-                            text_only: Some(false),
-                            max_duration_seconds: Some(5),
+                            text_only: Some(true),
+                            max_duration_seconds: Some(9),
                             ..Default::default()
                         }),
                         agent: Some(AgentConfigOverrideInput {
@@ -36190,7 +36298,7 @@ async fn main() {
                                 llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
-                                tool_ids_strict: Some(false),
+                                tool_ids_strict: Some(true),
                                 native_mcp_server_ids: Some(vec![
                                     "native_mcp_server_ids".to_string(),
                                 ]),
@@ -36524,7 +36632,7 @@ async fn main() {
                 tool_call_sound: Some(ToolCallSoundType::Typing),
                 tool_call_sound_behavior: Some(ToolCallSoundBehavior::Auto),
                 execution_mode: Some(ToolExecutionMode::Immediate),
-                response_timeout_secs: Some(45),
+                response_timeout_secs: Some(245),
                 request_headers: Some(HashMap::new()),
                 request_meta: Some(HashMap::new()),
                 disable_compression: Some(true),
@@ -36872,14 +36980,14 @@ async fn main() {
                         .interruption_mode(ToolInterruptionMode::Allow)
                         .tool_call_sound_behavior(ToolCallSoundBehavior::Auto)
                         .execution_mode(ToolExecutionMode::Immediate)
-                        .response_timeout_secs(37)
+                        .response_timeout_secs(52)
                         .assignments(vec![
                             DynamicVariableAssignment::builder()
                                 .source(DynamicVariableAssignmentSource::Response)
                                 .dynamic_variable("dynamic_variable")
                                 .value_path("value_path")
-                                .sanitize(true)
-                                .preserve_native_type(true)
+                                .sanitize(false)
+                                .preserve_native_type(false)
                                 .build()
                                 .expect("Failed to build request"),
                         ])
@@ -36898,7 +37006,7 @@ async fn main() {
                                         .expect("Failed to build request"),
                                 ])
                                 .mock_result("mock_result")
-                                .is_error(true)
+                                .is_error(false)
                                 .build()
                                 .expect("Failed to build request"),
                         ])
@@ -37094,14 +37202,14 @@ async fn main() {
                     interruption_mode: Some(ToolInterruptionMode::Allow),
                     tool_call_sound_behavior: Some(ToolCallSoundBehavior::Auto),
                     execution_mode: Some(ToolExecutionMode::Immediate),
-                    response_timeout_secs: Some(215),
+                    response_timeout_secs: Some(163),
                     assignments: Some(vec![
                         DynamicVariableAssignment::builder()
                             .source(DynamicVariableAssignmentSource::Response)
                             .dynamic_variable("dynamic_variable")
                             .value_path("value_path")
-                            .sanitize(true)
-                            .preserve_native_type(true)
+                            .sanitize(false)
+                            .preserve_native_type(false)
                             .build()
                             .expect("Failed to build request"),
                     ]),
@@ -37120,7 +37228,7 @@ async fn main() {
                                     .expect("Failed to build request"),
                             ])
                             .mock_result("mock_result")
-                            .is_error(true)
+                            .is_error(false)
                             .build()
                             .expect("Failed to build request"),
                     ]),
@@ -37638,9 +37746,9 @@ async fn main() {
         .list(
             "agent_3701k3ttaq12ewp8b7qv5rfyszkz",
             &BranchesListQueryRequest {
-                include_archived: Some(false),
+                include_archived: Some(true),
                 limit: Some(100),
-                include_commit_status: Some(false),
+                include_commit_status: Some(true),
                 ..Default::default()
             },
             None,
@@ -37764,8 +37872,8 @@ async fn main() {
                             .source("source")
                             .target("target")
                             .reroutes(vec![PositionInput {
-                                x: Some(1.15),
-                                y: Some(5.14),
+                                x: Some(8.84),
+                                y: Some(0.92),
                                 ..Default::default()
                             }])
                             .build()
@@ -37776,8 +37884,8 @@ async fn main() {
                         AgentWorkflowRequestModelNodes::End {
                             data: WorkflowEndNodeModelInput {
                                 position: Some(PositionInput {
-                                    x: Some(1.15),
-                                    y: Some(5.14),
+                                    x: Some(8.84),
+                                    y: Some(0.92),
                                     ..Default::default()
                                 }),
                                 edge_order: Some(vec!["edge_order".to_string()]),
@@ -37965,7 +38073,7 @@ async fn main() {
             Some(&BodyUpdateAgentBranchV1ConvaiAgentsAgentIdBranchesBranchIdPatch {
                 name: Some("name".to_string()),
                 description: Some("description".to_string()),
-                is_archived: Some(true),
+                is_archived: Some(false),
                 protection_status: Some(BranchProtectionStatus::WriterPermsRequired),
                 auto_rebase: Some(false),
                 ..Default::default()
@@ -38864,8 +38972,8 @@ async fn main() {
                                     .source("source")
                                     .target("target")
                                     .reroutes(vec![PositionInput {
-                                        x: Some(1.15),
-                                        y: Some(5.14),
+                                        x: Some(8.84),
+                                        y: Some(0.92),
                                         ..Default::default()
                                     }])
                                     .build()
@@ -38876,8 +38984,8 @@ async fn main() {
                                 AgentWorkflowRequestModelNodes::End {
                                     data: WorkflowEndNodeModelInput {
                                         position: Some(PositionInput {
-                                            x: Some(1.15),
-                                            y: Some(5.14),
+                                            x: Some(8.84),
+                                            y: Some(0.92),
                                             ..Default::default()
                                         }),
                                         edge_order: Some(vec!["edge_order".to_string()]),
@@ -39714,7 +39822,7 @@ async fn main() {
                 title: Some("title".to_string()),
                 description: Some("description".to_string()),
                 requested_reviewer_user_ids: Some(vec!["requested_reviewer_user_ids".to_string()]),
-                close: Some(false),
+                close: Some(true),
                 ..Default::default()
             }),
             None,
@@ -40007,7 +40115,7 @@ async fn main() {
             "agtmprop_8901k4t9z5defmb8vh3e9361y7nj",
             Some(&BodyMergeAMergeProposalV1ConvaiAgentsAgentIdMergeProposalsMergeProposalIdMergePost {
                 archive_source_branch: Some(true),
-                force: Some(false),
+                force: Some(true),
                 ..Default::default()
             }),
             None,
@@ -40165,7 +40273,7 @@ async fn main() {
         .config_param
         .update(
             &ReplaceWorkspaceConfigRequest::builder()
-                .expected_version(10)
+                .expected_version(9)
                 .config(CampaignConfigInput {
                     policy: Some(PolicyConfigInput {
                         timezone: Some("UTC".to_string()),
@@ -40177,16 +40285,16 @@ async fn main() {
                             max_redirects: Some(2),
                             interval_placement: Some(IntervalPlacement::Start),
                             rotate_step_seconds: Some(900),
-                            max_consecutive_failures_per_number: Some(7),
+                            max_consecutive_failures_per_number: Some(24),
                             ..Default::default()
                         }),
                         calling_periods: Some(vec![
                             CallingPeriod::builder()
-                                .weekdays(vec![6])
+                                .weekdays(vec![1])
                                 .intervals(vec![
                                     CallingIntervalPolicy::builder()
-                                        .start("23:47")
-                                        .end("24:00")
+                                        .start("22:42")
+                                        .end("04:57")
                                         .build()
                                         .expect("Failed to build request"),
                                 ])
@@ -40203,8 +40311,8 @@ async fn main() {
                                 )
                                 .intervals(vec![
                                     CallingIntervalPolicy::builder()
-                                        .start("23:47")
-                                        .end("24:00")
+                                        .start("22:42")
+                                        .end("04:57")
                                         .build()
                                         .expect("Failed to build request"),
                                 ])
@@ -40243,16 +40351,16 @@ async fn main() {
                                 max_redirects: Some(2),
                                 interval_placement: Some(IntervalPlacement::Start),
                                 rotate_step_seconds: Some(900),
-                                max_consecutive_failures_per_number: Some(7),
+                                max_consecutive_failures_per_number: Some(24),
                                 ..Default::default()
                             }),
                             calling_periods: Some(vec![
                                 CallingPeriod::builder()
-                                    .weekdays(vec![6])
+                                    .weekdays(vec![1])
                                     .intervals(vec![
                                         CallingIntervalPolicy::builder()
-                                            .start("23:47")
-                                            .end("24:00")
+                                            .start("22:42")
+                                            .end("04:57")
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
@@ -40269,8 +40377,8 @@ async fn main() {
                                     )
                                     .intervals(vec![
                                         CallingIntervalPolicy::builder()
-                                            .start("23:47")
-                                            .end("24:00")
+                                            .start("22:42")
+                                            .end("04:57")
                                             .build()
                                             .expect("Failed to build request"),
                                     ])
@@ -40308,16 +40416,16 @@ async fn main() {
                             max_redirects: Some(2),
                             interval_placement: Some(IntervalPlacement::Start),
                             rotate_step_seconds: Some(900),
-                            max_consecutive_failures_per_number: Some(7),
+                            max_consecutive_failures_per_number: Some(24),
                             ..Default::default()
                         }),
                         calling_periods: Some(vec![
                             CallingPeriod::builder()
-                                .weekdays(vec![6])
+                                .weekdays(vec![1])
                                 .intervals(vec![
                                     CallingIntervalPolicy::builder()
-                                        .start("23:47")
-                                        .end("24:00")
+                                        .start("22:42")
+                                        .end("04:57")
                                         .build()
                                         .expect("Failed to build request"),
                                 ])
@@ -40334,8 +40442,8 @@ async fn main() {
                                 )
                                 .intervals(vec![
                                     CallingIntervalPolicy::builder()
-                                        .start("23:47")
-                                        .end("24:00")
+                                        .start("22:42")
+                                        .end("04:57")
                                         .build()
                                         .expect("Failed to build request"),
                                 ])
@@ -40444,7 +40552,7 @@ async fn main() {
         .list(
             &OutboundCampaignsListQueryRequest {
                 page_size: Some(100),
-                status: Some(vec![]),
+                status: Some(vec![CampaignStatus::Active]),
                 agent_id: Some("agent_id".to_string()),
                 channel: Some(OutboundChannel::Phone),
                 mode: Some(ListMode::Voice),
@@ -40518,7 +40626,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.search:** `Option<String>` — Only campaigns whose name contains this text.
+**request.search:** `Option<String>` — Only campaigns whose name contains this text, or whose ID is exactly this text.
     
 </dd>
 </dl>
@@ -40715,6 +40823,7 @@ async fn main() {
                     phone_numbers: Some(vec!["phone_numbers".to_string()]),
                     whatsapp_user_id: Some("whatsapp_user_id".to_string()),
                     id: Some("id".to_string()),
+                    timezone_override: Some("timezone_override".to_string()),
                     conversation_initiation_client_data: Some(ConversationInitiationClientDataRequestInput {
                         conversation_config_override: Some(ConversationConfigClientOverrideInput {
                             asr: Some(AsrConversationalConfigOverride {
@@ -40731,16 +40840,16 @@ async fn main() {
                                 model_id: Some(TtsConversationalModel::ElevenTurboV2),
                                 voice_id: Some("voice_id".to_string()),
                                 supported_voices: Some(vec![]),
-                                stability: Some(6.57),
-                                speed: Some(1.8),
-                                similarity_boost: Some(6.48),
-                                clone_strength: Some(1.49),
+                                stability: Some(4.99),
+                                speed: Some(7.29),
+                                similarity_boost: Some(5.75),
+                                clone_strength: Some(5.08),
                                 pronunciation_dictionary_locators: Some(vec![]),
                                 ..Default::default()
                             }),
                             conversation: Some(ConversationConfigOverride {
-                                text_only: Some(false),
-                                max_duration_seconds: Some(5),
+                                text_only: Some(true),
+                                max_duration_seconds: Some(9),
                                 ..Default::default()
                             }),
                             agent: Some(AgentConfigOverrideInput {
@@ -40770,11 +40879,11 @@ async fn main() {
                     }),
                     ..Default::default()
                 }])
-                .scheduled_time_unix(3)
+                .scheduled_time_unix(4)
                 .timezone("timezone")
                 .branch_id("branch_id")
                 .environment("environment")
-                .target_concurrency_limit(4)
+                .target_concurrency_limit(6)
                 .idempotency_key("idempotency_key")
                 .policy(PolicyConfigInput {
                     timezone: Some("UTC".to_string()),
@@ -40786,16 +40895,16 @@ async fn main() {
                         max_redirects: Some(2),
                         interval_placement: Some(IntervalPlacement::Start),
                         rotate_step_seconds: Some(900),
-                        max_consecutive_failures_per_number: Some(7),
+                        max_consecutive_failures_per_number: Some(24),
                         ..Default::default()
                     }),
                     calling_periods: Some(vec![
                         CallingPeriod::builder()
-                            .weekdays(vec![6])
+                            .weekdays(vec![1])
                             .intervals(vec![
                                 CallingIntervalPolicy::builder()
-                                    .start("23:47")
-                                    .end("24:00")
+                                    .start("22:42")
+                                    .end("04:57")
                                     .build()
                                     .expect("Failed to build request"),
                             ])
@@ -40810,8 +40919,8 @@ async fn main() {
                             .end_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
                             .intervals(vec![
                                 CallingIntervalPolicy::builder()
-                                    .start("23:47")
-                                    .end("24:00")
+                                    .start("22:42")
+                                    .end("04:57")
                                     .build()
                                     .expect("Failed to build request"),
                             ])
@@ -41368,7 +41477,7 @@ async fn main() {
                 page_size: Some(100),
                 search: Some("search".to_string()),
                 status: Some(ListStatusQueryParameter2::InProgress),
-                disposition: Some(vec![]),
+                disposition: Some(vec![TerminalDisposition::CampaignEnded]),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
             },
@@ -41657,7 +41766,7 @@ async fn main() {
                 page_size: Some(100),
                 lead_id: Some("lead_id".to_string()),
                 status: Some(CallStatus::Queued),
-                call_result: Some(vec![]),
+                call_result: Some(vec![CallResult::Answered]),
                 stage: Some(ListStage::Queued),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -41795,7 +41904,7 @@ async fn main() {
         .export(
             "campaign_id",
             &CallsExportQueryRequest {
-                limit: Some(9),
+                limit: Some(5),
                 ..Default::default()
             },
             None,
@@ -42313,10 +42422,10 @@ async fn main() {
                             .language("language")
                             .model_family(ModelFamily::Turbo)
                             .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                            .stability(0.42)
-                            .speed(0.78)
-                            .similarity_boost(0.33)
-                            .clone_strength(0.41)
+                            .stability(0.56)
+                            .speed(0.83)
+                            .similarity_boost(0.04)
+                            .clone_strength(0.3)
                             .build()
                             .expect("Failed to build request"),
                     ]),
@@ -42333,7 +42442,7 @@ async fn main() {
                     stability: Some(0.5),
                     speed: Some(1_f64),
                     similarity_boost: Some(0.8),
-                    clone_strength: Some(0.91),
+                    clone_strength: Some(0.03),
                     text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                     pronunciation_dictionary_locators: Some(vec![
                         PydanticPronunciationDictionaryVersionLocator::builder()
@@ -42356,24 +42465,24 @@ async fn main() {
                 })
                 .turn(BaseTurnConfig {
                     turn_timeout: Some(7_f64),
-                    initial_wait_time: Some(5_f64),
+                    initial_wait_time: Some(1_f64),
                     silence_end_call_timeout: Some(-1_f64),
                     turn_eagerness: Some(TurnEagerness::Patient),
                     spelling_patience: Some(SpellingPatience::Auto),
-                    speculative_turn: Some(false),
+                    speculative_turn: Some(true),
                     retranscribe_on_turn_timeout: Some(false),
                     turn_model: Some(TurnModel::TurnV2),
                     interruption_ignore_terms: Some(vec!["interruption_ignore_terms".to_string()]),
                     interruption_ignore_term_languages: Some(vec![
                         "interruption_ignore_term_languages".to_string(),
                     ]),
-                    merge_with_default_ignore_terms: Some(true),
-                    transcribe_on_disabled_interruptions: Some(true),
+                    merge_with_default_ignore_terms: Some(false),
+                    transcribe_on_disabled_interruptions: Some(false),
                     ..Default::default()
                 })
                 .vad(VadConfig::default())
                 .conversation(ConversationConfigInput {
-                    text_only: Some(false),
+                    text_only: Some(true),
                     max_duration_seconds: Some(600),
                     client_events: Some(vec![ClientEvent::ConversationInitiationMetadata]),
                     file_input: Some(FileInputConfig {
@@ -42382,12 +42491,12 @@ async fn main() {
                         max_files_per_conversation: Some(10),
                         ..Default::default()
                     }),
-                    monitoring_enabled: Some(false),
+                    monitoring_enabled: Some(true),
                     monitoring_events: Some(vec![ClientEvent::ConversationInitiationMetadata]),
                     dtmf_input_settings: Some(DtmfInputConfig {
                         dtmf_input_timeout: Some(2_f64),
                         hash_terminator: Some(true),
-                        redact_input: Some(false),
+                        redact_input: Some(true),
                         ..Default::default()
                     }),
                     background_sound: Some(BackgroundSoundConfig {
@@ -42397,16 +42506,16 @@ async fn main() {
                         crossfade_loop: Some(true),
                         ..Default::default()
                     }),
-                    source_attribution: Some(true),
+                    source_attribution: Some(false),
                     ..Default::default()
                 })
                 .privacy(PrivacyConfigInput {
                     record_voice: Some(true),
                     retention_days: Some(-1),
-                    delete_transcript_and_pii: Some(true),
-                    delete_audio: Some(false),
-                    apply_to_existing_conversations: Some(false),
-                    zero_retention_mode: Some(false),
+                    delete_transcript_and_pii: Some(false),
+                    delete_audio: Some(true),
+                    apply_to_existing_conversations: Some(true),
+                    zero_retention_mode: Some(true),
                     conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                         enabled: Some(true),
                         entities: Some(vec![ConfigEntityType::Name]),
@@ -42431,7 +42540,7 @@ async fn main() {
                 .cascade_timeout_seconds(4_f64)
                 .tags(vec!["tags".to_string()])
                 .overrides(SpeechEngineConversationInitiationClientDataConfig {
-                    first_message: Some(false),
+                    first_message: Some(true),
                     ..Default::default()
                 })
                 .build()
@@ -42612,10 +42721,10 @@ async fn main() {
                             .language("language")
                             .model_family(ModelFamily::Turbo)
                             .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
-                            .stability(0.42)
-                            .speed(0.78)
-                            .similarity_boost(0.33)
-                            .clone_strength(0.41)
+                            .stability(0.56)
+                            .speed(0.83)
+                            .similarity_boost(0.04)
+                            .clone_strength(0.3)
                             .build()
                             .expect("Failed to build request"),
                     ]),
@@ -42632,7 +42741,7 @@ async fn main() {
                     stability: Some(0.5),
                     speed: Some(1_f64),
                     similarity_boost: Some(0.8),
-                    clone_strength: Some(0.91),
+                    clone_strength: Some(0.03),
                     text_normalisation_type: Some(TextNormalisationType::SystemPrompt),
                     pronunciation_dictionary_locators: Some(vec![
                         PydanticPronunciationDictionaryVersionLocator::builder()
@@ -42655,24 +42764,24 @@ async fn main() {
                 }),
                 turn: Some(BaseTurnConfig {
                     turn_timeout: Some(7_f64),
-                    initial_wait_time: Some(5_f64),
+                    initial_wait_time: Some(1_f64),
                     silence_end_call_timeout: Some(-1_f64),
                     turn_eagerness: Some(TurnEagerness::Patient),
                     spelling_patience: Some(SpellingPatience::Auto),
-                    speculative_turn: Some(false),
+                    speculative_turn: Some(true),
                     retranscribe_on_turn_timeout: Some(false),
                     turn_model: Some(TurnModel::TurnV2),
                     interruption_ignore_terms: Some(vec!["interruption_ignore_terms".to_string()]),
                     interruption_ignore_term_languages: Some(vec![
                         "interruption_ignore_term_languages".to_string(),
                     ]),
-                    merge_with_default_ignore_terms: Some(true),
-                    transcribe_on_disabled_interruptions: Some(true),
+                    merge_with_default_ignore_terms: Some(false),
+                    transcribe_on_disabled_interruptions: Some(false),
                     ..Default::default()
                 }),
                 vad: Some(VadConfig::default()),
                 conversation: Some(ConversationConfigInput {
-                    text_only: Some(false),
+                    text_only: Some(true),
                     max_duration_seconds: Some(600),
                     client_events: Some(vec![ClientEvent::ConversationInitiationMetadata]),
                     file_input: Some(FileInputConfig {
@@ -42681,12 +42790,12 @@ async fn main() {
                         max_files_per_conversation: Some(10),
                         ..Default::default()
                     }),
-                    monitoring_enabled: Some(false),
+                    monitoring_enabled: Some(true),
                     monitoring_events: Some(vec![ClientEvent::ConversationInitiationMetadata]),
                     dtmf_input_settings: Some(DtmfInputConfig {
                         dtmf_input_timeout: Some(2_f64),
                         hash_terminator: Some(true),
-                        redact_input: Some(false),
+                        redact_input: Some(true),
                         ..Default::default()
                     }),
                     background_sound: Some(BackgroundSoundConfig {
@@ -42696,16 +42805,16 @@ async fn main() {
                         crossfade_loop: Some(true),
                         ..Default::default()
                     }),
-                    source_attribution: Some(true),
+                    source_attribution: Some(false),
                     ..Default::default()
                 }),
                 privacy: Some(PrivacyConfigInput {
                     record_voice: Some(true),
                     retention_days: Some(-1),
-                    delete_transcript_and_pii: Some(true),
-                    delete_audio: Some(false),
-                    apply_to_existing_conversations: Some(false),
-                    zero_retention_mode: Some(false),
+                    delete_transcript_and_pii: Some(false),
+                    delete_audio: Some(true),
+                    apply_to_existing_conversations: Some(true),
+                    zero_retention_mode: Some(true),
                     conversation_history_redaction: Some(ConversationHistoryRedactionConfig {
                         enabled: Some(true),
                         entities: Some(vec![ConfigEntityType::Name]),
@@ -42727,10 +42836,10 @@ async fn main() {
                     ..Default::default()
                 }),
                 language: Some("language".to_string()),
-                cascade_timeout_seconds: Some(5.8),
+                cascade_timeout_seconds: Some(4.7),
                 tags: Some(vec!["tags".to_string()]),
                 overrides: Some(SpeechEngineConversationInitiationClientDataConfig {
-                    first_message: Some(false),
+                    first_message: Some(true),
                     ..Default::default()
                 }),
                 ..Default::default()
@@ -43575,8 +43684,8 @@ async fn main() {
         .create_2(
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionCreateProcedureRequest::builder()
-                .name(StrippedStr("ametincididunt".to_string()))
-                .trigger(StrippedStr("sintnulla veni".to_string()))
+                .name(StrippedStr("ea exe".to_string()))
+                .trigger(StrippedStr("exercitation a".to_string()))
                 .body(
                     "1. Ask for the caller\'s name and order number.\n2. Look up the order and read back its status.",
                 )
@@ -43677,8 +43786,8 @@ async fn main() {
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             "agtprc_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionUpdateProcedureRequest::builder()
-                .name(StrippedStr("consectetu".to_string()))
-                .trigger(StrippedStr("pariat".to_string()))
+                .name(StrippedStr("dolore l".to_string()))
+                .trigger(StrippedStr("eu no".to_string()))
                 .body(
                     "1. Ask for the caller\'s name and order number.\n2. Look up the order and read back its status.",
                 )
@@ -45290,9 +45399,9 @@ async fn main() {
                                 eagerness: Some(Eagerness::Low),
                                 create_response: Some(true),
                                 interrupt_response: Some(true),
-                                threshold: Some(5.31),
-                                prefix_padding_ms: Some(8),
-                                silence_duration_ms: Some(3),
+                                threshold: Some(4.42),
+                                prefix_padding_ms: Some(2),
+                                silence_duration_ms: Some(9),
                                 turn_timeout: Some(-1_f64),
                                 ..Default::default()
                             }),
@@ -45328,7 +45437,7 @@ async fn main() {
                 expires_after: Some(
                     ExpiresAfter::builder()
                         .anchor(Anchor::CreatedAt)
-                        .seconds(6)
+                        .seconds(5)
                         .build()
                         .expect("Failed to build request"),
                 ),
@@ -45415,7 +45524,7 @@ async fn main() {
                 .body(
                     BodyGenerateCompositionPlanV1MusicPlanPost::builder()
                         .prompt("prompt")
-                        .music_length_ms(389660)
+                        .music_length_ms(218434)
                         .model_id(MusicModelId::MusicV1)
                         .build()
                         .expect("Failed to build request"),
@@ -45647,7 +45756,7 @@ async fn main() {
         .finetunes
         .create(
             &BodyCreateMusicFinetuneV1MusicFinetunesPost::builder()
-                .name("ipsum aute anim laboris cillum")
+                .name("do amet non id")
                 .primary_genre("primary_genre")
                 .files(vec![vec![]])
                 .tags(vec!["tags".to_string()])
@@ -45802,7 +45911,7 @@ async fn main() {
         .update(
             "finetune_id",
             &UpdateMusicFinetuneRequestModel {
-                name: Some("in veniam".to_string()),
+                name: Some("nostrud irure enim cillum".to_string()),
                 tags: Some(vec!["tags".to_string()]),
                 primary_genre: Some("primary_genre".to_string()),
                 visibility: Some(BodyCreateMusicFinetuneV1MusicFinetunesPostVisibility::Private),
@@ -45964,8 +46073,8 @@ async fn main() {
         .list(
             &OrdersListQueryRequest {
                 page_size: Some(20),
-                offset: Some(2),
-                status: Some(vec![]),
+                offset: Some(10),
+                status: Some(vec![OrderState::Open]),
                 start_date: Some("2023-07-20T21:03:51.582Z".to_string()),
                 end_date: Some("2023-07-20T21:03:51.582Z".to_string()),
                 ..Default::default()
@@ -46086,7 +46195,7 @@ async fn main() {
         .orders
         .create(
             Some(&Some(CreateOrderRequest {
-                sandbox: Some(false),
+                sandbox: Some(true),
                 ..Default::default()
             })),
             None,
@@ -46164,7 +46273,7 @@ async fn main() {
     client
         .orders
         .get(
-            &OrderId("prodorder_q8w2dbfa16xgtlvpoa0wum7qoh".to_string()),
+            &OrderId("prodorder_vocexr04wxus25fg4ia9atfzun".to_string()),
             None,
         )
         .await;
@@ -46240,7 +46349,7 @@ async fn main() {
     client
         .orders
         .update(
-            &OrderId("prodorder_tw8bnuc48f630g94hprtlwlnem".to_string()),
+            &OrderId("prodorder_nixfsew3tvij8uzea42iqdmjob".to_string()),
             &BodyUpdateOrderV1ProductionsOrdersOrderIdPatch::builder()
                 .request(
                     UpdateOrderRequest::builder()
@@ -46333,7 +46442,7 @@ async fn main() {
     client
         .orders
         .submit(
-            &OrderId("prodorder_az733zm9ev09qlameu8iq1qrkh".to_string()),
+            &OrderId("prodorder_zwjdn1dn7qbr3gamncisgk6c1d".to_string()),
             None,
         )
         .await;
@@ -46410,7 +46519,7 @@ async fn main() {
     client
         .media
         .register(
-            &OrderId("prodorder_uiip38fw6oaxf9gz3cnnuplz2m".to_string()),
+            &OrderId("prodorder_f4bec8msxt6qz46ok5fhzo2dku".to_string()),
             &BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPost::builder()
                 .declared_language("declared_language")
                 .media(vec![])
@@ -46502,8 +46611,8 @@ async fn main() {
     client
         .media
         .get(
-            &OrderId("prodorder_7mbbxwjo9h420zonqxj8zubn7r".to_string()),
-            &MediaId("prodmedia_xrwpqq6wvf21lwlhim1dh7g4qh".to_string()),
+            &OrderId("prodorder_1ee3227nsadhy4rizmu7wassdw".to_string()),
+            &MediaId("prodmedia_j9zzcgpl3ovy2piv18dray9evy".to_string()),
             None,
         )
         .await;
@@ -46588,19 +46697,19 @@ async fn main() {
     client
         .items
         .upsert(
-            &OrderId("prodorder_bcluxwmxxkxpu9nsh2o0ihren6".to_string()),
+            &OrderId("prodorder_xgtlvpoa0wum7qohp42vqjk180".to_string()),
             &BodyUpsertOrderItemV1ProductionsOrdersOrderIdItemsPost::builder()
                 .request(
                     UpsertOrderItemRequest::builder()
                         .item(OrderItemRequestInput::Dub {
                             data: DubOrderItemRequest::builder()
                                 .media_id(MediaId(
-                                    "prodmedia_h2101ek0y4z82n6ytjig82mvel".to_string(),
+                                    "prodmedia_5pg5hiy2kygkr6rykg1lupzli4".to_string(),
                                 ))
                                 .source_language("source_language")
                                 .destination_languages(vec!["destination_languages".to_string()])
                                 .include_captions(false)
-                                .include_source_captions(true)
+                                .include_source_captions(false)
                                 .instructions("instructions")
                                 .captions_sdh(false)
                                 .build()
@@ -46694,8 +46803,8 @@ async fn main() {
     client
         .items
         .remove(
-            &OrderId("prodorder_ednllfuhozfltew590ksm7mw9a".to_string()),
-            &ItemId("proditem_jnzx94trynt2tmoo3iua9vgcda".to_string()),
+            &OrderId("prodorder_z82n6ytjig82mvelhzk7fj17br".to_string()),
+            &ItemId("proditem_z8jh3g5e8j249pxq0junwpjgaa".to_string()),
             None,
         )
         .await;
@@ -46780,7 +46889,7 @@ async fn main() {
     client
         .deliverables
         .list(
-            &OrderId("prodorder_7q8apf4tz9uai2rdk14zoq9yw4".to_string()),
+            &OrderId("prodorder_iip38fw6oaxf9gz3cnnuplz2mx".to_string()),
             None,
         )
         .await;
@@ -47808,7 +47917,7 @@ async fn main() {
                     )
                     .aspect_ratio(BytedanceSeedance2FastRequestAspectRatio::Auto)
                     .duration_secs(5)
-                    .seed(4)
+                    .seed(0)
                     .generate_audio(true)
                     .start_frame(ImageReference::Asset {
                         data: StaticAssetReference::builder()
@@ -48119,7 +48228,7 @@ async fn main() {
                             .expect("Failed to build request"),
                     }])
                     .aspect_ratio(BytedanceSeedream5LiteRequestAspectRatio::Auto)
-                    .seed(5)
+                    .seed(0)
                     .resolution(BytedanceSeedream5LiteRequestResolution::Num2K)
                     .build()
                     .expect("Failed to build request"),
@@ -49164,14 +49273,14 @@ async fn main() {
             &ReceptionCreateAssetRequest::builder()
                 .groups(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("consectetur e".to_string()))
-                        .rank(4)
+                        .label(StrippedStr("ipsum cu".to_string()))
+                        .rank(0)
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .ungrouped_rank(6)
-                .name(StrippedStr("velit".to_string()))
-                .description(StrippedStr("qui veniam ".to_string()))
+                .ungrouped_rank(0)
+                .name(StrippedStr("ut in ex".to_string()))
+                .description(StrippedStr("voluptat".to_string()))
                 .is_active(true)
                 .available_hours(WorkingHours {
                     hours: Some(HashMap::from([(
@@ -49179,7 +49288,7 @@ async fn main() {
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(6)
+                                .start_minute(5)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -49191,7 +49300,7 @@ async fn main() {
                 })
                 .photo_url("https://male-coal.com/")
                 .location_id("location_id")
-                .customer_facing_name(StrippedStr("ut sed elit".to_string()))
+                .customer_facing_name(StrippedStr("dolor".to_string()))
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -49367,14 +49476,14 @@ async fn main() {
             &ReceptionUpdateAssetRequestPatch {
                 groups: Some(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("consectetur e".to_string()))
-                        .rank(4)
+                        .label(StrippedStr("ipsum cu".to_string()))
+                        .rank(0)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                ungrouped_rank: Some(3),
-                name: Some(StrippedStr("amete".to_string())),
-                description: Some(StrippedStr("pariat".to_string())),
+                ungrouped_rank: Some(8),
+                name: Some(StrippedStr("enim ul".to_string())),
+                description: Some(StrippedStr("pariatur ".to_string())),
                 is_active: Some(true),
                 available_hours: Some(WorkingHours {
                     hours: Some(HashMap::from([(
@@ -49382,7 +49491,7 @@ async fn main() {
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(6)
+                                .start_minute(5)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -49394,7 +49503,7 @@ async fn main() {
                 }),
                 photo_url: Some("https://male-coal.com/".to_string()),
                 location_id: Some("location_id".to_string()),
-                customer_facing_name: Some(StrippedStr("do pa".to_string())),
+                customer_facing_name: Some(StrippedStr("dolor".to_string())),
                 ..Default::default()
             },
             "xi-workspace-id".to_string(),
@@ -49576,8 +49685,8 @@ async fn main() {
         .usage
         .get_usage_by_product_over_time(
             &BodyGetWorkspaceUsageV1WorkspaceAnalyticsQueryUsageByProductOverTimePost::builder()
-                .start_time(716590707768701)
-                .end_time(6591121939594520)
+                .start_time(2311779635461293)
+                .end_time(587011754995981)
                 .interval_seconds(60)
                 .group_by(vec![
                     BodyGetWorkspaceUsageV1WorkspaceAnalyticsQueryUsageByProductOverTimePostGroupByItem::ProductType,
@@ -49669,9 +49778,9 @@ async fn main() {
         .usage
         .get_usage(
             &BodyGetWorkspaceCostUsageV1WorkspaceAnalyticsUsagePost::builder()
-                .start_time(298351135570565)
-                .end_time(7828834351137042)
-                .interval_seconds(6509554547760000)
+                .start_time(3700831597212185)
+                .end_time(6599812297071380)
+                .interval_seconds(5258698093987200)
                 .group_by(vec![
                     BodyGetWorkspaceCostUsageV1WorkspaceAnalyticsUsagePostGroupByItem::Model,
                 ])
@@ -49764,8 +49873,8 @@ async fn main() {
         .requests
         .get(
             Some(&BodyListApiRequestsV1WorkspaceAnalyticsRequestsPost {
-                start_time: Some(31362851225611),
-                end_time: Some(3841650168223277),
+                start_time: Some(5996244761066775),
+                end_time: Some(6420567498530413),
                 limit: Some(100),
                 sort: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 filters: Some(vec![
@@ -49858,7 +49967,7 @@ async fn main() {
             &ServicesListQueryRequest {
                 staff_id: Some("staff_id".to_string()),
                 asset_id: Some("asset_id".to_string()),
-                is_active: Some(false),
+                is_active: Some(true),
                 kind: Some(ReceptionServiceKind::Classic),
                 ..Default::default()
             },
@@ -49983,9 +50092,9 @@ async fn main() {
                 .intake_questions(vec![
                     ReceptionIntakeQuestion::builder()
                         .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .label(StrippedStr("tempor id sint".to_string()))
+                        .label(StrippedStr("tempor ex".to_string()))
                         .kind(IntakeQuestionKind::Text)
-                        .options(vec![StrippedStr("conse".to_string())])
+                        .options(vec![StrippedStr("quis Duis".to_string())])
                         .required(true)
                         .is_active(true)
                         .build()
@@ -49993,19 +50102,19 @@ async fn main() {
                 ])
                 .groups(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("consectetur e".to_string()))
-                        .rank(4)
+                        .label(StrippedStr("ipsum cu".to_string()))
+                        .rank(0)
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .ungrouped_rank(4)
-                .name(StrippedStr("dolor".to_string()))
-                .description(StrippedStr("laborum".to_string()))
+                .ungrouped_rank(8)
+                .name(StrippedStr("ipsum cillum".to_string()))
+                .description(StrippedStr("eiusmod ".to_string()))
                 .variants(vec![
                     ReceptionServiceVariant::builder()
                         .id("variant_4801jx8k3m5n7p9q2r4s6t8v0w2y")
                         .duration_minutes(60)
-                        .price(4.08)
+                        .price(1.68)
                         .is_active(true)
                         .build()
                         .expect("Failed to build request"),
@@ -50016,15 +50125,15 @@ async fn main() {
                 .add_ons(vec![
                     ReceptionAddOn::builder()
                         .id("addon_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .name(StrippedStr("adipi".to_string()))
-                        .description(StrippedStr("culpa eu ir".to_string()))
+                        .name(StrippedStr("irure".to_string()))
+                        .description(StrippedStr("sint proi".to_string()))
                         .add_duration_minutes(10)
                         .add_price(5_f64)
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .max_participants(88)
-                .capacity(2)
+                .max_participants(137)
+                .capacity(5)
                 .is_active(true)
                 .any_staff_member(true)
                 .staff_ids(vec!["staff_ids".to_string()])
@@ -50038,12 +50147,12 @@ async fn main() {
                 .promotions(vec![
                     ReceptionServicePromotion::builder()
                         .id("promo_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .name(StrippedStr("nostrud id".to_string()))
+                        .name(StrippedStr("incididunt mag".to_string()))
                         .target(PromotionTarget::Service)
                         .variant_id("variant_id")
                         .add_on_id("add_on_id")
                         .promotional_price(35_f64)
-                        .days_of_week(vec![6])
+                        .days_of_week(vec![0])
                         .start_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
                         .end_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
                         .is_active(true)
@@ -50227,9 +50336,9 @@ async fn main() {
                 intake_questions: Some(vec![
                     ReceptionIntakeQuestion::builder()
                         .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .label(StrippedStr("tempor id sint".to_string()))
+                        .label(StrippedStr("tempor ex".to_string()))
                         .kind(IntakeQuestionKind::Text)
-                        .options(vec![StrippedStr("conse".to_string())])
+                        .options(vec![StrippedStr("quis Duis".to_string())])
                         .required(true)
                         .is_active(true)
                         .build()
@@ -50237,19 +50346,19 @@ async fn main() {
                 ]),
                 groups: Some(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("consectetur e".to_string()))
-                        .rank(4)
+                        .label(StrippedStr("ipsum cu".to_string()))
+                        .rank(0)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                ungrouped_rank: Some(5),
-                name: Some(StrippedStr("incidi".to_string())),
-                description: Some(StrippedStr("in aliqui".to_string())),
+                ungrouped_rank: Some(7),
+                name: Some(StrippedStr("consequ".to_string())),
+                description: Some(StrippedStr("irure".to_string())),
                 variants: Some(vec![
                     ReceptionServiceVariant::builder()
                         .id("variant_4801jx8k3m5n7p9q2r4s6t8v0w2y")
                         .duration_minutes(60)
-                        .price(4.08)
+                        .price(1.68)
                         .is_active(true)
                         .build()
                         .expect("Failed to build request"),
@@ -50260,42 +50369,42 @@ async fn main() {
                 add_ons: Some(vec![
                     ReceptionAddOn::builder()
                         .id("addon_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .name(StrippedStr("adipi".to_string()))
-                        .description(StrippedStr("culpa eu ir".to_string()))
+                        .name(StrippedStr("irure".to_string()))
+                        .description(StrippedStr("sint proi".to_string()))
                         .add_duration_minutes(10)
                         .add_price(5_f64)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                max_participants: Some(171),
+                max_participants: Some(142),
                 capacity: Some(3),
-                is_active: Some(true),
-                any_staff_member: Some(true),
+                is_active: Some(false),
+                any_staff_member: Some(false),
                 staff_ids: Some(vec!["staff_ids".to_string()]),
                 asset_ids: Some(vec!["asset_ids".to_string()]),
                 advance_booking_minutes: Some(10080),
                 location_ids: Some(vec!["location_ids".to_string()]),
                 display_on_booking_page: Some(true),
                 travel_minutes: Some(15),
-                travel_before: Some(false),
-                travel_after: Some(true),
+                travel_before: Some(true),
+                travel_after: Some(false),
                 promotions: Some(vec![
                     ReceptionServicePromotion::builder()
                         .id("promo_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .name(StrippedStr("nostrud id".to_string()))
+                        .name(StrippedStr("incididunt mag".to_string()))
                         .target(PromotionTarget::Service)
                         .variant_id("variant_id")
                         .add_on_id("add_on_id")
                         .promotional_price(35_f64)
-                        .days_of_week(vec![6])
+                        .days_of_week(vec![0])
                         .start_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
                         .end_date(NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap())
                         .is_active(true)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                duration_minutes: Some(9907),
-                price: Some(9.3),
+                duration_minutes: Some(35122),
+                price: Some(0.15),
                 ..Default::default()
             },
             "xi-workspace-id".to_string(),
@@ -50477,15 +50586,15 @@ async fn main() {
         .confirm_update(
             "service_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ConfirmUpdateRequest::builder()
-                .reprice(false)
+                .reprice(true)
                 .body(ReceptionConfirmServiceUpdateRequest {
                     pricing_mode: Some(PricingMode::Fixed),
                     intake_questions: Some(vec![
                         ReceptionIntakeQuestion::builder()
                             .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                            .label(StrippedStr("tempor id sint".to_string()))
+                            .label(StrippedStr("tempor ex".to_string()))
                             .kind(IntakeQuestionKind::Text)
-                            .options(vec![StrippedStr("conse".to_string())])
+                            .options(vec![StrippedStr("quis Duis".to_string())])
                             .required(true)
                             .is_active(true)
                             .build()
@@ -50493,19 +50602,19 @@ async fn main() {
                     ]),
                     groups: Some(vec![
                         ReceptionGroupMembership::builder()
-                            .label(StrippedStr("consectetur e".to_string()))
-                            .rank(4)
+                            .label(StrippedStr("ipsum cu".to_string()))
+                            .rank(0)
                             .build()
                             .expect("Failed to build request"),
                     ]),
-                    ungrouped_rank: Some(2),
-                    name: Some(StrippedStr("dolore venia".to_string())),
-                    description: Some(StrippedStr("nisireprehen".to_string())),
+                    ungrouped_rank: Some(7),
+                    name: Some(StrippedStr("dolor".to_string())),
+                    description: Some(StrippedStr("irure ".to_string())),
                     variants: Some(vec![
                         ReceptionServiceVariant::builder()
                             .id("variant_4801jx8k3m5n7p9q2r4s6t8v0w2y")
                             .duration_minutes(60)
-                            .price(4.08)
+                            .price(1.68)
                             .is_active(true)
                             .build()
                             .expect("Failed to build request"),
@@ -50516,34 +50625,34 @@ async fn main() {
                     add_ons: Some(vec![
                         ReceptionAddOn::builder()
                             .id("addon_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                            .name(StrippedStr("adipi".to_string()))
-                            .description(StrippedStr("culpa eu ir".to_string()))
+                            .name(StrippedStr("irure".to_string()))
+                            .description(StrippedStr("sint proi".to_string()))
                             .add_duration_minutes(10)
                             .add_price(5_f64)
                             .build()
                             .expect("Failed to build request"),
                     ]),
-                    max_participants: Some(103),
-                    capacity: Some(5),
-                    is_active: Some(false),
-                    any_staff_member: Some(true),
+                    max_participants: Some(67),
+                    capacity: Some(2),
+                    is_active: Some(true),
+                    any_staff_member: Some(false),
                     staff_ids: Some(vec!["staff_ids".to_string()]),
                     asset_ids: Some(vec!["asset_ids".to_string()]),
                     advance_booking_minutes: Some(10080),
                     location_ids: Some(vec!["location_ids".to_string()]),
-                    display_on_booking_page: Some(true),
+                    display_on_booking_page: Some(false),
                     travel_minutes: Some(15),
-                    travel_before: Some(false),
+                    travel_before: Some(true),
                     travel_after: Some(false),
                     promotions: Some(vec![
                         ReceptionServicePromotion::builder()
                             .id("promo_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                            .name(StrippedStr("nostrud id".to_string()))
+                            .name(StrippedStr("incididunt mag".to_string()))
                             .target(PromotionTarget::Service)
                             .variant_id("variant_id")
                             .add_on_id("add_on_id")
                             .promotional_price(35_f64)
-                            .days_of_week(vec![6])
+                            .days_of_week(vec![0])
                             .start_date(
                                 NaiveDate::parse_from_str("2023-01-15", "%Y-%m-%d").unwrap(),
                             )
@@ -50552,8 +50661,8 @@ async fn main() {
                             .build()
                             .expect("Failed to build request"),
                     ]),
-                    duration_minutes: Some(35075),
-                    price: Some(8.34),
+                    duration_minutes: Some(28750),
+                    price: Some(6.99),
                     ..Default::default()
                 })
                 .build()
@@ -50777,9 +50886,9 @@ async fn main() {
                 .intake_questions(vec![
                     ReceptionIntakeQuestion::builder()
                         .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .label(StrippedStr("tempor id sint".to_string()))
+                        .label(StrippedStr("tempor ex".to_string()))
                         .kind(IntakeQuestionKind::Text)
-                        .options(vec![StrippedStr("conse".to_string())])
+                        .options(vec![StrippedStr("quis Duis".to_string())])
                         .required(true)
                         .is_active(true)
                         .build()
@@ -50787,20 +50896,20 @@ async fn main() {
                 ])
                 .groups(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("consectetur e".to_string()))
-                        .rank(4)
+                        .label(StrippedStr("ipsum cu".to_string()))
+                        .rank(0)
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .ungrouped_rank(5)
-                .name(StrippedStr("invelit tem".to_string()))
-                .description(StrippedStr("non irure ad".to_string()))
-                .price(2.05)
+                .ungrouped_rank(1)
+                .name(StrippedStr("proid".to_string()))
+                .description(StrippedStr("nostrud ve".to_string()))
+                .price(1.86)
                 .is_active(true)
                 .orderable(true)
                 .allowed_fulfillment_types(vec![OrderFulfillmentType::Pickup])
                 .location_ids(vec!["location_ids".to_string()])
-                .track_quantity(true)
+                .track_quantity(false)
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -50978,9 +51087,9 @@ async fn main() {
                 intake_questions: Some(vec![
                     ReceptionIntakeQuestion::builder()
                         .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .label(StrippedStr("tempor id sint".to_string()))
+                        .label(StrippedStr("tempor ex".to_string()))
                         .kind(IntakeQuestionKind::Text)
-                        .options(vec![StrippedStr("conse".to_string())])
+                        .options(vec![StrippedStr("quis Duis".to_string())])
                         .required(true)
                         .is_active(true)
                         .build()
@@ -50988,20 +51097,20 @@ async fn main() {
                 ]),
                 groups: Some(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("consectetur e".to_string()))
-                        .rank(4)
+                        .label(StrippedStr("ipsum cu".to_string()))
+                        .rank(0)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                ungrouped_rank: Some(3),
-                name: Some(StrippedStr("sint ".to_string())),
-                description: Some(StrippedStr("non labo".to_string())),
-                price: Some(5.49),
+                ungrouped_rank: Some(9),
+                name: Some(StrippedStr("culpa ani".to_string())),
+                description: Some(StrippedStr("ex cillum o".to_string())),
+                price: Some(1.22),
                 is_active: Some(false),
                 orderable: Some(false),
                 allowed_fulfillment_types: Some(vec![OrderFulfillmentType::Pickup]),
                 location_ids: Some(vec!["location_ids".to_string()]),
-                track_quantity: Some(false),
+                track_quantity: Some(true),
                 ..Default::default()
             },
             "xi-workspace-id".to_string(),
@@ -51453,17 +51562,17 @@ async fn main() {
             &ReceptionCreateStaffRequest::builder()
                 .groups(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("consectetur e".to_string()))
-                        .rank(4)
+                        .label(StrippedStr("ipsum cu".to_string()))
+                        .rank(0)
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .ungrouped_rank(4)
-                .name(StrippedStr("proident".to_string()))
-                .description(StrippedStr("non proiden".to_string()))
+                .ungrouped_rank(6)
+                .name(StrippedStr("aute si".to_string()))
+                .description(StrippedStr("sint moll".to_string()))
                 .is_active(true)
                 .email("jane@example.com")
-                .phone(PhoneNumberOptional("dolore culpa".to_string()))
+                .phone(PhoneNumberOptional("offic".to_string()))
                 .sms_notifications_opted_in(false)
                 .photo_url("https://male-coal.com/")
                 .location_id("location_id")
@@ -51473,7 +51582,7 @@ async fn main() {
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(6)
+                                .start_minute(5)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -51484,7 +51593,7 @@ async fn main() {
                     ..Default::default()
                 })
                 .display_on_booking_page(true)
-                .customer_facing_name(StrippedStr("magna proident ".to_string()))
+                .customer_facing_name(StrippedStr("Ut Ex".to_string()))
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -51660,18 +51769,18 @@ async fn main() {
             &ReceptionUpdateStaffRequestPatch {
                 groups: Some(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("consectetur e".to_string()))
-                        .rank(4)
+                        .label(StrippedStr("ipsum cu".to_string()))
+                        .rank(0)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                ungrouped_rank: Some(1),
-                name: Some(StrippedStr("enim in".to_string())),
-                description: Some(StrippedStr("incidi".to_string())),
+                ungrouped_rank: Some(2),
+                name: Some(StrippedStr("deserunt".to_string())),
+                description: Some(StrippedStr("et adipis".to_string())),
                 is_active: Some(false),
                 email: Some("jane@example.com".to_string()),
-                phone: Some(PhoneNumberOptional("esse ut ".to_string())),
-                sms_notifications_opted_in: Some(true),
+                phone: Some(PhoneNumberOptional("consequat".to_string())),
+                sms_notifications_opted_in: Some(false),
                 photo_url: Some("https://male-coal.com/".to_string()),
                 location_id: Some("location_id".to_string()),
                 working_hours: Some(WorkingHours {
@@ -51680,7 +51789,7 @@ async fn main() {
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(6)
+                                .start_minute(5)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -51691,7 +51800,7 @@ async fn main() {
                     ..Default::default()
                 }),
                 display_on_booking_page: Some(false),
-                customer_facing_name: Some(StrippedStr("minim ".to_string())),
+                customer_facing_name: Some(StrippedStr("exercit".to_string())),
                 ..Default::default()
             },
             "xi-workspace-id".to_string(),
@@ -51948,28 +52057,28 @@ async fn main() {
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionUpdateCustomerFacingAgentRequest {
                 config: Some(ReceptionCustomerFacingConfigPatch {
-                    additional_instructions: Some(StrippedStr("sint aliqui".to_string())),
-                    tone_traits: Some(vec![StrippedStr("in velit nu".to_string())]),
-                    details_to_collect: Some(vec![StrippedStr("utdo velit".to_string())]),
+                    additional_instructions: Some(StrippedStr("aute repre".to_string())),
+                    tone_traits: Some(vec![StrippedStr("minim ".to_string())]),
+                    details_to_collect: Some(vec![StrippedStr("Duis dolor n".to_string())]),
                     llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
                     reasoning_effort: Some(LlmReasoningEffort::None),
-                    disable_rag: Some(true),
-                    background_voice_detection: Some(true),
+                    disable_rag: Some(false),
+                    background_voice_detection: Some(false),
                     turn_eagerness: Some(ReceptionTurnEagerness::Patient),
                     voice_id: Some("21m00Tcm4TlvDq8ikWAM".to_string()),
-                    language: Some(SupportedLang("dolore eu ".to_string())),
-                    additional_languages: Some(vec![SupportedLang("indolor cil".to_string())]),
+                    language: Some(SupportedLang("dolor l".to_string())),
+                    additional_languages: Some(vec![SupportedLang("pariatu".to_string())]),
                     first_message: Some(
                         "Hi, thanks for calling Bloom Salon! How can I help you today?".to_string(),
                     ),
                     first_message_mode: Some(FirstMessageMode::Interruptible),
-                    enable_end_call_tool: Some(false),
-                    enable_skip_turn_tool: Some(false),
-                    enable_play_keypad_touch_tone_tool: Some(true),
+                    enable_end_call_tool: Some(true),
+                    enable_skip_turn_tool: Some(true),
+                    enable_play_keypad_touch_tone_tool: Some(false),
                     hide_caller_number_on_transfers: Some(true),
-                    record_after_transfers: Some(true),
-                    enable_secure_mode: Some(true),
-                    enable_spam_protection: Some(true),
+                    record_after_transfers: Some(false),
+                    enable_secure_mode: Some(false),
+                    enable_spam_protection: Some(false),
                     ..Default::default()
                 }),
                 name: Some("name".to_string()),
@@ -52167,10 +52276,10 @@ async fn main() {
         .create(
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionCreateTransferRuleRequest::builder()
-                .label(StrippedStr("veniam enim r".to_string()))
-                .phone_number(PhoneNumber("culpa".to_string()))
-                .condition(StrippedStr("nostrud".to_string()))
-                .post_dial_digits("2663")
+                .label(StrippedStr("commod".to_string()))
+                .phone_number(PhoneNumber("in sin".to_string()))
+                .condition(StrippedStr("consec".to_string()))
+                .post_dial_digits("77*092")
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -52268,10 +52377,10 @@ async fn main() {
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             "transferrule_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionUpdateTransferRuleRequest::builder()
-                .label(StrippedStr("minim velit fug".to_string()))
-                .phone_number(PhoneNumber("elit consequ".to_string()))
-                .condition(StrippedStr("anim in occa".to_string()))
-                .post_dial_digits("#0922")
+                .label(StrippedStr("veniam qui".to_string()))
+                .phone_number(PhoneNumber("laboris dolor".to_string()))
+                .condition(StrippedStr("pariatu".to_string()))
+                .post_dial_digits("*441")
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -52470,8 +52579,8 @@ async fn main() {
         .holidays
         .list(
             &HolidaysListQueryRequest {
-                start_unix: Some(4),
-                end_unix: Some(6),
+                start_unix: Some(5),
+                end_unix: Some(5),
                 time_off_type: Some(TimeOffType::Staff),
                 resource_id: Some("resource_id".to_string()),
                 location_id: Some("location_id".to_string()),
@@ -52623,7 +52732,7 @@ async fn main() {
                 .override_hours(vec![
                     TimeRangeModel::builder()
                         .start_hour(9)
-                        .start_minute(6)
+                        .start_minute(5)
                         .end_hour(17)
                         .end_minute(30)
                         .build()
@@ -52827,7 +52936,7 @@ async fn main() {
                 override_hours: Some(vec![
                     TimeRangeModel::builder()
                         .start_hour(9)
-                        .start_minute(6)
+                        .start_minute(5)
                         .end_hour(17)
                         .end_minute(30)
                         .build()
@@ -53088,16 +53197,16 @@ async fn main() {
         .locations
         .create(
             &ReceptionLocationRequest::builder()
-                .name(StrippedStr("suntinci".to_string()))
-                .address(StrippedStr("tempor ".to_string()))
-                .notes(StrippedStr("sit off".to_string()))
+                .name(StrippedStr("reprehenderit e".to_string()))
+                .address(StrippedStr("aliquip adip".to_string()))
+                .notes(StrippedStr("aliquip au".to_string()))
                 .operating_hours(WorkingHours {
                     hours: Some(HashMap::from([(
                         "key".to_string(),
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(6)
+                                .start_minute(5)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -53107,7 +53216,7 @@ async fn main() {
                     timezone: Some("timezone".to_string()),
                     ..Default::default()
                 })
-                .customer_facing_name(StrippedStr("UtDuis".to_string()))
+                .customer_facing_name(StrippedStr("sit ut c".to_string()))
                 .max_concurrent_appointments(3)
                 .is_active(true)
                 .build()
@@ -53283,16 +53392,16 @@ async fn main() {
         .update(
             "location_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionLocationRequestPatch {
-                name: Some(StrippedStr("culpa".to_string())),
-                address: Some(StrippedStr("incididunt".to_string())),
-                notes: Some(StrippedStr("repre".to_string())),
+                name: Some(StrippedStr("idquis d".to_string())),
+                address: Some(StrippedStr("ullamco q".to_string())),
+                notes: Some(StrippedStr("sunt pr".to_string())),
                 operating_hours: Some(WorkingHours {
                     hours: Some(HashMap::from([(
                         "key".to_string(),
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(6)
+                                .start_minute(5)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -53302,9 +53411,9 @@ async fn main() {
                     timezone: Some("timezone".to_string()),
                     ..Default::default()
                 }),
-                customer_facing_name: Some(StrippedStr("veniam elit nul".to_string())),
+                customer_facing_name: Some(StrippedStr("consequat ".to_string())),
                 max_concurrent_appointments: Some(3),
-                is_active: Some(true),
+                is_active: Some(false),
                 ..Default::default()
             },
             "xi-workspace-id".to_string(),
@@ -53571,7 +53680,7 @@ async fn main() {
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(6)
+                                .start_minute(5)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -54189,6 +54298,7 @@ async fn main() {
             &ReceptionProvisionResellerWorkspaceRequest::builder()
                 .business_name("business_name")
                 .vertical(ReceptionVertical::SalonBarbershop)
+                .charge_customer(true)
                 .subscription(
                     ProvisionResellerWorkspaceSubscription::builder()
                         .tier_id("tier_id")

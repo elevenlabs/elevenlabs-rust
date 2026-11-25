@@ -6,6 +6,7 @@ pub enum ObjectJsonSchemaPropertyOutputProperties {
     LiteralJsonSchemaProperty(LiteralJsonSchemaProperty),
     ObjectJsonSchemaPropertyOutput(ObjectJsonSchemaPropertyOutput),
     ArrayJsonSchemaPropertyOutput(ArrayJsonSchemaPropertyOutput),
+    AnyOfJsonSchemaPropertyOutput(AnyOfJsonSchemaPropertyOutput),
 }
 
 impl<'de> serde::Deserialize<'de> for ObjectJsonSchemaPropertyOutputProperties {
@@ -144,6 +145,12 @@ impl<'de> serde::Deserialize<'de> for ObjectJsonSchemaPropertyOutputProperties {
                     return Ok(Self::ArrayJsonSchemaPropertyOutput(parsed));
                 }
             }
+
+            if let Ok(parsed) =
+                serde_json::from_value::<AnyOfJsonSchemaPropertyOutput>(value.clone())
+            {
+                return Ok(Self::AnyOfJsonSchemaPropertyOutput(parsed));
+            }
         }
 
         Err(serde::de::Error::custom(
@@ -206,6 +213,24 @@ impl ObjectJsonSchemaPropertyOutputProperties {
             _ => None,
         }
     }
+
+    pub fn is_any_of_json_schema_property_output(&self) -> bool {
+        matches!(self, Self::AnyOfJsonSchemaPropertyOutput(_))
+    }
+
+    pub fn as_any_of_json_schema_property_output(&self) -> Option<&AnyOfJsonSchemaPropertyOutput> {
+        match self {
+            Self::AnyOfJsonSchemaPropertyOutput(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_any_of_json_schema_property_output(self) -> Option<AnyOfJsonSchemaPropertyOutput> {
+        match self {
+            Self::AnyOfJsonSchemaPropertyOutput(value) => Some(value),
+            _ => None,
+        }
+    }
 }
 
 impl fmt::Display for ObjectJsonSchemaPropertyOutputProperties {
@@ -222,6 +247,11 @@ impl fmt::Display for ObjectJsonSchemaPropertyOutputProperties {
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
             ),
             Self::ArrayJsonSchemaPropertyOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::AnyOfJsonSchemaPropertyOutput(value) => write!(
                 f,
                 "{}",
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))

@@ -17,6 +17,9 @@ pub struct BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPost {
     /// The MIME type for URL-sourced media (e.g. 'video/mp4'). Required when using media_url.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_url_content_type: Option<String>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub media_file_name: Option<String>,
 }
 
 impl BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPost {
@@ -33,6 +36,7 @@ pub struct BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPostBuilder {
     media_url: Option<String>,
     media_url_filename: Option<String>,
     media_url_content_type: Option<String>,
+    media_file_name: Option<String>,
 }
 
 impl BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPostBuilder {
@@ -61,6 +65,11 @@ impl BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPostBuilder {
         self
     }
 
+    pub fn media_file_name(mut self, value: impl Into<String>) -> Self {
+        self.media_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPost`].
     /// This method will fail if any of the following fields are not set:
     /// - [`declared_language`](BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPostBuilder::declared_language)
@@ -73,6 +82,7 @@ impl BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPostBuilder {
             media_url: self.media_url,
             media_url_filename: self.media_url_filename,
             media_url_content_type: self.media_url_content_type,
+            media_file_name: self.media_file_name,
         })
     }
 }
@@ -82,13 +92,14 @@ impl BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPost {
         let mut form = reqwest::multipart::Form::new();
         form = form.text("declared_language", self.declared_language.to_string());
         if let Some(value) = self.media {
-            form = form.part(
-                "media",
+            form = form.part("media", {
+                let file_name = self.media_file_name.unwrap_or_else(|| "media".to_string());
+                let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
                 reqwest::multipart::Part::bytes(value)
-                    .file_name("media")
-                    .mime_str("application/octet-stream")
-                    .expect("application/octet-stream is a valid MIME type"),
-            );
+                    .file_name(file_name)
+                    .mime_str(mime.as_ref())
+                    .expect("a guessed MIME type is valid")
+            });
         }
         if let Some(value) = self.media_url {
             form = form.text("media_url", value.to_string());

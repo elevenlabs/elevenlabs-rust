@@ -5,6 +5,9 @@ pub struct BodyUploadFileV1ConvaiConversationsConversationIdFilesPost {
     /// Image, PDF, or text file to upload
     #[serde(default)]
     pub file: Vec<u8>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub file_file_name: Option<String>,
 }
 
 impl BodyUploadFileV1ConvaiConversationsConversationIdFilesPost {
@@ -17,11 +20,17 @@ impl BodyUploadFileV1ConvaiConversationsConversationIdFilesPost {
 #[non_exhaustive]
 pub struct BodyUploadFileV1ConvaiConversationsConversationIdFilesPostBuilder {
     file: Option<Vec<u8>>,
+    file_file_name: Option<String>,
 }
 
 impl BodyUploadFileV1ConvaiConversationsConversationIdFilesPostBuilder {
     pub fn file(mut self, value: Vec<u8>) -> Self {
         self.file = Some(value);
+        self
+    }
+
+    pub fn file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.file_file_name = Some(value.into());
         self
     }
 
@@ -33,6 +42,7 @@ impl BodyUploadFileV1ConvaiConversationsConversationIdFilesPostBuilder {
     ) -> Result<BodyUploadFileV1ConvaiConversationsConversationIdFilesPost, BuildError> {
         Ok(BodyUploadFileV1ConvaiConversationsConversationIdFilesPost {
             file: self.file.ok_or_else(|| BuildError::missing_field("file"))?,
+            file_file_name: self.file_file_name,
         })
     }
 }
@@ -40,13 +50,14 @@ impl BodyUploadFileV1ConvaiConversationsConversationIdFilesPostBuilder {
 impl BodyUploadFileV1ConvaiConversationsConversationIdFilesPost {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
-        form = form.part(
-            "file",
+        form = form.part("file", {
+            let file_name = self.file_file_name.unwrap_or_else(|| "file".to_string());
+            let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
             reqwest::multipart::Part::bytes(self.file)
-                .file_name("file")
-                .mime_str("application/octet-stream")
-                .expect("application/octet-stream is a valid MIME type"),
-        );
+                .file_name(file_name)
+                .mime_str(mime.as_ref())
+                .expect("a guessed MIME type is valid")
+        });
         form
     }
 }

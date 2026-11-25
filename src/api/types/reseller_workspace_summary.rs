@@ -17,9 +17,12 @@ pub struct ResellerWorkspaceSummary {
     #[serde(default)]
     #[serde(with = "crate::core::number_serializers::int")]
     pub created_at_unix: i64,
-    /// The reseller-managed subscription, when this workspace has one. None means nothing is sold here yet and a tier can be assigned.
+    /// The reseller-managed subscription, when this workspace has one. None means the reseller sells nothing here: no tier is assigned yet, or the workspace pays for its own subscription (see charge_customer).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription: Option<ResellerWorkspaceSubscription>,
+    /// The workspace pays for its own subscription, so its tier can't be assigned or changed here.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub charge_customer: Option<bool>,
     /// A charge for this workspace is unpaid. Assigning or changing a tier is refused until it clears, so surface it rather than letting it fail.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_payment_issue: Option<bool>,
@@ -46,6 +49,7 @@ pub struct ResellerWorkspaceSummaryBuilder {
     calls_last_30_days: Option<i64>,
     created_at_unix: Option<i64>,
     subscription: Option<ResellerWorkspaceSubscription>,
+    charge_customer: Option<bool>,
     has_payment_issue: Option<bool>,
     onboarding_completed_at_unix: Option<i64>,
 }
@@ -86,6 +90,11 @@ impl ResellerWorkspaceSummaryBuilder {
         self
     }
 
+    pub fn charge_customer(mut self, value: bool) -> Self {
+        self.charge_customer = Some(value);
+        self
+    }
+
     pub fn has_payment_issue(mut self, value: bool) -> Self {
         self.has_payment_issue = Some(value);
         self
@@ -122,6 +131,7 @@ impl ResellerWorkspaceSummaryBuilder {
                 .created_at_unix
                 .ok_or_else(|| BuildError::missing_field("created_at_unix"))?,
             subscription: self.subscription,
+            charge_customer: self.charge_customer,
             has_payment_issue: self.has_payment_issue,
             onboarding_completed_at_unix: self.onboarding_completed_at_unix,
         })

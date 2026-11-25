@@ -80,7 +80,7 @@ impl Default for ClientConfig {
             custom_headers: Default::default(),
             oauth_token_endpoint: None,
             oauth_token_exchange: None,
-            user_agent: "postman-codegen/3.30.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string(),
+            user_agent: "postman-codegen/3.31.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string(),
             reqwest_client: None,
         }
     }
@@ -225,7 +225,7 @@ impl ClientConfigBuilder {
             oauth_token_endpoint: self.oauth_token_endpoint,
             oauth_token_exchange: self.oauth_token_exchange,
             user_agent: self.user_agent.unwrap_or_else(|| {
-                "postman-codegen/3.30.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string()
+                "postman-codegen/3.31.0 elevenlabs-rust-sdk/1.0.0 (rust)".to_string()
             }),
             reqwest_client: self.reqwest_client,
         })

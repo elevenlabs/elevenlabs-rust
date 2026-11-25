@@ -8,6 +8,9 @@ pub struct BodyUploadAssetV1AssetsPost {
     /// Display name for the asset.
     #[serde(default)]
     pub name: String,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub asset_file_name: Option<String>,
 }
 
 impl BodyUploadAssetV1AssetsPost {
@@ -21,6 +24,7 @@ impl BodyUploadAssetV1AssetsPost {
 pub struct BodyUploadAssetV1AssetsPostBuilder {
     asset: Option<Vec<u8>>,
     name: Option<String>,
+    asset_file_name: Option<String>,
 }
 
 impl BodyUploadAssetV1AssetsPostBuilder {
@@ -34,6 +38,11 @@ impl BodyUploadAssetV1AssetsPostBuilder {
         self
     }
 
+    pub fn asset_file_name(mut self, value: impl Into<String>) -> Self {
+        self.asset_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyUploadAssetV1AssetsPost`].
     /// This method will fail if any of the following fields are not set:
     /// - [`asset`](BodyUploadAssetV1AssetsPostBuilder::asset)
@@ -44,6 +53,7 @@ impl BodyUploadAssetV1AssetsPostBuilder {
                 .asset
                 .ok_or_else(|| BuildError::missing_field("asset"))?,
             name: self.name.ok_or_else(|| BuildError::missing_field("name"))?,
+            asset_file_name: self.asset_file_name,
         })
     }
 }
@@ -51,13 +61,14 @@ impl BodyUploadAssetV1AssetsPostBuilder {
 impl BodyUploadAssetV1AssetsPost {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
-        form = form.part(
-            "asset",
+        form = form.part("asset", {
+            let file_name = self.asset_file_name.unwrap_or_else(|| "asset".to_string());
+            let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
             reqwest::multipart::Part::bytes(self.asset)
-                .file_name("asset")
-                .mime_str("application/octet-stream")
-                .expect("application/octet-stream is a valid MIME type"),
-        );
+                .file_name(file_name)
+                .mime_str(mime.as_ref())
+                .expect("a guessed MIME type is valid")
+        });
         form = form.text("name", self.name.to_string());
         form
     }

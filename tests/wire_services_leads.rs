@@ -17,6 +17,7 @@ async fn get_sends_the_real_wire_request() {
             "value"
         ],
         "phone_numbers_index": 123,
+        "timezone_override": "value",
         "user_id": "value",
         "attempt_count": 123,
         "failure_count": 123,

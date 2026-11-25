@@ -7,6 +7,9 @@ pub struct ReceptionProvisionResellerWorkspaceRequest {
     /// The business's vertical, used with `complete_onboarding`. Without it, onboarding picks the vertical as usual.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vertical: Option<ReceptionVertical>,
+    /// Bill the workspace's own customer instead of the reseller: it checks out and sees its billing itself, and the reseller earns a commission. Only for a reseller on standard billing.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub charge_customer: Option<bool>,
     /// Paid tier to subscribe to. Omitted leaves the workspace with no subscription.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription: Option<ProvisionResellerWorkspaceSubscription>,
@@ -35,6 +38,7 @@ impl ReceptionProvisionResellerWorkspaceRequest {
 pub struct ReceptionProvisionResellerWorkspaceRequestBuilder {
     business_name: Option<String>,
     vertical: Option<ReceptionVertical>,
+    charge_customer: Option<bool>,
     subscription: Option<ProvisionResellerWorkspaceSubscription>,
     phone_number: Option<String>,
     members: Option<Vec<TeamInviteRequest>>,
@@ -50,6 +54,11 @@ impl ReceptionProvisionResellerWorkspaceRequestBuilder {
 
     pub fn vertical(mut self, value: ReceptionVertical) -> Self {
         self.vertical = Some(value);
+        self
+    }
+
+    pub fn charge_customer(mut self, value: bool) -> Self {
+        self.charge_customer = Some(value);
         self
     }
 
@@ -87,6 +96,7 @@ impl ReceptionProvisionResellerWorkspaceRequestBuilder {
                 .business_name
                 .ok_or_else(|| BuildError::missing_field("business_name"))?,
             vertical: self.vertical,
+            charge_customer: self.charge_customer,
             subscription: self.subscription,
             phone_number: self.phone_number,
             members: self.members,

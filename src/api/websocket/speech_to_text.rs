@@ -17,6 +17,7 @@ pub struct SpeechToTextConnectOptions {
     pub no_verbatim: Option<bool>,
     pub multilang_mode: Option<bool>,
     pub diarize: Option<bool>,
+    pub infer_speaker_names: Option<bool>,
     pub entity_detection: Option<crate::api::types::V1SpeechToTextRealtimeEntityDetection>,
     pub entity_redaction: Option<crate::api::types::V1SpeechToTextRealtimeEntityRedaction>,
     pub entity_redaction_mode: Option<crate::api::types::SpeechToTextRealtimeEntityRedactionMode>,
@@ -186,6 +187,11 @@ impl SpeechToTextClient {
             ws_options
                 .query_params
                 .push(("diarize".to_string(), value.to_string()));
+        }
+        if let Some(value) = options.infer_speaker_names {
+            ws_options
+                .query_params
+                .push(("infer_speaker_names".to_string(), value.to_string()));
         }
         if let Some(value) = &options.entity_detection {
             if let Ok(serialized) = serde_json::to_string(value) {
@@ -426,6 +432,11 @@ impl SpeechToTextConnector {
             ws_options
                 .query_params
                 .push(("diarize".to_string(), value.to_string()));
+        }
+        if let Some(value) = options.infer_speaker_names {
+            ws_options
+                .query_params
+                .push(("infer_speaker_names".to_string(), value.to_string()));
         }
         if let Some(value) = &options.entity_detection {
             if let Ok(serialized) = serde_json::to_string(value) {

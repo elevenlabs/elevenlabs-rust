@@ -56,6 +56,7 @@ impl HistoryClient {
         let sort_direction = request.sort_direction.clone();
         let search = request.search.clone();
         let source = request.source.clone();
+        let sources = request.sources.clone();
         let url = "/v1/history";
 
         let mut request = self.http_client.get(url);
@@ -85,6 +86,11 @@ impl HistoryClient {
         }
         if let Some(val) = &source {
             request = request.query(&[("source", &val.to_string())]);
+        }
+        if let Some(val) = &sources {
+            for item in val.iter() {
+                request = request.query(&[("sources", &item.to_string())]);
+            }
         }
         if let Some(opts) = &options {
             for (key, value) in &opts.additional_headers {

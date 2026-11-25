@@ -14,6 +14,9 @@ pub struct BodyUploadMusicV1MusicUploadPost {
     /// Whether to return the visual waveform of the uploaded song.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub with_waveform_visual: Option<bool>,
+    /// The name sent with the file; when unset the part is named after its field.
+    #[serde(skip)]
+    pub file_file_name: Option<String>,
 }
 
 impl BodyUploadMusicV1MusicUploadPost {
@@ -29,6 +32,7 @@ pub struct BodyUploadMusicV1MusicUploadPostBuilder {
     extract_composition_plan: Option<ExtractCompositionPlan>,
     with_timestamps: Option<bool>,
     with_waveform_visual: Option<bool>,
+    file_file_name: Option<String>,
 }
 
 impl BodyUploadMusicV1MusicUploadPostBuilder {
@@ -52,6 +56,11 @@ impl BodyUploadMusicV1MusicUploadPostBuilder {
         self
     }
 
+    pub fn file_file_name(mut self, value: impl Into<String>) -> Self {
+        self.file_file_name = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyUploadMusicV1MusicUploadPost`].
     /// This method will fail if any of the following fields are not set:
     /// - [`file`](BodyUploadMusicV1MusicUploadPostBuilder::file)
@@ -61,6 +70,7 @@ impl BodyUploadMusicV1MusicUploadPostBuilder {
             extract_composition_plan: self.extract_composition_plan,
             with_timestamps: self.with_timestamps,
             with_waveform_visual: self.with_waveform_visual,
+            file_file_name: self.file_file_name,
         })
     }
 }
@@ -68,13 +78,14 @@ impl BodyUploadMusicV1MusicUploadPostBuilder {
 impl BodyUploadMusicV1MusicUploadPost {
     pub fn to_multipart(self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
-        form = form.part(
-            "file",
+        form = form.part("file", {
+            let file_name = self.file_file_name.unwrap_or_else(|| "file".to_string());
+            let mime = mime_guess::from_path(&file_name).first_or_octet_stream();
             reqwest::multipart::Part::bytes(self.file)
-                .file_name("file")
-                .mime_str("application/octet-stream")
-                .expect("application/octet-stream is a valid MIME type"),
-        );
+                .file_name(file_name)
+                .mime_str(mime.as_ref())
+                .expect("a guessed MIME type is valid")
+        });
         if let Some(value) = self.extract_composition_plan {
             form = form.text(
                 "extract_composition_plan",

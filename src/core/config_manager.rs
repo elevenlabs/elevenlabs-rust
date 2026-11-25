@@ -35,13 +35,13 @@ pub struct ConfigManager {
     content: RwLock<ClientConfig>,
     snapshots: RwLock<ClientConfig>,
     chapters: RwLock<ClientConfig>,
+    audio_native: RwLock<ClientConfig>,
     project: RwLock<ClientConfig>,
     language: RwLock<ClientConfig>,
     transcript: RwLock<ClientConfig>,
     dubbing: RwLock<ClientConfig>,
     transcripts: RwLock<ClientConfig>,
     models: RwLock<ClientConfig>,
-    audio_native: RwLock<ClientConfig>,
     content_provenance: RwLock<ClientConfig>,
     rules: RwLock<ClientConfig>,
     api_keys: RwLock<ClientConfig>,
@@ -157,6 +157,7 @@ pub struct ConfigManager {
     v_1_text_to_speech_voice_id_multi_stream_input: RwLock<ClientConfig>,
     v_1_translation_realtime: RwLock<ClientConfig>,
     v_1_dubbing_live: RwLock<ClientConfig>,
+    v_1_subtitling_realtime: RwLock<ClientConfig>,
     v_1_convai_conversation: RwLock<ClientConfig>,
 }
 
@@ -188,13 +189,13 @@ impl ConfigManager {
             content: RwLock::new(config.clone()),
             snapshots: RwLock::new(config.clone()),
             chapters: RwLock::new(config.clone()),
+            audio_native: RwLock::new(config.clone()),
             project: RwLock::new(config.clone()),
             language: RwLock::new(config.clone()),
             transcript: RwLock::new(config.clone()),
             dubbing: RwLock::new(config.clone()),
             transcripts: RwLock::new(config.clone()),
             models: RwLock::new(config.clone()),
-            audio_native: RwLock::new(config.clone()),
             content_provenance: RwLock::new(config.clone()),
             rules: RwLock::new(config.clone()),
             api_keys: RwLock::new(config.clone()),
@@ -310,6 +311,7 @@ impl ConfigManager {
             v_1_text_to_speech_voice_id_multi_stream_input: RwLock::new(config.clone()),
             v_1_translation_realtime: RwLock::new(config.clone()),
             v_1_dubbing_live: RwLock::new(config.clone()),
+            v_1_subtitling_realtime: RwLock::new(config.clone()),
             v_1_convai_conversation: RwLock::new(config),
         }
     }
@@ -410,6 +412,10 @@ impl ConfigManager {
         read_or_recover(&self.chapters).clone()
     }
 
+    pub fn get_audio_native_config(&self) -> ClientConfig {
+        read_or_recover(&self.audio_native).clone()
+    }
+
     pub fn get_project_config(&self) -> ClientConfig {
         read_or_recover(&self.project).clone()
     }
@@ -432,10 +438,6 @@ impl ConfigManager {
 
     pub fn get_models_config(&self) -> ClientConfig {
         read_or_recover(&self.models).clone()
-    }
-
-    pub fn get_audio_native_config(&self) -> ClientConfig {
-        read_or_recover(&self.audio_native).clone()
     }
 
     pub fn get_content_provenance_config(&self) -> ClientConfig {
@@ -898,6 +900,10 @@ impl ConfigManager {
         read_or_recover(&self.v_1_dubbing_live).clone()
     }
 
+    pub fn get_v_1_subtitling_realtime_config(&self) -> ClientConfig {
+        read_or_recover(&self.v_1_subtitling_realtime).clone()
+    }
+
     pub fn get_v_1_convai_conversation_config(&self) -> ClientConfig {
         read_or_recover(&self.v_1_convai_conversation).clone()
     }
@@ -928,13 +934,13 @@ impl ConfigManager {
         write_or_recover(&self.content).base_url = val.clone();
         write_or_recover(&self.snapshots).base_url = val.clone();
         write_or_recover(&self.chapters).base_url = val.clone();
+        write_or_recover(&self.audio_native).base_url = val.clone();
         write_or_recover(&self.project).base_url = val.clone();
         write_or_recover(&self.language).base_url = val.clone();
         write_or_recover(&self.transcript).base_url = val.clone();
         write_or_recover(&self.dubbing).base_url = val.clone();
         write_or_recover(&self.transcripts).base_url = val.clone();
         write_or_recover(&self.models).base_url = val.clone();
-        write_or_recover(&self.audio_native).base_url = val.clone();
         write_or_recover(&self.content_provenance).base_url = val.clone();
         write_or_recover(&self.rules).base_url = val.clone();
         write_or_recover(&self.api_keys).base_url = val.clone();
@@ -1051,6 +1057,7 @@ impl ConfigManager {
             val.clone();
         write_or_recover(&self.v_1_translation_realtime).base_url = val.clone();
         write_or_recover(&self.v_1_dubbing_live).base_url = val.clone();
+        write_or_recover(&self.v_1_subtitling_realtime).base_url = val.clone();
         write_or_recover(&self.v_1_convai_conversation).base_url = val.clone();
     }
 
@@ -1080,13 +1087,13 @@ impl ConfigManager {
         write_or_recover(&self.content).timeout = val.clone();
         write_or_recover(&self.snapshots).timeout = val.clone();
         write_or_recover(&self.chapters).timeout = val.clone();
+        write_or_recover(&self.audio_native).timeout = val.clone();
         write_or_recover(&self.project).timeout = val.clone();
         write_or_recover(&self.language).timeout = val.clone();
         write_or_recover(&self.transcript).timeout = val.clone();
         write_or_recover(&self.dubbing).timeout = val.clone();
         write_or_recover(&self.transcripts).timeout = val.clone();
         write_or_recover(&self.models).timeout = val.clone();
-        write_or_recover(&self.audio_native).timeout = val.clone();
         write_or_recover(&self.content_provenance).timeout = val.clone();
         write_or_recover(&self.rules).timeout = val.clone();
         write_or_recover(&self.api_keys).timeout = val.clone();
@@ -1203,6 +1210,7 @@ impl ConfigManager {
             val.clone();
         write_or_recover(&self.v_1_translation_realtime).timeout = val.clone();
         write_or_recover(&self.v_1_dubbing_live).timeout = val.clone();
+        write_or_recover(&self.v_1_subtitling_realtime).timeout = val.clone();
         write_or_recover(&self.v_1_convai_conversation).timeout = val.clone();
     }
 
@@ -1232,13 +1240,13 @@ impl ConfigManager {
         write_or_recover(&self.content).api_key = val.clone();
         write_or_recover(&self.snapshots).api_key = val.clone();
         write_or_recover(&self.chapters).api_key = val.clone();
+        write_or_recover(&self.audio_native).api_key = val.clone();
         write_or_recover(&self.project).api_key = val.clone();
         write_or_recover(&self.language).api_key = val.clone();
         write_or_recover(&self.transcript).api_key = val.clone();
         write_or_recover(&self.dubbing).api_key = val.clone();
         write_or_recover(&self.transcripts).api_key = val.clone();
         write_or_recover(&self.models).api_key = val.clone();
-        write_or_recover(&self.audio_native).api_key = val.clone();
         write_or_recover(&self.content_provenance).api_key = val.clone();
         write_or_recover(&self.rules).api_key = val.clone();
         write_or_recover(&self.api_keys).api_key = val.clone();
@@ -1355,6 +1363,7 @@ impl ConfigManager {
             val.clone();
         write_or_recover(&self.v_1_translation_realtime).api_key = val.clone();
         write_or_recover(&self.v_1_dubbing_live).api_key = val.clone();
+        write_or_recover(&self.v_1_subtitling_realtime).api_key = val.clone();
         write_or_recover(&self.v_1_convai_conversation).api_key = val.clone();
     }
 
@@ -1646,6 +1655,18 @@ impl ConfigManager {
         write_or_recover(&self.chapters).api_key = Some(api_key.into());
     }
 
+    pub(crate) fn set_audio_native_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.audio_native).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_audio_native_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.audio_native).timeout = timeout;
+    }
+
+    pub(crate) fn set_audio_native_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.audio_native).api_key = Some(api_key.into());
+    }
+
     pub(crate) fn set_project_base_url(&self, base_url: impl Into<String>) {
         write_or_recover(&self.project).base_url = base_url.into();
     }
@@ -1716,18 +1737,6 @@ impl ConfigManager {
 
     pub(crate) fn set_models_api_key(&self, api_key: impl Into<String>) {
         write_or_recover(&self.models).api_key = Some(api_key.into());
-    }
-
-    pub(crate) fn set_audio_native_base_url(&self, base_url: impl Into<String>) {
-        write_or_recover(&self.audio_native).base_url = base_url.into();
-    }
-
-    pub(crate) fn set_audio_native_timeout(&self, timeout: Duration) {
-        write_or_recover(&self.audio_native).timeout = timeout;
-    }
-
-    pub(crate) fn set_audio_native_api_key(&self, api_key: impl Into<String>) {
-        write_or_recover(&self.audio_native).api_key = Some(api_key.into());
     }
 
     pub(crate) fn set_content_provenance_base_url(&self, base_url: impl Into<String>) {
@@ -3136,6 +3145,18 @@ impl ConfigManager {
 
     pub(crate) fn set_v_1_dubbing_live_api_key(&self, api_key: impl Into<String>) {
         write_or_recover(&self.v_1_dubbing_live).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_v_1_subtitling_realtime_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.v_1_subtitling_realtime).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_v_1_subtitling_realtime_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.v_1_subtitling_realtime).timeout = timeout;
+    }
+
+    pub(crate) fn set_v_1_subtitling_realtime_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.v_1_subtitling_realtime).api_key = Some(api_key.into());
     }
 
     pub(crate) fn set_v_1_convai_conversation_base_url(&self, base_url: impl Into<String>) {
