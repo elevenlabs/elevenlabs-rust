@@ -10,7 +10,7 @@ use crate::agent_tools::json::js_canonical;
 use crate::agent_tools::{Tool, ToolKind};
 use crate::agent_workflows::Workflow;
 use crate::api::types::{
-    AgentConfig, AgentMessagesOverridesLlm as Llm, AgentPlatformSettingsRequestModel,
+    AgentConfig, Llm, AgentPlatformSettingsRequestModel,
     BodyCreateAgentV1ConvaiAgentsCreatePost, ConversationalConfig, PromptAgentApiModelInput,
     TtsConversationalConfigInput, TtsConversationalModel,
 };

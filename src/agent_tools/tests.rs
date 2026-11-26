@@ -750,8 +750,7 @@ fn keeps_a_tool_of_an_unknown_type_and_warns_when_built() {
     let mut warnings = Vec::new();
     let built = tool.build_with_warnings(|issue| warnings.push(issue.code));
     assert_eq!(warnings, [ToolIssueCode::UnknownToolType]);
-    // The generated enum has no variant that holds it unchanged.
-    assert_eq!(codes_of(built), ["invalid_model"]);
+    assert_eq!(built.unwrap().tool_config.as_unknown(), Some(&raw));
     assert_eq!(tool.to_json().unwrap(), raw);
     // Nothing can be set on it.
     assert_eq!(
@@ -761,10 +760,10 @@ fn keeps_a_tool_of_an_unknown_type_and_warns_when_built() {
 }
 
 #[test]
-fn refuses_to_build_a_tool_the_generated_types_would_change() {
+fn builds_a_tool_the_generated_types_do_not_model_into_the_catch_all() {
     let raw = json!({ "name": "lookup", "description": "Look up", "type": "api_integration_webhook", "x": 1 });
     let tool = Tool::from_json(&raw);
-    assert_eq!(codes_of(tool.build()), ["invalid_model"]);
+    assert_eq!(tool.build().unwrap().tool_config.as_unknown(), Some(&raw));
     assert_eq!(tool.to_json().unwrap(), raw);
 }
 

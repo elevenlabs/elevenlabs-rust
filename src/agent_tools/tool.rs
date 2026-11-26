@@ -304,8 +304,8 @@ impl Tool {
 }
 
 /// A loaded tool of a type the builder has no constructor for, such as `mcp`. Kept exactly as
-/// loaded; `build()` warns with `unknown_tool_type`, and fails with `invalid_model` when no
-/// generated variant can hold the tool unchanged.
+/// loaded; `build()` warns with `unknown_tool_type` and sends it through the generated enum's
+/// `__Unknown` catch-all.
 #[derive(Debug, Clone, PartialEq)]
 pub struct OtherTool {
     raw: WireMap,
@@ -344,7 +344,7 @@ impl OtherTool {
     }
 
     /// The loaded config as the generated tool config, if a generated variant holds it unchanged;
-    /// otherwise an `invalid_model` error (the generated enum has no catch-all variant).
+    /// otherwise an `invalid_model` error.
     pub fn build_config(&self) -> Result<ToolRequestModelToolConfig, ToolValidationError> {
         self.build_config_with_warnings(|_| {})
     }
@@ -357,8 +357,8 @@ impl OtherTool {
     ) -> Result<ToolRequestModelToolConfig, ToolValidationError> {
         check(self.name(), self.all_issues(), on_warning)?;
         let raw = canonical(&Value::Object(self.raw.clone()));
-        // The generated enum has no catch-all variant, and it decodes an unknown `type` into the
-        // first variant whose fields fit, dropping the rest. Accept it only if nothing is lost.
+        // An unknown `type` decodes to the generated `__Unknown` catch-all as loaded, but a known
+        // one drops fields its struct doesn't model. Accept it only if nothing is lost.
         serde_json::from_value::<ToolRequestModelToolConfig>(raw.clone())
             .ok()
             .filter(|config| serde_json::to_value(config).is_ok_and(|sent| same_value(&sent, &raw)))
