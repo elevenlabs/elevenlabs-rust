@@ -67,3 +67,7 @@ tests/music_detailed.rs
 
 # The org allowlist only permits actions-rust-lang/setup-rust-toolchain pinned to a commit hash.
 .github/workflows/ci.yml
+
+# Hand-written release workflow: publishes to crates.io with trusted publishing when a GitHub release
+# is published. Fern's Rust generator emits no publish job.
+.github/workflows/release.yml

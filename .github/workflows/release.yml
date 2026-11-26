@@ -1,0 +1,73 @@
+name: Release
+
+# Runs only when a GitHub release is published. Hand-written and listed in .fernignore: Fern's Rust
+# generator emits no publish job.
+#
+# Publishes to crates.io with trusted publishing (OIDC): crates-io-auth-action exchanges this job's
+# GitHub token for a short-lived crates.io token. The crate's trusted publishing config on crates.io
+# must name this repository and this workflow file. crates.io only allows that for a crate that
+# already exists, so the first version is published by hand with an API token.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+env:
+  CRATE: elevenlabs-rust-sdk
+  RUSTFLAGS: '-A warnings'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Exchanged by crates-io-auth-action for a short-lived crates.io token
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: actions-rust-lang/setup-rust-toolchain@166cdcfd11aee3cb47222f9ddb555ce30ddb9659 # v1.17.0
+
+      - name: Verify crate version matches release tag
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          TAG_VERSION="${RELEASE_TAG#v}"
+          CRATE_VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r --arg name "$CRATE" '.packages[] | select(.name == $name) | .version')
+
+          if [ -z "$CRATE_VERSION" ]; then
+            echo "::error::Could not read the $CRATE version."
+            exit 1
+          fi
+
+          if [ "$CRATE_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::Release tag $RELEASE_TAG does not match $CRATE version $CRATE_VERSION. Bump the version in Cargo.toml before releasing."
+            exit 1
+          fi
+
+          # crates.io rejects requests without a User-Agent.
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -A "elevenlabs-rust release workflow (https://github.com/elevenlabs/elevenlabs-rust)" \
+            "https://crates.io/api/v1/crates/$CRATE/$CRATE_VERSION")
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "::error::Version $CRATE_VERSION is already published to crates.io."
+            exit 1
+          elif [ "$HTTP_CODE" != "404" ]; then
+            echo "::error::Could not verify crates.io status for $CRATE_VERSION (HTTP $HTTP_CODE)."
+            exit 1
+          fi
+
+      - name: Run tests
+        run: cargo test -- --test-threads=1
+
+      - name: crates.io login (OIDC to short-lived token)
+        id: auth
+        uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9 # v1.0.6
+
+      - name: Publish to crates.io
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+        run: cargo publish
