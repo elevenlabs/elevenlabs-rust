@@ -115,6 +115,9 @@ pub struct ConfigManager {
     analysis: RwLock<ClientConfig>,
     environment_variables: RwLock<ClientConfig>,
     environments: RwLock<ClientConfig>,
+    requesters: RwLock<ClientConfig>,
+    sla_policies: RwLock<ClientConfig>,
+    tickets: RwLock<ClientConfig>,
     realtime: RwLock<ClientConfig>,
     composition_plan: RwLock<ClientConfig>,
     finetunes: RwLock<ClientConfig>,
@@ -269,6 +272,9 @@ impl ConfigManager {
             analysis: RwLock::new(config.clone()),
             environment_variables: RwLock::new(config.clone()),
             environments: RwLock::new(config.clone()),
+            requesters: RwLock::new(config.clone()),
+            sla_policies: RwLock::new(config.clone()),
+            tickets: RwLock::new(config.clone()),
             realtime: RwLock::new(config.clone()),
             composition_plan: RwLock::new(config.clone()),
             finetunes: RwLock::new(config.clone()),
@@ -732,6 +738,18 @@ impl ConfigManager {
         read_or_recover(&self.environments).clone()
     }
 
+    pub fn get_requesters_config(&self) -> ClientConfig {
+        read_or_recover(&self.requesters).clone()
+    }
+
+    pub fn get_sla_policies_config(&self) -> ClientConfig {
+        read_or_recover(&self.sla_policies).clone()
+    }
+
+    pub fn get_tickets_config(&self) -> ClientConfig {
+        read_or_recover(&self.tickets).clone()
+    }
+
     pub fn get_realtime_config(&self) -> ClientConfig {
         read_or_recover(&self.realtime).clone()
     }
@@ -1014,6 +1032,9 @@ impl ConfigManager {
         write_or_recover(&self.analysis).base_url = val.clone();
         write_or_recover(&self.environment_variables).base_url = val.clone();
         write_or_recover(&self.environments).base_url = val.clone();
+        write_or_recover(&self.requesters).base_url = val.clone();
+        write_or_recover(&self.sla_policies).base_url = val.clone();
+        write_or_recover(&self.tickets).base_url = val.clone();
         write_or_recover(&self.realtime).base_url = val.clone();
         write_or_recover(&self.composition_plan).base_url = val.clone();
         write_or_recover(&self.finetunes).base_url = val.clone();
@@ -1167,6 +1188,9 @@ impl ConfigManager {
         write_or_recover(&self.analysis).timeout = val.clone();
         write_or_recover(&self.environment_variables).timeout = val.clone();
         write_or_recover(&self.environments).timeout = val.clone();
+        write_or_recover(&self.requesters).timeout = val.clone();
+        write_or_recover(&self.sla_policies).timeout = val.clone();
+        write_or_recover(&self.tickets).timeout = val.clone();
         write_or_recover(&self.realtime).timeout = val.clone();
         write_or_recover(&self.composition_plan).timeout = val.clone();
         write_or_recover(&self.finetunes).timeout = val.clone();
@@ -1320,6 +1344,9 @@ impl ConfigManager {
         write_or_recover(&self.analysis).api_key = val.clone();
         write_or_recover(&self.environment_variables).api_key = val.clone();
         write_or_recover(&self.environments).api_key = val.clone();
+        write_or_recover(&self.requesters).api_key = val.clone();
+        write_or_recover(&self.sla_policies).api_key = val.clone();
+        write_or_recover(&self.tickets).api_key = val.clone();
         write_or_recover(&self.realtime).api_key = val.clone();
         write_or_recover(&self.composition_plan).api_key = val.clone();
         write_or_recover(&self.finetunes).api_key = val.clone();
@@ -2613,6 +2640,42 @@ impl ConfigManager {
 
     pub(crate) fn set_environments_api_key(&self, api_key: impl Into<String>) {
         write_or_recover(&self.environments).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_requesters_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.requesters).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_requesters_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.requesters).timeout = timeout;
+    }
+
+    pub(crate) fn set_requesters_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.requesters).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_sla_policies_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.sla_policies).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_sla_policies_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.sla_policies).timeout = timeout;
+    }
+
+    pub(crate) fn set_sla_policies_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.sla_policies).api_key = Some(api_key.into());
+    }
+
+    pub(crate) fn set_tickets_base_url(&self, base_url: impl Into<String>) {
+        write_or_recover(&self.tickets).base_url = base_url.into();
+    }
+
+    pub(crate) fn set_tickets_timeout(&self, timeout: Duration) {
+        write_or_recover(&self.tickets).timeout = timeout;
+    }
+
+    pub(crate) fn set_tickets_api_key(&self, api_key: impl Into<String>) {
+        write_or_recover(&self.tickets).api_key = Some(api_key.into());
     }
 
     pub(crate) fn set_realtime_base_url(&self, base_url: impl Into<String>) {

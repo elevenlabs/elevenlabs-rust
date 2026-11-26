@@ -20,7 +20,7 @@ pub struct AnalysisItemsListQueryRequest {
     pub created_by_user_id: Option<String>,
     /// The direction to sort the results
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    pub sort_direction: Option<SortDirection>,
     /// Used for fetching next page. Cursor is returned in the response.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cursor: Option<String>,
@@ -40,7 +40,7 @@ pub struct AnalysisItemsListQueryRequestBuilder {
     kind: Option<AnalysisItemKind>,
     analysis_item_ids: Option<Vec<String>>,
     created_by_user_id: Option<String>,
-    sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    sort_direction: Option<SortDirection>,
     cursor: Option<String>,
 }
 
@@ -70,10 +70,7 @@ impl AnalysisItemsListQueryRequestBuilder {
         self
     }
 
-    pub fn sort_direction(
-        mut self,
-        value: BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort,
-    ) -> Self {
+    pub fn sort_direction(mut self, value: SortDirection) -> Self {
         self.sort_direction = Some(value);
         self
     }

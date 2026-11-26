@@ -554,4 +554,257 @@ impl TagsClient {
         let _ = response;
         Ok(())
     }
+
+    /// List Ticket Tags
+    ///
+    /// List active ticket tags for the workspace, newest first. Requires support read permission.
+    ///
+    /// # Arguments
+    ///
+    /// * `request` - Query parameters for this request
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn list_2(
+        &self,
+        request: &TagsListQueryRequest2,
+        options: Option<RequestOptions>,
+    ) -> Result<PaginatedResultTicketTagResponse_, crate::error::ApiError> {
+        let ids = request.ids.clone();
+        let include_archived = request.include_archived.clone();
+        let page_size = request.page_size.clone();
+        let cursor = request.cursor.clone();
+        let url = "/v1/support/tags";
+
+        let mut request = self.http_client.get(url);
+        if let Some(val) = &ids {
+            for item in val.iter() {
+                request = request.query(&[("ids", &item.to_string())]);
+            }
+        }
+        if let Some(val) = &include_archived {
+            request = request.query(&[("include_archived", &val.to_string())]);
+        }
+        if let Some(val) = &page_size {
+            request = request.query(&[("page_size", &val.to_string())]);
+        }
+        if let Some(val) = &cursor {
+            request = request.query(&[("cursor", &val.to_string())]);
+        }
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        let config = self.config.get_tags_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: PaginatedResultTicketTagResponse_ =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
+
+    /// Create Ticket Tag
+    ///
+    /// Create a ticket tag for the workspace. Requires support write permission.
+    ///
+    /// # Arguments
+    ///
+    /// * `body`
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn create_2(
+        &self,
+        body: &CreateTicketTagRequest,
+        options: Option<RequestOptions>,
+    ) -> Result<TicketTagResponse, crate::error::ApiError> {
+        let url = "/v1/support/tags";
+
+        let mut request = self.http_client.post(url);
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        request = match options
+            .as_ref()
+            .and_then(|opts| opts.merge_into_body(&body))
+        {
+            Some(merged) => request.json(&merged),
+            None => request.json(&body),
+        };
+        let config = self.config.get_tags_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: TicketTagResponse =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
+
+    /// Update Ticket Tag
+    ///
+    /// Update a ticket tag. Requires support write permission.
+    ///
+    /// # Arguments
+    ///
+    /// * `tag_id`
+    /// * `body`
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn update_2(
+        &self,
+        tag_id: &str,
+        body: &UpdateTicketTagRequest,
+        options: Option<RequestOptions>,
+    ) -> Result<TicketTagResponse, crate::error::ApiError> {
+        let url = format!("/v1/support/tags/{}", tag_id);
+
+        let mut request = self.http_client.patch(url);
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        request = match options
+            .as_ref()
+            .and_then(|opts| opts.merge_into_body(&body))
+        {
+            Some(merged) => request.json(&merged),
+            None => request.json(&body),
+        };
+        let config = self.config.get_tags_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: TicketTagResponse =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
 }

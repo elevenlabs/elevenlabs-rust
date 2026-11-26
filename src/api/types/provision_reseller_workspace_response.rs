@@ -1,6 +1,6 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ProvisionResellerWorkspaceResponse {
     #[serde(default)]
     pub workspace_id: String,
@@ -31,6 +31,9 @@ pub struct ProvisionResellerWorkspaceResponse {
     #[serde(default)]
     #[serde(with = "crate::core::number_serializers::int::option")]
     pub onboarding_completed_at_unix: Option<i64>,
+    /// Your own key-value pairs for the workspace.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<std::collections::HashMap<String, String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub member_results: Option<Vec<TeamInviteResult>>,
 }
@@ -54,6 +57,7 @@ pub struct ProvisionResellerWorkspaceResponseBuilder {
     charge_customer: Option<bool>,
     has_payment_issue: Option<bool>,
     onboarding_completed_at_unix: Option<i64>,
+    metadata: Option<std::collections::HashMap<String, String>>,
     member_results: Option<Vec<TeamInviteResult>>,
 }
 
@@ -108,6 +112,11 @@ impl ProvisionResellerWorkspaceResponseBuilder {
         self
     }
 
+    pub fn metadata(mut self, value: std::collections::HashMap<String, String>) -> Self {
+        self.metadata = Some(value);
+        self
+    }
+
     pub fn member_results(mut self, value: Vec<TeamInviteResult>) -> Self {
         self.member_results = Some(value);
         self
@@ -142,6 +151,7 @@ impl ProvisionResellerWorkspaceResponseBuilder {
             charge_customer: self.charge_customer,
             has_payment_issue: self.has_payment_issue,
             onboarding_completed_at_unix: self.onboarding_completed_at_unix,
+            metadata: self.metadata,
             member_results: self.member_results,
         })
     }

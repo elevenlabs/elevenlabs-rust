@@ -2,9 +2,15 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(untagged)]
+#[non_exhaustive]
 pub enum AnalysisItemResponseModelDefinition {
     UserEvaluationAnalysisItem(UserEvaluationAnalysisItem),
     UserDataCollectionAnalysisItemOutput(UserDataCollectionAnalysisItemOutput),
+
+    /// Catch-all variant for unrecognized discriminant values.
+    /// If the server sends a discriminant not recognized by the current SDK
+    /// version, the raw payload is captured here so callers can still inspect it.
+    __Unknown(serde_json::Value),
 }
 
 impl<'de> serde::Deserialize<'de> for AnalysisItemResponseModelDefinition {
@@ -16,9 +22,7 @@ impl<'de> serde::Deserialize<'de> for AnalysisItemResponseModelDefinition {
 
         let mut matched_literal = false;
 
-        if value.get("source").and_then(serde_json::Value::as_str) == Some("user")
-            && value.get("kind").and_then(serde_json::Value::as_str) == Some("evaluation")
-        {
+        if value.get("kind").and_then(serde_json::Value::as_str) == Some("evaluation") {
             matched_literal = true;
             if let Ok(parsed) = serde_json::from_value::<UserEvaluationAnalysisItem>(value.clone())
             {
@@ -26,9 +30,7 @@ impl<'de> serde::Deserialize<'de> for AnalysisItemResponseModelDefinition {
             }
         }
 
-        if value.get("source").and_then(serde_json::Value::as_str) == Some("user")
-            && value.get("kind").and_then(serde_json::Value::as_str) == Some("data_collection")
-        {
+        if value.get("kind").and_then(serde_json::Value::as_str) == Some("data_collection") {
             matched_literal = true;
             if let Ok(parsed) =
                 serde_json::from_value::<UserDataCollectionAnalysisItemOutput>(value.clone())
@@ -38,6 +40,10 @@ impl<'de> serde::Deserialize<'de> for AnalysisItemResponseModelDefinition {
         }
 
         if !matched_literal {
+            if value.get("kind").is_some_and(serde_json::Value::is_string) {
+                return Ok(Self::__Unknown(value));
+            }
+
             if let Ok(parsed) = serde_json::from_value::<UserEvaluationAnalysisItem>(value.clone())
             {
                 return Ok(Self::UserEvaluationAnalysisItem(parsed));
@@ -48,6 +54,8 @@ impl<'de> serde::Deserialize<'de> for AnalysisItemResponseModelDefinition {
             {
                 return Ok(Self::UserDataCollectionAnalysisItemOutput(parsed));
             }
+
+            return Ok(Self::__Unknown(value));
         }
 
         Err(serde::de::Error::custom(
@@ -96,6 +104,24 @@ impl AnalysisItemResponseModelDefinition {
             _ => None,
         }
     }
+
+    pub fn is_unknown(&self) -> bool {
+        matches!(self, Self::__Unknown(_))
+    }
+
+    pub fn as_unknown(&self) -> Option<&serde_json::Value> {
+        match self {
+            Self::__Unknown(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_unknown(self) -> Option<serde_json::Value> {
+        match self {
+            Self::__Unknown(value) => Some(value),
+            _ => None,
+        }
+    }
 }
 
 impl fmt::Display for AnalysisItemResponseModelDefinition {
@@ -107,6 +133,11 @@ impl fmt::Display for AnalysisItemResponseModelDefinition {
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
             ),
             Self::UserDataCollectionAnalysisItemOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::__Unknown(value) => write!(
                 f,
                 "{}",
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))

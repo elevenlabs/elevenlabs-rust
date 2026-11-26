@@ -20,7 +20,7 @@ pub struct ToolsListQueryRequest {
     pub types: Option<Vec<ToolTypeFilter>>,
     /// The direction to sort the results
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    pub sort_direction: Option<SortDirection>,
     /// The field to sort the results by
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<ToolSortBy>,
@@ -46,7 +46,7 @@ pub struct ToolsListQueryRequestBuilder {
     show_only_owned_documents: Option<bool>,
     created_by_user_id: Option<String>,
     types: Option<Vec<ToolTypeFilter>>,
-    sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    sort_direction: Option<SortDirection>,
     sort_by: Option<ToolSortBy>,
     used_by_agent_id: Option<String>,
     cursor: Option<String>,
@@ -78,10 +78,7 @@ impl ToolsListQueryRequestBuilder {
         self
     }
 
-    pub fn sort_direction(
-        mut self,
-        value: BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort,
-    ) -> Self {
+    pub fn sort_direction(mut self, value: SortDirection) -> Self {
         self.sort_direction = Some(value);
         self
     }

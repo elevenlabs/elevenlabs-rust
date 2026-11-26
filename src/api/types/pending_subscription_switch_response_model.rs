@@ -4,7 +4,7 @@ pub use crate::prelude::*;
 pub struct PendingSubscriptionSwitchResponseModel {
     /// The tier to change to.
     pub next_tier: NextTier,
-    pub next_billing_period: CharacterRefreshPeriod,
+    pub next_billing_period: BillingPeriod,
     /// The timestamp of the change.
     #[serde(default)]
     #[serde(with = "crate::core::number_serializers::int")]
@@ -21,7 +21,7 @@ impl PendingSubscriptionSwitchResponseModel {
 #[non_exhaustive]
 pub struct PendingSubscriptionSwitchResponseModelBuilder {
     next_tier: Option<NextTier>,
-    next_billing_period: Option<CharacterRefreshPeriod>,
+    next_billing_period: Option<BillingPeriod>,
     timestamp_seconds: Option<i64>,
 }
 
@@ -31,7 +31,7 @@ impl PendingSubscriptionSwitchResponseModelBuilder {
         self
     }
 
-    pub fn next_billing_period(mut self, value: CharacterRefreshPeriod) -> Self {
+    pub fn next_billing_period(mut self, value: BillingPeriod) -> Self {
         self.next_billing_period = Some(value);
         self
     }

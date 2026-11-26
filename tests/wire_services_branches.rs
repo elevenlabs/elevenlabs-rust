@@ -224,6 +224,7 @@ async fn get_sends_the_real_wire_request() {
         "protection_status": "writer_perms_required",
         "auto_rebase": true,
         "sync_status": {
+            "branch_id": "value",
             "last_attempt": {
                 "outcome": "succeeded",
                 "attempted_at": 123
@@ -393,6 +394,7 @@ async fn update_sends_the_real_wire_request() {
         "protection_status": "writer_perms_required",
         "auto_rebase": true,
         "sync_status": {
+            "branch_id": "value",
             "last_attempt": {
                 "outcome": "succeeded",
                 "attempted_at": 123
@@ -456,7 +458,8 @@ async fn update_sends_the_real_wire_request() {
         "description": "value",
         "is_archived": true,
         "protection_status": "writer_perms_required",
-        "auto_rebase": true
+        "auto_rebase": true,
+        "sync_branch_id": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -538,7 +541,8 @@ async fn update_surfaces_the_declared_422() {
         "description": "value",
         "is_archived": true,
         "protection_status": "writer_perms_required",
-        "auto_rebase": true
+        "auto_rebase": true,
+        "sync_branch_id": "value"
     }"#,
     )
     .expect("fixture is valid JSON");

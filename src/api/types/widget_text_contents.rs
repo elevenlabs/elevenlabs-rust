@@ -14,9 +14,15 @@ pub struct WidgetTextContents {
     /// Text and ARIA label for the new call button. Displayed when the caller already finished at least one call in order ot start the next one.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_call: Option<String>,
+    /// Text and ARIA label for the button that resumes the conversation.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resume_call: Option<String>,
     /// Text and ARIA label for the end call button.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_call: Option<String>,
+    /// Text and ARIA label for the end chat button.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_chat: Option<String>,
     /// ARIA label for the mute microphone button.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mute_microphone: Option<String>,
@@ -29,6 +35,18 @@ pub struct WidgetTextContents {
     /// ARIA label for the expand button.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expand: Option<String>,
+    /// ARIA label for the header button that expands the widget.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand_widget: Option<String>,
+    /// ARIA label for the header button that collapses the widget back to its compact size.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collapse_widget: Option<String>,
+    /// ARIA label for the button that hides a dismissible widget.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dismiss: Option<String>,
+    /// ARIA label for the launcher button that reopens a dismissed widget.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_chat: Option<String>,
     /// Text displayed when the user copies a value using the copy button.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copied: Option<String>,
@@ -38,6 +56,24 @@ pub struct WidgetTextContents {
     /// Text and ARIA label for the cancel terms button.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dismiss_terms: Option<String>,
+    /// Title displayed in the confirmation dialog before ending a chat.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_chat_confirmation_title: Option<String>,
+    /// Description displayed in the confirmation dialog before ending a chat.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_chat_confirmation_description: Option<String>,
+    /// Title displayed in the confirmation dialog before ending a call.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_call_confirmation_title: Option<String>,
+    /// Description displayed in the confirmation dialog before ending a call.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_call_confirmation_description: Option<String>,
+    /// Text and ARIA label for the button that confirms ending a call.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_call_confirm: Option<String>,
+    /// Text and ARIA label for the button that cancels ending a chat or call.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cancel_end_confirmation: Option<String>,
     /// Status displayed when the agent is listening.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub listening_status: Option<String>,
@@ -47,6 +83,9 @@ pub struct WidgetTextContents {
     /// Status displayed when the agent is connecting.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connecting_status: Option<String>,
+    /// Status displayed when the agent is reconnecting.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reconnecting_status: Option<String>,
     /// Status displayed when the agent is chatting (text only)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chatting_status: Option<String>,
@@ -116,6 +155,12 @@ pub struct WidgetTextContents {
     /// Text and ARIA label for the switch to voice mode button.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub voice_mode: Option<String>,
+    /// Label for the voice option in the conversation mode toggle.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub voice_mode_label: Option<String>,
+    /// Label for the text option in the conversation mode toggle.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_mode_label: Option<String>,
     /// Toast notification displayed when switching to text mode.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub switched_to_text_mode: Option<String>,
@@ -161,9 +206,24 @@ pub struct WidgetTextContents {
     /// Status text displayed while the agent is typing.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub typing_indicator: Option<String>,
+    /// Status text displayed while the agent is thinking.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thinking_status: Option<String>,
     /// Fallback message displayed when rich content cannot be rendered.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rich_content_unavailable: Option<String>,
+    /// ARIA label for the previous button in a rich content carousel.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub carousel_previous: Option<String>,
+    /// ARIA label for the next button in a rich content carousel.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub carousel_next: Option<String>,
+    /// Label for the button that scrolls to one new message.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub new_message: Option<String>,
+    /// Label for the button that scrolls to new messages. Keep the count placeholder from the default, which is replaced with the number of messages.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub new_messages: Option<String>,
 }
 
 impl WidgetTextContents {
@@ -179,17 +239,30 @@ pub struct WidgetTextContentsBuilder {
     start_call: Option<String>,
     start_chat: Option<String>,
     new_call: Option<String>,
+    resume_call: Option<String>,
     end_call: Option<String>,
+    end_chat: Option<String>,
     mute_microphone: Option<String>,
     change_language: Option<String>,
     collapse: Option<String>,
     expand: Option<String>,
+    expand_widget: Option<String>,
+    collapse_widget: Option<String>,
+    dismiss: Option<String>,
+    open_chat: Option<String>,
     copied: Option<String>,
     accept_terms: Option<String>,
     dismiss_terms: Option<String>,
+    end_chat_confirmation_title: Option<String>,
+    end_chat_confirmation_description: Option<String>,
+    end_call_confirmation_title: Option<String>,
+    end_call_confirmation_description: Option<String>,
+    end_call_confirm: Option<String>,
+    cancel_end_confirmation: Option<String>,
     listening_status: Option<String>,
     speaking_status: Option<String>,
     connecting_status: Option<String>,
+    reconnecting_status: Option<String>,
     chatting_status: Option<String>,
     queue_waiting_status: Option<String>,
     queue_waiting_status_short: Option<String>,
@@ -213,6 +286,8 @@ pub struct WidgetTextContentsBuilder {
     send_message: Option<String>,
     text_mode: Option<String>,
     voice_mode: Option<String>,
+    voice_mode_label: Option<String>,
+    text_mode_label: Option<String>,
     switched_to_text_mode: Option<String>,
     switched_to_voice_mode: Option<String>,
     copy: Option<String>,
@@ -228,7 +303,12 @@ pub struct WidgetTextContentsBuilder {
     file_too_large: Option<String>,
     file_limit_reached: Option<String>,
     typing_indicator: Option<String>,
+    thinking_status: Option<String>,
     rich_content_unavailable: Option<String>,
+    carousel_previous: Option<String>,
+    carousel_next: Option<String>,
+    new_message: Option<String>,
+    new_messages: Option<String>,
 }
 
 impl WidgetTextContentsBuilder {
@@ -252,8 +332,18 @@ impl WidgetTextContentsBuilder {
         self
     }
 
+    pub fn resume_call(mut self, value: impl Into<String>) -> Self {
+        self.resume_call = Some(value.into());
+        self
+    }
+
     pub fn end_call(mut self, value: impl Into<String>) -> Self {
         self.end_call = Some(value.into());
+        self
+    }
+
+    pub fn end_chat(mut self, value: impl Into<String>) -> Self {
+        self.end_chat = Some(value.into());
         self
     }
 
@@ -277,6 +367,26 @@ impl WidgetTextContentsBuilder {
         self
     }
 
+    pub fn expand_widget(mut self, value: impl Into<String>) -> Self {
+        self.expand_widget = Some(value.into());
+        self
+    }
+
+    pub fn collapse_widget(mut self, value: impl Into<String>) -> Self {
+        self.collapse_widget = Some(value.into());
+        self
+    }
+
+    pub fn dismiss(mut self, value: impl Into<String>) -> Self {
+        self.dismiss = Some(value.into());
+        self
+    }
+
+    pub fn open_chat(mut self, value: impl Into<String>) -> Self {
+        self.open_chat = Some(value.into());
+        self
+    }
+
     pub fn copied(mut self, value: impl Into<String>) -> Self {
         self.copied = Some(value.into());
         self
@@ -292,6 +402,36 @@ impl WidgetTextContentsBuilder {
         self
     }
 
+    pub fn end_chat_confirmation_title(mut self, value: impl Into<String>) -> Self {
+        self.end_chat_confirmation_title = Some(value.into());
+        self
+    }
+
+    pub fn end_chat_confirmation_description(mut self, value: impl Into<String>) -> Self {
+        self.end_chat_confirmation_description = Some(value.into());
+        self
+    }
+
+    pub fn end_call_confirmation_title(mut self, value: impl Into<String>) -> Self {
+        self.end_call_confirmation_title = Some(value.into());
+        self
+    }
+
+    pub fn end_call_confirmation_description(mut self, value: impl Into<String>) -> Self {
+        self.end_call_confirmation_description = Some(value.into());
+        self
+    }
+
+    pub fn end_call_confirm(mut self, value: impl Into<String>) -> Self {
+        self.end_call_confirm = Some(value.into());
+        self
+    }
+
+    pub fn cancel_end_confirmation(mut self, value: impl Into<String>) -> Self {
+        self.cancel_end_confirmation = Some(value.into());
+        self
+    }
+
     pub fn listening_status(mut self, value: impl Into<String>) -> Self {
         self.listening_status = Some(value.into());
         self
@@ -304,6 +444,11 @@ impl WidgetTextContentsBuilder {
 
     pub fn connecting_status(mut self, value: impl Into<String>) -> Self {
         self.connecting_status = Some(value.into());
+        self
+    }
+
+    pub fn reconnecting_status(mut self, value: impl Into<String>) -> Self {
+        self.reconnecting_status = Some(value.into());
         self
     }
 
@@ -422,6 +567,16 @@ impl WidgetTextContentsBuilder {
         self
     }
 
+    pub fn voice_mode_label(mut self, value: impl Into<String>) -> Self {
+        self.voice_mode_label = Some(value.into());
+        self
+    }
+
+    pub fn text_mode_label(mut self, value: impl Into<String>) -> Self {
+        self.text_mode_label = Some(value.into());
+        self
+    }
+
     pub fn switched_to_text_mode(mut self, value: impl Into<String>) -> Self {
         self.switched_to_text_mode = Some(value.into());
         self
@@ -497,8 +652,33 @@ impl WidgetTextContentsBuilder {
         self
     }
 
+    pub fn thinking_status(mut self, value: impl Into<String>) -> Self {
+        self.thinking_status = Some(value.into());
+        self
+    }
+
     pub fn rich_content_unavailable(mut self, value: impl Into<String>) -> Self {
         self.rich_content_unavailable = Some(value.into());
+        self
+    }
+
+    pub fn carousel_previous(mut self, value: impl Into<String>) -> Self {
+        self.carousel_previous = Some(value.into());
+        self
+    }
+
+    pub fn carousel_next(mut self, value: impl Into<String>) -> Self {
+        self.carousel_next = Some(value.into());
+        self
+    }
+
+    pub fn new_message(mut self, value: impl Into<String>) -> Self {
+        self.new_message = Some(value.into());
+        self
+    }
+
+    pub fn new_messages(mut self, value: impl Into<String>) -> Self {
+        self.new_messages = Some(value.into());
         self
     }
 
@@ -509,17 +689,30 @@ impl WidgetTextContentsBuilder {
             start_call: self.start_call,
             start_chat: self.start_chat,
             new_call: self.new_call,
+            resume_call: self.resume_call,
             end_call: self.end_call,
+            end_chat: self.end_chat,
             mute_microphone: self.mute_microphone,
             change_language: self.change_language,
             collapse: self.collapse,
             expand: self.expand,
+            expand_widget: self.expand_widget,
+            collapse_widget: self.collapse_widget,
+            dismiss: self.dismiss,
+            open_chat: self.open_chat,
             copied: self.copied,
             accept_terms: self.accept_terms,
             dismiss_terms: self.dismiss_terms,
+            end_chat_confirmation_title: self.end_chat_confirmation_title,
+            end_chat_confirmation_description: self.end_chat_confirmation_description,
+            end_call_confirmation_title: self.end_call_confirmation_title,
+            end_call_confirmation_description: self.end_call_confirmation_description,
+            end_call_confirm: self.end_call_confirm,
+            cancel_end_confirmation: self.cancel_end_confirmation,
             listening_status: self.listening_status,
             speaking_status: self.speaking_status,
             connecting_status: self.connecting_status,
+            reconnecting_status: self.reconnecting_status,
             chatting_status: self.chatting_status,
             queue_waiting_status: self.queue_waiting_status,
             queue_waiting_status_short: self.queue_waiting_status_short,
@@ -543,6 +736,8 @@ impl WidgetTextContentsBuilder {
             send_message: self.send_message,
             text_mode: self.text_mode,
             voice_mode: self.voice_mode,
+            voice_mode_label: self.voice_mode_label,
+            text_mode_label: self.text_mode_label,
             switched_to_text_mode: self.switched_to_text_mode,
             switched_to_voice_mode: self.switched_to_voice_mode,
             copy: self.copy,
@@ -558,7 +753,12 @@ impl WidgetTextContentsBuilder {
             file_too_large: self.file_too_large,
             file_limit_reached: self.file_limit_reached,
             typing_indicator: self.typing_indicator,
+            thinking_status: self.thinking_status,
             rich_content_unavailable: self.rich_content_unavailable,
+            carousel_previous: self.carousel_previous,
+            carousel_next: self.carousel_next,
+            new_message: self.new_message,
+            new_messages: self.new_messages,
         })
     }
 }

@@ -4,6 +4,8 @@ pub use crate::prelude::*;
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum AuditActivityName {
     AccountSecurityChange,
+    AgentsUserDeleted,
+    AgentsUserExported,
     AgentsUserMemoryEntityDeleted,
     AgentsUserMemoryErased,
     AgentsUserMemoryExported,
@@ -153,6 +155,8 @@ impl Serialize for AuditActivityName {
     fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         match self {
             Self::AccountSecurityChange => serializer.serialize_str("Account Security Change"),
+            Self::AgentsUserDeleted => serializer.serialize_str("Agents User Deleted"),
+            Self::AgentsUserExported => serializer.serialize_str("Agents User Exported"),
             Self::AgentsUserMemoryEntityDeleted => {
                 serializer.serialize_str("Agents User Memory Entity Deleted")
             }
@@ -431,6 +435,8 @@ impl<'de> Deserialize<'de> for AuditActivityName {
         let value = String::deserialize(deserializer)?;
         match value.as_str() {
             "Account Security Change" => Ok(Self::AccountSecurityChange),
+            "Agents User Deleted" => Ok(Self::AgentsUserDeleted),
+            "Agents User Exported" => Ok(Self::AgentsUserExported),
             "Agents User Memory Entity Deleted" => Ok(Self::AgentsUserMemoryEntityDeleted),
             "Agents User Memory Erased" => Ok(Self::AgentsUserMemoryErased),
             "Agents User Memory Exported" => Ok(Self::AgentsUserMemoryExported),
@@ -602,6 +608,8 @@ impl fmt::Display for AuditActivityName {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::AccountSecurityChange => write!(f, "Account Security Change"),
+            Self::AgentsUserDeleted => write!(f, "Agents User Deleted"),
+            Self::AgentsUserExported => write!(f, "Agents User Exported"),
             Self::AgentsUserMemoryEntityDeleted => write!(f, "Agents User Memory Entity Deleted"),
             Self::AgentsUserMemoryErased => write!(f, "Agents User Memory Erased"),
             Self::AgentsUserMemoryExported => write!(f, "Agents User Memory Exported"),

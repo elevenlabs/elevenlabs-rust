@@ -37,7 +37,7 @@ pub struct CampaignResponse {
     #[serde(with = "crate::core::number_serializers::int::option")]
     pub target_concurrency_limit: Option<i64>,
     pub channel: OutboundChannel,
-    pub mode: ListMode,
+    pub mode: OutboundMode,
     pub counts: CampaignSummaryCounts,
     #[serde(default)]
     pub agent_name: String,
@@ -67,7 +67,7 @@ pub struct CampaignResponseBuilder {
     environment: Option<String>,
     target_concurrency_limit: Option<i64>,
     channel: Option<OutboundChannel>,
-    mode: Option<ListMode>,
+    mode: Option<OutboundMode>,
     counts: Option<CampaignSummaryCounts>,
     agent_name: Option<String>,
 }
@@ -148,7 +148,7 @@ impl CampaignResponseBuilder {
         self
     }
 
-    pub fn mode(mut self, value: ListMode) -> Self {
+    pub fn mode(mut self, value: OutboundMode) -> Self {
         self.mode = Some(value);
         self
     }

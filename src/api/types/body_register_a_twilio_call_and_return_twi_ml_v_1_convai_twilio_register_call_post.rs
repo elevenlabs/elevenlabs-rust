@@ -9,7 +9,7 @@ pub struct BodyRegisterATwilioCallAndReturnTwiMlV1ConvaiTwilioRegisterCallPost {
     #[serde(default)]
     pub to_number: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub direction: Option<SmsConversationInfoDirection>,
+    pub direction: Option<TelephonyDirection>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conversation_initiation_client_data: Option<ConversationInitiationClientDataRequestInput>,
 }
@@ -26,7 +26,7 @@ pub struct BodyRegisterATwilioCallAndReturnTwiMlV1ConvaiTwilioRegisterCallPostBu
     agent_id: Option<String>,
     from_number: Option<String>,
     to_number: Option<String>,
-    direction: Option<SmsConversationInfoDirection>,
+    direction: Option<TelephonyDirection>,
     conversation_initiation_client_data: Option<ConversationInitiationClientDataRequestInput>,
 }
 
@@ -46,7 +46,7 @@ impl BodyRegisterATwilioCallAndReturnTwiMlV1ConvaiTwilioRegisterCallPostBuilder 
         self
     }
 
-    pub fn direction(mut self, value: SmsConversationInfoDirection) -> Self {
+    pub fn direction(mut self, value: TelephonyDirection) -> Self {
         self.direction = Some(value);
         self
     }

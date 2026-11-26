@@ -14,9 +14,12 @@ pub struct BodyUpdateAgentBranchV1ConvaiAgentsAgentIdBranchesBranchIdPatch {
     /// The protection level for the branch
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protection_status: Option<BranchProtectionStatus>,
-    /// When true, rebase this branch onto main automatically after each new main version. Cannot be enabled on the main branch.
+    /// When true, rebase this branch automatically after each new version of the branch it is kept in sync with (`sync_branch_id`, main by default). Cannot be enabled on the main branch, or while this branch is more protected than a non-main branch it is kept in sync with.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rebase: Option<bool>,
+    /// ID of the branch to keep this branch in sync with: its new versions are pulled in automatically while `auto_rebase` is on. Pass the main branch's ID to sync with main again. Must be the main branch or the active branch this branch was created from (`parent_branch_id`). At most 10 branches can be kept in sync with one another in a row. Cannot be set on the main branch.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_branch_id: Option<String>,
 }
 
 impl BodyUpdateAgentBranchV1ConvaiAgentsAgentIdBranchesBranchIdPatch {
@@ -34,6 +37,7 @@ pub struct BodyUpdateAgentBranchV1ConvaiAgentsAgentIdBranchesBranchIdPatchBuilde
     is_archived: Option<bool>,
     protection_status: Option<BranchProtectionStatus>,
     auto_rebase: Option<bool>,
+    sync_branch_id: Option<String>,
 }
 
 impl BodyUpdateAgentBranchV1ConvaiAgentsAgentIdBranchesBranchIdPatchBuilder {
@@ -62,6 +66,11 @@ impl BodyUpdateAgentBranchV1ConvaiAgentsAgentIdBranchesBranchIdPatchBuilder {
         self
     }
 
+    pub fn sync_branch_id(mut self, value: impl Into<String>) -> Self {
+        self.sync_branch_id = Some(value.into());
+        self
+    }
+
     /// Consumes the builder and constructs a [`BodyUpdateAgentBranchV1ConvaiAgentsAgentIdBranchesBranchIdPatch`].
     pub fn build(
         self,
@@ -73,6 +82,7 @@ impl BodyUpdateAgentBranchV1ConvaiAgentsAgentIdBranchesBranchIdPatchBuilder {
                 is_archived: self.is_archived,
                 protection_status: self.protection_status,
                 auto_rebase: self.auto_rebase,
+                sync_branch_id: self.sync_branch_id,
             },
         )
     }

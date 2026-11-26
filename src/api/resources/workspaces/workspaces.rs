@@ -191,6 +191,88 @@ impl WorkspacesClient {
         Ok(result)
     }
 
+    /// Update Reseller Workspace
+    ///
+    /// Update a customer workspace. Only the fields sent are changed.
+    ///
+    /// # Arguments
+    ///
+    /// * `workspace_id` - ID of the customer workspace. Returned when you provision one; list them with `GET /v1/reception/reseller/workspaces`.
+    /// * `body`
+    /// * `options` - Per-call overrides
+    ///
+    /// # Returns
+    ///
+    /// Successful Response
+    pub async fn update(
+        &self,
+        workspace_id: &str,
+        body: &UpdateResellerWorkspaceRequest,
+        options: Option<RequestOptions>,
+    ) -> Result<ResellerWorkspaceSummary, crate::error::ApiError> {
+        let url = format!("/v1/reception/reseller/workspaces/{}", workspace_id);
+
+        let mut request = self.http_client.patch(url);
+        if let Some(opts) = &options {
+            for (key, value) in &opts.additional_headers {
+                request = request.header(key.as_str(), value.as_str());
+            }
+            for (key, value) in &opts.additional_query_params {
+                request = request.query(&[(key.as_str(), value.as_str())]);
+            }
+            if let Some(timeout_seconds) = opts.timeout_seconds {
+                request = request.timeout(std::time::Duration::from_secs(timeout_seconds));
+            }
+        }
+        request = match options
+            .as_ref()
+            .and_then(|opts| opts.merge_into_body(&body))
+        {
+            Some(merged) => request.json(&merged),
+            None => request.json(&body),
+        };
+        let config = self.config.get_workspaces_config();
+        let config = match &options {
+            Some(opts) if opts.token.is_some() || opts.api_key.is_some() => {
+                let mut overridden = config.clone();
+                if let Some(api_key) = &opts.api_key {
+                    overridden.api_key = Some(api_key.clone());
+                }
+                overridden
+            }
+            _ => config,
+        };
+        for (key, value) in &config.custom_headers {
+            request = request.header(key.as_str(), value.as_str());
+        }
+        request = crate::core::auth::apply_auth(&config, request, true);
+
+        let response = self
+            .http_client
+            .send_with_retry(request, options.as_ref())
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            let body = response.text().await.unwrap_or_default();
+            return Err(crate::error::ApiError::from_response(
+                status,
+                Some(body.as_str()),
+            ));
+        }
+
+        let status = response.status().as_u16();
+        let result: ResellerWorkspaceSummary =
+            response
+                .json()
+                .await
+                .map_err(|err| crate::error::ApiError::DecodeError {
+                    status,
+                    message: format!("{err}"),
+                })?;
+        Ok(result)
+    }
+
     /// Complete Reseller Workspace Onboarding
     ///
     /// Finish setting up the workspace: create its receptionist and assistant from the business profile, reusing a receptionist from a setup already started, and connect your phone number, if you supply one. Safe to retry.

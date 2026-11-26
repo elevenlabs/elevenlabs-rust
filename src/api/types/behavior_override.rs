@@ -7,7 +7,7 @@ pub struct BehaviorOverride {
     pub verbosity: Option<Verbosity>,
     /// Output format override. Underlying default applies when unset.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub output_format: Option<BehaviorOverrideOutputFormat>,
+    pub output_format: Option<OutputFormat>,
     /// Interaction budget override. Underlying default applies when unset.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interaction_budget: Option<InteractionBudget>,
@@ -23,7 +23,7 @@ impl BehaviorOverride {
 #[non_exhaustive]
 pub struct BehaviorOverrideBuilder {
     verbosity: Option<Verbosity>,
-    output_format: Option<BehaviorOverrideOutputFormat>,
+    output_format: Option<OutputFormat>,
     interaction_budget: Option<InteractionBudget>,
 }
 
@@ -33,7 +33,7 @@ impl BehaviorOverrideBuilder {
         self
     }
 
-    pub fn output_format(mut self, value: BehaviorOverrideOutputFormat) -> Self {
+    pub fn output_format(mut self, value: OutputFormat) -> Self {
         self.output_format = Some(value);
         self
     }

@@ -7,7 +7,7 @@ pub struct UserDataCollectionAnalysisItemInput {
     pub source: Option<AttachedUserDataCollectionRefSource>,
     /// LLM to use for this item. If unset, the attaching agent's analysis_llm default is used.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub llm: Option<AgentMessagesOverridesLlm>,
+    pub llm: Option<Llm>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<DashboardDataCollectionChartModelType>,
     /// Schema property for literal JSON types. IMPORTANT: Only ONE of the following fields can be set: description (LLM provides value), dynamic_variable (value from variable), is_system_provided (system provides value), constant_value (fixed value), or is_omitted (parameter is omitted). These are mutually exclusive.
@@ -25,7 +25,7 @@ impl UserDataCollectionAnalysisItemInput {
 pub struct UserDataCollectionAnalysisItemInputBuilder {
     name: Option<String>,
     source: Option<AttachedUserDataCollectionRefSource>,
-    llm: Option<AgentMessagesOverridesLlm>,
+    llm: Option<Llm>,
     kind: Option<DashboardDataCollectionChartModelType>,
     value_schema: Option<DataCollectionValueSchema>,
 }
@@ -41,7 +41,7 @@ impl UserDataCollectionAnalysisItemInputBuilder {
         self
     }
 
-    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
+    pub fn llm(mut self, value: Llm) -> Self {
         self.llm = Some(value);
         self
     }

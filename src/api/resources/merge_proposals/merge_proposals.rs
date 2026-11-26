@@ -131,7 +131,7 @@ impl MergeProposalsClient {
 
     /// Create A Merge Proposal
     ///
-    /// Record a request to merge a source branch into a target branch. Anyone with edit access can open one; merging it later is gated on write access to the target branch, so this is how a change reaches a protected branch the author cannot merge into themselves.
+    /// Create a request to merge a source branch into a target branch. Callers with only propose access can open a proposal from a branch they own into its parent. Merging requires write access to the target branch.
     ///
     /// # Arguments
     ///

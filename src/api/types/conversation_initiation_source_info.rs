@@ -5,7 +5,7 @@ pub use crate::prelude::*;
 pub struct ConversationInitiationSourceInfo {
     /// Source of the conversation initiation
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub source: Option<ListConversationInitiationSource>,
+    pub source: Option<ConversationInitiationSource>,
     /// The SDK version number
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -20,12 +20,12 @@ impl ConversationInitiationSourceInfo {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct ConversationInitiationSourceInfoBuilder {
-    source: Option<ListConversationInitiationSource>,
+    source: Option<ConversationInitiationSource>,
     version: Option<String>,
 }
 
 impl ConversationInitiationSourceInfoBuilder {
-    pub fn source(mut self, value: ListConversationInitiationSource) -> Self {
+    pub fn source(mut self, value: ConversationInitiationSource) -> Self {
         self.source = Some(value);
         self
     }

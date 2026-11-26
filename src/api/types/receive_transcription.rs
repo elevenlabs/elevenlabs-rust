@@ -8,7 +8,6 @@ pub enum ReceiveTranscription {
     CommittedTranscript(CommittedTranscript),
     DiarizedTranscript(DiarizedTranscript),
     SpeakersMerged(SpeakersMerged),
-    SpeakerNames(SpeakerNames),
     CommittedTranscriptWithTimestamps(CommittedTranscriptWithTimestamps),
     CommittedTranscriptEntities(CommittedTranscriptEntities),
     RedactedTranscript(RedactedTranscript),
@@ -158,27 +157,6 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
                     }
                 }
                 return Ok(chosen.unwrap_or(Self::SpeakersMerged(parsed)));
-            }
-        }
-
-        if value
-            .get("message_type")
-            .and_then(serde_json::Value::as_str)
-            == Some("speaker_names")
-        {
-            matched_literal = true;
-            if let Ok(parsed) = serde_json::from_value::<SpeakerNames>(value.clone()) {
-                let best = matching_keys(&["message_type", "speaker_names"]);
-                let mut chosen = None;
-                let score = matching_keys(&["message_type", "text", "edited_text"]);
-                if score > best {
-                    if let Ok(alternative) =
-                        serde_json::from_value::<EditedTranscript>(value.clone())
-                    {
-                        chosen = Some(Self::EditedTranscript(alternative));
-                    }
-                }
-                return Ok(chosen.unwrap_or(Self::SpeakerNames(parsed)));
             }
         }
 
@@ -593,10 +571,6 @@ impl<'de> serde::Deserialize<'de> for ReceiveTranscription {
                 return Ok(Self::SpeakersMerged(parsed));
             }
 
-            if let Ok(parsed) = serde_json::from_value::<SpeakerNames>(value.clone()) {
-                return Ok(Self::SpeakerNames(parsed));
-            }
-
             if let Ok(parsed) =
                 serde_json::from_value::<CommittedTranscriptWithTimestamps>(value.clone())
             {
@@ -779,24 +753,6 @@ impl ReceiveTranscription {
     pub fn into_speakers_merged(self) -> Option<SpeakersMerged> {
         match self {
             Self::SpeakersMerged(value) => Some(value),
-            _ => None,
-        }
-    }
-
-    pub fn is_speaker_names(&self) -> bool {
-        matches!(self, Self::SpeakerNames(_))
-    }
-
-    pub fn as_speaker_names(&self) -> Option<&SpeakerNames> {
-        match self {
-            Self::SpeakerNames(value) => Some(value),
-            _ => None,
-        }
-    }
-
-    pub fn into_speaker_names(self) -> Option<SpeakerNames> {
-        match self {
-            Self::SpeakerNames(value) => Some(value),
             _ => None,
         }
     }
@@ -1180,11 +1136,6 @@ impl fmt::Display for ReceiveTranscription {
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
             ),
             Self::SpeakersMerged(value) => write!(
-                f,
-                "{}",
-                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
-            ),
-            Self::SpeakerNames(value) => write!(
                 f,
                 "{}",
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))

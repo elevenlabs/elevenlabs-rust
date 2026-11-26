@@ -53,7 +53,7 @@ pub struct ConversationHistoryMetadataCommonModel {
     pub initiator_id: Option<String>,
     /// Enum representing the possible sources for conversation initiation.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conversation_initiation_source: Option<ListConversationInitiationSource>,
+    pub conversation_initiation_source: Option<ConversationInitiationSource>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conversation_initiation_source_version: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -106,7 +106,7 @@ pub struct ConversationHistoryMetadataCommonModelBuilder {
     features_usage: Option<FeaturesUsageCommonModel>,
     eleven_assistant: Option<ConversationHistoryElevenAssistantCommonModel>,
     initiator_id: Option<String>,
-    conversation_initiation_source: Option<ListConversationInitiationSource>,
+    conversation_initiation_source: Option<ConversationInitiationSource>,
     conversation_initiation_source_version: Option<String>,
     timezone: Option<String>,
     async_metadata: Option<AsyncConversationMetadata>,
@@ -222,10 +222,7 @@ impl ConversationHistoryMetadataCommonModelBuilder {
         self
     }
 
-    pub fn conversation_initiation_source(
-        mut self,
-        value: ListConversationInitiationSource,
-    ) -> Self {
+    pub fn conversation_initiation_source(mut self, value: ConversationInitiationSource) -> Self {
         self.conversation_initiation_source = Some(value);
         self
     }

@@ -13,7 +13,7 @@ pub enum ReceiveDubbingStreamMessage {
     #[serde(rename = "status")]
     Status {
         #[serde(flatten)]
-        data: ReceiveDubbingStreamMessage2,
+        data: DubbingStatus,
     },
 
     #[serde(rename = "partial_transcript")]
@@ -124,14 +124,14 @@ impl ReceiveDubbingStreamMessage {
         matches!(self, Self::Status { .. })
     }
 
-    pub fn as_status(&self) -> Option<&ReceiveDubbingStreamMessage2> {
+    pub fn as_status(&self) -> Option<&DubbingStatus> {
         match self {
             Self::Status { data } => Some(data),
             _ => None,
         }
     }
 
-    pub fn into_status(self) -> Option<ReceiveDubbingStreamMessage2> {
+    pub fn into_status(self) -> Option<DubbingStatus> {
         match self {
             Self::Status { data } => Some(data),
             _ => None,

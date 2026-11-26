@@ -1,0 +1,62 @@
+pub use crate::prelude::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(tag = "type")]
+#[non_exhaustive]
+pub enum CreateTicketRequestSecondaryAssignee {
+    #[serde(rename = "ai_agent")]
+    AiAgent {
+        #[serde(flatten)]
+        data: TicketAiAgentAssigneeRequest,
+    },
+
+    #[serde(rename = "human_agent")]
+    HumanAgent {
+        #[serde(flatten)]
+        data: TicketHumanAgentAssigneeRequest,
+    },
+
+    /// Catch-all variant for unrecognized discriminant values.
+    /// If the server sends a discriminant not recognized by the current SDK
+    /// version, the raw payload is captured here so callers can still inspect it.
+    #[serde(untagged)]
+    __Unknown(serde_json::Value),
+}
+
+impl CreateTicketRequestSecondaryAssignee {
+    pub fn is_ai_agent(&self) -> bool {
+        matches!(self, Self::AiAgent { .. })
+    }
+
+    pub fn as_ai_agent(&self) -> Option<&TicketAiAgentAssigneeRequest> {
+        match self {
+            Self::AiAgent { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn into_ai_agent(self) -> Option<TicketAiAgentAssigneeRequest> {
+        match self {
+            Self::AiAgent { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn is_human_agent(&self) -> bool {
+        matches!(self, Self::HumanAgent { .. })
+    }
+
+    pub fn as_human_agent(&self) -> Option<&TicketHumanAgentAssigneeRequest> {
+        match self {
+            Self::HumanAgent { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn into_human_agent(self) -> Option<TicketHumanAgentAssigneeRequest> {
+        match self {
+            Self::HumanAgent { data } => Some(data),
+            _ => None,
+        }
+    }
+}

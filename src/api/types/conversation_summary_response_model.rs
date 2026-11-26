@@ -57,11 +57,11 @@ pub struct ConversationSummaryResponseModel {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub main_language: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conversation_initiation_source: Option<ListConversationInitiationSource>,
+    pub conversation_initiation_source: Option<ConversationInitiationSource>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tool_names: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub direction: Option<SmsConversationInfoDirection>,
+    pub direction: Option<TelephonyDirection>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     #[serde(with = "crate::core::number_serializers::float::option")]
@@ -106,9 +106,9 @@ pub struct ConversationSummaryResponseModelBuilder {
     transcript_summary: Option<String>,
     call_summary_title: Option<String>,
     main_language: Option<String>,
-    conversation_initiation_source: Option<ListConversationInitiationSource>,
+    conversation_initiation_source: Option<ConversationInitiationSource>,
     tool_names: Option<Vec<String>>,
-    direction: Option<SmsConversationInfoDirection>,
+    direction: Option<TelephonyDirection>,
     rating: Option<f64>,
     sentiment_analysis: Option<ConversationSentimentAnalysis>,
     data_collection_results: Option<serde_json::Value>,
@@ -213,10 +213,7 @@ impl ConversationSummaryResponseModelBuilder {
         self
     }
 
-    pub fn conversation_initiation_source(
-        mut self,
-        value: ListConversationInitiationSource,
-    ) -> Self {
+    pub fn conversation_initiation_source(mut self, value: ConversationInitiationSource) -> Self {
         self.conversation_initiation_source = Some(value);
         self
     }
@@ -226,7 +223,7 @@ impl ConversationSummaryResponseModelBuilder {
         self
     }
 
-    pub fn direction(mut self, value: SmsConversationInfoDirection) -> Self {
+    pub fn direction(mut self, value: TelephonyDirection) -> Self {
         self.direction = Some(value);
         self
     }

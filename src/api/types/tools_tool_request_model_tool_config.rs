@@ -2,10 +2,16 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(untagged)]
+#[non_exhaustive]
 pub enum ToolRequestModelToolConfig {
     WebhookToolConfigInput(WebhookToolConfigInput),
     ClientToolConfigInput(ClientToolConfigInput),
     SystemToolConfigInput(SystemToolConfigInput),
+
+    /// Catch-all variant for unrecognized discriminant values.
+    /// If the server sends a discriminant not recognized by the current SDK
+    /// version, the raw payload is captured here so callers can still inspect it.
+    __Unknown(serde_json::Value),
 }
 
 impl<'de> serde::Deserialize<'de> for ToolRequestModelToolConfig {
@@ -39,6 +45,10 @@ impl<'de> serde::Deserialize<'de> for ToolRequestModelToolConfig {
         }
 
         if !matched_literal {
+            if value.get("type").is_some_and(serde_json::Value::is_string) {
+                return Ok(Self::__Unknown(value));
+            }
+
             if let Ok(parsed) = serde_json::from_value::<WebhookToolConfigInput>(value.clone()) {
                 return Ok(Self::WebhookToolConfigInput(parsed));
             }
@@ -50,6 +60,8 @@ impl<'de> serde::Deserialize<'de> for ToolRequestModelToolConfig {
             if let Ok(parsed) = serde_json::from_value::<SystemToolConfigInput>(value.clone()) {
                 return Ok(Self::SystemToolConfigInput(parsed));
             }
+
+            return Ok(Self::__Unknown(value));
         }
 
         Err(serde::de::Error::custom(
@@ -112,6 +124,24 @@ impl ToolRequestModelToolConfig {
             _ => None,
         }
     }
+
+    pub fn is_unknown(&self) -> bool {
+        matches!(self, Self::__Unknown(_))
+    }
+
+    pub fn as_unknown(&self) -> Option<&serde_json::Value> {
+        match self {
+            Self::__Unknown(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_unknown(self) -> Option<serde_json::Value> {
+        match self {
+            Self::__Unknown(value) => Some(value),
+            _ => None,
+        }
+    }
 }
 
 impl fmt::Display for ToolRequestModelToolConfig {
@@ -128,6 +158,11 @@ impl fmt::Display for ToolRequestModelToolConfig {
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
             ),
             Self::SystemToolConfigInput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::__Unknown(value) => write!(
                 f,
                 "{}",
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))

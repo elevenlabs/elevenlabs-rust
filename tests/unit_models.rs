@@ -10219,7 +10219,7 @@ fn multichannel_speech_to_text_response_model_round_trips_through_serde() {
 }
 
 #[test]
-fn list_ok_response_round_trips_through_serde() {
+fn model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "model_id": "value",
@@ -10250,7 +10250,7 @@ fn list_ok_response_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: ListOkResponse =
+    let decoded: Model =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -13944,7 +13944,7 @@ fn time_range_round_trips_through_serde() {
 }
 
 #[test]
-fn composition_plan2_round_trips_through_serde() {
+fn composition_plan_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "chunks": [
@@ -13971,7 +13971,7 @@ fn composition_plan2_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: CompositionPlan2 =
+    let decoded: CompositionPlan =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -22719,17 +22719,30 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                     "start_call": "value",
                     "start_chat": "value",
                     "new_call": "value",
+                    "resume_call": "value",
                     "end_call": "value",
+                    "end_chat": "value",
                     "mute_microphone": "value",
                     "change_language": "value",
                     "collapse": "value",
                     "expand": "value",
+                    "expand_widget": "value",
+                    "collapse_widget": "value",
+                    "dismiss": "value",
+                    "open_chat": "value",
                     "copied": "value",
                     "accept_terms": "value",
                     "dismiss_terms": "value",
+                    "end_chat_confirmation_title": "value",
+                    "end_chat_confirmation_description": "value",
+                    "end_call_confirmation_title": "value",
+                    "end_call_confirmation_description": "value",
+                    "end_call_confirm": "value",
+                    "cancel_end_confirmation": "value",
                     "listening_status": "value",
                     "speaking_status": "value",
                     "connecting_status": "value",
+                    "reconnecting_status": "value",
                     "chatting_status": "value",
                     "queue_waiting_status": "value",
                     "queue_waiting_status_short": "value",
@@ -22753,6 +22766,8 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                     "send_message": "value",
                     "text_mode": "value",
                     "voice_mode": "value",
+                    "voice_mode_label": "value",
+                    "text_mode_label": "value",
                     "switched_to_text_mode": "value",
                     "switched_to_voice_mode": "value",
                     "copy": "value",
@@ -22768,7 +22783,12 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                     "file_too_large": "value",
                     "file_limit_reached": "value",
                     "typing_indicator": "value",
-                    "rich_content_unavailable": "value"
+                    "thinking_status": "value",
+                    "rich_content_unavailable": "value",
+                    "carousel_previous": "value",
+                    "carousel_next": "value",
+                    "new_message": "value",
+                    "new_messages": "value"
                 },
                 "styles": {
                     "base": "value",
@@ -22796,6 +22816,7 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                 "end_confirmation_enabled": true,
                 "mobile_fullscreen": true,
                 "transcript_speech_sync_enabled": true,
+                "layout": "default",
                 "language_selector": true,
                 "supports_text_only": true,
                 "custom_avatar_path": "value",
@@ -22806,17 +22827,30 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                             "start_call": "value",
                             "start_chat": "value",
                             "new_call": "value",
+                            "resume_call": "value",
                             "end_call": "value",
+                            "end_chat": "value",
                             "mute_microphone": "value",
                             "change_language": "value",
                             "collapse": "value",
                             "expand": "value",
+                            "expand_widget": "value",
+                            "collapse_widget": "value",
+                            "dismiss": "value",
+                            "open_chat": "value",
                             "copied": "value",
                             "accept_terms": "value",
                             "dismiss_terms": "value",
+                            "end_chat_confirmation_title": "value",
+                            "end_chat_confirmation_description": "value",
+                            "end_call_confirmation_title": "value",
+                            "end_call_confirmation_description": "value",
+                            "end_call_confirm": "value",
+                            "cancel_end_confirmation": "value",
                             "listening_status": "value",
                             "speaking_status": "value",
                             "connecting_status": "value",
+                            "reconnecting_status": "value",
                             "chatting_status": "value",
                             "queue_waiting_status": "value",
                             "queue_waiting_status_short": "value",
@@ -22840,6 +22874,8 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                             "send_message": "value",
                             "text_mode": "value",
                             "voice_mode": "value",
+                            "voice_mode_label": "value",
+                            "text_mode_label": "value",
                             "switched_to_text_mode": "value",
                             "switched_to_voice_mode": "value",
                             "copy": "value",
@@ -22855,7 +22891,12 @@ fn body_create_agent_v1_convai_agents_create_post_round_trips_through_serde() {
                             "file_too_large": "value",
                             "file_limit_reached": "value",
                             "typing_indicator": "value",
-                            "rich_content_unavailable": "value"
+                            "thinking_status": "value",
+                            "rich_content_unavailable": "value",
+                            "carousel_previous": "value",
+                            "carousel_next": "value",
+                            "new_message": "value",
+                            "new_messages": "value"
                         },
                         "text_contents_translation": {
                             "source": {
@@ -28676,17 +28717,30 @@ fn agent_platform_settings_request_model_round_trips_through_serde() {
                 "start_call": "value",
                 "start_chat": "value",
                 "new_call": "value",
+                "resume_call": "value",
                 "end_call": "value",
+                "end_chat": "value",
                 "mute_microphone": "value",
                 "change_language": "value",
                 "collapse": "value",
                 "expand": "value",
+                "expand_widget": "value",
+                "collapse_widget": "value",
+                "dismiss": "value",
+                "open_chat": "value",
                 "copied": "value",
                 "accept_terms": "value",
                 "dismiss_terms": "value",
+                "end_chat_confirmation_title": "value",
+                "end_chat_confirmation_description": "value",
+                "end_call_confirmation_title": "value",
+                "end_call_confirmation_description": "value",
+                "end_call_confirm": "value",
+                "cancel_end_confirmation": "value",
                 "listening_status": "value",
                 "speaking_status": "value",
                 "connecting_status": "value",
+                "reconnecting_status": "value",
                 "chatting_status": "value",
                 "queue_waiting_status": "value",
                 "queue_waiting_status_short": "value",
@@ -28710,6 +28764,8 @@ fn agent_platform_settings_request_model_round_trips_through_serde() {
                 "send_message": "value",
                 "text_mode": "value",
                 "voice_mode": "value",
+                "voice_mode_label": "value",
+                "text_mode_label": "value",
                 "switched_to_text_mode": "value",
                 "switched_to_voice_mode": "value",
                 "copy": "value",
@@ -28725,7 +28781,12 @@ fn agent_platform_settings_request_model_round_trips_through_serde() {
                 "file_too_large": "value",
                 "file_limit_reached": "value",
                 "typing_indicator": "value",
-                "rich_content_unavailable": "value"
+                "thinking_status": "value",
+                "rich_content_unavailable": "value",
+                "carousel_previous": "value",
+                "carousel_next": "value",
+                "new_message": "value",
+                "new_messages": "value"
             },
             "styles": {
                 "base": "value",
@@ -28753,6 +28814,7 @@ fn agent_platform_settings_request_model_round_trips_through_serde() {
             "end_confirmation_enabled": true,
             "mobile_fullscreen": true,
             "transcript_speech_sync_enabled": true,
+            "layout": "default",
             "language_selector": true,
             "supports_text_only": true,
             "custom_avatar_path": "value",
@@ -28763,17 +28825,30 @@ fn agent_platform_settings_request_model_round_trips_through_serde() {
                         "start_call": "value",
                         "start_chat": "value",
                         "new_call": "value",
+                        "resume_call": "value",
                         "end_call": "value",
+                        "end_chat": "value",
                         "mute_microphone": "value",
                         "change_language": "value",
                         "collapse": "value",
                         "expand": "value",
+                        "expand_widget": "value",
+                        "collapse_widget": "value",
+                        "dismiss": "value",
+                        "open_chat": "value",
                         "copied": "value",
                         "accept_terms": "value",
                         "dismiss_terms": "value",
+                        "end_chat_confirmation_title": "value",
+                        "end_chat_confirmation_description": "value",
+                        "end_call_confirmation_title": "value",
+                        "end_call_confirmation_description": "value",
+                        "end_call_confirm": "value",
+                        "cancel_end_confirmation": "value",
                         "listening_status": "value",
                         "speaking_status": "value",
                         "connecting_status": "value",
+                        "reconnecting_status": "value",
                         "chatting_status": "value",
                         "queue_waiting_status": "value",
                         "queue_waiting_status_short": "value",
@@ -28797,6 +28872,8 @@ fn agent_platform_settings_request_model_round_trips_through_serde() {
                         "send_message": "value",
                         "text_mode": "value",
                         "voice_mode": "value",
+                        "voice_mode_label": "value",
+                        "text_mode_label": "value",
                         "switched_to_text_mode": "value",
                         "switched_to_voice_mode": "value",
                         "copy": "value",
@@ -28812,7 +28889,12 @@ fn agent_platform_settings_request_model_round_trips_through_serde() {
                         "file_too_large": "value",
                         "file_limit_reached": "value",
                         "typing_indicator": "value",
-                        "rich_content_unavailable": "value"
+                        "thinking_status": "value",
+                        "rich_content_unavailable": "value",
+                        "carousel_previous": "value",
+                        "carousel_next": "value",
+                        "new_message": "value",
+                        "new_messages": "value"
                     },
                     "text_contents_translation": {
                         "source": {
@@ -29211,17 +29293,30 @@ fn widget_config_round_trips_through_serde() {
             "start_call": "value",
             "start_chat": "value",
             "new_call": "value",
+            "resume_call": "value",
             "end_call": "value",
+            "end_chat": "value",
             "mute_microphone": "value",
             "change_language": "value",
             "collapse": "value",
             "expand": "value",
+            "expand_widget": "value",
+            "collapse_widget": "value",
+            "dismiss": "value",
+            "open_chat": "value",
             "copied": "value",
             "accept_terms": "value",
             "dismiss_terms": "value",
+            "end_chat_confirmation_title": "value",
+            "end_chat_confirmation_description": "value",
+            "end_call_confirmation_title": "value",
+            "end_call_confirmation_description": "value",
+            "end_call_confirm": "value",
+            "cancel_end_confirmation": "value",
             "listening_status": "value",
             "speaking_status": "value",
             "connecting_status": "value",
+            "reconnecting_status": "value",
             "chatting_status": "value",
             "queue_waiting_status": "value",
             "queue_waiting_status_short": "value",
@@ -29245,6 +29340,8 @@ fn widget_config_round_trips_through_serde() {
             "send_message": "value",
             "text_mode": "value",
             "voice_mode": "value",
+            "voice_mode_label": "value",
+            "text_mode_label": "value",
             "switched_to_text_mode": "value",
             "switched_to_voice_mode": "value",
             "copy": "value",
@@ -29260,7 +29357,12 @@ fn widget_config_round_trips_through_serde() {
             "file_too_large": "value",
             "file_limit_reached": "value",
             "typing_indicator": "value",
-            "rich_content_unavailable": "value"
+            "thinking_status": "value",
+            "rich_content_unavailable": "value",
+            "carousel_previous": "value",
+            "carousel_next": "value",
+            "new_message": "value",
+            "new_messages": "value"
         },
         "styles": {
             "base": "value",
@@ -29288,6 +29390,7 @@ fn widget_config_round_trips_through_serde() {
         "end_confirmation_enabled": true,
         "mobile_fullscreen": true,
         "transcript_speech_sync_enabled": true,
+        "layout": "default",
         "language_selector": true,
         "supports_text_only": true,
         "custom_avatar_path": "value",
@@ -29298,17 +29401,30 @@ fn widget_config_round_trips_through_serde() {
                     "start_call": "value",
                     "start_chat": "value",
                     "new_call": "value",
+                    "resume_call": "value",
                     "end_call": "value",
+                    "end_chat": "value",
                     "mute_microphone": "value",
                     "change_language": "value",
                     "collapse": "value",
                     "expand": "value",
+                    "expand_widget": "value",
+                    "collapse_widget": "value",
+                    "dismiss": "value",
+                    "open_chat": "value",
                     "copied": "value",
                     "accept_terms": "value",
                     "dismiss_terms": "value",
+                    "end_chat_confirmation_title": "value",
+                    "end_chat_confirmation_description": "value",
+                    "end_call_confirmation_title": "value",
+                    "end_call_confirmation_description": "value",
+                    "end_call_confirm": "value",
+                    "cancel_end_confirmation": "value",
                     "listening_status": "value",
                     "speaking_status": "value",
                     "connecting_status": "value",
+                    "reconnecting_status": "value",
                     "chatting_status": "value",
                     "queue_waiting_status": "value",
                     "queue_waiting_status_short": "value",
@@ -29332,6 +29448,8 @@ fn widget_config_round_trips_through_serde() {
                     "send_message": "value",
                     "text_mode": "value",
                     "voice_mode": "value",
+                    "voice_mode_label": "value",
+                    "text_mode_label": "value",
                     "switched_to_text_mode": "value",
                     "switched_to_voice_mode": "value",
                     "copy": "value",
@@ -29347,7 +29465,12 @@ fn widget_config_round_trips_through_serde() {
                     "file_too_large": "value",
                     "file_limit_reached": "value",
                     "typing_indicator": "value",
-                    "rich_content_unavailable": "value"
+                    "thinking_status": "value",
+                    "rich_content_unavailable": "value",
+                    "carousel_previous": "value",
+                    "carousel_next": "value",
+                    "new_message": "value",
+                    "new_messages": "value"
                 },
                 "text_contents_translation": {
                     "source": {
@@ -29484,17 +29607,30 @@ fn widget_text_contents_round_trips_through_serde() {
         "start_call": "value",
         "start_chat": "value",
         "new_call": "value",
+        "resume_call": "value",
         "end_call": "value",
+        "end_chat": "value",
         "mute_microphone": "value",
         "change_language": "value",
         "collapse": "value",
         "expand": "value",
+        "expand_widget": "value",
+        "collapse_widget": "value",
+        "dismiss": "value",
+        "open_chat": "value",
         "copied": "value",
         "accept_terms": "value",
         "dismiss_terms": "value",
+        "end_chat_confirmation_title": "value",
+        "end_chat_confirmation_description": "value",
+        "end_call_confirmation_title": "value",
+        "end_call_confirmation_description": "value",
+        "end_call_confirm": "value",
+        "cancel_end_confirmation": "value",
         "listening_status": "value",
         "speaking_status": "value",
         "connecting_status": "value",
+        "reconnecting_status": "value",
         "chatting_status": "value",
         "queue_waiting_status": "value",
         "queue_waiting_status_short": "value",
@@ -29518,6 +29654,8 @@ fn widget_text_contents_round_trips_through_serde() {
         "send_message": "value",
         "text_mode": "value",
         "voice_mode": "value",
+        "voice_mode_label": "value",
+        "text_mode_label": "value",
         "switched_to_text_mode": "value",
         "switched_to_voice_mode": "value",
         "copy": "value",
@@ -29533,7 +29671,12 @@ fn widget_text_contents_round_trips_through_serde() {
         "file_too_large": "value",
         "file_limit_reached": "value",
         "typing_indicator": "value",
-        "rich_content_unavailable": "value"
+        "thinking_status": "value",
+        "rich_content_unavailable": "value",
+        "carousel_previous": "value",
+        "carousel_next": "value",
+        "new_message": "value",
+        "new_messages": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -29589,17 +29732,30 @@ fn widget_language_preset_round_trips_through_serde() {
             "start_call": "value",
             "start_chat": "value",
             "new_call": "value",
+            "resume_call": "value",
             "end_call": "value",
+            "end_chat": "value",
             "mute_microphone": "value",
             "change_language": "value",
             "collapse": "value",
             "expand": "value",
+            "expand_widget": "value",
+            "collapse_widget": "value",
+            "dismiss": "value",
+            "open_chat": "value",
             "copied": "value",
             "accept_terms": "value",
             "dismiss_terms": "value",
+            "end_chat_confirmation_title": "value",
+            "end_chat_confirmation_description": "value",
+            "end_call_confirmation_title": "value",
+            "end_call_confirmation_description": "value",
+            "end_call_confirm": "value",
+            "cancel_end_confirmation": "value",
             "listening_status": "value",
             "speaking_status": "value",
             "connecting_status": "value",
+            "reconnecting_status": "value",
             "chatting_status": "value",
             "queue_waiting_status": "value",
             "queue_waiting_status_short": "value",
@@ -29623,6 +29779,8 @@ fn widget_language_preset_round_trips_through_serde() {
             "send_message": "value",
             "text_mode": "value",
             "voice_mode": "value",
+            "voice_mode_label": "value",
+            "text_mode_label": "value",
             "switched_to_text_mode": "value",
             "switched_to_voice_mode": "value",
             "copy": "value",
@@ -29638,7 +29796,12 @@ fn widget_language_preset_round_trips_through_serde() {
             "file_too_large": "value",
             "file_limit_reached": "value",
             "typing_indicator": "value",
-            "rich_content_unavailable": "value"
+            "thinking_status": "value",
+            "rich_content_unavailable": "value",
+            "carousel_previous": "value",
+            "carousel_next": "value",
+            "new_message": "value",
+            "new_messages": "value"
         },
         "text_contents_translation": {
             "source": {
@@ -36375,17 +36538,30 @@ fn get_agent_response_model_round_trips_through_serde() {
                     "start_call": "value",
                     "start_chat": "value",
                     "new_call": "value",
+                    "resume_call": "value",
                     "end_call": "value",
+                    "end_chat": "value",
                     "mute_microphone": "value",
                     "change_language": "value",
                     "collapse": "value",
                     "expand": "value",
+                    "expand_widget": "value",
+                    "collapse_widget": "value",
+                    "dismiss": "value",
+                    "open_chat": "value",
                     "copied": "value",
                     "accept_terms": "value",
                     "dismiss_terms": "value",
+                    "end_chat_confirmation_title": "value",
+                    "end_chat_confirmation_description": "value",
+                    "end_call_confirmation_title": "value",
+                    "end_call_confirmation_description": "value",
+                    "end_call_confirm": "value",
+                    "cancel_end_confirmation": "value",
                     "listening_status": "value",
                     "speaking_status": "value",
                     "connecting_status": "value",
+                    "reconnecting_status": "value",
                     "chatting_status": "value",
                     "queue_waiting_status": "value",
                     "queue_waiting_status_short": "value",
@@ -36409,6 +36585,8 @@ fn get_agent_response_model_round_trips_through_serde() {
                     "send_message": "value",
                     "text_mode": "value",
                     "voice_mode": "value",
+                    "voice_mode_label": "value",
+                    "text_mode_label": "value",
                     "switched_to_text_mode": "value",
                     "switched_to_voice_mode": "value",
                     "copy": "value",
@@ -36424,7 +36602,12 @@ fn get_agent_response_model_round_trips_through_serde() {
                     "file_too_large": "value",
                     "file_limit_reached": "value",
                     "typing_indicator": "value",
-                    "rich_content_unavailable": "value"
+                    "thinking_status": "value",
+                    "rich_content_unavailable": "value",
+                    "carousel_previous": "value",
+                    "carousel_next": "value",
+                    "new_message": "value",
+                    "new_messages": "value"
                 },
                 "styles": {
                     "base": "value",
@@ -36452,6 +36635,7 @@ fn get_agent_response_model_round_trips_through_serde() {
                 "end_confirmation_enabled": true,
                 "mobile_fullscreen": true,
                 "transcript_speech_sync_enabled": true,
+                "layout": "default",
                 "language_selector": true,
                 "supports_text_only": true,
                 "custom_avatar_path": "value",
@@ -36462,17 +36646,30 @@ fn get_agent_response_model_round_trips_through_serde() {
                             "start_call": "value",
                             "start_chat": "value",
                             "new_call": "value",
+                            "resume_call": "value",
                             "end_call": "value",
+                            "end_chat": "value",
                             "mute_microphone": "value",
                             "change_language": "value",
                             "collapse": "value",
                             "expand": "value",
+                            "expand_widget": "value",
+                            "collapse_widget": "value",
+                            "dismiss": "value",
+                            "open_chat": "value",
                             "copied": "value",
                             "accept_terms": "value",
                             "dismiss_terms": "value",
+                            "end_chat_confirmation_title": "value",
+                            "end_chat_confirmation_description": "value",
+                            "end_call_confirmation_title": "value",
+                            "end_call_confirmation_description": "value",
+                            "end_call_confirm": "value",
+                            "cancel_end_confirmation": "value",
                             "listening_status": "value",
                             "speaking_status": "value",
                             "connecting_status": "value",
+                            "reconnecting_status": "value",
                             "chatting_status": "value",
                             "queue_waiting_status": "value",
                             "queue_waiting_status_short": "value",
@@ -36496,6 +36693,8 @@ fn get_agent_response_model_round_trips_through_serde() {
                             "send_message": "value",
                             "text_mode": "value",
                             "voice_mode": "value",
+                            "voice_mode_label": "value",
+                            "text_mode_label": "value",
                             "switched_to_text_mode": "value",
                             "switched_to_voice_mode": "value",
                             "copy": "value",
@@ -36511,7 +36710,12 @@ fn get_agent_response_model_round_trips_through_serde() {
                             "file_too_large": "value",
                             "file_limit_reached": "value",
                             "typing_indicator": "value",
-                            "rich_content_unavailable": "value"
+                            "thinking_status": "value",
+                            "rich_content_unavailable": "value",
+                            "carousel_previous": "value",
+                            "carousel_next": "value",
+                            "new_message": "value",
+                            "new_messages": "value"
                         },
                         "text_contents_translation": {
                             "source": {
@@ -37003,17 +37207,30 @@ fn agent_platform_settings_response_model_round_trips_through_serde() {
                 "start_call": "value",
                 "start_chat": "value",
                 "new_call": "value",
+                "resume_call": "value",
                 "end_call": "value",
+                "end_chat": "value",
                 "mute_microphone": "value",
                 "change_language": "value",
                 "collapse": "value",
                 "expand": "value",
+                "expand_widget": "value",
+                "collapse_widget": "value",
+                "dismiss": "value",
+                "open_chat": "value",
                 "copied": "value",
                 "accept_terms": "value",
                 "dismiss_terms": "value",
+                "end_chat_confirmation_title": "value",
+                "end_chat_confirmation_description": "value",
+                "end_call_confirmation_title": "value",
+                "end_call_confirmation_description": "value",
+                "end_call_confirm": "value",
+                "cancel_end_confirmation": "value",
                 "listening_status": "value",
                 "speaking_status": "value",
                 "connecting_status": "value",
+                "reconnecting_status": "value",
                 "chatting_status": "value",
                 "queue_waiting_status": "value",
                 "queue_waiting_status_short": "value",
@@ -37037,6 +37254,8 @@ fn agent_platform_settings_response_model_round_trips_through_serde() {
                 "send_message": "value",
                 "text_mode": "value",
                 "voice_mode": "value",
+                "voice_mode_label": "value",
+                "text_mode_label": "value",
                 "switched_to_text_mode": "value",
                 "switched_to_voice_mode": "value",
                 "copy": "value",
@@ -37052,7 +37271,12 @@ fn agent_platform_settings_response_model_round_trips_through_serde() {
                 "file_too_large": "value",
                 "file_limit_reached": "value",
                 "typing_indicator": "value",
-                "rich_content_unavailable": "value"
+                "thinking_status": "value",
+                "rich_content_unavailable": "value",
+                "carousel_previous": "value",
+                "carousel_next": "value",
+                "new_message": "value",
+                "new_messages": "value"
             },
             "styles": {
                 "base": "value",
@@ -37080,6 +37304,7 @@ fn agent_platform_settings_response_model_round_trips_through_serde() {
             "end_confirmation_enabled": true,
             "mobile_fullscreen": true,
             "transcript_speech_sync_enabled": true,
+            "layout": "default",
             "language_selector": true,
             "supports_text_only": true,
             "custom_avatar_path": "value",
@@ -37090,17 +37315,30 @@ fn agent_platform_settings_response_model_round_trips_through_serde() {
                         "start_call": "value",
                         "start_chat": "value",
                         "new_call": "value",
+                        "resume_call": "value",
                         "end_call": "value",
+                        "end_chat": "value",
                         "mute_microphone": "value",
                         "change_language": "value",
                         "collapse": "value",
                         "expand": "value",
+                        "expand_widget": "value",
+                        "collapse_widget": "value",
+                        "dismiss": "value",
+                        "open_chat": "value",
                         "copied": "value",
                         "accept_terms": "value",
                         "dismiss_terms": "value",
+                        "end_chat_confirmation_title": "value",
+                        "end_chat_confirmation_description": "value",
+                        "end_call_confirmation_title": "value",
+                        "end_call_confirmation_description": "value",
+                        "end_call_confirm": "value",
+                        "cancel_end_confirmation": "value",
                         "listening_status": "value",
                         "speaking_status": "value",
                         "connecting_status": "value",
+                        "reconnecting_status": "value",
                         "chatting_status": "value",
                         "queue_waiting_status": "value",
                         "queue_waiting_status_short": "value",
@@ -37124,6 +37362,8 @@ fn agent_platform_settings_response_model_round_trips_through_serde() {
                         "send_message": "value",
                         "text_mode": "value",
                         "voice_mode": "value",
+                        "voice_mode_label": "value",
+                        "text_mode_label": "value",
                         "switched_to_text_mode": "value",
                         "switched_to_voice_mode": "value",
                         "copy": "value",
@@ -37139,7 +37379,12 @@ fn agent_platform_settings_response_model_round_trips_through_serde() {
                         "file_too_large": "value",
                         "file_limit_reached": "value",
                         "typing_indicator": "value",
-                        "rich_content_unavailable": "value"
+                        "thinking_status": "value",
+                        "rich_content_unavailable": "value",
+                        "carousel_previous": "value",
+                        "carousel_next": "value",
+                        "new_message": "value",
+                        "new_messages": "value"
                     },
                     "text_contents_translation": {
                         "source": {
@@ -45393,17 +45638,30 @@ fn update_agent_request_round_trips_through_serde() {
                     "start_call": "value",
                     "start_chat": "value",
                     "new_call": "value",
+                    "resume_call": "value",
                     "end_call": "value",
+                    "end_chat": "value",
                     "mute_microphone": "value",
                     "change_language": "value",
                     "collapse": "value",
                     "expand": "value",
+                    "expand_widget": "value",
+                    "collapse_widget": "value",
+                    "dismiss": "value",
+                    "open_chat": "value",
                     "copied": "value",
                     "accept_terms": "value",
                     "dismiss_terms": "value",
+                    "end_chat_confirmation_title": "value",
+                    "end_chat_confirmation_description": "value",
+                    "end_call_confirmation_title": "value",
+                    "end_call_confirmation_description": "value",
+                    "end_call_confirm": "value",
+                    "cancel_end_confirmation": "value",
                     "listening_status": "value",
                     "speaking_status": "value",
                     "connecting_status": "value",
+                    "reconnecting_status": "value",
                     "chatting_status": "value",
                     "queue_waiting_status": "value",
                     "queue_waiting_status_short": "value",
@@ -45427,6 +45685,8 @@ fn update_agent_request_round_trips_through_serde() {
                     "send_message": "value",
                     "text_mode": "value",
                     "voice_mode": "value",
+                    "voice_mode_label": "value",
+                    "text_mode_label": "value",
                     "switched_to_text_mode": "value",
                     "switched_to_voice_mode": "value",
                     "copy": "value",
@@ -45442,7 +45702,12 @@ fn update_agent_request_round_trips_through_serde() {
                     "file_too_large": "value",
                     "file_limit_reached": "value",
                     "typing_indicator": "value",
-                    "rich_content_unavailable": "value"
+                    "thinking_status": "value",
+                    "rich_content_unavailable": "value",
+                    "carousel_previous": "value",
+                    "carousel_next": "value",
+                    "new_message": "value",
+                    "new_messages": "value"
                 },
                 "styles": {
                     "base": "value",
@@ -45470,6 +45735,7 @@ fn update_agent_request_round_trips_through_serde() {
                 "end_confirmation_enabled": true,
                 "mobile_fullscreen": true,
                 "transcript_speech_sync_enabled": true,
+                "layout": "default",
                 "language_selector": true,
                 "supports_text_only": true,
                 "custom_avatar_path": "value",
@@ -45480,17 +45746,30 @@ fn update_agent_request_round_trips_through_serde() {
                             "start_call": "value",
                             "start_chat": "value",
                             "new_call": "value",
+                            "resume_call": "value",
                             "end_call": "value",
+                            "end_chat": "value",
                             "mute_microphone": "value",
                             "change_language": "value",
                             "collapse": "value",
                             "expand": "value",
+                            "expand_widget": "value",
+                            "collapse_widget": "value",
+                            "dismiss": "value",
+                            "open_chat": "value",
                             "copied": "value",
                             "accept_terms": "value",
                             "dismiss_terms": "value",
+                            "end_chat_confirmation_title": "value",
+                            "end_chat_confirmation_description": "value",
+                            "end_call_confirmation_title": "value",
+                            "end_call_confirmation_description": "value",
+                            "end_call_confirm": "value",
+                            "cancel_end_confirmation": "value",
                             "listening_status": "value",
                             "speaking_status": "value",
                             "connecting_status": "value",
+                            "reconnecting_status": "value",
                             "chatting_status": "value",
                             "queue_waiting_status": "value",
                             "queue_waiting_status_short": "value",
@@ -45514,6 +45793,8 @@ fn update_agent_request_round_trips_through_serde() {
                             "send_message": "value",
                             "text_mode": "value",
                             "voice_mode": "value",
+                            "voice_mode_label": "value",
+                            "text_mode_label": "value",
                             "switched_to_text_mode": "value",
                             "switched_to_voice_mode": "value",
                             "copy": "value",
@@ -45529,7 +45810,12 @@ fn update_agent_request_round_trips_through_serde() {
                             "file_too_large": "value",
                             "file_limit_reached": "value",
                             "typing_indicator": "value",
-                            "rich_content_unavailable": "value"
+                            "thinking_status": "value",
+                            "rich_content_unavailable": "value",
+                            "carousel_previous": "value",
+                            "carousel_next": "value",
+                            "new_message": "value",
+                            "new_messages": "value"
                         },
                         "text_contents_translation": {
                             "source": {
@@ -50322,17 +50608,30 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                         "start_call": "value",
                         "start_chat": "value",
                         "new_call": "value",
+                        "resume_call": "value",
                         "end_call": "value",
+                        "end_chat": "value",
                         "mute_microphone": "value",
                         "change_language": "value",
                         "collapse": "value",
                         "expand": "value",
+                        "expand_widget": "value",
+                        "collapse_widget": "value",
+                        "dismiss": "value",
+                        "open_chat": "value",
                         "copied": "value",
                         "accept_terms": "value",
                         "dismiss_terms": "value",
+                        "end_chat_confirmation_title": "value",
+                        "end_chat_confirmation_description": "value",
+                        "end_call_confirmation_title": "value",
+                        "end_call_confirmation_description": "value",
+                        "end_call_confirm": "value",
+                        "cancel_end_confirmation": "value",
                         "listening_status": "value",
                         "speaking_status": "value",
                         "connecting_status": "value",
+                        "reconnecting_status": "value",
                         "chatting_status": "value",
                         "queue_waiting_status": "value",
                         "queue_waiting_status_short": "value",
@@ -50356,6 +50655,8 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                         "send_message": "value",
                         "text_mode": "value",
                         "voice_mode": "value",
+                        "voice_mode_label": "value",
+                        "text_mode_label": "value",
                         "switched_to_text_mode": "value",
                         "switched_to_voice_mode": "value",
                         "copy": "value",
@@ -50371,7 +50672,12 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                         "file_too_large": "value",
                         "file_limit_reached": "value",
                         "typing_indicator": "value",
-                        "rich_content_unavailable": "value"
+                        "thinking_status": "value",
+                        "rich_content_unavailable": "value",
+                        "carousel_previous": "value",
+                        "carousel_next": "value",
+                        "new_message": "value",
+                        "new_messages": "value"
                     },
                     "styles": {
                         "base": "value",
@@ -50399,6 +50705,7 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                     "end_confirmation_enabled": true,
                     "mobile_fullscreen": true,
                     "transcript_speech_sync_enabled": true,
+                    "layout": "default",
                     "language_selector": true,
                     "supports_text_only": true,
                     "custom_avatar_path": "value",
@@ -50409,17 +50716,30 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                                 "start_call": "value",
                                 "start_chat": "value",
                                 "new_call": "value",
+                                "resume_call": "value",
                                 "end_call": "value",
+                                "end_chat": "value",
                                 "mute_microphone": "value",
                                 "change_language": "value",
                                 "collapse": "value",
                                 "expand": "value",
+                                "expand_widget": "value",
+                                "collapse_widget": "value",
+                                "dismiss": "value",
+                                "open_chat": "value",
                                 "copied": "value",
                                 "accept_terms": "value",
                                 "dismiss_terms": "value",
+                                "end_chat_confirmation_title": "value",
+                                "end_chat_confirmation_description": "value",
+                                "end_call_confirmation_title": "value",
+                                "end_call_confirmation_description": "value",
+                                "end_call_confirm": "value",
+                                "cancel_end_confirmation": "value",
                                 "listening_status": "value",
                                 "speaking_status": "value",
                                 "connecting_status": "value",
+                                "reconnecting_status": "value",
                                 "chatting_status": "value",
                                 "queue_waiting_status": "value",
                                 "queue_waiting_status_short": "value",
@@ -50443,6 +50763,8 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                                 "send_message": "value",
                                 "text_mode": "value",
                                 "voice_mode": "value",
+                                "voice_mode_label": "value",
+                                "text_mode_label": "value",
                                 "switched_to_text_mode": "value",
                                 "switched_to_voice_mode": "value",
                                 "copy": "value",
@@ -50458,7 +50780,12 @@ fn run_agent_tests_request_model_round_trips_through_serde() {
                                 "file_too_large": "value",
                                 "file_limit_reached": "value",
                                 "typing_indicator": "value",
-                                "rich_content_unavailable": "value"
+                                "thinking_status": "value",
+                                "rich_content_unavailable": "value",
+                                "carousel_previous": "value",
+                                "carousel_next": "value",
+                                "new_message": "value",
+                                "new_messages": "value"
                             },
                             "text_contents_translation": {
                                 "source": {
@@ -51586,17 +51913,30 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                     "start_call": "value",
                     "start_chat": "value",
                     "new_call": "value",
+                    "resume_call": "value",
                     "end_call": "value",
+                    "end_chat": "value",
                     "mute_microphone": "value",
                     "change_language": "value",
                     "collapse": "value",
                     "expand": "value",
+                    "expand_widget": "value",
+                    "collapse_widget": "value",
+                    "dismiss": "value",
+                    "open_chat": "value",
                     "copied": "value",
                     "accept_terms": "value",
                     "dismiss_terms": "value",
+                    "end_chat_confirmation_title": "value",
+                    "end_chat_confirmation_description": "value",
+                    "end_call_confirmation_title": "value",
+                    "end_call_confirmation_description": "value",
+                    "end_call_confirm": "value",
+                    "cancel_end_confirmation": "value",
                     "listening_status": "value",
                     "speaking_status": "value",
                     "connecting_status": "value",
+                    "reconnecting_status": "value",
                     "chatting_status": "value",
                     "queue_waiting_status": "value",
                     "queue_waiting_status_short": "value",
@@ -51620,6 +51960,8 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                     "send_message": "value",
                     "text_mode": "value",
                     "voice_mode": "value",
+                    "voice_mode_label": "value",
+                    "text_mode_label": "value",
                     "switched_to_text_mode": "value",
                     "switched_to_voice_mode": "value",
                     "copy": "value",
@@ -51635,7 +51977,12 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                     "file_too_large": "value",
                     "file_limit_reached": "value",
                     "typing_indicator": "value",
-                    "rich_content_unavailable": "value"
+                    "thinking_status": "value",
+                    "rich_content_unavailable": "value",
+                    "carousel_previous": "value",
+                    "carousel_next": "value",
+                    "new_message": "value",
+                    "new_messages": "value"
                 },
                 "styles": {
                     "base": "value",
@@ -51663,6 +52010,7 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                 "end_confirmation_enabled": true,
                 "mobile_fullscreen": true,
                 "transcript_speech_sync_enabled": true,
+                "layout": "default",
                 "language_selector": true,
                 "supports_text_only": true,
                 "custom_avatar_path": "value",
@@ -51673,17 +52021,30 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                             "start_call": "value",
                             "start_chat": "value",
                             "new_call": "value",
+                            "resume_call": "value",
                             "end_call": "value",
+                            "end_chat": "value",
                             "mute_microphone": "value",
                             "change_language": "value",
                             "collapse": "value",
                             "expand": "value",
+                            "expand_widget": "value",
+                            "collapse_widget": "value",
+                            "dismiss": "value",
+                            "open_chat": "value",
                             "copied": "value",
                             "accept_terms": "value",
                             "dismiss_terms": "value",
+                            "end_chat_confirmation_title": "value",
+                            "end_chat_confirmation_description": "value",
+                            "end_call_confirmation_title": "value",
+                            "end_call_confirmation_description": "value",
+                            "end_call_confirm": "value",
+                            "cancel_end_confirmation": "value",
                             "listening_status": "value",
                             "speaking_status": "value",
                             "connecting_status": "value",
+                            "reconnecting_status": "value",
                             "chatting_status": "value",
                             "queue_waiting_status": "value",
                             "queue_waiting_status_short": "value",
@@ -51707,6 +52068,8 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                             "send_message": "value",
                             "text_mode": "value",
                             "voice_mode": "value",
+                            "voice_mode_label": "value",
+                            "text_mode_label": "value",
                             "switched_to_text_mode": "value",
                             "switched_to_voice_mode": "value",
                             "copy": "value",
@@ -51722,7 +52085,12 @@ fn adhoc_agent_config_override_for_test_request_model_round_trips_through_serde(
                             "file_too_large": "value",
                             "file_limit_reached": "value",
                             "typing_indicator": "value",
-                            "rich_content_unavailable": "value"
+                            "thinking_status": "value",
+                            "rich_content_unavailable": "value",
+                            "carousel_previous": "value",
+                            "carousel_next": "value",
+                            "new_message": "value",
+                            "new_messages": "value"
                         },
                         "text_contents_translation": {
                             "source": {
@@ -53135,17 +53503,30 @@ fn get_agent_embed_response_model_round_trips_through_serde() {
                 "start_call": "value",
                 "start_chat": "value",
                 "new_call": "value",
+                "resume_call": "value",
                 "end_call": "value",
+                "end_chat": "value",
                 "mute_microphone": "value",
                 "change_language": "value",
                 "collapse": "value",
                 "expand": "value",
+                "expand_widget": "value",
+                "collapse_widget": "value",
+                "dismiss": "value",
+                "open_chat": "value",
                 "copied": "value",
                 "accept_terms": "value",
                 "dismiss_terms": "value",
+                "end_chat_confirmation_title": "value",
+                "end_chat_confirmation_description": "value",
+                "end_call_confirmation_title": "value",
+                "end_call_confirmation_description": "value",
+                "end_call_confirm": "value",
+                "cancel_end_confirmation": "value",
                 "listening_status": "value",
                 "speaking_status": "value",
                 "connecting_status": "value",
+                "reconnecting_status": "value",
                 "chatting_status": "value",
                 "queue_waiting_status": "value",
                 "queue_waiting_status_short": "value",
@@ -53169,6 +53550,8 @@ fn get_agent_embed_response_model_round_trips_through_serde() {
                 "send_message": "value",
                 "text_mode": "value",
                 "voice_mode": "value",
+                "voice_mode_label": "value",
+                "text_mode_label": "value",
                 "switched_to_text_mode": "value",
                 "switched_to_voice_mode": "value",
                 "copy": "value",
@@ -53184,7 +53567,12 @@ fn get_agent_embed_response_model_round_trips_through_serde() {
                 "file_too_large": "value",
                 "file_limit_reached": "value",
                 "typing_indicator": "value",
-                "rich_content_unavailable": "value"
+                "thinking_status": "value",
+                "rich_content_unavailable": "value",
+                "carousel_previous": "value",
+                "carousel_next": "value",
+                "new_message": "value",
+                "new_messages": "value"
             },
             "styles": {
                 "base": "value",
@@ -53212,6 +53600,7 @@ fn get_agent_embed_response_model_round_trips_through_serde() {
             "end_confirmation_enabled": true,
             "mobile_fullscreen": true,
             "transcript_speech_sync_enabled": true,
+            "layout": "default",
             "language": "value",
             "supported_language_overrides": [
                 "value"
@@ -53224,17 +53613,30 @@ fn get_agent_embed_response_model_round_trips_through_serde() {
                         "start_call": "value",
                         "start_chat": "value",
                         "new_call": "value",
+                        "resume_call": "value",
                         "end_call": "value",
+                        "end_chat": "value",
                         "mute_microphone": "value",
                         "change_language": "value",
                         "collapse": "value",
                         "expand": "value",
+                        "expand_widget": "value",
+                        "collapse_widget": "value",
+                        "dismiss": "value",
+                        "open_chat": "value",
                         "copied": "value",
                         "accept_terms": "value",
                         "dismiss_terms": "value",
+                        "end_chat_confirmation_title": "value",
+                        "end_chat_confirmation_description": "value",
+                        "end_call_confirmation_title": "value",
+                        "end_call_confirmation_description": "value",
+                        "end_call_confirm": "value",
+                        "cancel_end_confirmation": "value",
                         "listening_status": "value",
                         "speaking_status": "value",
                         "connecting_status": "value",
+                        "reconnecting_status": "value",
                         "chatting_status": "value",
                         "queue_waiting_status": "value",
                         "queue_waiting_status_short": "value",
@@ -53258,6 +53660,8 @@ fn get_agent_embed_response_model_round_trips_through_serde() {
                         "send_message": "value",
                         "text_mode": "value",
                         "voice_mode": "value",
+                        "voice_mode_label": "value",
+                        "text_mode_label": "value",
                         "switched_to_text_mode": "value",
                         "switched_to_voice_mode": "value",
                         "copy": "value",
@@ -53273,7 +53677,12 @@ fn get_agent_embed_response_model_round_trips_through_serde() {
                         "file_too_large": "value",
                         "file_limit_reached": "value",
                         "typing_indicator": "value",
-                        "rich_content_unavailable": "value"
+                        "thinking_status": "value",
+                        "rich_content_unavailable": "value",
+                        "carousel_previous": "value",
+                        "carousel_next": "value",
+                        "new_message": "value",
+                        "new_messages": "value"
                     },
                     "terms_text": "value",
                     "terms_html": "value",
@@ -53362,17 +53771,30 @@ fn widget_config_response_round_trips_through_serde() {
             "start_call": "value",
             "start_chat": "value",
             "new_call": "value",
+            "resume_call": "value",
             "end_call": "value",
+            "end_chat": "value",
             "mute_microphone": "value",
             "change_language": "value",
             "collapse": "value",
             "expand": "value",
+            "expand_widget": "value",
+            "collapse_widget": "value",
+            "dismiss": "value",
+            "open_chat": "value",
             "copied": "value",
             "accept_terms": "value",
             "dismiss_terms": "value",
+            "end_chat_confirmation_title": "value",
+            "end_chat_confirmation_description": "value",
+            "end_call_confirmation_title": "value",
+            "end_call_confirmation_description": "value",
+            "end_call_confirm": "value",
+            "cancel_end_confirmation": "value",
             "listening_status": "value",
             "speaking_status": "value",
             "connecting_status": "value",
+            "reconnecting_status": "value",
             "chatting_status": "value",
             "queue_waiting_status": "value",
             "queue_waiting_status_short": "value",
@@ -53396,6 +53818,8 @@ fn widget_config_response_round_trips_through_serde() {
             "send_message": "value",
             "text_mode": "value",
             "voice_mode": "value",
+            "voice_mode_label": "value",
+            "text_mode_label": "value",
             "switched_to_text_mode": "value",
             "switched_to_voice_mode": "value",
             "copy": "value",
@@ -53411,7 +53835,12 @@ fn widget_config_response_round_trips_through_serde() {
             "file_too_large": "value",
             "file_limit_reached": "value",
             "typing_indicator": "value",
-            "rich_content_unavailable": "value"
+            "thinking_status": "value",
+            "rich_content_unavailable": "value",
+            "carousel_previous": "value",
+            "carousel_next": "value",
+            "new_message": "value",
+            "new_messages": "value"
         },
         "styles": {
             "base": "value",
@@ -53439,6 +53868,7 @@ fn widget_config_response_round_trips_through_serde() {
         "end_confirmation_enabled": true,
         "mobile_fullscreen": true,
         "transcript_speech_sync_enabled": true,
+        "layout": "default",
         "language": "value",
         "supported_language_overrides": [
             "value"
@@ -53451,17 +53881,30 @@ fn widget_config_response_round_trips_through_serde() {
                     "start_call": "value",
                     "start_chat": "value",
                     "new_call": "value",
+                    "resume_call": "value",
                     "end_call": "value",
+                    "end_chat": "value",
                     "mute_microphone": "value",
                     "change_language": "value",
                     "collapse": "value",
                     "expand": "value",
+                    "expand_widget": "value",
+                    "collapse_widget": "value",
+                    "dismiss": "value",
+                    "open_chat": "value",
                     "copied": "value",
                     "accept_terms": "value",
                     "dismiss_terms": "value",
+                    "end_chat_confirmation_title": "value",
+                    "end_chat_confirmation_description": "value",
+                    "end_call_confirmation_title": "value",
+                    "end_call_confirmation_description": "value",
+                    "end_call_confirm": "value",
+                    "cancel_end_confirmation": "value",
                     "listening_status": "value",
                     "speaking_status": "value",
                     "connecting_status": "value",
+                    "reconnecting_status": "value",
                     "chatting_status": "value",
                     "queue_waiting_status": "value",
                     "queue_waiting_status_short": "value",
@@ -53485,6 +53928,8 @@ fn widget_config_response_round_trips_through_serde() {
                     "send_message": "value",
                     "text_mode": "value",
                     "voice_mode": "value",
+                    "voice_mode_label": "value",
+                    "text_mode_label": "value",
                     "switched_to_text_mode": "value",
                     "switched_to_voice_mode": "value",
                     "copy": "value",
@@ -53500,7 +53945,12 @@ fn widget_config_response_round_trips_through_serde() {
                     "file_too_large": "value",
                     "file_limit_reached": "value",
                     "typing_indicator": "value",
-                    "rich_content_unavailable": "value"
+                    "thinking_status": "value",
+                    "rich_content_unavailable": "value",
+                    "carousel_previous": "value",
+                    "carousel_next": "value",
+                    "new_message": "value",
+                    "new_messages": "value"
                 },
                 "terms_text": "value",
                 "terms_html": "value",
@@ -53555,17 +54005,30 @@ fn widget_language_preset_response_round_trips_through_serde() {
             "start_call": "value",
             "start_chat": "value",
             "new_call": "value",
+            "resume_call": "value",
             "end_call": "value",
+            "end_chat": "value",
             "mute_microphone": "value",
             "change_language": "value",
             "collapse": "value",
             "expand": "value",
+            "expand_widget": "value",
+            "collapse_widget": "value",
+            "dismiss": "value",
+            "open_chat": "value",
             "copied": "value",
             "accept_terms": "value",
             "dismiss_terms": "value",
+            "end_chat_confirmation_title": "value",
+            "end_chat_confirmation_description": "value",
+            "end_call_confirmation_title": "value",
+            "end_call_confirmation_description": "value",
+            "end_call_confirm": "value",
+            "cancel_end_confirmation": "value",
             "listening_status": "value",
             "speaking_status": "value",
             "connecting_status": "value",
+            "reconnecting_status": "value",
             "chatting_status": "value",
             "queue_waiting_status": "value",
             "queue_waiting_status_short": "value",
@@ -53589,6 +54052,8 @@ fn widget_language_preset_response_round_trips_through_serde() {
             "send_message": "value",
             "text_mode": "value",
             "voice_mode": "value",
+            "voice_mode_label": "value",
+            "text_mode_label": "value",
             "switched_to_text_mode": "value",
             "switched_to_voice_mode": "value",
             "copy": "value",
@@ -53604,7 +54069,12 @@ fn widget_language_preset_response_round_trips_through_serde() {
             "file_too_large": "value",
             "file_limit_reached": "value",
             "typing_indicator": "value",
-            "rich_content_unavailable": "value"
+            "thinking_status": "value",
+            "rich_content_unavailable": "value",
+            "carousel_previous": "value",
+            "carousel_next": "value",
+            "new_message": "value",
+            "new_messages": "value"
         },
         "terms_text": "value",
         "terms_html": "value",
@@ -61185,17 +61655,30 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                         "start_call": "value",
                         "start_chat": "value",
                         "new_call": "value",
+                        "resume_call": "value",
                         "end_call": "value",
+                        "end_chat": "value",
                         "mute_microphone": "value",
                         "change_language": "value",
                         "collapse": "value",
                         "expand": "value",
+                        "expand_widget": "value",
+                        "collapse_widget": "value",
+                        "dismiss": "value",
+                        "open_chat": "value",
                         "copied": "value",
                         "accept_terms": "value",
                         "dismiss_terms": "value",
+                        "end_chat_confirmation_title": "value",
+                        "end_chat_confirmation_description": "value",
+                        "end_call_confirmation_title": "value",
+                        "end_call_confirmation_description": "value",
+                        "end_call_confirm": "value",
+                        "cancel_end_confirmation": "value",
                         "listening_status": "value",
                         "speaking_status": "value",
                         "connecting_status": "value",
+                        "reconnecting_status": "value",
                         "chatting_status": "value",
                         "queue_waiting_status": "value",
                         "queue_waiting_status_short": "value",
@@ -61219,6 +61702,8 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                         "send_message": "value",
                         "text_mode": "value",
                         "voice_mode": "value",
+                        "voice_mode_label": "value",
+                        "text_mode_label": "value",
                         "switched_to_text_mode": "value",
                         "switched_to_voice_mode": "value",
                         "copy": "value",
@@ -61234,7 +61719,12 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                         "file_too_large": "value",
                         "file_limit_reached": "value",
                         "typing_indicator": "value",
-                        "rich_content_unavailable": "value"
+                        "thinking_status": "value",
+                        "rich_content_unavailable": "value",
+                        "carousel_previous": "value",
+                        "carousel_next": "value",
+                        "new_message": "value",
+                        "new_messages": "value"
                     },
                     "styles": {
                         "base": "value",
@@ -61262,6 +61752,7 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                     "end_confirmation_enabled": true,
                     "mobile_fullscreen": true,
                     "transcript_speech_sync_enabled": true,
+                    "layout": "default",
                     "language_selector": true,
                     "supports_text_only": true,
                     "custom_avatar_path": "value",
@@ -61272,17 +61763,30 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                                 "start_call": "value",
                                 "start_chat": "value",
                                 "new_call": "value",
+                                "resume_call": "value",
                                 "end_call": "value",
+                                "end_chat": "value",
                                 "mute_microphone": "value",
                                 "change_language": "value",
                                 "collapse": "value",
                                 "expand": "value",
+                                "expand_widget": "value",
+                                "collapse_widget": "value",
+                                "dismiss": "value",
+                                "open_chat": "value",
                                 "copied": "value",
                                 "accept_terms": "value",
                                 "dismiss_terms": "value",
+                                "end_chat_confirmation_title": "value",
+                                "end_chat_confirmation_description": "value",
+                                "end_call_confirmation_title": "value",
+                                "end_call_confirmation_description": "value",
+                                "end_call_confirm": "value",
+                                "cancel_end_confirmation": "value",
                                 "listening_status": "value",
                                 "speaking_status": "value",
                                 "connecting_status": "value",
+                                "reconnecting_status": "value",
                                 "chatting_status": "value",
                                 "queue_waiting_status": "value",
                                 "queue_waiting_status_short": "value",
@@ -61306,6 +61810,8 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                                 "send_message": "value",
                                 "text_mode": "value",
                                 "voice_mode": "value",
+                                "voice_mode_label": "value",
+                                "text_mode_label": "value",
                                 "switched_to_text_mode": "value",
                                 "switched_to_voice_mode": "value",
                                 "copy": "value",
@@ -61321,7 +61827,12 @@ fn resubmit_tests_request_model_round_trips_through_serde() {
                                 "file_too_large": "value",
                                 "file_limit_reached": "value",
                                 "typing_indicator": "value",
-                                "rich_content_unavailable": "value"
+                                "thinking_status": "value",
+                                "rich_content_unavailable": "value",
+                                "carousel_previous": "value",
+                                "carousel_next": "value",
+                                "new_message": "value",
+                                "new_messages": "value"
                             },
                             "text_contents_translation": {
                                 "source": {
@@ -61990,6 +62501,81 @@ fn patch_conversation_tag_request_model_round_trips_through_serde() {
 }
 
 #[test]
+fn paginated_result_ticket_tag_response__round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "results": [
+            {
+                "id": "value",
+                "name": "value",
+                "archived": true
+            }
+        ],
+        "next_cursor": "value",
+        "has_more": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PaginatedResultTicketTagResponse_ =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_tag_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "name": "value",
+        "archived": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketTagResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_ticket_tag_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTicketTagRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn update_ticket_tag_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "archived": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UpdateTicketTagRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
 fn get_agent_conversation_tickets_page_response_model_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
@@ -62388,7 +62974,7 @@ fn add_turn_comment_request_model_round_trips_through_serde() {
 }
 
 #[test]
-fn phone_numbers_list_ok_response_round_trips_through_serde() {
+fn list_ok_response_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "phone_number": "value",
@@ -62406,7 +62992,7 @@ fn phone_numbers_list_ok_response_round_trips_through_serde() {
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: PhoneNumbersListOkResponse =
+    let decoded: ListOkResponse =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -69152,6 +69738,7 @@ fn list_response_agent_branch_summary__round_trips_through_serde() {
                 "protection_status": "writer_perms_required",
                 "auto_rebase": true,
                 "sync_status": {
+                    "branch_id": "value",
                     "last_attempt": {
                         "outcome": "succeeded",
                         "attempted_at": 123
@@ -69201,6 +69788,7 @@ fn agent_branch_summary_round_trips_through_serde() {
         "protection_status": "writer_perms_required",
         "auto_rebase": true,
         "sync_status": {
+            "branch_id": "value",
             "last_attempt": {
                 "outcome": "succeeded",
                 "attempted_at": 123
@@ -69238,6 +69826,7 @@ fn agent_branch_summary_round_trips_through_serde() {
 fn branch_sync_status_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
+        "branch_id": "value",
         "last_attempt": {
             "outcome": "succeeded",
             "attempted_at": 123
@@ -69357,6 +69946,7 @@ fn agent_branch_response_round_trips_through_serde() {
         "protection_status": "writer_perms_required",
         "auto_rebase": true,
         "sync_status": {
+            "branch_id": "value",
             "last_attempt": {
                 "outcome": "succeeded",
                 "attempted_at": 123
@@ -69516,7 +70106,8 @@ fn body_update_agent_branch_v1_convai_agents_agent_id_branches_branch_id_patch_r
         "description": "value",
         "is_archived": true,
         "protection_status": "writer_perms_required",
-        "auto_rebase": true
+        "auto_rebase": true,
+        "sync_branch_id": "value"
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -70320,17 +70911,30 @@ fn merge_preview_response_model_round_trips_through_serde() {
                     "start_call": "value",
                     "start_chat": "value",
                     "new_call": "value",
+                    "resume_call": "value",
                     "end_call": "value",
+                    "end_chat": "value",
                     "mute_microphone": "value",
                     "change_language": "value",
                     "collapse": "value",
                     "expand": "value",
+                    "expand_widget": "value",
+                    "collapse_widget": "value",
+                    "dismiss": "value",
+                    "open_chat": "value",
                     "copied": "value",
                     "accept_terms": "value",
                     "dismiss_terms": "value",
+                    "end_chat_confirmation_title": "value",
+                    "end_chat_confirmation_description": "value",
+                    "end_call_confirmation_title": "value",
+                    "end_call_confirmation_description": "value",
+                    "end_call_confirm": "value",
+                    "cancel_end_confirmation": "value",
                     "listening_status": "value",
                     "speaking_status": "value",
                     "connecting_status": "value",
+                    "reconnecting_status": "value",
                     "chatting_status": "value",
                     "queue_waiting_status": "value",
                     "queue_waiting_status_short": "value",
@@ -70354,6 +70958,8 @@ fn merge_preview_response_model_round_trips_through_serde() {
                     "send_message": "value",
                     "text_mode": "value",
                     "voice_mode": "value",
+                    "voice_mode_label": "value",
+                    "text_mode_label": "value",
                     "switched_to_text_mode": "value",
                     "switched_to_voice_mode": "value",
                     "copy": "value",
@@ -70369,7 +70975,12 @@ fn merge_preview_response_model_round_trips_through_serde() {
                     "file_too_large": "value",
                     "file_limit_reached": "value",
                     "typing_indicator": "value",
-                    "rich_content_unavailable": "value"
+                    "thinking_status": "value",
+                    "rich_content_unavailable": "value",
+                    "carousel_previous": "value",
+                    "carousel_next": "value",
+                    "new_message": "value",
+                    "new_messages": "value"
                 },
                 "styles": {
                     "base": "value",
@@ -70397,6 +71008,7 @@ fn merge_preview_response_model_round_trips_through_serde() {
                 "end_confirmation_enabled": true,
                 "mobile_fullscreen": true,
                 "transcript_speech_sync_enabled": true,
+                "layout": "default",
                 "language_selector": true,
                 "supports_text_only": true,
                 "custom_avatar_path": "value",
@@ -70407,17 +71019,30 @@ fn merge_preview_response_model_round_trips_through_serde() {
                             "start_call": "value",
                             "start_chat": "value",
                             "new_call": "value",
+                            "resume_call": "value",
                             "end_call": "value",
+                            "end_chat": "value",
                             "mute_microphone": "value",
                             "change_language": "value",
                             "collapse": "value",
                             "expand": "value",
+                            "expand_widget": "value",
+                            "collapse_widget": "value",
+                            "dismiss": "value",
+                            "open_chat": "value",
                             "copied": "value",
                             "accept_terms": "value",
                             "dismiss_terms": "value",
+                            "end_chat_confirmation_title": "value",
+                            "end_chat_confirmation_description": "value",
+                            "end_call_confirmation_title": "value",
+                            "end_call_confirmation_description": "value",
+                            "end_call_confirm": "value",
+                            "cancel_end_confirmation": "value",
                             "listening_status": "value",
                             "speaking_status": "value",
                             "connecting_status": "value",
+                            "reconnecting_status": "value",
                             "chatting_status": "value",
                             "queue_waiting_status": "value",
                             "queue_waiting_status_short": "value",
@@ -70441,6 +71066,8 @@ fn merge_preview_response_model_round_trips_through_serde() {
                             "send_message": "value",
                             "text_mode": "value",
                             "voice_mode": "value",
+                            "voice_mode_label": "value",
+                            "text_mode_label": "value",
                             "switched_to_text_mode": "value",
                             "switched_to_voice_mode": "value",
                             "copy": "value",
@@ -70456,7 +71083,12 @@ fn merge_preview_response_model_round_trips_through_serde() {
                             "file_too_large": "value",
                             "file_limit_reached": "value",
                             "typing_indicator": "value",
-                            "rich_content_unavailable": "value"
+                            "thinking_status": "value",
+                            "rich_content_unavailable": "value",
+                            "carousel_previous": "value",
+                            "carousel_next": "value",
+                            "new_message": "value",
+                            "new_messages": "value"
                         },
                         "text_contents_translation": {
                             "source": {
@@ -75656,6 +76288,1653 @@ fn create_environment_request_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: CreateEnvironmentRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn paginated_result_ticket_requester_response__round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "results": [
+            {
+                "id": "value",
+                "first_name": "value",
+                "last_name": "value",
+                "full_name": "value",
+                "email": "value"
+            }
+        ],
+        "next_cursor": "value",
+        "has_more": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PaginatedResultTicketRequesterResponse_ =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_requester_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketRequesterResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sync_slack_requesters_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "created_count": 123,
+        "existing_count": 123,
+        "skipped_count": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SyncSlackRequestersResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn sync_slack_requesters_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "integration_connection_id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: SyncSlackRequestersRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn paginated_result_ticket_sla_policy_response__round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "results": [
+            {
+                "id": "value",
+                "name": "value",
+                "description": "value",
+                "targets": [
+                    {
+                        "metric": "first_response",
+                        "priority": "low",
+                        "duration_secs": 123
+                    }
+                ],
+                "archived": true,
+                "created_at_unix_secs": 123,
+                "updated_at_unix_secs": 123
+            }
+        ],
+        "next_cursor": "value",
+        "has_more": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PaginatedResultTicketSlaPolicyResponse_ =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_sla_policy_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "name": "value",
+        "description": "value",
+        "targets": [
+            {
+                "metric": "first_response",
+                "priority": "low",
+                "duration_secs": 123
+            }
+        ],
+        "archived": true,
+        "created_at_unix_secs": 123,
+        "updated_at_unix_secs": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSlaPolicyResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_sla_policy_target_output_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "metric": "first_response",
+        "priority": "low",
+        "duration_secs": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSlaPolicyTargetOutput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_ticket_sla_policy_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "description": "value",
+        "targets": [
+            {
+                "metric": "first_response",
+                "priority": "low",
+                "duration_secs": 123
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTicketSlaPolicyRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_sla_policy_target_input_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "metric": "first_response",
+        "priority": "low",
+        "duration_secs": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSlaPolicyTargetInput =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn update_ticket_sla_policy_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "name": "value",
+        "description": "value",
+        "targets": [
+            {
+                "metric": "first_response",
+                "priority": "low",
+                "duration_secs": 123
+            }
+        ],
+        "archived": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UpdateTicketSlaPolicyRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn paginated_result_ticket_list_item_response__round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "results": [
+            {
+                "id": "value",
+                "subject": "value",
+                "status": "open",
+                "priority": "low",
+                "requester": {
+                    "id": "value",
+                    "first_name": "value",
+                    "last_name": "value",
+                    "full_name": "value",
+                    "email": "value"
+                },
+                "assignee": {
+                    "type": "ai_agent",
+                    "id": "value",
+                    "name": "value"
+                },
+                "secondary_assignee": {
+                    "type": "ai_agent",
+                    "id": "value",
+                    "name": "value"
+                },
+                "subscribers": [
+                    {
+                        "type": "human_agent",
+                        "id": "value",
+                        "name": "value",
+                        "email": "value"
+                    }
+                ],
+                "tag_ids": [
+                    "value"
+                ],
+                "sla": {
+                    "metric": "first_response",
+                    "duration_secs": 123,
+                    "started_at_unix_secs": 123,
+                    "due_at_unix_secs": 123
+                },
+                "deadline_at_unix_secs": 123,
+                "created_at_unix_secs": 123,
+                "updated_at_unix_secs": 123
+            }
+        ],
+        "next_cursor": "value",
+        "has_more": true
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: PaginatedResultTicketListItemResponse_ =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_list_item_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "subject": "value",
+        "status": "open",
+        "priority": "low",
+        "requester": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value"
+        },
+        "assignee": {
+            "type": "ai_agent",
+            "id": "value",
+            "name": "value"
+        },
+        "secondary_assignee": {
+            "type": "ai_agent",
+            "id": "value",
+            "name": "value"
+        },
+        "subscribers": [
+            {
+                "type": "human_agent",
+                "id": "value",
+                "name": "value",
+                "email": "value"
+            }
+        ],
+        "tag_ids": [
+            "value"
+        ],
+        "sla": {
+            "metric": "first_response",
+            "duration_secs": 123,
+            "started_at_unix_secs": 123,
+            "due_at_unix_secs": 123
+        },
+        "deadline_at_unix_secs": 123,
+        "created_at_unix_secs": 123,
+        "updated_at_unix_secs": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketListItemResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_list_item_response_assignee_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketListItemResponseAssignee =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_ai_agent_assignee_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketAiAgentAssigneeResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_human_agent_assignee_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "name": "value",
+        "email": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketHumanAgentAssigneeResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_list_item_response_secondary_assignee_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketListItemResponseSecondaryAssignee =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_subscriber_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "human_agent",
+        "id": "value",
+        "name": "value",
+        "email": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSubscriberResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_sla_summary_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "metric": "first_response",
+        "duration_secs": 123,
+        "started_at_unix_secs": 123,
+        "due_at_unix_secs": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSlaSummaryResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn get_ticket_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "subject": "value",
+        "description": "value",
+        "status": "open",
+        "priority": "low",
+        "requester": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value"
+        },
+        "tag_ids": [
+            "value"
+        ],
+        "assignee": {
+            "type": "ai_agent",
+            "id": "value",
+            "name": "value"
+        },
+        "secondary_assignee": {
+            "type": "ai_agent",
+            "id": "value",
+            "name": "value"
+        },
+        "subscribers": [
+            {
+                "type": "human_agent",
+                "id": "value",
+                "name": "value",
+                "email": "value"
+            }
+        ],
+        "sla": {
+            "metric": "first_response",
+            "duration_secs": 123,
+            "started_at_unix_secs": 123,
+            "due_at_unix_secs": 123
+        },
+        "deadline_at_unix_secs": 123,
+        "created_at_unix_secs": 123,
+        "updated_at_unix_secs": 123,
+        "events": [
+            {
+                "id": "value",
+                "visibility": "public",
+                "author": {
+                    "id": "value",
+                    "first_name": "value",
+                    "last_name": "value",
+                    "full_name": "value",
+                    "email": "value",
+                    "type": "requester"
+                },
+                "created_at_unix_secs": 123,
+                "type": "message",
+                "body": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: GetTicketResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn get_ticket_response_assignee_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: GetTicketResponseAssignee =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn get_ticket_response_secondary_assignee_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: GetTicketResponseSecondaryAssignee =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn events_item_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "message",
+        "body": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: EventsItem =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_message_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "message",
+        "body": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketMessageEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_message_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketMessageEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_event_requester_author_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketEventRequesterAuthorResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_event_ai_agent_author_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketEventAiAgentAuthorResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_event_human_agent_author_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "name": "value",
+        "email": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketEventHumanAgentAuthorResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_created_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "ticket_created",
+        "priority": "low"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketCreatedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_created_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketCreatedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_deleted_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "ticket_deleted"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketDeletedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_deleted_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketDeletedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_assignee_changed_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "assignee_changed",
+        "before": {
+            "type": "ai_agent",
+            "id": "value",
+            "name": "value"
+        },
+        "after": {
+            "type": "ai_agent",
+            "id": "value",
+            "name": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketAssigneeChangedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_assignee_changed_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketAssigneeChangedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_assignee_changed_event_response_before_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketAssigneeChangedEventResponseBefore =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_assignee_changed_event_response_after_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketAssigneeChangedEventResponseAfter =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_secondary_assignee_changed_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "secondary_assignee_changed",
+        "before": {
+            "type": "ai_agent",
+            "id": "value",
+            "name": "value"
+        },
+        "after": {
+            "type": "ai_agent",
+            "id": "value",
+            "name": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSecondaryAssigneeChangedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_secondary_assignee_changed_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSecondaryAssigneeChangedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_secondary_assignee_changed_event_response_before_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSecondaryAssigneeChangedEventResponseBefore =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_secondary_assignee_changed_event_response_after_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value",
+        "name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSecondaryAssigneeChangedEventResponseAfter =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_subscribers_changed_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "subscribers_changed",
+        "before": [
+            {
+                "type": "human_agent",
+                "id": "value",
+                "name": "value",
+                "email": "value"
+            }
+        ],
+        "after": [
+            {
+                "type": "human_agent",
+                "id": "value",
+                "name": "value",
+                "email": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSubscribersChangedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_subscribers_changed_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSubscribersChangedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_subject_changed_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "subject_changed",
+        "before": "value",
+        "after": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSubjectChangedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_subject_changed_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSubjectChangedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_priority_changed_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "priority_changed",
+        "before": "low",
+        "after": "low"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketPriorityChangedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_priority_changed_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketPriorityChangedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_status_changed_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "status_changed",
+        "before": "open",
+        "after": "open"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketStatusChangedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_status_changed_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketStatusChangedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_deadline_changed_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "deadline_changed",
+        "before": 123,
+        "after": 123
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketDeadlineChangedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_deadline_changed_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketDeadlineChangedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_tag_ids_changed_event_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "visibility": "public",
+        "author": {
+            "id": "value",
+            "first_name": "value",
+            "last_name": "value",
+            "full_name": "value",
+            "email": "value",
+            "type": "requester"
+        },
+        "created_at_unix_secs": 123,
+        "type": "tag_ids_changed",
+        "before": [
+            "value"
+        ],
+        "after": [
+            "value"
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketTagIdsChangedEventResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_tag_ids_changed_event_response_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value",
+        "first_name": "value",
+        "last_name": "value",
+        "full_name": "value",
+        "email": "value",
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketTagIdsChangedEventResponseAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_ticket_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "requester": {
+            "type": "user_id",
+            "value": "value"
+        },
+        "author": {
+            "type": "requester"
+        },
+        "subject": "value",
+        "description": "value",
+        "priority": "low",
+        "deadline_at_unix_secs": 123,
+        "tag_ids": [
+            "value"
+        ],
+        "assignee": {
+            "type": "ai_agent",
+            "id": "value"
+        },
+        "secondary_assignee": {
+            "type": "ai_agent",
+            "id": "value"
+        },
+        "subscribers": [
+            {
+                "type": "human_agent",
+                "id": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTicketRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn requester_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "user_id",
+        "value": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: Requester =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_requester_by_user_id_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "value": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketRequesterByUserIdRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_requester_by_email_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "value": "value",
+        "full_name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketRequesterByEmailRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_requester_by_slack_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "team_id": "value",
+        "user_id": "value",
+        "full_name": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketRequesterBySlackRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_ticket_request_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTicketRequestAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_ticket_request_assignee_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTicketRequestAssignee =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_ai_agent_assignee_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketAiAgentAssigneeRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_human_agent_assignee_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketHumanAgentAssigneeRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_ticket_request_secondary_assignee_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTicketRequestSecondaryAssignee =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn ticket_subscriber_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "human_agent",
+        "id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: TicketSubscriberRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_ticket_message_response_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "ticket_id": "value",
+        "event": {
+            "id": "value",
+            "visibility": "public",
+            "author": {
+                "id": "value",
+                "first_name": "value",
+                "last_name": "value",
+                "full_name": "value",
+                "email": "value",
+                "type": "requester"
+            },
+            "created_at_unix_secs": 123,
+            "type": "message",
+            "body": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTicketMessageResponse =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_ticket_message_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "author": {
+            "type": "requester"
+        },
+        "body": "value",
+        "visibility": "public",
+        "status": "open"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTicketMessageRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn create_ticket_message_request_author_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "requester"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: CreateTicketMessageRequestAuthor =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn update_ticket_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "subject": "value",
+        "status": "open",
+        "priority": "low",
+        "deadline_at_unix_secs": 123,
+        "tag_ids": [
+            "value"
+        ],
+        "assignee": {
+            "type": "ai_agent",
+            "id": "value"
+        },
+        "secondary_assignee": {
+            "type": "ai_agent",
+            "id": "value"
+        },
+        "subscribers": [
+            {
+                "type": "human_agent",
+                "id": "value"
+            }
+        ]
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UpdateTicketRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn update_ticket_request_assignee_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UpdateTicketRequestAssignee =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn update_ticket_request_secondary_assignee_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "type": "ai_agent",
+        "id": "value"
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UpdateTicketRequestSecondaryAssignee =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -81384,7 +83663,10 @@ fn reseller_workspaces_response_round_trips_through_serde() {
                 },
                 "charge_customer": true,
                 "has_payment_issue": true,
-                "onboarding_completed_at_unix": 123
+                "onboarding_completed_at_unix": 123,
+                "metadata": {
+                    "key": "value"
+                }
             }
         ],
         "next_cursor": "value",
@@ -81420,7 +83702,10 @@ fn reseller_workspace_summary_round_trips_through_serde() {
         },
         "charge_customer": true,
         "has_payment_issue": true,
-        "onboarding_completed_at_unix": 123
+        "onboarding_completed_at_unix": 123,
+        "metadata": {
+            "key": "value"
+        }
     }"#,
     )
     .expect("fixture is valid JSON");
@@ -81474,6 +83759,9 @@ fn provision_reseller_workspace_response_round_trips_through_serde() {
         "charge_customer": true,
         "has_payment_issue": true,
         "onboarding_completed_at_unix": 123,
+        "metadata": {
+            "key": "value"
+        },
         "member_results": [
             {
                 "email": "value",
@@ -81529,6 +83817,9 @@ fn reception_provision_reseller_workspace_request_round_trips_through_serde() {
             }
         ],
         "complete_onboarding": true,
+        "metadata": {
+            "key": "value"
+        },
         "idempotency_key": "value"
     }"#,
     )
@@ -81568,6 +83859,24 @@ fn team_invite_request_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: TeamInviteRequest =
+        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("model should serialize"),
+        wire
+    );
+}
+
+#[test]
+fn update_reseller_workspace_request_round_trips_through_serde() {
+    let wire = serde_json::from_str::<serde_json::Value>(
+        r#"{
+        "metadata": {
+            "key": "value"
+        }
+    }"#,
+    )
+    .expect("fixture is valid JSON");
+    let decoded: UpdateResellerWorkspaceRequest =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -82884,25 +85193,6 @@ fn speakers_merged_round_trips_through_serde() {
     )
     .expect("fixture is valid JSON");
     let decoded: SpeakersMerged =
-        serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("model should serialize"),
-        wire
-    );
-}
-
-#[test]
-fn speaker_names_round_trips_through_serde() {
-    let wire = serde_json::from_str::<serde_json::Value>(
-        r#"{
-        "message_type": "speaker_names",
-        "speaker_names": {
-            "key": "value"
-        }
-    }"#,
-    )
-    .expect("fixture is valid JSON");
-    let decoded: SpeakerNames =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -84527,14 +86817,14 @@ fn dubbing_session_started_round_trips_through_serde() {
 }
 
 #[test]
-fn receive_dubbing_stream_message2_round_trips_through_serde() {
+fn dubbing_status_round_trips_through_serde() {
     let wire = serde_json::from_str::<serde_json::Value>(
         r#"{
         "status": "started"
     }"#,
     )
     .expect("fixture is valid JSON");
-    let decoded: ReceiveDubbingStreamMessage2 =
+    let decoded: DubbingStatus =
         serde_json::from_value(wire.clone()).expect("wire value should deserialize");
     assert_eq!(
         serde_json::to_value(&decoded).expect("model should serialize"),
@@ -88072,26 +90362,26 @@ fn voice_design_request_model_model_id_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn subscription_response_currency_variants_round_trip_through_serde() {
-    let cases: Vec<(SubscriptionResponseCurrency, serde_json::Value)> = vec![
+fn currency_variants_round_trip_through_serde() {
+    let cases: Vec<(Currency, serde_json::Value)> = vec![
         (
-            SubscriptionResponseCurrency::Usd,
+            Currency::Usd,
             serde_json::from_str::<serde_json::Value>(r#""usd""#).expect("fixture is valid JSON"),
         ),
         (
-            SubscriptionResponseCurrency::Eur,
+            Currency::Eur,
             serde_json::from_str::<serde_json::Value>(r#""eur""#).expect("fixture is valid JSON"),
         ),
         (
-            SubscriptionResponseCurrency::Inr,
+            Currency::Inr,
             serde_json::from_str::<serde_json::Value>(r#""inr""#).expect("fixture is valid JSON"),
         ),
         (
-            SubscriptionResponseCurrency::Pln,
+            Currency::Pln,
             serde_json::from_str::<serde_json::Value>(r#""pln""#).expect("fixture is valid JSON"),
         ),
         (
-            SubscriptionResponseCurrency::Gbp,
+            Currency::Gbp,
             serde_json::from_str::<serde_json::Value>(r#""gbp""#).expect("fixture is valid JSON"),
         ),
     ];
@@ -88100,13 +90390,13 @@ fn subscription_response_currency_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: SubscriptionResponseCurrency =
+        let decoded: Currency =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SubscriptionResponseCurrency = serde_json::from_value(unrecognized.clone())
+    let decoded: Currency = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -88159,6 +90449,49 @@ fn subscription_status_type_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: SubscriptionStatusType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn billing_period_variants_round_trip_through_serde() {
+    let cases: Vec<(BillingPeriod, serde_json::Value)> = vec![
+        (
+            BillingPeriod::MonthlyPeriod,
+            serde_json::from_str::<serde_json::Value>(r#""monthly_period""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            BillingPeriod::Num3MonthPeriod,
+            serde_json::from_str::<serde_json::Value>(r#""3_month_period""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            BillingPeriod::Num6MonthPeriod,
+            serde_json::from_str::<serde_json::Value>(r#""6_month_period""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            BillingPeriod::AnnualPeriod,
+            serde_json::from_str::<serde_json::Value>(r#""annual_period""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: BillingPeriod =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: BillingPeriod = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -92093,6 +94426,16 @@ fn audit_activity_name_variants_round_trip_through_serde() {
                 .expect("fixture is valid JSON"),
         ),
         (
+            AuditActivityName::AgentsUserDeleted,
+            serde_json::from_str::<serde_json::Value>(r#""Agents User Deleted""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            AuditActivityName::AgentsUserExported,
+            serde_json::from_str::<serde_json::Value>(r#""Agents User Exported""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
             AuditActivityName::AgentsUserMemoryEntityDeleted,
             serde_json::from_str::<serde_json::Value>(r#""Agents User Memory Entity Deleted""#)
                 .expect("fixture is valid JSON"),
@@ -93946,6 +96289,11 @@ fn webhook_usage_type_variants_round_trip_through_serde() {
             serde_json::from_str::<serde_json::Value>(r#""Dubbing""#)
                 .expect("fixture is valid JSON"),
         ),
+        (
+            WebhookUsageType::SupportTickets,
+            serde_json::from_str::<serde_json::Value>(r#""Support Tickets""#)
+                .expect("fixture is valid JSON"),
+        ),
     ];
     for (variant, wire) in cases {
         assert_eq!(
@@ -93987,6 +96335,11 @@ fn workspace_webhook_event_type_variants_round_trip_through_serde() {
         (
             WorkspaceWebhookEventType::Flows,
             serde_json::from_str::<serde_json::Value>(r#""flows""#).expect("fixture is valid JSON"),
+        ),
+        (
+            WorkspaceWebhookEventType::SupportTicket,
+            serde_json::from_str::<serde_json::Value>(r#""support_ticket""#)
+                .expect("fixture is valid JSON"),
         ),
     ];
     for (variant, wire) in cases {
@@ -94823,154 +97176,154 @@ fn evaluation_success_result_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn list_conversation_initiation_source_variants_round_trip_through_serde() {
-    let cases: Vec<(ListConversationInitiationSource, serde_json::Value)> = vec![
+fn conversation_initiation_source_variants_round_trip_through_serde() {
+    let cases: Vec<(ConversationInitiationSource, serde_json::Value)> = vec![
         (
-            ListConversationInitiationSource::Unknown,
+            ConversationInitiationSource::Unknown,
             serde_json::from_str::<serde_json::Value>(r#""unknown""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::AndroidSdk,
+            ConversationInitiationSource::AndroidSdk,
             serde_json::from_str::<serde_json::Value>(r#""android_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::NodeJsSdk,
+            ConversationInitiationSource::NodeJsSdk,
             serde_json::from_str::<serde_json::Value>(r#""node_js_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::ReactNativeSdk,
+            ConversationInitiationSource::ReactNativeSdk,
             serde_json::from_str::<serde_json::Value>(r#""react_native_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::ReactSdk,
+            ConversationInitiationSource::ReactSdk,
             serde_json::from_str::<serde_json::Value>(r#""react_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::JsSdk,
+            ConversationInitiationSource::JsSdk,
             serde_json::from_str::<serde_json::Value>(r#""js_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::PythonSdk,
+            ConversationInitiationSource::PythonSdk,
             serde_json::from_str::<serde_json::Value>(r#""python_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::Widget,
+            ConversationInitiationSource::Widget,
             serde_json::from_str::<serde_json::Value>(r#""widget""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::SipTrunk,
+            ConversationInitiationSource::SipTrunk,
             serde_json::from_str::<serde_json::Value>(r#""sip_trunk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::Twilio,
+            ConversationInitiationSource::Twilio,
             serde_json::from_str::<serde_json::Value>(r#""twilio""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::Exotel,
+            ConversationInitiationSource::Exotel,
             serde_json::from_str::<serde_json::Value>(r#""exotel""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::Genesys,
+            ConversationInitiationSource::Genesys,
             serde_json::from_str::<serde_json::Value>(r#""genesys""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::Avaya,
+            ConversationInitiationSource::Avaya,
             serde_json::from_str::<serde_json::Value>(r#""avaya""#).expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::Audiocodes,
+            ConversationInitiationSource::Audiocodes,
             serde_json::from_str::<serde_json::Value>(r#""audiocodes""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::SwiftSdk,
+            ConversationInitiationSource::SwiftSdk,
             serde_json::from_str::<serde_json::Value>(r#""swift_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::Whatsapp,
+            ConversationInitiationSource::Whatsapp,
             serde_json::from_str::<serde_json::Value>(r#""whatsapp""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::TwilioSms,
+            ConversationInitiationSource::TwilioSms,
             serde_json::from_str::<serde_json::Value>(r#""twilio_sms""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::FlutterSdk,
+            ConversationInitiationSource::FlutterSdk,
             serde_json::from_str::<serde_json::Value>(r#""flutter_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::UnitySdk,
+            ConversationInitiationSource::UnitySdk,
             serde_json::from_str::<serde_json::Value>(r#""unity_sdk""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::ZendeskIntegration,
+            ConversationInitiationSource::ZendeskIntegration,
             serde_json::from_str::<serde_json::Value>(r#""zendesk_integration""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::SlackIntegration,
+            ConversationInitiationSource::SlackIntegration,
             serde_json::from_str::<serde_json::Value>(r#""slack_integration""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::TelegramIntegration,
+            ConversationInitiationSource::TelegramIntegration,
             serde_json::from_str::<serde_json::Value>(r#""telegram_integration""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::IntercomIntegration,
+            ConversationInitiationSource::IntercomIntegration,
             serde_json::from_str::<serde_json::Value>(r#""intercom_integration""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::FreshdeskIntegration,
+            ConversationInitiationSource::FreshdeskIntegration,
             serde_json::from_str::<serde_json::Value>(r#""freshdesk_integration""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::PlainIntegration,
+            ConversationInitiationSource::PlainIntegration,
             serde_json::from_str::<serde_json::Value>(r#""plain_integration""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::SalesforceIntegration,
+            ConversationInitiationSource::SalesforceIntegration,
             serde_json::from_str::<serde_json::Value>(r#""salesforce_integration""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::TemplatePreview,
+            ConversationInitiationSource::TemplatePreview,
             serde_json::from_str::<serde_json::Value>(r#""template_preview""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::GenesysBotConnector,
+            ConversationInitiationSource::GenesysBotConnector,
             serde_json::from_str::<serde_json::Value>(r#""genesys_bot_connector""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::SubagentTool,
+            ConversationInitiationSource::SubagentTool,
             serde_json::from_str::<serde_json::Value>(r#""subagent_tool""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            ListConversationInitiationSource::AgentMessagesApi,
+            ConversationInitiationSource::AgentMessagesApi,
             serde_json::from_str::<serde_json::Value>(r#""agent_messages_api""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -94980,13 +97333,46 @@ fn list_conversation_initiation_source_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: ListConversationInitiationSource =
+        let decoded: ConversationInitiationSource =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: ListConversationInitiationSource = serde_json::from_value(unrecognized.clone())
+    let decoded: ConversationInitiationSource = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn telephony_direction_variants_round_trip_through_serde() {
+    let cases: Vec<(TelephonyDirection, serde_json::Value)> = vec![
+        (
+            TelephonyDirection::Inbound,
+            serde_json::from_str::<serde_json::Value>(r#""inbound""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TelephonyDirection::Outbound,
+            serde_json::from_str::<serde_json::Value>(r#""outbound""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TelephonyDirection =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TelephonyDirection = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -95249,6 +97635,37 @@ fn guardrail_type_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn sort_direction_variants_round_trip_through_serde() {
+    let cases: Vec<(SortDirection, serde_json::Value)> = vec![
+        (
+            SortDirection::Asc,
+            serde_json::from_str::<serde_json::Value>(r#""asc""#).expect("fixture is valid JSON"),
+        ),
+        (
+            SortDirection::Desc,
+            serde_json::from_str::<serde_json::Value>(r#""desc""#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: SortDirection =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: SortDirection = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn agent_messages_persisted_agent_type_variants_round_trip_through_serde() {
     let cases: Vec<(AgentMessagesPersistedAgentType, serde_json::Value)> = vec![(
         AgentMessagesPersistedAgentType::Persisted,
@@ -95274,578 +97691,578 @@ fn agent_messages_persisted_agent_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn agent_messages_overrides_llm_variants_round_trip_through_serde() {
-    let cases: Vec<(AgentMessagesOverridesLlm, serde_json::Value)> = vec![
+fn llm_variants_round_trip_through_serde() {
+    let cases: Vec<(Llm, serde_json::Value)> = vec![
         (
-            AgentMessagesOverridesLlm::Gpt4OMini,
+            Llm::Gpt4OMini,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4O,
+            Llm::Gpt4O,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4,
+            Llm::Gpt4,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4""#).expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4Turbo,
+            Llm::Gpt4Turbo,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4_1,
+            Llm::Gpt4_1,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4_1Mini,
+            Llm::Gpt4_1Mini,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4_1Nano,
+            Llm::Gpt4_1Nano,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5,
+            Llm::Gpt5,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5""#).expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_1,
+            Llm::Gpt5_1,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.1""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_2,
+            Llm::Gpt5_2,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.2""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_2ChatLatest,
+            Llm::Gpt5_2ChatLatest,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-chat-latest""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_4,
+            Llm::Gpt5_4,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_4Mini,
+            Llm::Gpt5_4Mini,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_4Nano,
+            Llm::Gpt5_4Nano,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_5,
+            Llm::Gpt5_5,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_6Sol,
+            Llm::Gpt5_6Sol,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-sol""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_6Terra,
+            Llm::Gpt5_6Terra,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-terra""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_6Luna,
+            Llm::Gpt5_6Luna,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.6-luna""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt6Astra,
+            Llm::Gpt6Astra,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6-astra""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt6Sol,
+            Llm::Gpt6Sol,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6-sol""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt6Luna,
+            Llm::Gpt6Luna,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6-luna""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt6_1Sol,
+            Llm::Gpt6_1Sol,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-sol""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt6_1Terra,
+            Llm::Gpt6_1Terra,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6.1-terra""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt6_2Astra,
+            Llm::Gpt6_2Astra,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6.2-astra""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt6_2Sol,
+            Llm::Gpt6_2Sol,
             serde_json::from_str::<serde_json::Value>(r#""gpt-6.2-sol""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5Mini,
+            Llm::Gpt5Mini,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5Nano,
+            Llm::Gpt5Nano,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt3_5Turbo,
+            Llm::Gpt3_5Turbo,
             serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini1_5Pro,
+            Llm::Gemini1_5Pro,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini1_5Flash,
+            Llm::Gemini1_5Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_0Flash,
+            Llm::Gemini2_0Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_0FlashLite,
+            Llm::Gemini2_0FlashLite,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_5FlashLite,
+            Llm::Gemini2_5FlashLite,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_5Flash,
+            Llm::Gemini2_5Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3ProPreview,
+            Llm::Gemini3ProPreview,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3-pro-preview""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3FlashPreview,
+            Llm::Gemini3FlashPreview,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3-flash-preview""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3_1ProPreview,
+            Llm::Gemini3_1ProPreview,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-pro-preview""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3_1FlashLitePreview,
+            Llm::Gemini3_1FlashLitePreview,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite-preview""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3_1FlashLite,
+            Llm::Gemini3_1FlashLite,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.1-flash-lite""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3_5Flash,
+            Llm::Gemini3_5Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3_5FlashLite,
+            Llm::Gemini3_5FlashLite,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.5-flash-lite""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3_6Flash,
+            Llm::Gemini3_6Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.6-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3_7Flash,
+            Llm::Gemini3_7Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.7-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini3_8Flash,
+            Llm::Gemini3_8Flash,
             serde_json::from_str::<serde_json::Value>(r#""gemini-3.8-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini4Argon,
+            Llm::Gemini4Argon,
             serde_json::from_str::<serde_json::Value>(r#""gemini-4-argon""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini4Hydrogen,
+            Llm::Gemini4Hydrogen,
             serde_json::from_str::<serde_json::Value>(r#""gemini-4-hydrogen""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini4Neon,
+            Llm::Gemini4Neon,
             serde_json::from_str::<serde_json::Value>(r#""gemini-4-neon""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeSonnet4_5,
+            Llm::ClaudeSonnet4_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeOpus4_6,
+            Llm::ClaudeOpus4_6,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-6""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeOpus4_7,
+            Llm::ClaudeOpus4_7,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-7""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeOpus4_8,
+            Llm::ClaudeOpus4_8,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-4-8""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeOpus5,
+            Llm::ClaudeOpus5,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeOpus5_5,
+            Llm::ClaudeOpus5_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-opus-5-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeSonnet4_6,
+            Llm::ClaudeSonnet4_6,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-6""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeSonnet5,
+            Llm::ClaudeSonnet5,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeSonnet5_5,
+            Llm::ClaudeSonnet5_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-5-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeSonnet4,
+            Llm::ClaudeSonnet4,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeHaiku4_5,
+            Llm::ClaudeHaiku4_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeHaiku5_5,
+            Llm::ClaudeHaiku5_5,
             serde_json::from_str::<serde_json::Value>(r#""claude-haiku-5-5""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Claude3_7Sonnet,
+            Llm::Claude3_7Sonnet,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Claude3_5Sonnet,
+            Llm::Claude3_5Sonnet,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Claude3_5SonnetV1,
+            Llm::Claude3_5SonnetV1,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v1""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Claude3Haiku,
+            Llm::Claude3Haiku,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::CustomLlm,
+            Llm::CustomLlm,
             serde_json::from_str::<serde_json::Value>(r#""custom-llm""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Qwen3_4B,
+            Llm::Qwen3_4B,
             serde_json::from_str::<serde_json::Value>(r#""qwen3-4b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Qwen3_30BA3B,
+            Llm::Qwen3_30BA3B,
             serde_json::from_str::<serde_json::Value>(r#""qwen3-30b-a3b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Qwen36_35BA3B,
+            Llm::Qwen36_35BA3B,
             serde_json::from_str::<serde_json::Value>(r#""qwen36-35b-a3b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Qwen35_397BA17B,
+            Llm::Qwen35_397BA17B,
             serde_json::from_str::<serde_json::Value>(r#""qwen35-397b-a17b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::GptOss20B,
+            Llm::GptOss20B,
             serde_json::from_str::<serde_json::Value>(r#""gpt-oss-20b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::GptOss120B,
+            Llm::GptOss120B,
             serde_json::from_str::<serde_json::Value>(r#""gpt-oss-120b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Glm45AirFp8,
+            Llm::Glm45AirFp8,
             serde_json::from_str::<serde_json::Value>(r#""glm-45-air-fp8""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Glm52,
+            Llm::Glm52,
             serde_json::from_str::<serde_json::Value>(r#""glm-52""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::DeepseekV41Flash,
+            Llm::DeepseekV41Flash,
             serde_json::from_str::<serde_json::Value>(r#""deepseek-v41-flash""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Nemotron35SuperVlNvfp4,
+            Llm::Nemotron35SuperVlNvfp4,
             serde_json::from_str::<serde_json::Value>(r#""nemotron-35-super-vl-nvfp4""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_5FlashPreview09_2025,
+            Llm::Gemini2_5FlashPreview09_2025,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-09-2025""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_5FlashLitePreview09_2025,
+            Llm::Gemini2_5FlashLitePreview09_2025,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-09-2025""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_5FlashPreview05_20,
+            Llm::Gemini2_5FlashPreview05_20,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-05-20""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_5FlashPreview04_17,
+            Llm::Gemini2_5FlashPreview04_17,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-preview-04-17""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_5FlashLitePreview06_17,
+            Llm::Gemini2_5FlashLitePreview06_17,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.5-flash-lite-preview-06-17""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_0FlashLite001,
+            Llm::Gemini2_0FlashLite001,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-lite-001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini2_0Flash001,
+            Llm::Gemini2_0Flash001,
             serde_json::from_str::<serde_json::Value>(r#""gemini-2.0-flash-001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini1_5Flash002,
+            Llm::Gemini1_5Flash002,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-002""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini1_5Flash001,
+            Llm::Gemini1_5Flash001,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-flash-001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini1_5Pro002,
+            Llm::Gemini1_5Pro002,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-002""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gemini1_5Pro001,
+            Llm::Gemini1_5Pro001,
             serde_json::from_str::<serde_json::Value>(r#""gemini-1.5-pro-001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeSonnet4_20250514,
+            Llm::ClaudeSonnet4_20250514,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4@20250514""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeSonnet4_5_20250929,
+            Llm::ClaudeSonnet4_5_20250929,
             serde_json::from_str::<serde_json::Value>(r#""claude-sonnet-4-5@20250929""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::ClaudeHaiku4_5_20251001,
+            Llm::ClaudeHaiku4_5_20251001,
             serde_json::from_str::<serde_json::Value>(r#""claude-haiku-4-5@20251001""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Claude3_7Sonnet20250219,
+            Llm::Claude3_7Sonnet20250219,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-7-sonnet@20250219""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Claude3_5Sonnet20240620,
+            Llm::Claude3_5Sonnet20240620,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet@20240620""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Claude3_5SonnetV2_20241022,
+            Llm::Claude3_5SonnetV2_20241022,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-5-sonnet-v2@20241022""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Claude3Haiku20240307,
+            Llm::Claude3Haiku20240307,
             serde_json::from_str::<serde_json::Value>(r#""claude-3-haiku@20240307""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_2025_08_07,
+            Llm::Gpt5_2025_08_07,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-2025-08-07""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_1_2025_11_13,
+            Llm::Gpt5_1_2025_11_13,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.1-2025-11-13""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_2_2025_12_11,
+            Llm::Gpt5_2_2025_12_11,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.2-2025-12-11""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_4_2026_03_05,
+            Llm::Gpt5_4_2026_03_05,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-2026-03-05""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_4Mini2026_03_17,
+            Llm::Gpt5_4Mini2026_03_17,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-mini-2026-03-17""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_4Nano2026_03_17,
+            Llm::Gpt5_4Nano2026_03_17,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.4-nano-2026-03-17""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5_5_2026_04_23,
+            Llm::Gpt5_5_2026_04_23,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5.5-2026-04-23""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5Mini2025_08_07,
+            Llm::Gpt5Mini2025_08_07,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-mini-2025-08-07""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt5Nano2025_08_07,
+            Llm::Gpt5Nano2025_08_07,
             serde_json::from_str::<serde_json::Value>(r#""gpt-5-nano-2025-08-07""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4_1_2025_04_14,
+            Llm::Gpt4_1_2025_04_14,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-2025-04-14""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4_1Mini2025_04_14,
+            Llm::Gpt4_1Mini2025_04_14,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-mini-2025-04-14""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4_1Nano2025_04_14,
+            Llm::Gpt4_1Nano2025_04_14,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4.1-nano-2025-04-14""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4OMini2024_07_18,
+            Llm::Gpt4OMini2024_07_18,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-mini-2024-07-18""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4O2024_11_20,
+            Llm::Gpt4O2024_11_20,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-11-20""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4O2024_08_06,
+            Llm::Gpt4O2024_08_06,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-08-06""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4O2024_05_13,
+            Llm::Gpt4O2024_05_13,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4o-2024-05-13""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4_0613,
+            Llm::Gpt4_0613,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4-0613""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4_0314,
+            Llm::Gpt4_0314,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4-0314""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt4Turbo2024_04_09,
+            Llm::Gpt4Turbo2024_04_09,
             serde_json::from_str::<serde_json::Value>(r#""gpt-4-turbo-2024-04-09""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt3_5Turbo0125,
+            Llm::Gpt3_5Turbo0125,
             serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-0125""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::Gpt3_5Turbo1106,
+            Llm::Gpt3_5Turbo1106,
             serde_json::from_str::<serde_json::Value>(r#""gpt-3.5-turbo-1106""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::WattTool8B,
+            Llm::WattTool8B,
             serde_json::from_str::<serde_json::Value>(r#""watt-tool-8b""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            AgentMessagesOverridesLlm::WattTool70B,
+            Llm::WattTool70B,
             serde_json::from_str::<serde_json::Value>(r#""watt-tool-70b""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -95855,13 +98272,13 @@ fn agent_messages_overrides_llm_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: AgentMessagesOverridesLlm =
+        let decoded: Llm =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: AgentMessagesOverridesLlm = serde_json::from_value(unrecognized.clone())
+    let decoded: Llm = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -96436,6 +98853,91 @@ fn tts_conversational_model_variants_round_trip_through_serde() {
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
     );
+}
+
+#[test]
+fn tts_model_family_variants_round_trip_through_serde() {
+    let cases: Vec<(TtsModelFamily, serde_json::Value)> = vec![
+        (
+            TtsModelFamily::Turbo,
+            serde_json::from_str::<serde_json::Value>(r#""turbo""#).expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelFamily::Flash,
+            serde_json::from_str::<serde_json::Value>(r#""flash""#).expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelFamily::Multilingual,
+            serde_json::from_str::<serde_json::Value>(r#""multilingual""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelFamily::V3Conversational,
+            serde_json::from_str::<serde_json::Value>(r#""v3_conversational""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelFamily::V4,
+            serde_json::from_str::<serde_json::Value>(r#""v4""#).expect("fixture is valid JSON"),
+        ),
+        (
+            TtsModelFamily::V4Turbo,
+            serde_json::from_str::<serde_json::Value>(r#""v4_turbo""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TtsModelFamily =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TtsModelFamily = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn tts_optimize_streaming_latency_variants_round_trip_through_serde() {
+    let cases: Vec<(TtsOptimizeStreamingLatency, serde_json::Value)> = vec![
+        (
+            TtsOptimizeStreamingLatency::Num0,
+            serde_json::from_str::<serde_json::Value>(r#"0"#).expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOptimizeStreamingLatency::Num1,
+            serde_json::from_str::<serde_json::Value>(r#"1"#).expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOptimizeStreamingLatency::Num2,
+            serde_json::from_str::<serde_json::Value>(r#"2"#).expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOptimizeStreamingLatency::Num3,
+            serde_json::from_str::<serde_json::Value>(r#"3"#).expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOptimizeStreamingLatency::Num4,
+            serde_json::from_str::<serde_json::Value>(r#"4"#).expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TtsOptimizeStreamingLatency =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
 }
 
 #[test]
@@ -97432,24 +99934,24 @@ fn agent_response_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn status_variants_round_trip_through_serde() {
-    let cases: Vec<(Status, serde_json::Value)> = vec![
+fn agent_tool_response_status_variants_round_trip_through_serde() {
+    let cases: Vec<(AgentToolResponseStatus, serde_json::Value)> = vec![
         (
-            Status::Success,
+            AgentToolResponseStatus::Success,
             serde_json::from_str::<serde_json::Value>(r#""success""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Status::Error,
+            AgentToolResponseStatus::Error,
             serde_json::from_str::<serde_json::Value>(r#""error""#).expect("fixture is valid JSON"),
         ),
         (
-            Status::Blocked,
+            AgentToolResponseStatus::Blocked,
             serde_json::from_str::<serde_json::Value>(r#""blocked""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            Status::Skipped,
+            AgentToolResponseStatus::Skipped,
             serde_json::from_str::<serde_json::Value>(r#""skipped""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -97459,13 +99961,13 @@ fn status_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: Status =
+        let decoded: AgentToolResponseStatus =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: Status = serde_json::from_value(unrecognized.clone())
+    let decoded: AgentToolResponseStatus = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -97896,6 +100398,64 @@ fn turn_model_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn tts_output_format_variants_round_trip_through_serde() {
+    let cases: Vec<(TtsOutputFormat, serde_json::Value)> = vec![
+        (
+            TtsOutputFormat::Pcm8000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_8000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOutputFormat::Pcm16000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_16000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOutputFormat::Pcm22050,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_22050""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOutputFormat::Pcm24000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_24000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOutputFormat::Pcm44100,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_44100""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOutputFormat::Pcm48000,
+            serde_json::from_str::<serde_json::Value>(r#""pcm_48000""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TtsOutputFormat::Ulaw8000,
+            serde_json::from_str::<serde_json::Value>(r#""ulaw_8000""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TtsOutputFormat =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TtsOutputFormat = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn text_normalisation_type_variants_round_trip_through_serde() {
     let cases: Vec<(TextNormalisationType, serde_json::Value)> = vec![
         (
@@ -98204,60 +100764,60 @@ fn verbosity_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn behavior_override_output_format_variants_round_trip_through_serde() {
-    let cases: Vec<(BehaviorOverrideOutputFormat, serde_json::Value)> = vec![
+fn output_format_variants_round_trip_through_serde() {
+    let cases: Vec<(OutputFormat, serde_json::Value)> = vec![
         (
-            BehaviorOverrideOutputFormat::Mp3_22050_32,
+            OutputFormat::Mp3_22050_32,
             serde_json::from_str::<serde_json::Value>(r#""mp3_22050_32""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Mp3_44100_32,
+            OutputFormat::Mp3_44100_32,
             serde_json::from_str::<serde_json::Value>(r#""mp3_44100_32""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Mp3_44100_64,
+            OutputFormat::Mp3_44100_64,
             serde_json::from_str::<serde_json::Value>(r#""mp3_44100_64""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Mp3_44100_96,
+            OutputFormat::Mp3_44100_96,
             serde_json::from_str::<serde_json::Value>(r#""mp3_44100_96""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Mp3_44100_128,
+            OutputFormat::Mp3_44100_128,
             serde_json::from_str::<serde_json::Value>(r#""mp3_44100_128""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Mp3_44100_192,
+            OutputFormat::Mp3_44100_192,
             serde_json::from_str::<serde_json::Value>(r#""mp3_44100_192""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Pcm16000,
+            OutputFormat::Pcm16000,
             serde_json::from_str::<serde_json::Value>(r#""pcm_16000""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Pcm22050,
+            OutputFormat::Pcm22050,
             serde_json::from_str::<serde_json::Value>(r#""pcm_22050""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Pcm24000,
+            OutputFormat::Pcm24000,
             serde_json::from_str::<serde_json::Value>(r#""pcm_24000""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Pcm44100,
+            OutputFormat::Pcm44100,
             serde_json::from_str::<serde_json::Value>(r#""pcm_44100""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            BehaviorOverrideOutputFormat::Ulaw8000,
+            OutputFormat::Ulaw8000,
             serde_json::from_str::<serde_json::Value>(r#""ulaw_8000""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -98267,13 +100827,13 @@ fn behavior_override_output_format_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: BehaviorOverrideOutputFormat =
+        let decoded: OutputFormat =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: BehaviorOverrideOutputFormat = serde_json::from_value(unrecognized.clone())
+    let decoded: OutputFormat = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -99368,6 +101928,39 @@ fn widget_end_feedback_type_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn widget_layout_variants_round_trip_through_serde() {
+    let cases: Vec<(WidgetLayout, serde_json::Value)> = vec![
+        (
+            WidgetLayout::Default,
+            serde_json::from_str::<serde_json::Value>(r#""default""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            WidgetLayout::SidePanel,
+            serde_json::from_str::<serde_json::Value>(r#""side-panel""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: WidgetLayout =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: WidgetLayout = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn analysis_property_type_variants_round_trip_through_serde() {
     let cases: Vec<(AnalysisPropertyType, serde_json::Value)> = vec![
         (
@@ -100325,6 +102918,39 @@ fn astllm_node_output_type_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn integration_type_variants_round_trip_through_serde() {
+    let cases: Vec<(IntegrationType, serde_json::Value)> = vec![
+        (
+            IntegrationType::McpServer,
+            serde_json::from_str::<serde_json::Value>(r#""mcp_server""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            IntegrationType::McpIntegration,
+            serde_json::from_str::<serde_json::Value>(r#""mcp_integration""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: IntegrationType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: IntegrationType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn mcp_approval_policy_variants_round_trip_through_serde() {
     let cases: Vec<(McpApprovalPolicy, serde_json::Value)> = vec![
         (
@@ -101188,23 +103814,23 @@ fn conversation_history_transcript_workflow_tools_result_common_model_input_type
 }
 
 #[test]
-fn unit_test_summary_response_model_type_variants_round_trip_through_serde() {
-    let cases: Vec<(UnitTestSummaryResponseModelType, serde_json::Value)> = vec![
+fn test_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TestType, serde_json::Value)> = vec![
         (
-            UnitTestSummaryResponseModelType::Llm,
+            TestType::Llm,
             serde_json::from_str::<serde_json::Value>(r#""llm""#).expect("fixture is valid JSON"),
         ),
         (
-            UnitTestSummaryResponseModelType::Tool,
+            TestType::Tool,
             serde_json::from_str::<serde_json::Value>(r#""tool""#).expect("fixture is valid JSON"),
         ),
         (
-            UnitTestSummaryResponseModelType::Simulation,
+            TestType::Simulation,
             serde_json::from_str::<serde_json::Value>(r#""simulation""#)
                 .expect("fixture is valid JSON"),
         ),
         (
-            UnitTestSummaryResponseModelType::Folder,
+            TestType::Folder,
             serde_json::from_str::<serde_json::Value>(r#""folder""#)
                 .expect("fixture is valid JSON"),
         ),
@@ -101214,13 +103840,13 @@ fn unit_test_summary_response_model_type_variants_round_trip_through_serde() {
             serde_json::to_value(&variant).expect("variant should serialize"),
             wire,
         );
-        let decoded: UnitTestSummaryResponseModelType =
+        let decoded: TestType =
             serde_json::from_value(wire.clone()).expect("wire value should deserialize");
         assert_eq!(decoded, variant);
     }
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: UnitTestSummaryResponseModelType = serde_json::from_value(unrecognized.clone())
+    let decoded: TestType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -103356,6 +105982,38 @@ fn outbound_channel_variants_round_trip_through_serde() {
 }
 
 #[test]
+fn outbound_mode_variants_round_trip_through_serde() {
+    let cases: Vec<(OutboundMode, serde_json::Value)> = vec![
+        (
+            OutboundMode::Voice,
+            serde_json::from_str::<serde_json::Value>(r#""voice""#).expect("fixture is valid JSON"),
+        ),
+        (
+            OutboundMode::Message,
+            serde_json::from_str::<serde_json::Value>(r#""message""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: OutboundMode =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: OutboundMode = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
 fn list_mode_variants_round_trip_through_serde() {
     let cases: Vec<(ListMode, serde_json::Value)> = vec![
         (
@@ -103430,6 +106088,31 @@ fn submit_whats_app_channel_config_channel_variants_round_trip_through_serde() {
 
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: SubmitWhatsAppChannelConfigChannel = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn submit_whats_app_message_config_mode_variants_round_trip_through_serde() {
+    let cases: Vec<(SubmitWhatsAppMessageConfigMode, serde_json::Value)> = vec![(
+        SubmitWhatsAppMessageConfigMode::Message,
+        serde_json::from_str::<serde_json::Value>(r#""message""#).expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: SubmitWhatsAppMessageConfigMode =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: SubmitWhatsAppMessageConfigMode = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
@@ -103920,6 +106603,550 @@ fn environment_variable_response_type_variants_round_trip_through_serde() {
     let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
     let decoded: EnvironmentVariableResponseType = serde_json::from_value(unrecognized.clone())
         .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn sla_metric_variants_round_trip_through_serde() {
+    let cases: Vec<(SlaMetric, serde_json::Value)> = vec![
+        (
+            SlaMetric::FirstResponse,
+            serde_json::from_str::<serde_json::Value>(r#""first_response""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SlaMetric::Resolution,
+            serde_json::from_str::<serde_json::Value>(r#""resolution""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            SlaMetric::NextResponse,
+            serde_json::from_str::<serde_json::Value>(r#""next_response""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: SlaMetric =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: SlaMetric = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_priority_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketPriority, serde_json::Value)> = vec![
+        (
+            TicketPriority::Low,
+            serde_json::from_str::<serde_json::Value>(r#""low""#).expect("fixture is valid JSON"),
+        ),
+        (
+            TicketPriority::Medium,
+            serde_json::from_str::<serde_json::Value>(r#""medium""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TicketPriority::High,
+            serde_json::from_str::<serde_json::Value>(r#""high""#).expect("fixture is valid JSON"),
+        ),
+        (
+            TicketPriority::Urgent,
+            serde_json::from_str::<serde_json::Value>(r#""urgent""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketPriority =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketPriority = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_status_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketStatus, serde_json::Value)> = vec![
+        (
+            TicketStatus::Open,
+            serde_json::from_str::<serde_json::Value>(r#""open""#).expect("fixture is valid JSON"),
+        ),
+        (
+            TicketStatus::Pending,
+            serde_json::from_str::<serde_json::Value>(r#""pending""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TicketStatus::Waiting,
+            serde_json::from_str::<serde_json::Value>(r#""waiting""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TicketStatus::Resolved,
+            serde_json::from_str::<serde_json::Value>(r#""resolved""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketStatus = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_sla_status_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketSlaStatus, serde_json::Value)> = vec![
+        (
+            TicketSlaStatus::Overdue,
+            serde_json::from_str::<serde_json::Value>(r#""overdue""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TicketSlaStatus::OnTrack,
+            serde_json::from_str::<serde_json::Value>(r#""on_track""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketSlaStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketSlaStatus = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_deadline_status_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketDeadlineStatus, serde_json::Value)> = vec![
+        (
+            TicketDeadlineStatus::Overdue,
+            serde_json::from_str::<serde_json::Value>(r#""overdue""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TicketDeadlineStatus::OnTrack,
+            serde_json::from_str::<serde_json::Value>(r#""on_track""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketDeadlineStatus =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketDeadlineStatus = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_sort_by_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketSortBy, serde_json::Value)> = vec![(
+        TicketSortBy::UpdatedAt,
+        serde_json::from_str::<serde_json::Value>(r#""updated_at""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketSortBy =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketSortBy = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_event_visibility_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketEventVisibility, serde_json::Value)> = vec![
+        (
+            TicketEventVisibility::Public,
+            serde_json::from_str::<serde_json::Value>(r#""public""#)
+                .expect("fixture is valid JSON"),
+        ),
+        (
+            TicketEventVisibility::Internal,
+            serde_json::from_str::<serde_json::Value>(r#""internal""#)
+                .expect("fixture is valid JSON"),
+        ),
+    ];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketEventVisibility =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketEventVisibility = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_event_human_agent_author_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketEventHumanAgentAuthorResponseType, serde_json::Value)> = vec![(
+        TicketEventHumanAgentAuthorResponseType::HumanAgent,
+        serde_json::from_str::<serde_json::Value>(r#""human_agent""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketEventHumanAgentAuthorResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketEventHumanAgentAuthorResponseType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_created_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketCreatedEventResponseType, serde_json::Value)> = vec![(
+        TicketCreatedEventResponseType::TicketCreated,
+        serde_json::from_str::<serde_json::Value>(r#""ticket_created""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketCreatedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketCreatedEventResponseType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_deleted_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketDeletedEventResponseType, serde_json::Value)> = vec![(
+        TicketDeletedEventResponseType::TicketDeleted,
+        serde_json::from_str::<serde_json::Value>(r#""ticket_deleted""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketDeletedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketDeletedEventResponseType = serde_json::from_value(unrecognized.clone())
+        .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_assignee_changed_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketAssigneeChangedEventResponseType, serde_json::Value)> = vec![(
+        TicketAssigneeChangedEventResponseType::AssigneeChanged,
+        serde_json::from_str::<serde_json::Value>(r#""assignee_changed""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketAssigneeChangedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketAssigneeChangedEventResponseType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_secondary_assignee_changed_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(
+        TicketSecondaryAssigneeChangedEventResponseType,
+        serde_json::Value,
+    )> = vec![(
+        TicketSecondaryAssigneeChangedEventResponseType::SecondaryAssigneeChanged,
+        serde_json::from_str::<serde_json::Value>(r#""secondary_assignee_changed""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketSecondaryAssigneeChangedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketSecondaryAssigneeChangedEventResponseType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_subscribers_changed_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketSubscribersChangedEventResponseType, serde_json::Value)> = vec![(
+        TicketSubscribersChangedEventResponseType::SubscribersChanged,
+        serde_json::from_str::<serde_json::Value>(r#""subscribers_changed""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketSubscribersChangedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketSubscribersChangedEventResponseType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_subject_changed_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketSubjectChangedEventResponseType, serde_json::Value)> = vec![(
+        TicketSubjectChangedEventResponseType::SubjectChanged,
+        serde_json::from_str::<serde_json::Value>(r#""subject_changed""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketSubjectChangedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketSubjectChangedEventResponseType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_priority_changed_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketPriorityChangedEventResponseType, serde_json::Value)> = vec![(
+        TicketPriorityChangedEventResponseType::PriorityChanged,
+        serde_json::from_str::<serde_json::Value>(r#""priority_changed""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketPriorityChangedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketPriorityChangedEventResponseType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_status_changed_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketStatusChangedEventResponseType, serde_json::Value)> = vec![(
+        TicketStatusChangedEventResponseType::StatusChanged,
+        serde_json::from_str::<serde_json::Value>(r#""status_changed""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketStatusChangedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketStatusChangedEventResponseType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_deadline_changed_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketDeadlineChangedEventResponseType, serde_json::Value)> = vec![(
+        TicketDeadlineChangedEventResponseType::DeadlineChanged,
+        serde_json::from_str::<serde_json::Value>(r#""deadline_changed""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketDeadlineChangedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketDeadlineChangedEventResponseType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
+    assert_eq!(
+        serde_json::to_value(&decoded).expect("catch-all should serialize"),
+        unrecognized,
+    );
+}
+
+#[test]
+fn ticket_tag_ids_changed_event_response_type_variants_round_trip_through_serde() {
+    let cases: Vec<(TicketTagIdsChangedEventResponseType, serde_json::Value)> = vec![(
+        TicketTagIdsChangedEventResponseType::TagIdsChanged,
+        serde_json::from_str::<serde_json::Value>(r#""tag_ids_changed""#)
+            .expect("fixture is valid JSON"),
+    )];
+    for (variant, wire) in cases {
+        assert_eq!(
+            serde_json::to_value(&variant).expect("variant should serialize"),
+            wire,
+        );
+        let decoded: TicketTagIdsChangedEventResponseType =
+            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
+        assert_eq!(decoded, variant);
+    }
+
+    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
+    let decoded: TicketTagIdsChangedEventResponseType =
+        serde_json::from_value(unrecognized.clone())
+            .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,
@@ -107910,32 +111137,6 @@ fn speakers_merged_message_type_variants_round_trip_through_serde() {
 }
 
 #[test]
-fn speaker_names_message_type_variants_round_trip_through_serde() {
-    let cases: Vec<(SpeakerNamesMessageType, serde_json::Value)> = vec![(
-        SpeakerNamesMessageType::SpeakerNames,
-        serde_json::from_str::<serde_json::Value>(r#""speaker_names""#)
-            .expect("fixture is valid JSON"),
-    )];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: SpeakerNamesMessageType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: SpeakerNamesMessageType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
 fn committed_transcript_with_timestamps_message_type_variants_round_trip_through_serde() {
     let cases: Vec<(
         CommittedTranscriptWithTimestampsMessageType,
@@ -110580,39 +113781,6 @@ fn agent_tool_response_agent_tool_response_status_variants_round_trip_through_se
     let decoded: AgentToolResponseAgentToolResponseStatus =
         serde_json::from_value(unrecognized.clone())
             .expect("an unrecognized value should fall through to the catch-all variant");
-    assert_eq!(
-        serde_json::to_value(&decoded).expect("catch-all should serialize"),
-        unrecognized,
-    );
-}
-
-#[test]
-fn integrations_item_integration_type_variants_round_trip_through_serde() {
-    let cases: Vec<(IntegrationsItemIntegrationType, serde_json::Value)> = vec![
-        (
-            IntegrationsItemIntegrationType::McpServer,
-            serde_json::from_str::<serde_json::Value>(r#""mcp_server""#)
-                .expect("fixture is valid JSON"),
-        ),
-        (
-            IntegrationsItemIntegrationType::McpIntegration,
-            serde_json::from_str::<serde_json::Value>(r#""mcp_integration""#)
-                .expect("fixture is valid JSON"),
-        ),
-    ];
-    for (variant, wire) in cases {
-        assert_eq!(
-            serde_json::to_value(&variant).expect("variant should serialize"),
-            wire,
-        );
-        let decoded: IntegrationsItemIntegrationType =
-            serde_json::from_value(wire.clone()).expect("wire value should deserialize");
-        assert_eq!(decoded, variant);
-    }
-
-    let unrecognized = serde_json::Value::String("__not_a_declared_variant__".to_string());
-    let decoded: IntegrationsItemIntegrationType = serde_json::from_value(unrecognized.clone())
-        .expect("an unrecognized value should fall through to the catch-all variant");
     assert_eq!(
         serde_json::to_value(&decoded).expect("catch-all should serialize"),
         unrecognized,

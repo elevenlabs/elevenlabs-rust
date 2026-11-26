@@ -11,6 +11,7 @@ pub enum WebhookUsageType {
     ConvAiAlerting,
     Flows,
     Dubbing,
+    SupportTickets,
     /// This variant is used for forward compatibility.
     /// If the server sends a value not recognized by the current SDK version,
     /// it will be captured here with the raw string value.
@@ -29,6 +30,7 @@ impl Serialize for WebhookUsageType {
             Self::ConvAiAlerting => serializer.serialize_str("ConvAI Alerting"),
             Self::Flows => serializer.serialize_str("Flows"),
             Self::Dubbing => serializer.serialize_str("Dubbing"),
+            Self::SupportTickets => serializer.serialize_str("Support Tickets"),
             Self::__Unknown(val) => serializer.serialize_str(val),
         }
     }
@@ -46,6 +48,7 @@ impl<'de> Deserialize<'de> for WebhookUsageType {
             "ConvAI Alerting" => Ok(Self::ConvAiAlerting),
             "Flows" => Ok(Self::Flows),
             "Dubbing" => Ok(Self::Dubbing),
+            "Support Tickets" => Ok(Self::SupportTickets),
             _ => Ok(Self::__Unknown(value)),
         }
     }
@@ -62,6 +65,7 @@ impl fmt::Display for WebhookUsageType {
             Self::ConvAiAlerting => write!(f, "ConvAI Alerting"),
             Self::Flows => write!(f, "Flows"),
             Self::Dubbing => write!(f, "Dubbing"),
+            Self::SupportTickets => write!(f, "Support Tickets"),
             Self::__Unknown(val) => write!(f, "{}", val),
         }
     }

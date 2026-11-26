@@ -19,7 +19,7 @@ pub struct UnitTestSummaryResponseModel {
     #[serde(default)]
     #[serde(with = "crate::core::number_serializers::int")]
     pub last_updated_at_unix_secs: i64,
-    pub r#type: UnitTestSummaryResponseModelType,
+    pub r#type: TestType,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_type: Option<AgentTestEntityType>,
     /// The ID of the parent folder
@@ -35,7 +35,7 @@ pub struct UnitTestSummaryResponseModel {
     pub children_count: Option<i64>,
     /// Channel the test simulates the conversation as. Null for folders or default behavior.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conversation_initiation_source: Option<ListConversationInitiationSource>,
+    pub conversation_initiation_source: Option<ConversationInitiationSource>,
 }
 
 impl UnitTestSummaryResponseModel {
@@ -52,12 +52,12 @@ pub struct UnitTestSummaryResponseModelBuilder {
     access_info: Option<ResourceAccessInfo>,
     created_at_unix_secs: Option<i64>,
     last_updated_at_unix_secs: Option<i64>,
-    r#type: Option<UnitTestSummaryResponseModelType>,
+    r#type: Option<TestType>,
     entity_type: Option<AgentTestEntityType>,
     folder_parent_id: Option<String>,
     folder_path: Option<Vec<AgentTestFolderPathSegmentResponseModel>>,
     children_count: Option<i64>,
-    conversation_initiation_source: Option<ListConversationInitiationSource>,
+    conversation_initiation_source: Option<ConversationInitiationSource>,
 }
 
 impl UnitTestSummaryResponseModelBuilder {
@@ -86,7 +86,7 @@ impl UnitTestSummaryResponseModelBuilder {
         self
     }
 
-    pub fn r#type(mut self, value: UnitTestSummaryResponseModelType) -> Self {
+    pub fn r#type(mut self, value: TestType) -> Self {
         self.r#type = Some(value);
         self
     }
@@ -111,10 +111,7 @@ impl UnitTestSummaryResponseModelBuilder {
         self
     }
 
-    pub fn conversation_initiation_source(
-        mut self,
-        value: ListConversationInitiationSource,
-    ) -> Self {
+    pub fn conversation_initiation_source(mut self, value: ConversationInitiationSource) -> Self {
         self.conversation_initiation_source = Some(value);
         self
     }

@@ -23,7 +23,7 @@ pub struct AgentsListQueryRequest {
     pub tags: Option<Vec<String>>,
     /// The direction to sort the results
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    pub sort_direction: Option<SortDirection>,
     /// The field to sort the results by
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<AgentSortBy>,
@@ -47,7 +47,7 @@ pub struct AgentsListQueryRequestBuilder {
     show_only_owned_agents: Option<bool>,
     created_by_user_id: Option<String>,
     tags: Option<Vec<String>>,
-    sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    sort_direction: Option<SortDirection>,
     sort_by: Option<AgentSortBy>,
     cursor: Option<String>,
 }
@@ -83,10 +83,7 @@ impl AgentsListQueryRequestBuilder {
         self
     }
 
-    pub fn sort_direction(
-        mut self,
-        value: BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort,
-    ) -> Self {
+    pub fn sort_direction(mut self, value: SortDirection) -> Self {
         self.sort_direction = Some(value);
         self
     }
