@@ -144,6 +144,8 @@ pub struct WidgetConfigResponse {
     /// Whether voice call transcripts are revealed as the agent speaks
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transcript_speech_sync_enabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layout: Option<WidgetLayout>,
     #[serde(default)]
     pub language: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -223,6 +225,7 @@ pub struct WidgetConfigResponseBuilder {
     end_confirmation_enabled: Option<bool>,
     mobile_fullscreen: Option<bool>,
     transcript_speech_sync_enabled: Option<bool>,
+    layout: Option<WidgetLayout>,
     language: Option<String>,
     supported_language_overrides: Option<Vec<String>>,
     language_presets: Option<std::collections::HashMap<String, WidgetLanguagePresetResponse>>,
@@ -474,6 +477,11 @@ impl WidgetConfigResponseBuilder {
         self
     }
 
+    pub fn layout(mut self, value: WidgetLayout) -> Self {
+        self.layout = Some(value);
+        self
+    }
+
     pub fn language(mut self, value: impl Into<String>) -> Self {
         self.language = Some(value.into());
         self
@@ -570,6 +578,7 @@ impl WidgetConfigResponseBuilder {
             end_confirmation_enabled: self.end_confirmation_enabled,
             mobile_fullscreen: self.mobile_fullscreen,
             transcript_speech_sync_enabled: self.transcript_speech_sync_enabled,
+            layout: self.layout,
             language: self
                 .language
                 .ok_or_else(|| BuildError::missing_field("language"))?,

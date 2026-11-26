@@ -144,6 +144,8 @@ pub struct WidgetConfig {
     /// Whether voice call transcripts are revealed as the agent speaks
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transcript_speech_sync_enabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layout: Option<WidgetLayout>,
     /// Whether to show the language selector
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_selector: Option<bool>,
@@ -215,6 +217,7 @@ pub struct WidgetConfigBuilder {
     end_confirmation_enabled: Option<bool>,
     mobile_fullscreen: Option<bool>,
     transcript_speech_sync_enabled: Option<bool>,
+    layout: Option<WidgetLayout>,
     language_selector: Option<bool>,
     supports_text_only: Option<bool>,
     custom_avatar_path: Option<String>,
@@ -462,6 +465,11 @@ impl WidgetConfigBuilder {
         self
     }
 
+    pub fn layout(mut self, value: WidgetLayout) -> Self {
+        self.layout = Some(value);
+        self
+    }
+
     pub fn language_selector(mut self, value: bool) -> Self {
         self.language_selector = Some(value);
         self
@@ -536,6 +544,7 @@ impl WidgetConfigBuilder {
             end_confirmation_enabled: self.end_confirmation_enabled,
             mobile_fullscreen: self.mobile_fullscreen,
             transcript_speech_sync_enabled: self.transcript_speech_sync_enabled,
+            layout: self.layout,
             language_selector: self.language_selector,
             supports_text_only: self.supports_text_only,
             custom_avatar_path: self.custom_avatar_path,

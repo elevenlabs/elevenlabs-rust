@@ -22,7 +22,7 @@ pub struct AgentBranchResponse {
     pub protection_status: Option<BranchProtectionStatus>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rebase: Option<bool>,
-    /// Set while the branch is kept in sync with another branch (Main today), pulling in its new versions automatically. Null when it is not synced.
+    /// Set while the branch is kept in sync with another branch: automatically (`auto_rebase`), or with a chosen branch other than main. Null otherwise.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_status: Option<BranchSyncStatus>,
     /// Access information for the branch

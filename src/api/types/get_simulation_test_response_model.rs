@@ -15,7 +15,7 @@ pub struct GetSimulationTestResponseModel {
     pub chat_history: Option<Vec<ConversationHistoryTranscriptCommonModelOutput>>,
     /// Simulate the test as if the conversation originated from this channel.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conversation_initiation_source: Option<ListConversationInitiationSource>,
+    pub conversation_initiation_source: Option<ConversationInitiationSource>,
     /// The environment to resolve environment-specific variable values against when running this test (URL, headers, auth connections). If not provided, defaults to 'production'. For simulation tests, simulation_environment takes precedence when set.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<String>,
@@ -45,10 +45,10 @@ pub struct GetSimulationTestResponseModel {
         Option<std::collections::HashMap<String, Vec<ToolResponseMockConfigOutput>>>,
     /// LLM model to use for evaluating simulation results.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub evaluation_model: Option<AgentMessagesOverridesLlm>,
+    pub evaluation_model: Option<Llm>,
     /// LLM model for the simulated user.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub simulated_user_model: Option<AgentMessagesOverridesLlm>,
+    pub simulated_user_model: Option<Llm>,
     #[serde(default)]
     pub id: String,
     #[serde(default)]
@@ -68,7 +68,7 @@ pub struct GetSimulationTestResponseModelBuilder {
     from_conversation_metadata: Option<TestFromConversationMetadataOutput>,
     dynamic_variables: Option<serde_json::Value>,
     chat_history: Option<Vec<ConversationHistoryTranscriptCommonModelOutput>>,
-    conversation_initiation_source: Option<ListConversationInitiationSource>,
+    conversation_initiation_source: Option<ConversationInitiationSource>,
     environment: Option<String>,
     success_condition: Option<String>,
     success_conditions: Option<Vec<String>>,
@@ -78,8 +78,8 @@ pub struct GetSimulationTestResponseModelBuilder {
     tool_mock_config: Option<SimulationToolMockBehaviorConfig>,
     tool_mock_overrides:
         Option<std::collections::HashMap<String, Vec<ToolResponseMockConfigOutput>>>,
-    evaluation_model: Option<AgentMessagesOverridesLlm>,
-    simulated_user_model: Option<AgentMessagesOverridesLlm>,
+    evaluation_model: Option<Llm>,
+    simulated_user_model: Option<Llm>,
     id: Option<String>,
     name: Option<String>,
 }
@@ -108,10 +108,7 @@ impl GetSimulationTestResponseModelBuilder {
         self
     }
 
-    pub fn conversation_initiation_source(
-        mut self,
-        value: ListConversationInitiationSource,
-    ) -> Self {
+    pub fn conversation_initiation_source(mut self, value: ConversationInitiationSource) -> Self {
         self.conversation_initiation_source = Some(value);
         self
     }
@@ -159,12 +156,12 @@ impl GetSimulationTestResponseModelBuilder {
         self
     }
 
-    pub fn evaluation_model(mut self, value: AgentMessagesOverridesLlm) -> Self {
+    pub fn evaluation_model(mut self, value: Llm) -> Self {
         self.evaluation_model = Some(value);
         self
     }
 
-    pub fn simulated_user_model(mut self, value: AgentMessagesOverridesLlm) -> Self {
+    pub fn simulated_user_model(mut self, value: Llm) -> Self {
         self.simulated_user_model = Some(value);
         self
     }

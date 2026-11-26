@@ -1,6 +1,6 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ReceptionProvisionResellerWorkspaceRequest {
     #[serde(default)]
     pub business_name: String,
@@ -22,6 +22,9 @@ pub struct ReceptionProvisionResellerWorkspaceRequest {
     /// Finish setup right away, as `POST /v1/reception/reseller/workspaces/{workspace_id}/complete-onboarding` does. Best-effort: `onboarding_completed_at_unix` stays null on failure, and that call can be retried.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub complete_onboarding: Option<bool>,
+    /// Your own key-value pairs for the workspace, such as your customer or contract id. Up to 20 keys of up to 40 characters, without `.` or `$`, and values of up to 500 characters. Not shown to the workspace's members.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<std::collections::HashMap<String, String>>,
     /// Client-generated key that makes a retry safe. The same key and body within 24 hours returns the first result without running again. While that first request is still running, a retry gets 409 `idempotency_key_in_progress`; a different body with the same key gets 400 `idempotency_key_reused`. A request that fails is not saved, so it can be retried with the same key.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_key: Option<String>,
@@ -43,6 +46,7 @@ pub struct ReceptionProvisionResellerWorkspaceRequestBuilder {
     phone_number: Option<String>,
     members: Option<Vec<TeamInviteRequest>>,
     complete_onboarding: Option<bool>,
+    metadata: Option<std::collections::HashMap<String, String>>,
     idempotency_key: Option<String>,
 }
 
@@ -82,6 +86,11 @@ impl ReceptionProvisionResellerWorkspaceRequestBuilder {
         self
     }
 
+    pub fn metadata(mut self, value: std::collections::HashMap<String, String>) -> Self {
+        self.metadata = Some(value);
+        self
+    }
+
     pub fn idempotency_key(mut self, value: impl Into<String>) -> Self {
         self.idempotency_key = Some(value.into());
         self
@@ -101,6 +110,7 @@ impl ReceptionProvisionResellerWorkspaceRequestBuilder {
             phone_number: self.phone_number,
             members: self.members,
             complete_onboarding: self.complete_onboarding,
+            metadata: self.metadata,
             idempotency_key: self.idempotency_key,
         })
     }

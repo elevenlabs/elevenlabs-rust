@@ -44,7 +44,7 @@ impl ModelsClient {
     pub async fn list(
         &self,
         options: Option<RequestOptions>,
-    ) -> Result<Vec<ListOkResponse>, crate::error::ApiError> {
+    ) -> Result<Vec<Model>, crate::error::ApiError> {
         let url = "/v1/models";
 
         let mut request = self.http_client.get(url);
@@ -91,7 +91,7 @@ impl ModelsClient {
 
         let status = response.status().as_u16();
         let bytes = response.bytes().await?;
-        let result: Vec<ListOkResponse> = if bytes.is_empty() {
+        let result: Vec<Model> = if bytes.is_empty() {
             Default::default()
         } else {
             serde_json::from_slice(&bytes).map_err(|err| crate::error::ApiError::DecodeError {

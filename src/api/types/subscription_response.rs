@@ -71,13 +71,13 @@ pub struct SubscriptionResponse {
     pub can_use_professional_voice_cloning: bool,
     /// The currency of the user's subscription.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub currency: Option<SubscriptionResponseCurrency>,
+    pub currency: Option<Currency>,
     /// Currency/amount pair.
     pub current_overage: Price,
     pub status: SubscriptionStatusType,
     /// The billing period of the user's subscription.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub billing_period: Option<CharacterRefreshPeriod>,
+    pub billing_period: Option<BillingPeriod>,
     /// The character refresh period of the user's subscription.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub character_refresh_period: Option<CharacterRefreshPeriod>,
@@ -110,10 +110,10 @@ pub struct SubscriptionResponseBuilder {
     can_extend_voice_limit: Option<bool>,
     can_use_instant_voice_cloning: Option<bool>,
     can_use_professional_voice_cloning: Option<bool>,
-    currency: Option<SubscriptionResponseCurrency>,
+    currency: Option<Currency>,
     current_overage: Option<Price>,
     status: Option<SubscriptionStatusType>,
-    billing_period: Option<CharacterRefreshPeriod>,
+    billing_period: Option<BillingPeriod>,
     character_refresh_period: Option<CharacterRefreshPeriod>,
 }
 
@@ -211,7 +211,7 @@ impl SubscriptionResponseBuilder {
         self
     }
 
-    pub fn currency(mut self, value: SubscriptionResponseCurrency) -> Self {
+    pub fn currency(mut self, value: Currency) -> Self {
         self.currency = Some(value);
         self
     }
@@ -226,7 +226,7 @@ impl SubscriptionResponseBuilder {
         self
     }
 
-    pub fn billing_period(mut self, value: CharacterRefreshPeriod) -> Self {
+    pub fn billing_period(mut self, value: BillingPeriod) -> Self {
         self.billing_period = Some(value);
         self
     }

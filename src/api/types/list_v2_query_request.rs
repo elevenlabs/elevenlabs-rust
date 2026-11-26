@@ -32,7 +32,7 @@ pub struct ListV2QueryRequest {
     pub sort_by: Option<PhoneNumberSortBy>,
     /// The direction to sort the results
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    pub sort_direction: Option<SortDirection>,
     /// Used for fetching next page. Cursor is returned in the response.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cursor: Option<String>,
@@ -56,7 +56,7 @@ pub struct ListV2QueryRequestBuilder {
     agent_id: Option<String>,
     branch_id: Option<String>,
     sort_by: Option<PhoneNumberSortBy>,
-    sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    sort_direction: Option<SortDirection>,
     cursor: Option<String>,
 }
 
@@ -106,10 +106,7 @@ impl ListV2QueryRequestBuilder {
         self
     }
 
-    pub fn sort_direction(
-        mut self,
-        value: BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort,
-    ) -> Self {
+    pub fn sort_direction(mut self, value: SortDirection) -> Self {
         self.sort_direction = Some(value);
         self
     }

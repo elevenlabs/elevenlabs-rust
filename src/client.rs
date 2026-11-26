@@ -89,6 +89,7 @@ use crate::api::PronunciationDictionariesClient;
 use crate::api::PvcClient;
 use crate::api::RealtimeClient;
 use crate::api::ReceptionistsClient;
+use crate::api::RequestersClient;
 use crate::api::RequestsClient;
 use crate::api::ResourcesClient;
 use crate::api::RulesClient;
@@ -100,6 +101,7 @@ use crate::api::ServicesClient;
 use crate::api::SettingsClient;
 use crate::api::SingleUseClient;
 use crate::api::SipTrunkClient;
+use crate::api::SlaPoliciesClient;
 use crate::api::SnapshotsClient;
 use crate::api::SpeakersClient;
 use crate::api::SpeechEngineClient;
@@ -119,6 +121,7 @@ use crate::api::TextToDialogueClient;
 use crate::api::TextToSoundEffectsClient;
 use crate::api::TextToSpeechClient;
 use crate::api::TextToVoiceClient;
+use crate::api::TicketsClient;
 use crate::api::TiersClient;
 use crate::api::ToolApprovalsClient;
 use crate::api::ToolConfigsClient;
@@ -257,6 +260,9 @@ pub struct ApiClient {
     pub analysis: AnalysisClient,
     pub environment_variables: EnvironmentVariablesClient,
     pub environments: EnvironmentsClient,
+    pub requesters: RequestersClient,
+    pub sla_policies: SlaPoliciesClient,
+    pub tickets: TicketsClient,
     pub realtime: RealtimeClient,
     pub composition_plan: CompositionPlanClient,
     pub finetunes: FinetunesClient,
@@ -446,6 +452,10 @@ impl ApiClient {
             EnvironmentVariablesClient::with_shared(http_client.clone(), config_manager.clone());
         let environments =
             EnvironmentsClient::with_shared(http_client.clone(), config_manager.clone());
+        let requesters = RequestersClient::with_shared(http_client.clone(), config_manager.clone());
+        let sla_policies =
+            SlaPoliciesClient::with_shared(http_client.clone(), config_manager.clone());
+        let tickets = TicketsClient::with_shared(http_client.clone(), config_manager.clone());
         let realtime = RealtimeClient::with_shared(http_client.clone(), config_manager.clone());
         let composition_plan =
             CompositionPlanClient::with_shared(http_client.clone(), config_manager.clone());
@@ -605,6 +615,9 @@ impl ApiClient {
             analysis,
             environment_variables,
             environments,
+            requesters,
+            sla_policies,
+            tickets,
             realtime,
             composition_plan,
             finetunes,

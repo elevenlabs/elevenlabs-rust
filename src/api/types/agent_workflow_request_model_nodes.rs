@@ -22,6 +22,12 @@ pub enum AgentWorkflowRequestModelNodes {
         data: WorkflowPhoneNumberNodeModelInput,
     },
 
+    #[serde(rename = "say")]
+    Say {
+        #[serde(flatten)]
+        data: WorkflowSayNodeModelInput,
+    },
+
     #[serde(rename = "standalone_agent")]
     StandaloneAgent {
         #[serde(flatten)]
@@ -44,12 +50,6 @@ pub enum AgentWorkflowRequestModelNodes {
     Tool {
         #[serde(flatten)]
         data: WorkflowToolNodeModelInput,
-    },
-
-    #[serde(rename = "say")]
-    Say {
-        #[serde(flatten)]
-        data: WorkflowSayNodeModelInput,
     },
 
     #[serde(rename = "update_state")]
@@ -116,6 +116,24 @@ impl AgentWorkflowRequestModelNodes {
     pub fn into_phone_number(self) -> Option<WorkflowPhoneNumberNodeModelInput> {
         match self {
             Self::PhoneNumber { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn is_say(&self) -> bool {
+        matches!(self, Self::Say { .. })
+    }
+
+    pub fn as_say(&self) -> Option<&WorkflowSayNodeModelInput> {
+        match self {
+            Self::Say { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn into_say(self) -> Option<WorkflowSayNodeModelInput> {
+        match self {
+            Self::Say { data } => Some(data),
             _ => None,
         }
     }
@@ -188,24 +206,6 @@ impl AgentWorkflowRequestModelNodes {
     pub fn into_tool(self) -> Option<WorkflowToolNodeModelInput> {
         match self {
             Self::Tool { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn is_say(&self) -> bool {
-        matches!(self, Self::Say { .. })
-    }
-
-    pub fn as_say(&self) -> Option<&WorkflowSayNodeModelInput> {
-        match self {
-            Self::Say { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn into_say(self) -> Option<WorkflowSayNodeModelInput> {
-        match self {
-            Self::Say { data } => Some(data),
             _ => None,
         }
     }

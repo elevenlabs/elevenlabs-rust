@@ -2,11 +2,17 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(untagged)]
+#[non_exhaustive]
 pub enum ToolResponseModelToolConfig {
     WebhookToolConfigOutput(WebhookToolConfigOutput),
     ClientToolConfigOutput(ClientToolConfigOutput),
     SystemToolConfigOutput(SystemToolConfigOutput),
     McpToolConfigOutput(McpToolConfigOutput),
+
+    /// Catch-all variant for unrecognized discriminant values.
+    /// If the server sends a discriminant not recognized by the current SDK
+    /// version, the raw payload is captured here so callers can still inspect it.
+    __Unknown(serde_json::Value),
 }
 
 impl<'de> serde::Deserialize<'de> for ToolResponseModelToolConfig {
@@ -47,6 +53,10 @@ impl<'de> serde::Deserialize<'de> for ToolResponseModelToolConfig {
         }
 
         if !matched_literal {
+            if value.get("type").is_some_and(serde_json::Value::is_string) {
+                return Ok(Self::__Unknown(value));
+            }
+
             if let Ok(parsed) = serde_json::from_value::<WebhookToolConfigOutput>(value.clone()) {
                 return Ok(Self::WebhookToolConfigOutput(parsed));
             }
@@ -62,6 +72,8 @@ impl<'de> serde::Deserialize<'de> for ToolResponseModelToolConfig {
             if let Ok(parsed) = serde_json::from_value::<McpToolConfigOutput>(value.clone()) {
                 return Ok(Self::McpToolConfigOutput(parsed));
             }
+
+            return Ok(Self::__Unknown(value));
         }
 
         Err(serde::de::Error::custom(
@@ -142,6 +154,24 @@ impl ToolResponseModelToolConfig {
             _ => None,
         }
     }
+
+    pub fn is_unknown(&self) -> bool {
+        matches!(self, Self::__Unknown(_))
+    }
+
+    pub fn as_unknown(&self) -> Option<&serde_json::Value> {
+        match self {
+            Self::__Unknown(value) => Some(value),
+            _ => None,
+        }
+    }
+
+    pub fn into_unknown(self) -> Option<serde_json::Value> {
+        match self {
+            Self::__Unknown(value) => Some(value),
+            _ => None,
+        }
+    }
 }
 
 impl fmt::Display for ToolResponseModelToolConfig {
@@ -163,6 +193,11 @@ impl fmt::Display for ToolResponseModelToolConfig {
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
             ),
             Self::McpToolConfigOutput(value) => write!(
+                f,
+                "{}",
+                serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
+            ),
+            Self::__Unknown(value) => write!(
                 f,
                 "{}",
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))

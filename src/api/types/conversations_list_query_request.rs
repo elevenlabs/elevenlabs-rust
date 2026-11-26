@@ -106,7 +106,7 @@ pub struct ConversationsListQueryRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub search: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conversation_initiation_source: Option<ListConversationInitiationSource>,
+    pub conversation_initiation_source: Option<ConversationInitiationSource>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_only: Option<bool>,
     /// Restrict results to a single conversation product surface.
@@ -144,7 +144,7 @@ pub struct ConversationsListQueryRequest {
     pub custom_guardrail_names: Option<Vec<String>>,
     /// The direction to sort conversations by call start time. Defaults to descending (newest first).
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    pub sort_direction: Option<SortDirection>,
 }
 
 impl ConversationsListQueryRequest {
@@ -190,7 +190,7 @@ pub struct ConversationsListQueryRequestBuilder {
     page_size: Option<i64>,
     summary_mode: Option<ListSummaryMode>,
     search: Option<String>,
-    conversation_initiation_source: Option<ListConversationInitiationSource>,
+    conversation_initiation_source: Option<ConversationInitiationSource>,
     text_only: Option<bool>,
     conversation_product_type: Option<ConversationProduct>,
     branch_id: Option<String>,
@@ -203,7 +203,7 @@ pub struct ConversationsListQueryRequestBuilder {
     termination_reasons: Option<Vec<String>>,
     guardrail_types: Option<Vec<GuardrailType>>,
     custom_guardrail_names: Option<Vec<String>>,
-    sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    sort_direction: Option<SortDirection>,
 }
 
 impl ConversationsListQueryRequestBuilder {
@@ -377,10 +377,7 @@ impl ConversationsListQueryRequestBuilder {
         self
     }
 
-    pub fn conversation_initiation_source(
-        mut self,
-        value: ListConversationInitiationSource,
-    ) -> Self {
+    pub fn conversation_initiation_source(mut self, value: ConversationInitiationSource) -> Self {
         self.conversation_initiation_source = Some(value);
         self
     }
@@ -445,10 +442,7 @@ impl ConversationsListQueryRequestBuilder {
         self
     }
 
-    pub fn sort_direction(
-        mut self,
-        value: BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort,
-    ) -> Self {
+    pub fn sort_direction(mut self, value: SortDirection) -> Self {
         self.sort_direction = Some(value);
         self
     }

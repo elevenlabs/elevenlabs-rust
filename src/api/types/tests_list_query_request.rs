@@ -17,7 +17,7 @@ pub struct TestsListQueryRequest {
     pub parent_folder_id: Option<String>,
     /// If present, the endpoint will return only tests/folders of the given types.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub types: Option<Vec<UnitTestSummaryResponseModelType>>,
+    pub types: Option<Vec<TestType>>,
     /// Deprecated. Use the `types` query param and include `folder` instead.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_folders: Option<bool>,
@@ -45,7 +45,7 @@ pub struct TestsListQueryRequestBuilder {
     page_size: Option<i64>,
     search: Option<String>,
     parent_folder_id: Option<String>,
-    types: Option<Vec<UnitTestSummaryResponseModelType>>,
+    types: Option<Vec<TestType>>,
     include_folders: Option<bool>,
     sort_mode: Option<SortMode>,
     sharing_mode: Option<TestSharingMode>,
@@ -73,7 +73,7 @@ impl TestsListQueryRequestBuilder {
         self
     }
 
-    pub fn types(mut self, value: Vec<UnitTestSummaryResponseModelType>) -> Self {
+    pub fn types(mut self, value: Vec<TestType>) -> Self {
         self.types = Some(value);
         self
     }

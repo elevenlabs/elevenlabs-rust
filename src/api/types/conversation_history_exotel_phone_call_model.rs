@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct ConversationHistoryExotelPhoneCallModel {
-    pub direction: SmsConversationInfoDirection,
+    pub direction: TelephonyDirection,
     #[serde(default)]
     pub phone_number_id: String,
     #[serde(default)]
@@ -26,7 +26,7 @@ impl ConversationHistoryExotelPhoneCallModel {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct ConversationHistoryExotelPhoneCallModelBuilder {
-    direction: Option<SmsConversationInfoDirection>,
+    direction: Option<TelephonyDirection>,
     phone_number_id: Option<String>,
     agent_number: Option<String>,
     external_number: Option<String>,
@@ -36,7 +36,7 @@ pub struct ConversationHistoryExotelPhoneCallModelBuilder {
 }
 
 impl ConversationHistoryExotelPhoneCallModelBuilder {
-    pub fn direction(mut self, value: SmsConversationInfoDirection) -> Self {
+    pub fn direction(mut self, value: TelephonyDirection) -> Self {
         self.direction = Some(value);
         self
     }

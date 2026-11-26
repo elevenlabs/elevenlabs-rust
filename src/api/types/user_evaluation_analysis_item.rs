@@ -7,7 +7,7 @@ pub struct UserEvaluationAnalysisItem {
     pub source: Option<AttachedUserDataCollectionRefSource>,
     /// LLM to use for this item. If unset, the attaching agent's analysis_llm default is used.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub llm: Option<AgentMessagesOverridesLlm>,
+    pub llm: Option<Llm>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<UserEvaluationAnalysisItemKind>,
     /// The prompt used to evaluate the conversation.
@@ -31,7 +31,7 @@ impl UserEvaluationAnalysisItem {
 pub struct UserEvaluationAnalysisItemBuilder {
     name: Option<String>,
     source: Option<AttachedUserDataCollectionRefSource>,
-    llm: Option<AgentMessagesOverridesLlm>,
+    llm: Option<Llm>,
     kind: Option<UserEvaluationAnalysisItemKind>,
     conversation_goal_prompt: Option<String>,
     use_knowledge_base: Option<bool>,
@@ -49,7 +49,7 @@ impl UserEvaluationAnalysisItemBuilder {
         self
     }
 
-    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
+    pub fn llm(mut self, value: Llm) -> Self {
         self.llm = Some(value);
         self
     }

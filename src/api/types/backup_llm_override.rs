@@ -3,7 +3,7 @@ pub use crate::prelude::*;
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct BackupLlmOverride {
     #[serde(default)]
-    pub order: Vec<AgentMessagesOverridesLlm>,
+    pub order: Vec<Llm>,
 }
 
 impl BackupLlmOverride {
@@ -15,11 +15,11 @@ impl BackupLlmOverride {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct BackupLlmOverrideBuilder {
-    order: Option<Vec<AgentMessagesOverridesLlm>>,
+    order: Option<Vec<Llm>>,
 }
 
 impl BackupLlmOverrideBuilder {
-    pub fn order(mut self, value: Vec<AgentMessagesOverridesLlm>) -> Self {
+    pub fn order(mut self, value: Vec<Llm>) -> Self {
         self.order = Some(value);
         self
     }

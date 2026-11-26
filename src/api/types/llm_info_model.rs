@@ -2,7 +2,7 @@ pub use crate::prelude::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct LlmInfoModel {
-    pub llm: AgentMessagesOverridesLlm,
+    pub llm: Llm,
     /// Whether this is a pinned checkpoint version of a model rather than a top-level alias.
     #[serde(default)]
     pub is_checkpoint: bool,
@@ -46,7 +46,7 @@ impl LlmInfoModel {
 #[derive(Clone, PartialEq, Default, Debug)]
 #[non_exhaustive]
 pub struct LlmInfoModelBuilder {
-    llm: Option<AgentMessagesOverridesLlm>,
+    llm: Option<Llm>,
     is_checkpoint: Option<bool>,
     max_tokens_limit: Option<i64>,
     max_context_limit: Option<i64>,
@@ -60,7 +60,7 @@ pub struct LlmInfoModelBuilder {
 }
 
 impl LlmInfoModelBuilder {
-    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
+    pub fn llm(mut self, value: Llm) -> Self {
         self.llm = Some(value);
         self
     }

@@ -1185,8 +1185,8 @@ async fn main() {
             Some(&BodyUpdatePvcVoiceSampleV1VoicesPvcVoiceIdSamplesSampleIdPost {
                 remove_background_noise: Some(true),
                 selected_speaker_ids: Some(vec!["selected_speaker_ids".to_string()]),
-                trim_start_time: Some(0),
-                trim_end_time: Some(10),
+                trim_start_time: Some(1),
+                trim_end_time: Some(6),
                 file_name: Some("file_name".to_string()),
                 ..Default::default()
             }),
@@ -2620,9 +2620,9 @@ async fn main() {
                     ])
                     .language_code("language_code")
                     .voice_settings(ElevenFlashV2_5VoiceSettings {
-                        stability: Some(0.77),
-                        similarity_boost: Some(0.67),
-                        speed: Some(0.83),
+                        stability: Some(0.48),
+                        similarity_boost: Some(0.29),
+                        speed: Some(0.81),
                         ..Default::default()
                     })
                     .build()
@@ -11583,7 +11583,7 @@ async fn main() {
 </details>
 
 ## Models
-<details><summary><code>client.models.<a href="/src/api/resources/models/models.rs">list</a>(options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ListOkResponse&gt;, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.models.<a href="/src/api/resources/models/models.rs">list</a>(options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;Model&gt;, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -12045,8 +12045,8 @@ async fn main() {
         .create(
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionCreateAgentRuleRequest::builder()
-                .title(StrippedStr("estLo".to_string()))
-                .description(StrippedStr("anim nu".to_string()))
+                .title(StrippedStr("quisesse in".to_string()))
+                .description(StrippedStr("ut mini".to_string()))
                 .priority(RulePriority::Strict)
                 .build()
                 .expect("Failed to build request"),
@@ -12145,8 +12145,8 @@ async fn main() {
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             "rule_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionUpdateAgentRuleRequest::builder()
-                .title(StrippedStr("magna irure r".to_string()))
-                .description(StrippedStr("estdeserunt ".to_string()))
+                .title(StrippedStr("dolor".to_string()))
+                .description(StrippedStr("incididunt".to_string()))
                 .priority(RulePriority::Strict)
                 .build()
                 .expect("Failed to build request"),
@@ -15757,14 +15757,14 @@ async fn main() {
                 enable_logging: Some(true),
                 body: Some(BodyComposeMusicV1MusicPost {
                     prompt: Some("prompt".to_string()),
-                    music_length_ms: Some(359140),
+                    music_length_ms: Some(496047),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(343402192),
-                    force_instrumental: Some(false),
+                    seed: Some(936823962),
+                    force_instrumental: Some(true),
                     finetune_id: Some("finetune_id".to_string()),
                     respect_sections_durations: Some(true),
                     store_for_inpainting: Some(false),
-                    sign_with_c_2_pa: Some(true),
+                    sign_with_c_2_pa: Some(false),
                     ..Default::default()
                 }),
                 ..Default::default()
@@ -15875,13 +15875,13 @@ async fn main() {
                     prompt: Some("A prompt for music generation".to_string()),
                     music_length_ms: Some(10000),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(883366474),
-                    force_instrumental: Some(false),
+                    seed: Some(572933716),
+                    force_instrumental: Some(true),
                     finetune_id: Some("finetune_id".to_string()),
                     respect_sections_durations: Some(true),
-                    store_for_inpainting: Some(false),
-                    with_timestamps: Some(true),
-                    with_waveform_visual: Some(false),
+                    store_for_inpainting: Some(true),
+                    with_timestamps: Some(false),
+                    with_waveform_visual: Some(true),
                     sign_with_c_2_pa: Some(true),
                     ..Default::default()
                 }),
@@ -15992,14 +15992,14 @@ async fn main() {
                 enable_logging: Some(true),
                 body: Some(BodyStreamComposedMusicWithADetailedResponseV1MusicDetailedStreamPost {
                     prompt: Some("prompt".to_string()),
-                    music_length_ms: Some(550877),
+                    music_length_ms: Some(310726),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(558884580),
+                    seed: Some(535000175),
                     force_instrumental: Some(false),
                     finetune_id: Some("finetune_id".to_string()),
                     store_for_inpainting: Some(false),
                     with_timestamps: Some(true),
-                    with_waveform_visual: Some(true),
+                    with_waveform_visual: Some(false),
                     ..Default::default()
                 }),
                 ..Default::default()
@@ -16112,12 +16112,12 @@ async fn main() {
                 enable_logging: Some(true),
                 body: Some(BodyStreamComposedMusicV1MusicStreamPost {
                     prompt: Some("prompt".to_string()),
-                    music_length_ms: Some(409105),
+                    music_length_ms: Some(364761),
                     model_id: Some(MusicModelId::MusicV1),
-                    seed: Some(1057215319),
+                    seed: Some(697497575),
                     force_instrumental: Some(true),
                     finetune_id: Some("finetune_id".to_string()),
-                    store_for_inpainting: Some(true),
+                    store_for_inpainting: Some(false),
                     ..Default::default()
                 }),
                 ..Default::default()
@@ -17034,7 +17034,7 @@ async fn main() {
                 page_size: Some(30),
                 summary_mode: Some(ListSummaryMode::Exclude),
                 search: Some("search".to_string()),
-                conversation_initiation_source: Some(ListConversationInitiationSource::Unknown),
+                conversation_initiation_source: Some(ConversationInitiationSource::Unknown),
                 text_only: Some(false),
                 conversation_product_type: Some(ConversationProduct::Agents),
                 branch_id: Some("branch_id".to_string()),
@@ -17047,7 +17047,7 @@ async fn main() {
                 termination_reasons: Some(vec!["termination_reasons".to_string()]),
                 guardrail_types: Some(vec![GuardrailType::Custom]),
                 custom_guardrail_names: Some(vec!["custom_guardrail_names".to_string()]),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
+                sort_direction: Some(SortDirection::Asc),
                 ..Default::default()
             },
             None,
@@ -17348,7 +17348,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.conversation_initiation_source:** `Option<ListConversationInitiationSource>`
+**request.conversation_initiation_source:** `Option<ConversationInitiationSource>`
     
 </dd>
 </dl>
@@ -17452,7 +17452,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — The direction to sort conversations by call start time. Defaults to descending (newest first).
+**request.sort_direction:** `Option<SortDirection>` — The direction to sort conversations by call start time. Defaults to descending (newest first).
     
 </dd>
 </dl>
@@ -17517,7 +17517,7 @@ async fn main() {
                         .branch_id("branch_id")
                         .overrides(AgentMessagesOverrides {
                             prompt: Some("prompt".to_string()),
-                            llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                            llm: Some(Llm::Gpt4OMini),
                             language: Some("language".to_string()),
                             tool_ids: Some(vec!["tool_ids".to_string()]),
                             native_mcp_server_ids: Some(vec!["native_mcp_server_ids".to_string()]),
@@ -18483,8 +18483,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(ModelFamily::Turbo)
-                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                                     .stability(0.56)
                                     .speed(0.83)
                                     .similarity_boost(0.04)
@@ -18518,7 +18518,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(true),
@@ -18535,7 +18535,7 @@ async fn main() {
                     custom_llm_extra_body: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     user_id: Some("user_id".to_string()),
                     source_info: Some(ConversationInitiationSourceInfo {
-                        source: Some(ListConversationInitiationSource::Unknown),
+                        source: Some(ConversationInitiationSource::Unknown),
                         version: Some("version".to_string()),
                         ..Default::default()
                     }),
@@ -18645,7 +18645,7 @@ async fn main() {
                 .agent_id("agent_id")
                 .from_number("from_number")
                 .to_number("to_number")
-                .direction(SmsConversationInfoDirection::Inbound)
+                .direction(TelephonyDirection::Inbound)
                 .conversation_initiation_client_data(ConversationInitiationClientDataRequestInput {
                     conversation_config_override: Some(ConversationConfigClientOverrideInput {
                         asr: Some(AsrConversationalConfigOverride {
@@ -18674,8 +18674,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(ModelFamily::Turbo)
-                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                                     .stability(0.56)
                                     .speed(0.83)
                                     .similarity_boost(0.04)
@@ -18709,7 +18709,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(true),
@@ -18726,7 +18726,7 @@ async fn main() {
                     custom_llm_extra_body: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     user_id: Some("user_id".to_string()),
                     source_info: Some(ConversationInitiationSourceInfo {
-                        source: Some(ListConversationInitiationSource::Unknown),
+                        source: Some(ConversationInitiationSource::Unknown),
                         version: Some("version".to_string()),
                         ..Default::default()
                     }),
@@ -18848,8 +18848,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(ModelFamily::Turbo)
-                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                                     .stability(0.56)
                                     .speed(0.83)
                                     .similarity_boost(0.04)
@@ -18883,7 +18883,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(true),
@@ -18900,7 +18900,7 @@ async fn main() {
                     custom_llm_extra_body: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     user_id: Some("user_id".to_string()),
                     source_info: Some(ConversationInitiationSourceInfo {
-                        source: Some(ListConversationInitiationSource::Unknown),
+                        source: Some(ConversationInitiationSource::Unknown),
                         version: Some("version".to_string()),
                         ..Default::default()
                     }),
@@ -19044,8 +19044,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(ModelFamily::Turbo)
-                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                                     .stability(0.56)
                                     .speed(0.83)
                                     .similarity_boost(0.04)
@@ -19079,7 +19079,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(true),
@@ -19096,7 +19096,7 @@ async fn main() {
                     custom_llm_extra_body: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     user_id: Some("user_id".to_string()),
                     source_info: Some(ConversationInitiationSourceInfo {
-                        source: Some(ListConversationInitiationSource::Unknown),
+                        source: Some(ConversationInitiationSource::Unknown),
                         version: Some("version".to_string()),
                         ..Default::default()
                     }),
@@ -19232,8 +19232,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(ModelFamily::Turbo)
-                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                                     .stability(0.56)
                                     .speed(0.83)
                                     .similarity_boost(0.04)
@@ -19267,7 +19267,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(true),
@@ -19284,7 +19284,7 @@ async fn main() {
                     custom_llm_extra_body: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     user_id: Some("user_id".to_string()),
                     source_info: Some(ConversationInitiationSourceInfo {
-                        source: Some(ListConversationInitiationSource::Unknown),
+                        source: Some(ConversationInitiationSource::Unknown),
                         version: Some("version".to_string()),
                         ..Default::default()
                     }),
@@ -19434,8 +19434,10 @@ async fn main() {
                                         .voice_id("voice_id")
                                         .description("description")
                                         .language("language")
-                                        .model_family(ModelFamily::Turbo)
-                                        .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                        .model_family(TtsModelFamily::Turbo)
+                                        .optimize_streaming_latency(
+                                            TtsOptimizeStreamingLatency::Num0,
+                                        )
                                         .stability(0.56)
                                         .speed(0.83)
                                         .similarity_boost(0.04)
@@ -19451,8 +19453,8 @@ async fn main() {
                                         .build()
                                         .expect("Failed to build request"),
                                 ]),
-                                agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                                optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
+                                agent_output_audio_format: Some(TtsOutputFormat::Pcm8000),
+                                optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
                                 stability: Some(0.5),
                                 speed: Some(1_f64),
                                 similarity_boost: Some(0.8),
@@ -19589,9 +19591,7 @@ async fn main() {
                                     "key".to_string(),
                                     BehaviorOverride {
                                         verbosity: Some(Verbosity::Auto),
-                                        output_format: Some(
-                                            BehaviorOverrideOutputFormat::Mp3_22050_32,
-                                        ),
+                                        output_format: Some(OutputFormat::Mp3_22050_32),
                                         interaction_budget: Some(InteractionBudget::Realtime),
                                         ..Default::default()
                                     },
@@ -19617,7 +19617,7 @@ async fn main() {
                                 }),
                                 prompt: Some(PromptAgentApiModelInput {
                                     prompt: Some("prompt".to_string()),
-                                    llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                    llm: Some(Llm::Gpt4OMini),
                                     reasoning_effort: Some(LlmReasoningEffort::None),
                                     service_tier: Some(LlmServiceTier::Standard),
                                     thinking_budget: Some(5),
@@ -19687,7 +19687,7 @@ async fn main() {
                                         .conversation_goal_prompt("conversation_goal_prompt")
                                         .use_knowledge_base(false)
                                         .scope(AnalysisScope::Conversation)
-                                        .llm(AgentMessagesOverridesLlm::Gpt4OMini)
+                                        .llm(Llm::Gpt4OMini)
                                         .scoring_mode(CriteriaScoringMode::Binary)
                                         .max_score(100)
                                         .score_instructions("score_instructions")
@@ -19758,17 +19758,40 @@ async fn main() {
                                     start_call: Some("start_call".to_string()),
                                     start_chat: Some("start_chat".to_string()),
                                     new_call: Some("new_call".to_string()),
+                                    resume_call: Some("resume_call".to_string()),
                                     end_call: Some("end_call".to_string()),
+                                    end_chat: Some("end_chat".to_string()),
                                     mute_microphone: Some("mute_microphone".to_string()),
                                     change_language: Some("change_language".to_string()),
                                     collapse: Some("collapse".to_string()),
                                     expand: Some("expand".to_string()),
+                                    expand_widget: Some("expand_widget".to_string()),
+                                    collapse_widget: Some("collapse_widget".to_string()),
+                                    dismiss: Some("dismiss".to_string()),
+                                    open_chat: Some("open_chat".to_string()),
                                     copied: Some("copied".to_string()),
                                     accept_terms: Some("accept_terms".to_string()),
                                     dismiss_terms: Some("dismiss_terms".to_string()),
+                                    end_chat_confirmation_title: Some(
+                                        "end_chat_confirmation_title".to_string(),
+                                    ),
+                                    end_chat_confirmation_description: Some(
+                                        "end_chat_confirmation_description".to_string(),
+                                    ),
+                                    end_call_confirmation_title: Some(
+                                        "end_call_confirmation_title".to_string(),
+                                    ),
+                                    end_call_confirmation_description: Some(
+                                        "end_call_confirmation_description".to_string(),
+                                    ),
+                                    end_call_confirm: Some("end_call_confirm".to_string()),
+                                    cancel_end_confirmation: Some(
+                                        "cancel_end_confirmation".to_string(),
+                                    ),
                                     listening_status: Some("listening_status".to_string()),
                                     speaking_status: Some("speaking_status".to_string()),
                                     connecting_status: Some("connecting_status".to_string()),
+                                    reconnecting_status: Some("reconnecting_status".to_string()),
                                     chatting_status: Some("chatting_status".to_string()),
                                     queue_waiting_status: Some("queue_waiting_status".to_string()),
                                     queue_waiting_status_short: Some(
@@ -19808,6 +19831,8 @@ async fn main() {
                                     send_message: Some("send_message".to_string()),
                                     text_mode: Some("text_mode".to_string()),
                                     voice_mode: Some("voice_mode".to_string()),
+                                    voice_mode_label: Some("voice_mode_label".to_string()),
+                                    text_mode_label: Some("text_mode_label".to_string()),
                                     switched_to_text_mode: Some(
                                         "switched_to_text_mode".to_string(),
                                     ),
@@ -19829,9 +19854,14 @@ async fn main() {
                                     file_too_large: Some("file_too_large".to_string()),
                                     file_limit_reached: Some("file_limit_reached".to_string()),
                                     typing_indicator: Some("typing_indicator".to_string()),
+                                    thinking_status: Some("thinking_status".to_string()),
                                     rich_content_unavailable: Some(
                                         "rich_content_unavailable".to_string(),
                                     ),
+                                    carousel_previous: Some("carousel_previous".to_string()),
+                                    carousel_next: Some("carousel_next".to_string()),
+                                    new_message: Some("new_message".to_string()),
+                                    new_messages: Some("new_messages".to_string()),
                                     ..Default::default()
                                 }),
                                 styles: Some(WidgetStyles {
@@ -19861,6 +19891,7 @@ async fn main() {
                                 end_confirmation_enabled: Some(true),
                                 mobile_fullscreen: Some(true),
                                 transcript_speech_sync_enabled: Some(true),
+                                layout: Some(WidgetLayout::Default),
                                 language_selector: Some(false),
                                 supports_text_only: Some(true),
                                 custom_avatar_path: Some("custom_avatar_path".to_string()),
@@ -19872,18 +19903,43 @@ async fn main() {
                                             start_call: Some("start_call".to_string()),
                                             start_chat: Some("start_chat".to_string()),
                                             new_call: Some("new_call".to_string()),
+                                            resume_call: Some("resume_call".to_string()),
                                             end_call: Some("end_call".to_string()),
+                                            end_chat: Some("end_chat".to_string()),
                                             mute_microphone: Some("mute_microphone".to_string()),
                                             change_language: Some("change_language".to_string()),
                                             collapse: Some("collapse".to_string()),
                                             expand: Some("expand".to_string()),
+                                            expand_widget: Some("expand_widget".to_string()),
+                                            collapse_widget: Some("collapse_widget".to_string()),
+                                            dismiss: Some("dismiss".to_string()),
+                                            open_chat: Some("open_chat".to_string()),
                                             copied: Some("copied".to_string()),
                                             accept_terms: Some("accept_terms".to_string()),
                                             dismiss_terms: Some("dismiss_terms".to_string()),
+                                            end_chat_confirmation_title: Some(
+                                                "end_chat_confirmation_title".to_string(),
+                                            ),
+                                            end_chat_confirmation_description: Some(
+                                                "end_chat_confirmation_description".to_string(),
+                                            ),
+                                            end_call_confirmation_title: Some(
+                                                "end_call_confirmation_title".to_string(),
+                                            ),
+                                            end_call_confirmation_description: Some(
+                                                "end_call_confirmation_description".to_string(),
+                                            ),
+                                            end_call_confirm: Some("end_call_confirm".to_string()),
+                                            cancel_end_confirmation: Some(
+                                                "cancel_end_confirmation".to_string(),
+                                            ),
                                             listening_status: Some("listening_status".to_string()),
                                             speaking_status: Some("speaking_status".to_string()),
                                             connecting_status: Some(
                                                 "connecting_status".to_string(),
+                                            ),
+                                            reconnecting_status: Some(
+                                                "reconnecting_status".to_string(),
                                             ),
                                             chatting_status: Some("chatting_status".to_string()),
                                             queue_waiting_status: Some(
@@ -19932,6 +19988,8 @@ async fn main() {
                                             send_message: Some("send_message".to_string()),
                                             text_mode: Some("text_mode".to_string()),
                                             voice_mode: Some("voice_mode".to_string()),
+                                            voice_mode_label: Some("voice_mode_label".to_string()),
+                                            text_mode_label: Some("text_mode_label".to_string()),
                                             switched_to_text_mode: Some(
                                                 "switched_to_text_mode".to_string(),
                                             ),
@@ -19957,9 +20015,16 @@ async fn main() {
                                                 "file_limit_reached".to_string(),
                                             ),
                                             typing_indicator: Some("typing_indicator".to_string()),
+                                            thinking_status: Some("thinking_status".to_string()),
                                             rich_content_unavailable: Some(
                                                 "rich_content_unavailable".to_string(),
                                             ),
+                                            carousel_previous: Some(
+                                                "carousel_previous".to_string(),
+                                            ),
+                                            carousel_next: Some("carousel_next".to_string()),
+                                            new_message: Some("new_message".to_string()),
+                                            new_messages: Some("new_messages".to_string()),
                                             ..Default::default()
                                         }),
                                         text_contents_translation: Some(WidgetTextContentsTranslation {
@@ -20004,7 +20069,7 @@ async fn main() {
                                     )
                                     .is_omitted(false)
                                     .name("name")
-                                    .llm(AgentMessagesOverridesLlm::Gpt4OMini)
+                                    .llm(Llm::Gpt4OMini)
                                     .build()
                                     .expect("Failed to build request"),
                             )])),
@@ -20184,7 +20249,7 @@ async fn main() {
                                 ..Default::default()
                             }),
                             trust_context: Some(AgentTrustContext::Unknown),
-                            analysis_llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                            analysis_llm: Some(Llm::Gpt4OMini),
                             topic_discovery: Some(TopicDiscoverySettings::default()),
                             sentiment_analysis: Some(SentimentAnalysisSettings::default()),
                             alerting: Some(AlertingSettings {
@@ -20520,8 +20585,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(ModelFamily::Turbo)
-                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                                     .stability(0.56)
                                     .speed(0.83)
                                     .similarity_boost(0.04)
@@ -20537,8 +20602,8 @@ async fn main() {
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                            optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
+                            agent_output_audio_format: Some(TtsOutputFormat::Pcm8000),
+                            optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
@@ -20673,7 +20738,7 @@ async fn main() {
                                 "key".to_string(),
                                 BehaviorOverride {
                                     verbosity: Some(Verbosity::Auto),
-                                    output_format: Some(BehaviorOverrideOutputFormat::Mp3_22050_32),
+                                    output_format: Some(OutputFormat::Mp3_22050_32),
                                     interaction_budget: Some(InteractionBudget::Realtime),
                                     ..Default::default()
                                 },
@@ -20699,7 +20764,7 @@ async fn main() {
                             }),
                             prompt: Some(PromptAgentApiModelInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
                                 thinking_budget: Some(5),
@@ -20767,7 +20832,7 @@ async fn main() {
                                     .conversation_goal_prompt("conversation_goal_prompt")
                                     .use_knowledge_base(false)
                                     .scope(AnalysisScope::Conversation)
-                                    .llm(AgentMessagesOverridesLlm::Gpt4OMini)
+                                    .llm(Llm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
                                     .max_score(100)
                                     .score_instructions("score_instructions")
@@ -20838,17 +20903,40 @@ async fn main() {
                                 start_call: Some("start_call".to_string()),
                                 start_chat: Some("start_chat".to_string()),
                                 new_call: Some("new_call".to_string()),
+                                resume_call: Some("resume_call".to_string()),
                                 end_call: Some("end_call".to_string()),
+                                end_chat: Some("end_chat".to_string()),
                                 mute_microphone: Some("mute_microphone".to_string()),
                                 change_language: Some("change_language".to_string()),
                                 collapse: Some("collapse".to_string()),
                                 expand: Some("expand".to_string()),
+                                expand_widget: Some("expand_widget".to_string()),
+                                collapse_widget: Some("collapse_widget".to_string()),
+                                dismiss: Some("dismiss".to_string()),
+                                open_chat: Some("open_chat".to_string()),
                                 copied: Some("copied".to_string()),
                                 accept_terms: Some("accept_terms".to_string()),
                                 dismiss_terms: Some("dismiss_terms".to_string()),
+                                end_chat_confirmation_title: Some(
+                                    "end_chat_confirmation_title".to_string(),
+                                ),
+                                end_chat_confirmation_description: Some(
+                                    "end_chat_confirmation_description".to_string(),
+                                ),
+                                end_call_confirmation_title: Some(
+                                    "end_call_confirmation_title".to_string(),
+                                ),
+                                end_call_confirmation_description: Some(
+                                    "end_call_confirmation_description".to_string(),
+                                ),
+                                end_call_confirm: Some("end_call_confirm".to_string()),
+                                cancel_end_confirmation: Some(
+                                    "cancel_end_confirmation".to_string(),
+                                ),
                                 listening_status: Some("listening_status".to_string()),
                                 speaking_status: Some("speaking_status".to_string()),
                                 connecting_status: Some("connecting_status".to_string()),
+                                reconnecting_status: Some("reconnecting_status".to_string()),
                                 chatting_status: Some("chatting_status".to_string()),
                                 queue_waiting_status: Some("queue_waiting_status".to_string()),
                                 queue_waiting_status_short: Some(
@@ -20888,6 +20976,8 @@ async fn main() {
                                 send_message: Some("send_message".to_string()),
                                 text_mode: Some("text_mode".to_string()),
                                 voice_mode: Some("voice_mode".to_string()),
+                                voice_mode_label: Some("voice_mode_label".to_string()),
+                                text_mode_label: Some("text_mode_label".to_string()),
                                 switched_to_text_mode: Some("switched_to_text_mode".to_string()),
                                 switched_to_voice_mode: Some("switched_to_voice_mode".to_string()),
                                 copy: Some("copy".to_string()),
@@ -20903,9 +20993,14 @@ async fn main() {
                                 file_too_large: Some("file_too_large".to_string()),
                                 file_limit_reached: Some("file_limit_reached".to_string()),
                                 typing_indicator: Some("typing_indicator".to_string()),
+                                thinking_status: Some("thinking_status".to_string()),
                                 rich_content_unavailable: Some(
                                     "rich_content_unavailable".to_string(),
                                 ),
+                                carousel_previous: Some("carousel_previous".to_string()),
+                                carousel_next: Some("carousel_next".to_string()),
+                                new_message: Some("new_message".to_string()),
+                                new_messages: Some("new_messages".to_string()),
                                 ..Default::default()
                             }),
                             styles: Some(WidgetStyles {
@@ -20935,6 +21030,7 @@ async fn main() {
                             end_confirmation_enabled: Some(true),
                             mobile_fullscreen: Some(true),
                             transcript_speech_sync_enabled: Some(true),
+                            layout: Some(WidgetLayout::Default),
                             language_selector: Some(false),
                             supports_text_only: Some(true),
                             custom_avatar_path: Some("custom_avatar_path".to_string()),
@@ -20946,17 +21042,42 @@ async fn main() {
                                         start_call: Some("start_call".to_string()),
                                         start_chat: Some("start_chat".to_string()),
                                         new_call: Some("new_call".to_string()),
+                                        resume_call: Some("resume_call".to_string()),
                                         end_call: Some("end_call".to_string()),
+                                        end_chat: Some("end_chat".to_string()),
                                         mute_microphone: Some("mute_microphone".to_string()),
                                         change_language: Some("change_language".to_string()),
                                         collapse: Some("collapse".to_string()),
                                         expand: Some("expand".to_string()),
+                                        expand_widget: Some("expand_widget".to_string()),
+                                        collapse_widget: Some("collapse_widget".to_string()),
+                                        dismiss: Some("dismiss".to_string()),
+                                        open_chat: Some("open_chat".to_string()),
                                         copied: Some("copied".to_string()),
                                         accept_terms: Some("accept_terms".to_string()),
                                         dismiss_terms: Some("dismiss_terms".to_string()),
+                                        end_chat_confirmation_title: Some(
+                                            "end_chat_confirmation_title".to_string(),
+                                        ),
+                                        end_chat_confirmation_description: Some(
+                                            "end_chat_confirmation_description".to_string(),
+                                        ),
+                                        end_call_confirmation_title: Some(
+                                            "end_call_confirmation_title".to_string(),
+                                        ),
+                                        end_call_confirmation_description: Some(
+                                            "end_call_confirmation_description".to_string(),
+                                        ),
+                                        end_call_confirm: Some("end_call_confirm".to_string()),
+                                        cancel_end_confirmation: Some(
+                                            "cancel_end_confirmation".to_string(),
+                                        ),
                                         listening_status: Some("listening_status".to_string()),
                                         speaking_status: Some("speaking_status".to_string()),
                                         connecting_status: Some("connecting_status".to_string()),
+                                        reconnecting_status: Some(
+                                            "reconnecting_status".to_string(),
+                                        ),
                                         chatting_status: Some("chatting_status".to_string()),
                                         queue_waiting_status: Some(
                                             "queue_waiting_status".to_string(),
@@ -21000,6 +21121,8 @@ async fn main() {
                                         send_message: Some("send_message".to_string()),
                                         text_mode: Some("text_mode".to_string()),
                                         voice_mode: Some("voice_mode".to_string()),
+                                        voice_mode_label: Some("voice_mode_label".to_string()),
+                                        text_mode_label: Some("text_mode_label".to_string()),
                                         switched_to_text_mode: Some(
                                             "switched_to_text_mode".to_string(),
                                         ),
@@ -21021,9 +21144,14 @@ async fn main() {
                                         file_too_large: Some("file_too_large".to_string()),
                                         file_limit_reached: Some("file_limit_reached".to_string()),
                                         typing_indicator: Some("typing_indicator".to_string()),
+                                        thinking_status: Some("thinking_status".to_string()),
                                         rich_content_unavailable: Some(
                                             "rich_content_unavailable".to_string(),
                                         ),
+                                        carousel_previous: Some("carousel_previous".to_string()),
+                                        carousel_next: Some("carousel_next".to_string()),
+                                        new_message: Some("new_message".to_string()),
+                                        new_messages: Some("new_messages".to_string()),
                                         ..Default::default()
                                     }),
                                     text_contents_translation: Some(WidgetTextContentsTranslation {
@@ -21068,7 +21196,7 @@ async fn main() {
                                 )
                                 .is_omitted(false)
                                 .name("name")
-                                .llm(AgentMessagesOverridesLlm::Gpt4OMini)
+                                .llm(Llm::Gpt4OMini)
                                 .build()
                                 .expect("Failed to build request"),
                         )])),
@@ -21246,7 +21374,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         trust_context: Some(AgentTrustContext::Unknown),
-                        analysis_llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                        analysis_llm: Some(Llm::Gpt4OMini),
                         topic_discovery: Some(TopicDiscoverySettings::default()),
                         sentiment_analysis: Some(SentimentAnalysisSettings::default()),
                         alerting: Some(AlertingSettings {
@@ -21541,7 +21669,7 @@ async fn main() {
                 show_only_owned_agents: Some(false),
                 created_by_user_id: Some("created_by_user_id".to_string()),
                 tags: Some(vec!["tags".to_string()]),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
+                sort_direction: Some(SortDirection::Asc),
                 sort_by: Some(AgentSortBy::Name),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -21620,7 +21748,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — The direction to sort the results
+**request.sort_direction:** `Option<SortDirection>` — The direction to sort the results
     
 </dd>
 </dl>
@@ -21850,8 +21978,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(ModelFamily::Turbo)
-                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                                     .stability(0.56)
                                     .speed(0.83)
                                     .similarity_boost(0.04)
@@ -21867,8 +21995,8 @@ async fn main() {
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                            optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
+                            agent_output_audio_format: Some(TtsOutputFormat::Pcm8000),
+                            optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
@@ -21967,7 +22095,7 @@ async fn main() {
                                 "key".to_string(),
                                 BehaviorOverride {
                                     verbosity: Some(Verbosity::Auto),
-                                    output_format: Some(BehaviorOverrideOutputFormat::Mp3_22050_32),
+                                    output_format: Some(OutputFormat::Mp3_22050_32),
                                     interaction_budget: Some(InteractionBudget::Realtime),
                                     ..Default::default()
                                 },
@@ -21978,7 +22106,7 @@ async fn main() {
                             }),
                             prompt: Some(PromptAgentApiModelInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
                                 thinking_budget: Some(5),
@@ -22012,7 +22140,7 @@ async fn main() {
                                     .conversation_goal_prompt("conversation_goal_prompt")
                                     .use_knowledge_base(false)
                                     .scope(AnalysisScope::Conversation)
-                                    .llm(AgentMessagesOverridesLlm::Gpt4OMini)
+                                    .llm(Llm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
                                     .max_score(100)
                                     .score_instructions("score_instructions")
@@ -22083,17 +22211,40 @@ async fn main() {
                                 start_call: Some("start_call".to_string()),
                                 start_chat: Some("start_chat".to_string()),
                                 new_call: Some("new_call".to_string()),
+                                resume_call: Some("resume_call".to_string()),
                                 end_call: Some("end_call".to_string()),
+                                end_chat: Some("end_chat".to_string()),
                                 mute_microphone: Some("mute_microphone".to_string()),
                                 change_language: Some("change_language".to_string()),
                                 collapse: Some("collapse".to_string()),
                                 expand: Some("expand".to_string()),
+                                expand_widget: Some("expand_widget".to_string()),
+                                collapse_widget: Some("collapse_widget".to_string()),
+                                dismiss: Some("dismiss".to_string()),
+                                open_chat: Some("open_chat".to_string()),
                                 copied: Some("copied".to_string()),
                                 accept_terms: Some("accept_terms".to_string()),
                                 dismiss_terms: Some("dismiss_terms".to_string()),
+                                end_chat_confirmation_title: Some(
+                                    "end_chat_confirmation_title".to_string(),
+                                ),
+                                end_chat_confirmation_description: Some(
+                                    "end_chat_confirmation_description".to_string(),
+                                ),
+                                end_call_confirmation_title: Some(
+                                    "end_call_confirmation_title".to_string(),
+                                ),
+                                end_call_confirmation_description: Some(
+                                    "end_call_confirmation_description".to_string(),
+                                ),
+                                end_call_confirm: Some("end_call_confirm".to_string()),
+                                cancel_end_confirmation: Some(
+                                    "cancel_end_confirmation".to_string(),
+                                ),
                                 listening_status: Some("listening_status".to_string()),
                                 speaking_status: Some("speaking_status".to_string()),
                                 connecting_status: Some("connecting_status".to_string()),
+                                reconnecting_status: Some("reconnecting_status".to_string()),
                                 chatting_status: Some("chatting_status".to_string()),
                                 queue_waiting_status: Some("queue_waiting_status".to_string()),
                                 queue_waiting_status_short: Some(
@@ -22133,6 +22284,8 @@ async fn main() {
                                 send_message: Some("send_message".to_string()),
                                 text_mode: Some("text_mode".to_string()),
                                 voice_mode: Some("voice_mode".to_string()),
+                                voice_mode_label: Some("voice_mode_label".to_string()),
+                                text_mode_label: Some("text_mode_label".to_string()),
                                 switched_to_text_mode: Some("switched_to_text_mode".to_string()),
                                 switched_to_voice_mode: Some("switched_to_voice_mode".to_string()),
                                 copy: Some("copy".to_string()),
@@ -22148,9 +22301,14 @@ async fn main() {
                                 file_too_large: Some("file_too_large".to_string()),
                                 file_limit_reached: Some("file_limit_reached".to_string()),
                                 typing_indicator: Some("typing_indicator".to_string()),
+                                thinking_status: Some("thinking_status".to_string()),
                                 rich_content_unavailable: Some(
                                     "rich_content_unavailable".to_string(),
                                 ),
+                                carousel_previous: Some("carousel_previous".to_string()),
+                                carousel_next: Some("carousel_next".to_string()),
+                                new_message: Some("new_message".to_string()),
+                                new_messages: Some("new_messages".to_string()),
                                 ..Default::default()
                             }),
                             styles: Some(WidgetStyles {
@@ -22180,6 +22338,7 @@ async fn main() {
                             end_confirmation_enabled: Some(true),
                             mobile_fullscreen: Some(true),
                             transcript_speech_sync_enabled: Some(true),
+                            layout: Some(WidgetLayout::Default),
                             language_selector: Some(false),
                             supports_text_only: Some(true),
                             custom_avatar_path: Some("custom_avatar_path".to_string()),
@@ -22210,7 +22369,7 @@ async fn main() {
                                 )
                                 .is_omitted(false)
                                 .name("name")
-                                .llm(AgentMessagesOverridesLlm::Gpt4OMini)
+                                .llm(Llm::Gpt4OMini)
                                 .build()
                                 .expect("Failed to build request"),
                         )])),
@@ -22348,7 +22507,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         trust_context: Some(AgentTrustContext::Unknown),
-                        analysis_llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                        analysis_llm: Some(Llm::Gpt4OMini),
                         topic_discovery: Some(TopicDiscoverySettings::default()),
                         sentiment_analysis: Some(SentimentAnalysisSettings::default()),
                         alerting: Some(AlertingSettings {
@@ -23495,7 +23654,7 @@ async fn main() {
                 parent_folder_id: Some("parent_folder_id".to_string()),
                 ancestor_folder_id: Some("ancestor_folder_id".to_string()),
                 folders_first: Some(false),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
+                sort_direction: Some(SortDirection::Asc),
                 sort_by: Some(KnowledgeBaseSortBy::Name),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -23590,7 +23749,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — The direction to sort the results
+**request.sort_direction:** `Option<SortDirection>` — The direction to sort the results
     
 </dd>
 </dl>
@@ -24364,7 +24523,7 @@ async fn main() {
                             .build()
                             .expect("Failed to build request"),
                     ])
-                    .conversation_initiation_source(ListConversationInitiationSource::Unknown)
+                    .conversation_initiation_source(ConversationInitiationSource::Unknown)
                     .environment("environment")
                     .success_condition("success_condition")
                     .success_examples(vec![
@@ -24938,7 +25097,7 @@ async fn main() {
                             .build()
                             .expect("Failed to build request"),
                     ])
-                    .conversation_initiation_source(ListConversationInitiationSource::Unknown)
+                    .conversation_initiation_source(ConversationInitiationSource::Unknown)
                     .environment("environment")
                     .success_condition("success_condition")
                     .success_examples(vec![
@@ -25197,7 +25356,7 @@ async fn main() {
                 page_size: Some(30),
                 search: Some("search".to_string()),
                 parent_folder_id: Some("parent_folder_id".to_string()),
-                types: Some(vec![UnitTestSummaryResponseModelType::Llm]),
+                types: Some(vec![TestType::Llm]),
                 include_folders: Some(true),
                 sort_mode: Some(SortMode::Default),
                 sharing_mode: Some(TestSharingMode::All),
@@ -25262,7 +25421,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.types:** `Option<Vec<UnitTestSummaryResponseModelType>>` — If present, the endpoint will return only tests/folders of the given types.
+**request.types:** `Option<Vec<TestType>>` — If present, the endpoint will return only tests/folders of the given types.
     
 </dd>
 </dl>
@@ -26146,8 +26305,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(ModelFamily::Turbo)
-                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                                     .stability(0.56)
                                     .speed(0.83)
                                     .similarity_boost(0.04)
@@ -26163,8 +26322,8 @@ async fn main() {
                                     .build()
                                     .expect("Failed to build request"),
                             ]),
-                            agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                            optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
+                            agent_output_audio_format: Some(TtsOutputFormat::Pcm8000),
+                            optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
                             stability: Some(0.5),
                             speed: Some(1_f64),
                             similarity_boost: Some(0.8),
@@ -26263,7 +26422,7 @@ async fn main() {
                                 "key".to_string(),
                                 BehaviorOverride {
                                     verbosity: Some(Verbosity::Auto),
-                                    output_format: Some(BehaviorOverrideOutputFormat::Mp3_22050_32),
+                                    output_format: Some(OutputFormat::Mp3_22050_32),
                                     interaction_budget: Some(InteractionBudget::Realtime),
                                     ..Default::default()
                                 },
@@ -26274,7 +26433,7 @@ async fn main() {
                             }),
                             prompt: Some(PromptAgentApiModelInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 service_tier: Some(LlmServiceTier::Standard),
                                 thinking_budget: Some(5),
@@ -26308,7 +26467,7 @@ async fn main() {
                                     .conversation_goal_prompt("conversation_goal_prompt")
                                     .use_knowledge_base(false)
                                     .scope(AnalysisScope::Conversation)
-                                    .llm(AgentMessagesOverridesLlm::Gpt4OMini)
+                                    .llm(Llm::Gpt4OMini)
                                     .scoring_mode(CriteriaScoringMode::Binary)
                                     .max_score(100)
                                     .score_instructions("score_instructions")
@@ -26379,17 +26538,40 @@ async fn main() {
                                 start_call: Some("start_call".to_string()),
                                 start_chat: Some("start_chat".to_string()),
                                 new_call: Some("new_call".to_string()),
+                                resume_call: Some("resume_call".to_string()),
                                 end_call: Some("end_call".to_string()),
+                                end_chat: Some("end_chat".to_string()),
                                 mute_microphone: Some("mute_microphone".to_string()),
                                 change_language: Some("change_language".to_string()),
                                 collapse: Some("collapse".to_string()),
                                 expand: Some("expand".to_string()),
+                                expand_widget: Some("expand_widget".to_string()),
+                                collapse_widget: Some("collapse_widget".to_string()),
+                                dismiss: Some("dismiss".to_string()),
+                                open_chat: Some("open_chat".to_string()),
                                 copied: Some("copied".to_string()),
                                 accept_terms: Some("accept_terms".to_string()),
                                 dismiss_terms: Some("dismiss_terms".to_string()),
+                                end_chat_confirmation_title: Some(
+                                    "end_chat_confirmation_title".to_string(),
+                                ),
+                                end_chat_confirmation_description: Some(
+                                    "end_chat_confirmation_description".to_string(),
+                                ),
+                                end_call_confirmation_title: Some(
+                                    "end_call_confirmation_title".to_string(),
+                                ),
+                                end_call_confirmation_description: Some(
+                                    "end_call_confirmation_description".to_string(),
+                                ),
+                                end_call_confirm: Some("end_call_confirm".to_string()),
+                                cancel_end_confirmation: Some(
+                                    "cancel_end_confirmation".to_string(),
+                                ),
                                 listening_status: Some("listening_status".to_string()),
                                 speaking_status: Some("speaking_status".to_string()),
                                 connecting_status: Some("connecting_status".to_string()),
+                                reconnecting_status: Some("reconnecting_status".to_string()),
                                 chatting_status: Some("chatting_status".to_string()),
                                 queue_waiting_status: Some("queue_waiting_status".to_string()),
                                 queue_waiting_status_short: Some(
@@ -26429,6 +26611,8 @@ async fn main() {
                                 send_message: Some("send_message".to_string()),
                                 text_mode: Some("text_mode".to_string()),
                                 voice_mode: Some("voice_mode".to_string()),
+                                voice_mode_label: Some("voice_mode_label".to_string()),
+                                text_mode_label: Some("text_mode_label".to_string()),
                                 switched_to_text_mode: Some("switched_to_text_mode".to_string()),
                                 switched_to_voice_mode: Some("switched_to_voice_mode".to_string()),
                                 copy: Some("copy".to_string()),
@@ -26444,9 +26628,14 @@ async fn main() {
                                 file_too_large: Some("file_too_large".to_string()),
                                 file_limit_reached: Some("file_limit_reached".to_string()),
                                 typing_indicator: Some("typing_indicator".to_string()),
+                                thinking_status: Some("thinking_status".to_string()),
                                 rich_content_unavailable: Some(
                                     "rich_content_unavailable".to_string(),
                                 ),
+                                carousel_previous: Some("carousel_previous".to_string()),
+                                carousel_next: Some("carousel_next".to_string()),
+                                new_message: Some("new_message".to_string()),
+                                new_messages: Some("new_messages".to_string()),
                                 ..Default::default()
                             }),
                             styles: Some(WidgetStyles {
@@ -26476,6 +26665,7 @@ async fn main() {
                             end_confirmation_enabled: Some(true),
                             mobile_fullscreen: Some(true),
                             transcript_speech_sync_enabled: Some(true),
+                            layout: Some(WidgetLayout::Default),
                             language_selector: Some(false),
                             supports_text_only: Some(true),
                             custom_avatar_path: Some("custom_avatar_path".to_string()),
@@ -26506,7 +26696,7 @@ async fn main() {
                                 )
                                 .is_omitted(false)
                                 .name("name")
-                                .llm(AgentMessagesOverridesLlm::Gpt4OMini)
+                                .llm(Llm::Gpt4OMini)
                                 .build()
                                 .expect("Failed to build request"),
                         )])),
@@ -26644,7 +26834,7 @@ async fn main() {
                             ..Default::default()
                         }),
                         trust_context: Some(AgentTrustContext::Unknown),
-                        analysis_llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                        analysis_llm: Some(Llm::Gpt4OMini),
                         topic_discovery: Some(TopicDiscoverySettings::default()),
                         sentiment_analysis: Some(SentimentAnalysisSettings::default()),
                         alerting: Some(AlertingSettings {
@@ -26804,7 +26994,7 @@ async fn main() {
                 search: Some("search".to_string()),
                 page_size: Some(30),
                 sort_by: Some(UsersSortBy::LastContactUnixSecs),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
+                sort_direction: Some(SortDirection::Asc),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
             },
@@ -26890,7 +27080,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — The direction to sort the results
+**request.sort_direction:** `Option<SortDirection>` — The direction to sort the results
     
 </dd>
 </dl>
@@ -27322,7 +27512,7 @@ async fn main() {
                 .termination_reasons(vec!["termination_reasons".to_string()])
                 .page_size(20)
                 .summary_mode(ListSummaryMode::Exclude)
-                .conversation_initiation_source(ListConversationInitiationSource::Unknown)
+                .conversation_initiation_source(ConversationInitiationSource::Unknown)
                 .text_only(false)
                 .conversation_product_type(ConversationProduct::Agents)
                 .branch_id("branch_id")
@@ -27606,7 +27796,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.conversation_initiation_source:** `Option<ListConversationInitiationSource>`
+**request.conversation_initiation_source:** `Option<ConversationInitiationSource>`
     
 </dd>
 </dl>
@@ -28358,6 +28548,288 @@ async fn main() {
 <dd>
 
 **tag_id:** `&str`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tags.<a href="/src/api/resources/tags/tags.rs">list_2</a>(request: &amp;TagsListQueryRequest2, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PaginatedResultTicketTagResponse_, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List active ticket tags for the workspace, newest first. Requires support read permission.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .tags
+        .list_2(
+            &TagsListQueryRequest2 {
+                ids: Some(vec!["ids".to_string()]),
+                include_archived: Some(false),
+                page_size: Some(100),
+                cursor: Some("cursor".to_string()),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `&TagsListQueryRequest2` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.ids:** `Option<Vec<String>>` — Only return ticket tags with these IDs.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.include_archived:** `Option<bool>` — Whether to include archived ticket tags.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.page_size:** `Option<i64>` — Number of ticket tags to return.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.cursor:** `Option<String>` — Used for fetching next page. Cursor is returned in the response.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tags.<a href="/src/api/resources/tags/tags.rs">create_2</a>(body: &amp;CreateTicketTagRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;TicketTagResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a ticket tag for the workspace. Requires support write permission.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .tags
+        .create_2(
+            &CreateTicketTagRequest::builder()
+                .name("name")
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&CreateTicketTagRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tags.<a href="/src/api/resources/tags/tags.rs">update_2</a>(tag_id: &amp;str, body: &amp;UpdateTicketTagRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;TicketTagResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a ticket tag. Requires support write permission.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .tags
+        .update_2(
+            "tag_id",
+            &UpdateTicketTagRequest {
+                name: Some("name".to_string()),
+                archived: Some(true),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tag_id:** `&str`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&UpdateTicketTagRequest`
     
 </dd>
 </dl>
@@ -29510,7 +29982,7 @@ async fn main() {
 </details>
 
 ## PhoneNumbers
-<details><summary><code>client.phone_numbers.<a href="/src/api/resources/phone_numbers/phone_numbers.rs">list</a>(request: &amp;PhoneNumbersListQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;PhoneNumbersListOkResponse&gt;, crate::error::ApiError&gt;</code></summary>
+<details><summary><code>client.phone_numbers.<a href="/src/api/resources/phone_numbers/phone_numbers.rs">list</a>(request: &amp;PhoneNumbersListQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;Vec&lt;ListOkResponse&gt;, crate::error::ApiError&gt;</code></summary>
 <dl>
 <dd>
 
@@ -30028,7 +30500,7 @@ async fn main() {
                 agent_id: Some("agent_id".to_string()),
                 branch_id: Some("branch_id".to_string()),
                 sort_by: Some(PhoneNumberSortBy::Label),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
+                sort_direction: Some(SortDirection::Asc),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
             },
@@ -30130,7 +30602,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — The direction to sort the results
+**request.sort_direction:** `Option<SortDirection>` — The direction to sort the results
     
 </dd>
 </dl>
@@ -33018,7 +33490,7 @@ async fn main() {
             &TopicsGetQueryRequest {
                 page_size: Some(37),
                 sort_by: Some(TopicSortBy::Conversations),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
+                sort_direction: Some(SortDirection::Asc),
                 from_unix_secs: Some(0),
                 to_unix_secs: Some(4),
                 include_evaluation_criteria: Some(true),
@@ -33075,7 +33547,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — Direction to sort topics.
+**request.sort_direction:** `Option<SortDirection>` — Direction to sort topics.
     
 </dd>
 </dl>
@@ -33171,7 +33643,7 @@ async fn main() {
                 show_only_owned_documents: Some(false),
                 created_by_user_id: Some("created_by_user_id".to_string()),
                 types: Some(vec![ToolTypeFilter::Webhook]),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
+                sort_direction: Some(SortDirection::Asc),
                 sort_by: Some(ToolSortBy::Name),
                 used_by_agent_id: Some("used_by_agent_id".to_string()),
                 cursor: Some("cursor".to_string()),
@@ -33243,7 +33715,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — The direction to sort the results
+**request.sort_direction:** `Option<SortDirection>` — The direction to sort the results
     
 </dd>
 </dl>
@@ -34192,7 +34664,7 @@ async fn main() {
                 kind: Some(AnalysisItemKind::Evaluation),
                 analysis_item_ids: Some(vec!["analysis_item_ids".to_string()]),
                 created_by_user_id: Some("created_by_user_id".to_string()),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
+                sort_direction: Some(SortDirection::Asc),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
             },
@@ -34262,7 +34734,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — The direction to sort the results
+**request.sort_direction:** `Option<SortDirection>` — The direction to sort the results
     
 </dd>
 </dl>
@@ -35621,7 +36093,7 @@ async fn main() {
                         custom_llm_extra_body: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                         user_id: Some("user_id".to_string()),
                         source_info: Some(ConversationInitiationSourceInfo {
-                            source: Some(ListConversationInitiationSource::Unknown),
+                            source: Some(ConversationInitiationSource::Unknown),
                             version: Some("version".to_string()),
                             ..Default::default()
                         }),
@@ -36260,8 +36732,8 @@ async fn main() {
                                     .voice_id("voice_id")
                                     .description("description")
                                     .language("language")
-                                    .model_family(ModelFamily::Turbo)
-                                    .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                                    .model_family(TtsModelFamily::Turbo)
+                                    .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                                     .stability(0.56)
                                     .speed(0.83)
                                     .similarity_boost(0.04)
@@ -36295,7 +36767,7 @@ async fn main() {
                             ),
                             prompt: Some(PromptAgentApiModelOverrideInput {
                                 prompt: Some("prompt".to_string()),
-                                llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                                llm: Some(Llm::Gpt4OMini),
                                 reasoning_effort: Some(LlmReasoningEffort::None),
                                 tool_ids: Some(vec!["tool_ids".to_string()]),
                                 tool_ids_strict: Some(true),
@@ -36312,7 +36784,7 @@ async fn main() {
                     custom_llm_extra_body: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                     user_id: Some("user_id".to_string()),
                     source_info: Some(ConversationInitiationSourceInfo {
-                        source: Some(ListConversationInitiationSource::Unknown),
+                        source: Some(ConversationInitiationSource::Unknown),
                         version: Some("version".to_string()),
                         ..Default::default()
                     }),
@@ -38044,7 +38516,7 @@ async fn main() {
 <dl>
 <dd>
 
-Update agent branch properties such as name, description, archiving status, protection level, and auto-rebase onto main
+Update agent branch properties such as name, description, archiving status, protection level, auto-rebase, and the branch it is kept in sync with
 </dd>
 </dl>
 </dd>
@@ -38076,6 +38548,7 @@ async fn main() {
                 is_archived: Some(false),
                 protection_status: Some(BranchProtectionStatus::WriterPermsRequired),
                 auto_rebase: Some(false),
+                sync_branch_id: Some("sync_branch_id".to_string()),
                 ..Default::default()
             }),
             None,
@@ -38510,7 +38983,7 @@ async fn main() {
 <dl>
 <dd>
 
-Pull changes from a source branch (defaults to main) into this branch as a new version. If both branches changed the same field, the rebase returns 409 unless `conflict_resolutions` settles every conflict the rebase preview reports.
+Pull changes from a source branch (defaults to main) into this branch as a new version. If both branches changed the same field, the rebase returns 409 unless `conflict_resolutions` settles every conflict the rebase preview reports. Callers with only propose access can pull into their own branch from its parent branch (their default source).
 </dd>
 </dl>
 </dd>
@@ -39614,7 +40087,7 @@ async fn main() {
 <dl>
 <dd>
 
-Record a request to merge a source branch into a target branch. Anyone with edit access can open one; merging it later is gated on write access to the target branch, so this is how a change reaches a protected branch the author cannot merge into themselves.
+Create a request to merge a source branch into a target branch. Callers with only propose access can open a proposal from a branch they own into its parent. Merging requires write access to the target branch.
 </dd>
 </dl>
 </dd>
@@ -40865,7 +41338,7 @@ async fn main() {
                         custom_llm_extra_body: Some(elevenlabs_rust_sdk::serde_json::json!({})),
                         user_id: Some("user_id".to_string()),
                         source_info: Some(ConversationInitiationSourceInfo {
-                            source: Some(ListConversationInitiationSource::Unknown),
+                            source: Some(ConversationInitiationSource::Unknown),
                             version: Some("version".to_string()),
                             ..Default::default()
                         }),
@@ -42275,7 +42748,7 @@ async fn main() {
             &SpeechEngineListQueryRequest {
                 page_size: Some(30),
                 search: Some("search".to_string()),
-                sort_direction: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
+                sort_direction: Some(SortDirection::Asc),
                 sort_by: Some(AgentSortBy::Name),
                 cursor: Some("cursor".to_string()),
                 ..Default::default()
@@ -42322,7 +42795,7 @@ async fn main() {
 <dl>
 <dd>
 
-**request.sort_direction:** `Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>` — The direction to sort the results
+**request.sort_direction:** `Option<SortDirection>` — The direction to sort the results
     
 </dd>
 </dl>
@@ -42420,8 +42893,8 @@ async fn main() {
                             .voice_id("voice_id")
                             .description("description")
                             .language("language")
-                            .model_family(ModelFamily::Turbo)
-                            .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                            .model_family(TtsModelFamily::Turbo)
+                            .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                             .stability(0.56)
                             .speed(0.83)
                             .similarity_boost(0.04)
@@ -42437,8 +42910,8 @@ async fn main() {
                             .build()
                             .expect("Failed to build request"),
                     ]),
-                    agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                    optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
+                    agent_output_audio_format: Some(TtsOutputFormat::Pcm8000),
+                    optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
                     stability: Some(0.5),
                     speed: Some(1_f64),
                     similarity_boost: Some(0.8),
@@ -42719,8 +43192,8 @@ async fn main() {
                             .voice_id("voice_id")
                             .description("description")
                             .language("language")
-                            .model_family(ModelFamily::Turbo)
-                            .optimize_streaming_latency(OptimizeStreamingLatency::Num0)
+                            .model_family(TtsModelFamily::Turbo)
+                            .optimize_streaming_latency(TtsOptimizeStreamingLatency::Num0)
                             .stability(0.56)
                             .speed(0.83)
                             .similarity_boost(0.04)
@@ -42736,8 +43209,8 @@ async fn main() {
                             .build()
                             .expect("Failed to build request"),
                     ]),
-                    agent_output_audio_format: Some(AsrInputFormat::Pcm8000),
-                    optimize_streaming_latency: Some(OptimizeStreamingLatency::Num0),
+                    agent_output_audio_format: Some(TtsOutputFormat::Pcm8000),
+                    optimize_streaming_latency: Some(TtsOptimizeStreamingLatency::Num0),
                     stability: Some(0.5),
                     speed: Some(1_f64),
                     similarity_boost: Some(0.8),
@@ -43684,8 +44157,8 @@ async fn main() {
         .create_2(
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionCreateProcedureRequest::builder()
-                .name(StrippedStr("ea exe".to_string()))
-                .trigger(StrippedStr("exercitation a".to_string()))
+                .name(StrippedStr("mollit non qui".to_string()))
+                .trigger(StrippedStr("reprehenderit c".to_string()))
                 .body(
                     "1. Ask for the caller\'s name and order number.\n2. Look up the order and read back its status.",
                 )
@@ -43786,8 +44259,8 @@ async fn main() {
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             "agtprc_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionUpdateProcedureRequest::builder()
-                .name(StrippedStr("dolore l".to_string()))
-                .trigger(StrippedStr("eu no".to_string()))
+                .name(StrippedStr("labore anim ea ".to_string()))
+                .trigger(StrippedStr("magna dolor".to_string()))
                 .body(
                     "1. Ask for the caller\'s name and order number.\n2. Look up the order and read back its status.",
                 )
@@ -44759,6 +45232,1205 @@ async fn main() {
 </dl>
 </details>
 
+## Requesters
+<details><summary><code>client.requesters.<a href="/src/api/resources/requesters/requesters.rs">list</a>(request: &amp;RequestersListQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PaginatedResultTicketRequesterResponse_, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List active Agents Users for the workspace as support requesters. Requires support read permission.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .requesters
+        .list(
+            &RequestersListQueryRequest {
+                ids: Some(vec!["ids".to_string()]),
+                page_size: Some(100),
+                cursor: Some("cursor".to_string()),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `&RequestersListQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.ids:** `Option<Vec<String>>` — Only return requesters with these IDs.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.page_size:** `Option<i64>` — Number of requesters to return.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.cursor:** `Option<String>` — Used for fetching next page. Cursor is returned in the response.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.requesters.<a href="/src/api/resources/requesters/requesters.rs">sync_slack</a>(body: &amp;SyncSlackRequestersRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;SyncSlackRequestersResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Import the members of a connected Slack workspace as support requesters. Requires support write permission.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .requesters
+        .sync_slack(
+            &SyncSlackRequestersRequest::builder()
+                .integration_connection_id("integration_connection_id")
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&SyncSlackRequestersRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## SlaPolicies
+<details><summary><code>client.sla_policies.<a href="/src/api/resources/sla_policies/sla_policies.rs">list</a>(request: &amp;SlaPoliciesListQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PaginatedResultTicketSlaPolicyResponse_, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List ticket SLA policies for the workspace, newest first.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .sla_policies
+        .list(
+            &SlaPoliciesListQueryRequest {
+                include_archived: Some(true),
+                page_size: Some(100),
+                cursor: Some("cursor".to_string()),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `&SlaPoliciesListQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.include_archived:** `Option<bool>` — Whether to include archived SLA policies.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.page_size:** `Option<i64>` — Number of ticket SLA policies to return.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.cursor:** `Option<String>` — Used for fetching next page. Cursor is returned in the response.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.sla_policies.<a href="/src/api/resources/sla_policies/sla_policies.rs">create</a>(body: &amp;CreateTicketSlaPolicyRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;TicketSlaPolicyResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a ticket SLA policy for the workspace. Requires support write permission.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .sla_policies
+        .create(
+            &CreateTicketSlaPolicyRequest::builder()
+                .name("name")
+                .description("description")
+                .targets(vec![
+                    TicketSlaPolicyTargetInput::builder()
+                        .metric(SlaMetric::FirstResponse)
+                        .priority(TicketPriority::Low)
+                        .duration_secs(7)
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&CreateTicketSlaPolicyRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.sla_policies.<a href="/src/api/resources/sla_policies/sla_policies.rs">get</a>(policy_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;TicketSlaPolicyResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a ticket SLA policy for the workspace.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.sla_policies.get("policy_id", None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**policy_id:** `&str`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.sla_policies.<a href="/src/api/resources/sla_policies/sla_policies.rs">update</a>(policy_id: &amp;str, body: &amp;UpdateTicketSlaPolicyRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;TicketSlaPolicyResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a ticket SLA policy, including archiving or restoring it. Requires support write permission.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .sla_policies
+        .update(
+            "policy_id",
+            &UpdateTicketSlaPolicyRequest {
+                name: Some("name".to_string()),
+                description: Some("description".to_string()),
+                targets: Some(vec![
+                    TicketSlaPolicyTargetInput::builder()
+                        .metric(SlaMetric::FirstResponse)
+                        .priority(TicketPriority::Low)
+                        .duration_secs(7)
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                archived: Some(true),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**policy_id:** `&str`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&UpdateTicketSlaPolicyRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Tickets
+<details><summary><code>client.tickets.<a href="/src/api/resources/tickets/tickets.rs">list</a>(request: &amp;TicketsListQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;PaginatedResultTicketListItemResponse_, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List tickets
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .tickets
+        .list(
+            &TicketsListQueryRequest {
+                page_size: Some(30),
+                cursor: Some("cursor".to_string()),
+                search: Some("search".to_string()),
+                status: Some(vec![TicketStatus::Open]),
+                priority: Some(vec![TicketPriority::Low]),
+                sla_status: Some(vec![TicketSlaStatus::Overdue]),
+                deadline_status: Some(vec![TicketDeadlineStatus::Overdue]),
+                requester_user_id: Some(vec!["requester_user_id".to_string()]),
+                assignee_id: Some(vec!["assignee_id".to_string()]),
+                tag_ids: Some(vec!["tag_ids".to_string()]),
+                unassigned: Some(true),
+                sort_by: Some(TicketSortBy::UpdatedAt),
+                sort_direction: Some(SortDirection::Asc),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `&TicketsListQueryRequest` — Query parameters for this request
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.page_size:** `Option<i64>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.cursor:** `Option<String>` — Used for fetching next page. Cursor is returned in the response.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.search:** `Option<String>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.status:** `Option<Vec<TicketStatus>>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.priority:** `Option<Vec<TicketPriority>>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.sla_status:** `Option<Vec<TicketSlaStatus>>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.deadline_status:** `Option<Vec<TicketDeadlineStatus>>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.requester_user_id:** `Option<Vec<String>>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.assignee_id:** `Option<Vec<String>>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.tag_ids:** `Option<Vec<String>>` — Only return tickets with any of these tag IDs.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.unassigned:** `Option<bool>`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.sort_by:** `Option<TicketSortBy>` — The field to sort the results by
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request.sort_direction:** `Option<SortDirection>` — The direction to sort the results
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tickets.<a href="/src/api/resources/tickets/tickets.rs">create</a>(body: &amp;CreateTicketRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetTicketResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create ticket
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .tickets
+        .create(
+            &CreateTicketRequest::builder()
+                .requester(Requester::Email {
+                    data: TicketRequesterByEmailRequest::builder()
+                        .value("value")
+                        .full_name("full_name")
+                        .build()
+                        .expect("Failed to build request"),
+                })
+                .author(CreateTicketRequestAuthor::HumanAgent {
+                    data: TicketHumanAgentAuthorRequest::default(),
+                })
+                .subject("subject")
+                .description("description")
+                .priority(TicketPriority::Low)
+                .deadline_at_unix_secs(8)
+                .tag_ids(vec!["tag_ids".to_string()])
+                .assignee(CreateTicketRequestAssignee::AiAgent {
+                    data: TicketAiAgentAssigneeRequest::builder()
+                        .id("id")
+                        .build()
+                        .expect("Failed to build request"),
+                })
+                .secondary_assignee(CreateTicketRequestSecondaryAssignee::AiAgent {
+                    data: TicketAiAgentAssigneeRequest::builder()
+                        .id("id")
+                        .build()
+                        .expect("Failed to build request"),
+                })
+                .subscribers(vec![
+                    TicketSubscriberRequest::builder()
+                        .r#type(TicketEventHumanAgentAuthorResponseType::HumanAgent)
+                        .id("id")
+                        .build()
+                        .expect("Failed to build request"),
+                ])
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**body:** `&CreateTicketRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tickets.<a href="/src/api/resources/tickets/tickets.rs">create_message</a>(ticket_id: &amp;str, body: &amp;CreateTicketMessageRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;CreateTicketMessageResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create ticket message
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .tickets
+        .create_message(
+            "ticket_id",
+            &CreateTicketMessageRequest::builder()
+                .author(CreateTicketMessageRequestAuthor::HumanAgent {
+                    data: TicketHumanAgentAuthorRequest::default(),
+                })
+                .body("body")
+                .visibility(TicketEventVisibility::Public)
+                .status(TicketStatus::Open)
+                .build()
+                .expect("Failed to build request"),
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ticket_id:** `&str`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&CreateTicketMessageRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tickets.<a href="/src/api/resources/tickets/tickets.rs">get</a>(ticket_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetTicketResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get ticket
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.tickets.get("ticket_id", None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ticket_id:** `&str`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tickets.<a href="/src/api/resources/tickets/tickets.rs">update</a>(ticket_id: &amp;str, body: &amp;UpdateTicketRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;GetTicketResponse, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update ticket
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .tickets
+        .update(
+            "ticket_id",
+            &UpdateTicketRequest {
+                subject: Some("subject".to_string()),
+                status: Some(TicketStatus::Open),
+                priority: Some(TicketPriority::Low),
+                deadline_at_unix_secs: Some(1),
+                tag_ids: Some(vec!["tag_ids".to_string()]),
+                assignee: Some(UpdateTicketRequestAssignee::AiAgent {
+                    data: TicketAiAgentAssigneeRequest::builder()
+                        .id("id")
+                        .build()
+                        .expect("Failed to build request"),
+                }),
+                secondary_assignee: Some(UpdateTicketRequestSecondaryAssignee::AiAgent {
+                    data: TicketAiAgentAssigneeRequest::builder()
+                        .id("id")
+                        .build()
+                        .expect("Failed to build request"),
+                }),
+                subscribers: Some(vec![
+                    TicketSubscriberRequest::builder()
+                        .r#type(TicketEventHumanAgentAuthorResponseType::HumanAgent)
+                        .id("id")
+                        .build()
+                        .expect("Failed to build request"),
+                ]),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ticket_id:** `&str`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&UpdateTicketRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tickets.<a href="/src/api/resources/tickets/tickets.rs">delete</a>(ticket_id: &amp;str, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;(), crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete ticket
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client.tickets.delete("ticket_id", None).await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**ticket_id:** `&str`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Realtime
 <details><summary><code>client.realtime.<a href="/src/api/resources/realtime/realtime.rs">list_conversation_groups</a>(request: &amp;ListConversationGroupsQueryRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;RealtimeConversationGroupsResponseModel, crate::error::ApiError&gt;</code></summary>
 <dl>
@@ -45399,8 +47071,8 @@ async fn main() {
                                 eagerness: Some(Eagerness::Low),
                                 create_response: Some(true),
                                 interrupt_response: Some(true),
-                                threshold: Some(4.42),
-                                prefix_padding_ms: Some(2),
+                                threshold: Some(2.54),
+                                prefix_padding_ms: Some(7),
                                 silence_duration_ms: Some(9),
                                 turn_timeout: Some(-1_f64),
                                 ..Default::default()
@@ -45524,7 +47196,7 @@ async fn main() {
                 .body(
                     BodyGenerateCompositionPlanV1MusicPlanPost::builder()
                         .prompt("prompt")
-                        .music_length_ms(218434)
+                        .music_length_ms(318064)
                         .model_id(MusicModelId::MusicV1)
                         .build()
                         .expect("Failed to build request"),
@@ -45756,7 +47428,7 @@ async fn main() {
         .finetunes
         .create(
             &BodyCreateMusicFinetuneV1MusicFinetunesPost::builder()
-                .name("do amet non id")
+                .name("aliqua eiusmod cillum")
                 .primary_genre("primary_genre")
                 .files(vec![vec![]])
                 .tags(vec!["tags".to_string()])
@@ -45911,7 +47583,7 @@ async fn main() {
         .update(
             "finetune_id",
             &UpdateMusicFinetuneRequestModel {
-                name: Some("nostrud irure enim cillum".to_string()),
+                name: Some("minim labore fu".to_string()),
                 tags: Some(vec!["tags".to_string()]),
                 primary_genre: Some("primary_genre".to_string()),
                 visibility: Some(BodyCreateMusicFinetuneV1MusicFinetunesPostVisibility::Private),
@@ -46073,7 +47745,7 @@ async fn main() {
         .list(
             &OrdersListQueryRequest {
                 page_size: Some(20),
-                offset: Some(10),
+                offset: Some(5),
                 status: Some(vec![OrderState::Open]),
                 start_date: Some("2023-07-20T21:03:51.582Z".to_string()),
                 end_date: Some("2023-07-20T21:03:51.582Z".to_string()),
@@ -46195,7 +47867,7 @@ async fn main() {
         .orders
         .create(
             Some(&Some(CreateOrderRequest {
-                sandbox: Some(true),
+                sandbox: Some(false),
                 ..Default::default()
             })),
             None,
@@ -46273,7 +47945,7 @@ async fn main() {
     client
         .orders
         .get(
-            &OrderId("prodorder_vocexr04wxus25fg4ia9atfzun".to_string()),
+            &OrderId("prodorder_g1ee3227nsadhy4rizmu7wassd".to_string()),
             None,
         )
         .await;
@@ -46349,7 +48021,7 @@ async fn main() {
     client
         .orders
         .update(
-            &OrderId("prodorder_nixfsew3tvij8uzea42iqdmjob".to_string()),
+            &OrderId("prodorder_g82mvelhzk7fj17br7z8jh3g5e".to_string()),
             &BodyUpdateOrderV1ProductionsOrdersOrderIdPatch::builder()
                 .request(
                     UpdateOrderRequest::builder()
@@ -46442,7 +48114,7 @@ async fn main() {
     client
         .orders
         .submit(
-            &OrderId("prodorder_zwjdn1dn7qbr3gamncisgk6c1d".to_string()),
+            &OrderId("prodorder_jlaex67t608gjcf96ednllfuho".to_string()),
             None,
         )
         .await;
@@ -46519,7 +48191,7 @@ async fn main() {
     client
         .media
         .register(
-            &OrderId("prodorder_f4bec8msxt6qz46ok5fhzo2dku".to_string()),
+            &OrderId("prodorder_j249pxq0junwpjgaaouzwjdn1d".to_string()),
             &BodyRegisterMediaV1ProductionsOrdersOrderIdMediaPost::builder()
                 .declared_language("declared_language")
                 .media(vec![])
@@ -46611,8 +48283,8 @@ async fn main() {
     client
         .media
         .get(
-            &OrderId("prodorder_1ee3227nsadhy4rizmu7wassdw".to_string()),
-            &MediaId("prodmedia_j9zzcgpl3ovy2piv18dray9evy".to_string()),
+            &OrderId("prodorder_f630g94hprtlwlnemnuiip38fw".to_string()),
+            &MediaId("prodmedia_oaxf9gz3cnnuplz2mxa8iaw59m".to_string()),
             None,
         )
         .await;
@@ -46697,19 +48369,19 @@ async fn main() {
     client
         .items
         .upsert(
-            &OrderId("prodorder_xgtlvpoa0wum7qohp42vqjk180".to_string()),
+            &OrderId("prodorder_h420zonqxj8zubn7rexrwpqq6w".to_string()),
             &BodyUpsertOrderItemV1ProductionsOrdersOrderIdItemsPost::builder()
                 .request(
                     UpsertOrderItemRequest::builder()
                         .item(OrderItemRequestInput::Dub {
                             data: DubOrderItemRequest::builder()
                                 .media_id(MediaId(
-                                    "prodmedia_5pg5hiy2kygkr6rykg1lupzli4".to_string(),
+                                    "prodmedia_6xgtlvpoa0wum7qohp42vqjk18".to_string(),
                                 ))
                                 .source_language("source_language")
                                 .destination_languages(vec!["destination_languages".to_string()])
-                                .include_captions(false)
-                                .include_source_captions(false)
+                                .include_captions(true)
+                                .include_source_captions(true)
                                 .instructions("instructions")
                                 .captions_sdh(false)
                                 .build()
@@ -46803,8 +48475,8 @@ async fn main() {
     client
         .items
         .remove(
-            &OrderId("prodorder_z82n6ytjig82mvelhzk7fj17br".to_string()),
-            &ItemId("proditem_z8jh3g5e8j249pxq0junwpjgaa".to_string()),
+            &OrderId("prodorder_kxpu9nsh2o0ihren6kh2cozmla".to_string()),
+            &ItemId("proditem_zbrytxvspw0zaouovm1tk2ia6v".to_string()),
             None,
         )
         .await;
@@ -46889,7 +48561,7 @@ async fn main() {
     client
         .deliverables
         .list(
-            &OrderId("prodorder_iip38fw6oaxf9gz3cnnuplz2mx".to_string()),
+            &OrderId("prodorder_t2tmoo3iua9vgcda22az733zm9".to_string()),
             None,
         )
         .await;
@@ -47917,7 +49589,7 @@ async fn main() {
                     )
                     .aspect_ratio(BytedanceSeedance2FastRequestAspectRatio::Auto)
                     .duration_secs(5)
-                    .seed(0)
+                    .seed(10)
                     .generate_audio(true)
                     .start_frame(ImageReference::Asset {
                         data: StaticAssetReference::builder()
@@ -48228,7 +49900,7 @@ async fn main() {
                             .expect("Failed to build request"),
                     }])
                     .aspect_ratio(BytedanceSeedream5LiteRequestAspectRatio::Auto)
-                    .seed(0)
+                    .seed(8)
                     .resolution(BytedanceSeedream5LiteRequestResolution::Num2K)
                     .build()
                     .expect("Failed to build request"),
@@ -49273,14 +50945,14 @@ async fn main() {
             &ReceptionCreateAssetRequest::builder()
                 .groups(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("ipsum cu".to_string()))
-                        .rank(0)
+                        .label(StrippedStr("estconsectetur".to_string()))
+                        .rank(7)
                         .build()
                         .expect("Failed to build request"),
                 ])
                 .ungrouped_rank(0)
-                .name(StrippedStr("ut in ex".to_string()))
-                .description(StrippedStr("voluptat".to_string()))
+                .name(StrippedStr("incidid".to_string()))
+                .description(StrippedStr("est labor".to_string()))
                 .is_active(true)
                 .available_hours(WorkingHours {
                     hours: Some(HashMap::from([(
@@ -49288,7 +50960,7 @@ async fn main() {
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(5)
+                                .start_minute(6)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -49300,7 +50972,7 @@ async fn main() {
                 })
                 .photo_url("https://male-coal.com/")
                 .location_id("location_id")
-                .customer_facing_name(StrippedStr("dolor".to_string()))
+                .customer_facing_name(StrippedStr("velit".to_string()))
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -49476,22 +51148,22 @@ async fn main() {
             &ReceptionUpdateAssetRequestPatch {
                 groups: Some(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("ipsum cu".to_string()))
-                        .rank(0)
+                        .label(StrippedStr("estconsectetur".to_string()))
+                        .rank(7)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                ungrouped_rank: Some(8),
-                name: Some(StrippedStr("enim ul".to_string())),
-                description: Some(StrippedStr("pariatur ".to_string())),
-                is_active: Some(true),
+                ungrouped_rank: Some(6),
+                name: Some(StrippedStr("cillum conse".to_string())),
+                description: Some(StrippedStr("labore do".to_string())),
+                is_active: Some(false),
                 available_hours: Some(WorkingHours {
                     hours: Some(HashMap::from([(
                         "key".to_string(),
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(5)
+                                .start_minute(6)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -49503,7 +51175,7 @@ async fn main() {
                 }),
                 photo_url: Some("https://male-coal.com/".to_string()),
                 location_id: Some("location_id".to_string()),
-                customer_facing_name: Some(StrippedStr("dolor".to_string())),
+                customer_facing_name: Some(StrippedStr("est ve".to_string())),
                 ..Default::default()
             },
             "xi-workspace-id".to_string(),
@@ -49685,8 +51357,8 @@ async fn main() {
         .usage
         .get_usage_by_product_over_time(
             &BodyGetWorkspaceUsageV1WorkspaceAnalyticsQueryUsageByProductOverTimePost::builder()
-                .start_time(2311779635461293)
-                .end_time(587011754995981)
+                .start_time(3467217170684875)
+                .end_time(1068812153288680)
                 .interval_seconds(60)
                 .group_by(vec![
                     BodyGetWorkspaceUsageV1WorkspaceAnalyticsQueryUsageByProductOverTimePostGroupByItem::ProductType,
@@ -49753,7 +51425,7 @@ async fn main() {
 <dl>
 <dd>
 
-Returns the cost of the workspace's usage over time, for workspaces billed by cost. Usage is bucketed by UTC day. The response is a tabular structure with columns, column_types, column_units, and rows, with one row per group and bucket. `total_cost` is the cost in the workspace's currency and `total_charge_count` the billed quantity. Usage can be grouped or filtered by at most two of `user_id`, `hashed_xi_api_key`, `region`, `reporting_workspace_id`, `billing_group_id`, `product_type`, `surface` and `actor`, and grouping by two of them requires an `eq` or `in` filter on one. `model`, `request_source`, `fiat_charge_type` and `fiat_currency` can always be added. Some id columns also get a display-name column, such as user_label, appended after the existing columns. Workspaces billed in credits should use /v1/workspace/analytics/query/usage-by-product-over-time.
+Returns the base cost of the workspace's usage over time, bucketed by UTC day. The response is a tabular structure with columns, column_types, column_units, and rows, with one row per group and bucket. `total_cost` is the base cost in the workspace's currency (excluding overage surcharges) and `total_charge_count` is the billed quantity. Usage can be grouped or filtered by at most two of `user_id`, `hashed_xi_api_key`, `region`, `reporting_workspace_id`, `billing_group_id`, `product_type`, `surface` and `actor`, and grouping by two of them requires an `eq` or `in` filter on one. `model`, `request_source`, `fiat_charge_type` and `fiat_currency` can always be added. Some id columns also get a display-name column, such as user_label, appended after the existing columns.
 </dd>
 </dl>
 </dd>
@@ -49778,9 +51450,9 @@ async fn main() {
         .usage
         .get_usage(
             &BodyGetWorkspaceCostUsageV1WorkspaceAnalyticsUsagePost::builder()
-                .start_time(3700831597212185)
-                .end_time(6599812297071380)
-                .interval_seconds(5258698093987200)
+                .start_time(4018717264359507)
+                .end_time(4273916061948369.5)
+                .interval_seconds(5981179278355200)
                 .group_by(vec![
                     BodyGetWorkspaceCostUsageV1WorkspaceAnalyticsUsagePostGroupByItem::Model,
                 ])
@@ -49873,8 +51545,8 @@ async fn main() {
         .requests
         .get(
             Some(&BodyListApiRequestsV1WorkspaceAnalyticsRequestsPost {
-                start_time: Some(5996244761066775),
-                end_time: Some(6420567498530413),
+                start_time: Some(2618243406680354),
+                end_time: Some(2715058988292409),
                 limit: Some(100),
                 sort: Some(BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort::Asc),
                 filters: Some(vec![
@@ -50092,9 +51764,9 @@ async fn main() {
                 .intake_questions(vec![
                     ReceptionIntakeQuestion::builder()
                         .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .label(StrippedStr("tempor ex".to_string()))
+                        .label(StrippedStr("Duis in veli".to_string()))
                         .kind(IntakeQuestionKind::Text)
-                        .options(vec![StrippedStr("quis Duis".to_string())])
+                        .options(vec![StrippedStr("pariatu".to_string())])
                         .required(true)
                         .is_active(true)
                         .build()
@@ -50102,19 +51774,19 @@ async fn main() {
                 ])
                 .groups(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("ipsum cu".to_string()))
-                        .rank(0)
+                        .label(StrippedStr("estconsectetur".to_string()))
+                        .rank(7)
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .ungrouped_rank(8)
-                .name(StrippedStr("ipsum cillum".to_string()))
-                .description(StrippedStr("eiusmod ".to_string()))
+                .ungrouped_rank(3)
+                .name(StrippedStr("nulla".to_string()))
+                .description(StrippedStr("sint ex c".to_string()))
                 .variants(vec![
                     ReceptionServiceVariant::builder()
                         .id("variant_4801jx8k3m5n7p9q2r4s6t8v0w2y")
                         .duration_minutes(60)
-                        .price(1.68)
+                        .price(2.83)
                         .is_active(true)
                         .build()
                         .expect("Failed to build request"),
@@ -50125,15 +51797,15 @@ async fn main() {
                 .add_ons(vec![
                     ReceptionAddOn::builder()
                         .id("addon_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .name(StrippedStr("irure".to_string()))
-                        .description(StrippedStr("sint proi".to_string()))
+                        .name(StrippedStr("deserunt".to_string()))
+                        .description(StrippedStr("adipisici".to_string()))
                         .add_duration_minutes(10)
                         .add_price(5_f64)
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .max_participants(137)
-                .capacity(5)
+                .max_participants(29)
+                .capacity(8)
                 .is_active(true)
                 .any_staff_member(true)
                 .staff_ids(vec!["staff_ids".to_string()])
@@ -50147,7 +51819,7 @@ async fn main() {
                 .promotions(vec![
                     ReceptionServicePromotion::builder()
                         .id("promo_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .name(StrippedStr("incididunt mag".to_string()))
+                        .name(StrippedStr("cupidatat lab".to_string()))
                         .target(PromotionTarget::Service)
                         .variant_id("variant_id")
                         .add_on_id("add_on_id")
@@ -50336,9 +52008,9 @@ async fn main() {
                 intake_questions: Some(vec![
                     ReceptionIntakeQuestion::builder()
                         .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .label(StrippedStr("tempor ex".to_string()))
+                        .label(StrippedStr("Duis in veli".to_string()))
                         .kind(IntakeQuestionKind::Text)
-                        .options(vec![StrippedStr("quis Duis".to_string())])
+                        .options(vec![StrippedStr("pariatu".to_string())])
                         .required(true)
                         .is_active(true)
                         .build()
@@ -50346,19 +52018,19 @@ async fn main() {
                 ]),
                 groups: Some(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("ipsum cu".to_string()))
-                        .rank(0)
+                        .label(StrippedStr("estconsectetur".to_string()))
+                        .rank(7)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                ungrouped_rank: Some(7),
-                name: Some(StrippedStr("consequ".to_string())),
-                description: Some(StrippedStr("irure".to_string())),
+                ungrouped_rank: Some(0),
+                name: Some(StrippedStr("laboris e".to_string())),
+                description: Some(StrippedStr("exlabore u".to_string())),
                 variants: Some(vec![
                     ReceptionServiceVariant::builder()
                         .id("variant_4801jx8k3m5n7p9q2r4s6t8v0w2y")
                         .duration_minutes(60)
-                        .price(1.68)
+                        .price(2.83)
                         .is_active(true)
                         .build()
                         .expect("Failed to build request"),
@@ -50369,16 +52041,16 @@ async fn main() {
                 add_ons: Some(vec![
                     ReceptionAddOn::builder()
                         .id("addon_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .name(StrippedStr("irure".to_string()))
-                        .description(StrippedStr("sint proi".to_string()))
+                        .name(StrippedStr("deserunt".to_string()))
+                        .description(StrippedStr("adipisici".to_string()))
                         .add_duration_minutes(10)
                         .add_price(5_f64)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                max_participants: Some(142),
+                max_participants: Some(188),
                 capacity: Some(3),
-                is_active: Some(false),
+                is_active: Some(true),
                 any_staff_member: Some(false),
                 staff_ids: Some(vec!["staff_ids".to_string()]),
                 asset_ids: Some(vec!["asset_ids".to_string()]),
@@ -50387,11 +52059,11 @@ async fn main() {
                 display_on_booking_page: Some(true),
                 travel_minutes: Some(15),
                 travel_before: Some(true),
-                travel_after: Some(false),
+                travel_after: Some(true),
                 promotions: Some(vec![
                     ReceptionServicePromotion::builder()
                         .id("promo_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .name(StrippedStr("incididunt mag".to_string()))
+                        .name(StrippedStr("cupidatat lab".to_string()))
                         .target(PromotionTarget::Service)
                         .variant_id("variant_id")
                         .add_on_id("add_on_id")
@@ -50403,8 +52075,8 @@ async fn main() {
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                duration_minutes: Some(35122),
-                price: Some(0.15),
+                duration_minutes: Some(11423),
+                price: Some(5.51),
                 ..Default::default()
             },
             "xi-workspace-id".to_string(),
@@ -50592,9 +52264,9 @@ async fn main() {
                     intake_questions: Some(vec![
                         ReceptionIntakeQuestion::builder()
                             .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                            .label(StrippedStr("tempor ex".to_string()))
+                            .label(StrippedStr("Duis in veli".to_string()))
                             .kind(IntakeQuestionKind::Text)
-                            .options(vec![StrippedStr("quis Duis".to_string())])
+                            .options(vec![StrippedStr("pariatu".to_string())])
                             .required(true)
                             .is_active(true)
                             .build()
@@ -50602,19 +52274,19 @@ async fn main() {
                     ]),
                     groups: Some(vec![
                         ReceptionGroupMembership::builder()
-                            .label(StrippedStr("ipsum cu".to_string()))
-                            .rank(0)
+                            .label(StrippedStr("estconsectetur".to_string()))
+                            .rank(7)
                             .build()
                             .expect("Failed to build request"),
                     ]),
-                    ungrouped_rank: Some(7),
-                    name: Some(StrippedStr("dolor".to_string())),
-                    description: Some(StrippedStr("irure ".to_string())),
+                    ungrouped_rank: Some(9),
+                    name: Some(StrippedStr("ad ex".to_string())),
+                    description: Some(StrippedStr("adipi".to_string())),
                     variants: Some(vec![
                         ReceptionServiceVariant::builder()
                             .id("variant_4801jx8k3m5n7p9q2r4s6t8v0w2y")
                             .duration_minutes(60)
-                            .price(1.68)
+                            .price(2.83)
                             .is_active(true)
                             .build()
                             .expect("Failed to build request"),
@@ -50625,29 +52297,29 @@ async fn main() {
                     add_ons: Some(vec![
                         ReceptionAddOn::builder()
                             .id("addon_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                            .name(StrippedStr("irure".to_string()))
-                            .description(StrippedStr("sint proi".to_string()))
+                            .name(StrippedStr("deserunt".to_string()))
+                            .description(StrippedStr("adipisici".to_string()))
                             .add_duration_minutes(10)
                             .add_price(5_f64)
                             .build()
                             .expect("Failed to build request"),
                     ]),
-                    max_participants: Some(67),
-                    capacity: Some(2),
-                    is_active: Some(true),
+                    max_participants: Some(50),
+                    capacity: Some(8),
+                    is_active: Some(false),
                     any_staff_member: Some(false),
                     staff_ids: Some(vec!["staff_ids".to_string()]),
                     asset_ids: Some(vec!["asset_ids".to_string()]),
                     advance_booking_minutes: Some(10080),
                     location_ids: Some(vec!["location_ids".to_string()]),
-                    display_on_booking_page: Some(false),
+                    display_on_booking_page: Some(true),
                     travel_minutes: Some(15),
-                    travel_before: Some(true),
+                    travel_before: Some(false),
                     travel_after: Some(false),
                     promotions: Some(vec![
                         ReceptionServicePromotion::builder()
                             .id("promo_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                            .name(StrippedStr("incididunt mag".to_string()))
+                            .name(StrippedStr("cupidatat lab".to_string()))
                             .target(PromotionTarget::Service)
                             .variant_id("variant_id")
                             .add_on_id("add_on_id")
@@ -50661,8 +52333,8 @@ async fn main() {
                             .build()
                             .expect("Failed to build request"),
                     ]),
-                    duration_minutes: Some(28750),
-                    price: Some(6.99),
+                    duration_minutes: Some(2712),
+                    price: Some(6.96),
                     ..Default::default()
                 })
                 .build()
@@ -50886,9 +52558,9 @@ async fn main() {
                 .intake_questions(vec![
                     ReceptionIntakeQuestion::builder()
                         .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .label(StrippedStr("tempor ex".to_string()))
+                        .label(StrippedStr("Duis in veli".to_string()))
                         .kind(IntakeQuestionKind::Text)
-                        .options(vec![StrippedStr("quis Duis".to_string())])
+                        .options(vec![StrippedStr("pariatu".to_string())])
                         .required(true)
                         .is_active(true)
                         .build()
@@ -50896,15 +52568,15 @@ async fn main() {
                 ])
                 .groups(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("ipsum cu".to_string()))
-                        .rank(0)
+                        .label(StrippedStr("estconsectetur".to_string()))
+                        .rank(7)
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .ungrouped_rank(1)
-                .name(StrippedStr("proid".to_string()))
-                .description(StrippedStr("nostrud ve".to_string()))
-                .price(1.86)
+                .ungrouped_rank(0)
+                .name(StrippedStr("ut dolore".to_string()))
+                .description(StrippedStr("Ut aute do".to_string()))
+                .price(1.93)
                 .is_active(true)
                 .orderable(true)
                 .allowed_fulfillment_types(vec![OrderFulfillmentType::Pickup])
@@ -51087,9 +52759,9 @@ async fn main() {
                 intake_questions: Some(vec![
                     ReceptionIntakeQuestion::builder()
                         .id("intakeq_4801jx8k3m5n7p9q2r4s6t8v0w2y")
-                        .label(StrippedStr("tempor ex".to_string()))
+                        .label(StrippedStr("Duis in veli".to_string()))
                         .kind(IntakeQuestionKind::Text)
-                        .options(vec![StrippedStr("quis Duis".to_string())])
+                        .options(vec![StrippedStr("pariatu".to_string())])
                         .required(true)
                         .is_active(true)
                         .build()
@@ -51097,20 +52769,20 @@ async fn main() {
                 ]),
                 groups: Some(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("ipsum cu".to_string()))
-                        .rank(0)
+                        .label(StrippedStr("estconsectetur".to_string()))
+                        .rank(7)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                ungrouped_rank: Some(9),
-                name: Some(StrippedStr("culpa ani".to_string())),
-                description: Some(StrippedStr("ex cillum o".to_string())),
-                price: Some(1.22),
+                ungrouped_rank: Some(1),
+                name: Some(StrippedStr("laborum repre".to_string())),
+                description: Some(StrippedStr("ullamco".to_string())),
+                price: Some(8.19),
                 is_active: Some(false),
-                orderable: Some(false),
+                orderable: Some(true),
                 allowed_fulfillment_types: Some(vec![OrderFulfillmentType::Pickup]),
                 location_ids: Some(vec!["location_ids".to_string()]),
-                track_quantity: Some(true),
+                track_quantity: Some(false),
                 ..Default::default()
             },
             "xi-workspace-id".to_string(),
@@ -51562,17 +53234,17 @@ async fn main() {
             &ReceptionCreateStaffRequest::builder()
                 .groups(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("ipsum cu".to_string()))
-                        .rank(0)
+                        .label(StrippedStr("estconsectetur".to_string()))
+                        .rank(7)
                         .build()
                         .expect("Failed to build request"),
                 ])
-                .ungrouped_rank(6)
-                .name(StrippedStr("aute si".to_string()))
-                .description(StrippedStr("sint moll".to_string()))
+                .ungrouped_rank(3)
+                .name(StrippedStr("ea cupida".to_string()))
+                .description(StrippedStr("incidi".to_string()))
                 .is_active(true)
                 .email("jane@example.com")
-                .phone(PhoneNumberOptional("offic".to_string()))
+                .phone(PhoneNumberOptional("nulla de".to_string()))
                 .sms_notifications_opted_in(false)
                 .photo_url("https://male-coal.com/")
                 .location_id("location_id")
@@ -51582,7 +53254,7 @@ async fn main() {
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(5)
+                                .start_minute(6)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -51593,7 +53265,7 @@ async fn main() {
                     ..Default::default()
                 })
                 .display_on_booking_page(true)
-                .customer_facing_name(StrippedStr("Ut Ex".to_string()))
+                .customer_facing_name(StrippedStr("aliqua dol".to_string()))
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -51769,17 +53441,17 @@ async fn main() {
             &ReceptionUpdateStaffRequestPatch {
                 groups: Some(vec![
                     ReceptionGroupMembership::builder()
-                        .label(StrippedStr("ipsum cu".to_string()))
-                        .rank(0)
+                        .label(StrippedStr("estconsectetur".to_string()))
+                        .rank(7)
                         .build()
                         .expect("Failed to build request"),
                 ]),
-                ungrouped_rank: Some(2),
-                name: Some(StrippedStr("deserunt".to_string())),
-                description: Some(StrippedStr("et adipis".to_string())),
+                ungrouped_rank: Some(1),
+                name: Some(StrippedStr("dolor".to_string())),
+                description: Some(StrippedStr("anim cupidata".to_string())),
                 is_active: Some(false),
                 email: Some("jane@example.com".to_string()),
-                phone: Some(PhoneNumberOptional("consequat".to_string())),
+                phone: Some(PhoneNumberOptional("dolore et offi".to_string())),
                 sms_notifications_opted_in: Some(false),
                 photo_url: Some("https://male-coal.com/".to_string()),
                 location_id: Some("location_id".to_string()),
@@ -51789,7 +53461,7 @@ async fn main() {
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(5)
+                                .start_minute(6)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -51799,8 +53471,8 @@ async fn main() {
                     timezone: Some("timezone".to_string()),
                     ..Default::default()
                 }),
-                display_on_booking_page: Some(false),
-                customer_facing_name: Some(StrippedStr("exercit".to_string())),
+                display_on_booking_page: Some(true),
+                customer_facing_name: Some(StrippedStr("in do eiusmod".to_string())),
                 ..Default::default()
             },
             "xi-workspace-id".to_string(),
@@ -52057,28 +53729,28 @@ async fn main() {
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionUpdateCustomerFacingAgentRequest {
                 config: Some(ReceptionCustomerFacingConfigPatch {
-                    additional_instructions: Some(StrippedStr("aute repre".to_string())),
-                    tone_traits: Some(vec![StrippedStr("minim ".to_string())]),
-                    details_to_collect: Some(vec![StrippedStr("Duis dolor n".to_string())]),
-                    llm: Some(AgentMessagesOverridesLlm::Gpt4OMini),
+                    additional_instructions: Some(StrippedStr("ipsum sint".to_string())),
+                    tone_traits: Some(vec![StrippedStr("in voluptate no".to_string())]),
+                    details_to_collect: Some(vec![StrippedStr("voluptate".to_string())]),
+                    llm: Some(Llm::Gpt4OMini),
                     reasoning_effort: Some(LlmReasoningEffort::None),
-                    disable_rag: Some(false),
+                    disable_rag: Some(true),
                     background_voice_detection: Some(false),
                     turn_eagerness: Some(ReceptionTurnEagerness::Patient),
                     voice_id: Some("21m00Tcm4TlvDq8ikWAM".to_string()),
-                    language: Some(SupportedLang("dolor l".to_string())),
-                    additional_languages: Some(vec![SupportedLang("pariatu".to_string())]),
+                    language: Some(SupportedLang("iddolore in ut ".to_string())),
+                    additional_languages: Some(vec![SupportedLang("sed laborum in".to_string())]),
                     first_message: Some(
                         "Hi, thanks for calling Bloom Salon! How can I help you today?".to_string(),
                     ),
                     first_message_mode: Some(FirstMessageMode::Interruptible),
                     enable_end_call_tool: Some(true),
-                    enable_skip_turn_tool: Some(true),
-                    enable_play_keypad_touch_tone_tool: Some(false),
-                    hide_caller_number_on_transfers: Some(true),
+                    enable_skip_turn_tool: Some(false),
+                    enable_play_keypad_touch_tone_tool: Some(true),
+                    hide_caller_number_on_transfers: Some(false),
                     record_after_transfers: Some(false),
                     enable_secure_mode: Some(false),
-                    enable_spam_protection: Some(false),
+                    enable_spam_protection: Some(true),
                     ..Default::default()
                 }),
                 name: Some("name".to_string()),
@@ -52088,7 +53760,7 @@ async fn main() {
                         .orb_color_2("#9ce6e6")
                         .variant(Variant::Tiny)
                         .placement(Placement::TopLeft)
-                        .dismissible(true)
+                        .dismissible(false)
                         .main_label("main_label")
                         .start_call("start_call")
                         .build()
@@ -52276,10 +53948,10 @@ async fn main() {
         .create(
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionCreateTransferRuleRequest::builder()
-                .label(StrippedStr("commod".to_string()))
-                .phone_number(PhoneNumber("in sin".to_string()))
-                .condition(StrippedStr("consec".to_string()))
-                .post_dial_digits("77*092")
+                .label(StrippedStr("ut magna".to_string()))
+                .phone_number(PhoneNumber("Lorem est in eu".to_string()))
+                .condition(StrippedStr("nulla non l".to_string()))
+                .post_dial_digits("43681")
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -52377,10 +54049,10 @@ async fn main() {
             "agent_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             "transferrule_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionUpdateTransferRuleRequest::builder()
-                .label(StrippedStr("veniam qui".to_string()))
-                .phone_number(PhoneNumber("laboris dolor".to_string()))
-                .condition(StrippedStr("pariatu".to_string()))
-                .post_dial_digits("*441")
+                .label(StrippedStr("ullamco".to_string()))
+                .phone_number(PhoneNumber("enim velit a".to_string()))
+                .condition(StrippedStr("suntrepreh".to_string()))
+                .post_dial_digits("87*#2")
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -52579,8 +54251,8 @@ async fn main() {
         .holidays
         .list(
             &HolidaysListQueryRequest {
-                start_unix: Some(5),
-                end_unix: Some(5),
+                start_unix: Some(4),
+                end_unix: Some(7),
                 time_off_type: Some(TimeOffType::Staff),
                 resource_id: Some("resource_id".to_string()),
                 location_id: Some("location_id".to_string()),
@@ -52732,7 +54404,7 @@ async fn main() {
                 .override_hours(vec![
                     TimeRangeModel::builder()
                         .start_hour(9)
-                        .start_minute(5)
+                        .start_minute(6)
                         .end_hour(17)
                         .end_minute(30)
                         .build()
@@ -52936,7 +54608,7 @@ async fn main() {
                 override_hours: Some(vec![
                     TimeRangeModel::builder()
                         .start_hour(9)
-                        .start_minute(5)
+                        .start_minute(6)
                         .end_hour(17)
                         .end_minute(30)
                         .build()
@@ -53197,16 +54869,16 @@ async fn main() {
         .locations
         .create(
             &ReceptionLocationRequest::builder()
-                .name(StrippedStr("reprehenderit e".to_string()))
-                .address(StrippedStr("aliquip adip".to_string()))
-                .notes(StrippedStr("aliquip au".to_string()))
+                .name(StrippedStr("eiusmod sit".to_string()))
+                .address(StrippedStr("eiusmod".to_string()))
+                .notes(StrippedStr("minim dolore".to_string()))
                 .operating_hours(WorkingHours {
                     hours: Some(HashMap::from([(
                         "key".to_string(),
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(5)
+                                .start_minute(6)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -53216,7 +54888,7 @@ async fn main() {
                     timezone: Some("timezone".to_string()),
                     ..Default::default()
                 })
-                .customer_facing_name(StrippedStr("sit ut c".to_string()))
+                .customer_facing_name(StrippedStr("non Duis laboru".to_string()))
                 .max_concurrent_appointments(3)
                 .is_active(true)
                 .build()
@@ -53392,16 +55064,16 @@ async fn main() {
         .update(
             "location_4801jx8k3m5n7p9q2r4s6t8v0w2y",
             &ReceptionLocationRequestPatch {
-                name: Some(StrippedStr("idquis d".to_string())),
-                address: Some(StrippedStr("ullamco q".to_string())),
-                notes: Some(StrippedStr("sunt pr".to_string())),
+                name: Some(StrippedStr("molli".to_string())),
+                address: Some(StrippedStr("cupidatat".to_string())),
+                notes: Some(StrippedStr("amet sunt".to_string())),
                 operating_hours: Some(WorkingHours {
                     hours: Some(HashMap::from([(
                         "key".to_string(),
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(5)
+                                .start_minute(6)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -53411,7 +55083,7 @@ async fn main() {
                     timezone: Some("timezone".to_string()),
                     ..Default::default()
                 }),
-                customer_facing_name: Some(StrippedStr("consequat ".to_string())),
+                customer_facing_name: Some(StrippedStr("sitofficia ".to_string())),
                 max_concurrent_appointments: Some(3),
                 is_active: Some(false),
                 ..Default::default()
@@ -53680,7 +55352,7 @@ async fn main() {
                         vec![
                             TimeRangeModel::builder()
                                 .start_hour(9)
-                                .start_minute(5)
+                                .start_minute(6)
                                 .end_hour(17)
                                 .end_minute(30)
                                 .build()
@@ -54111,7 +55783,7 @@ async fn main() {
         .add_url(
             &AddUrlRequest::builder()
                 .url("https://example.com")
-                .crawl_entire_site(false)
+                .crawl_entire_site(true)
                 .build()
                 .expect("Failed to build request"),
             "xi-workspace-id".to_string(),
@@ -54298,7 +55970,7 @@ async fn main() {
             &ReceptionProvisionResellerWorkspaceRequest::builder()
                 .business_name("business_name")
                 .vertical(ReceptionVertical::SalonBarbershop)
-                .charge_customer(true)
+                .charge_customer(false)
                 .subscription(
                     ProvisionResellerWorkspaceSubscription::builder()
                         .tier_id("tier_id")
@@ -54315,6 +55987,7 @@ async fn main() {
                         .expect("Failed to build request"),
                 ])
                 .complete_onboarding(false)
+                .metadata(HashMap::from([("key".to_string(), "metadata".to_string())]))
                 .idempotency_key("idempotency_key")
                 .build()
                 .expect("Failed to build request"),
@@ -54337,6 +56010,94 @@ async fn main() {
 <dd>
 
 **body:** `&ReceptionProvisionResellerWorkspaceRequest`
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**options:** `Option<RequestOptions>` — Per-call overrides
+    
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.workspaces.<a href="/src/api/resources/workspaces/workspaces.rs">update</a>(workspace_id: &amp;str, body: &amp;UpdateResellerWorkspaceRequest, options: Option&lt;RequestOptions&gt;) -&gt; Result&lt;ResellerWorkspaceSummary, crate::error::ApiError&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a customer workspace. Only the fields sent are changed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```rust
+use elevenlabs_rust_sdk::prelude::*;
+
+#[tokio::main]
+async fn main() {
+    let config = ClientConfig::default();
+    let client = ApiClient::new(config).expect("Failed to build client");
+    client
+        .workspaces
+        .update(
+            "3f2c9a7e1b4d4c8e9a6f0b2d5e7c1a93",
+            &UpdateResellerWorkspaceRequest {
+                metadata: Some(HashMap::from([("key".to_string(), "metadata".to_string())])),
+                ..Default::default()
+            },
+            None,
+        )
+        .await;
+}
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**workspace_id:** `&str` — ID of the customer workspace. Returned when you provision one; list them with `GET /v1/reception/reseller/workspaces`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**body:** `&UpdateResellerWorkspaceRequest`
     
 </dd>
 </dl>

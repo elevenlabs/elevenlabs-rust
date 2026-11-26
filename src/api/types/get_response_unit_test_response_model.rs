@@ -15,7 +15,7 @@ pub struct GetResponseUnitTestResponseModel {
     pub chat_history: Option<Vec<ConversationHistoryTranscriptCommonModelOutput>>,
     /// Simulate the test as if the conversation originated from this channel.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conversation_initiation_source: Option<ListConversationInitiationSource>,
+    pub conversation_initiation_source: Option<ConversationInitiationSource>,
     /// The environment to resolve environment-specific variable values against when running this test (URL, headers, auth connections). If not provided, defaults to 'production'. For simulation tests, simulation_environment takes precedence when set.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<String>,
@@ -47,7 +47,7 @@ pub struct GetResponseUnitTestResponseModelBuilder {
     from_conversation_metadata: Option<TestFromConversationMetadataOutput>,
     dynamic_variables: Option<serde_json::Value>,
     chat_history: Option<Vec<ConversationHistoryTranscriptCommonModelOutput>>,
-    conversation_initiation_source: Option<ListConversationInitiationSource>,
+    conversation_initiation_source: Option<ConversationInitiationSource>,
     environment: Option<String>,
     success_condition: Option<String>,
     success_examples: Option<Vec<AgentSuccessfulResponseExample>>,
@@ -80,10 +80,7 @@ impl GetResponseUnitTestResponseModelBuilder {
         self
     }
 
-    pub fn conversation_initiation_source(
-        mut self,
-        value: ListConversationInitiationSource,
-    ) -> Self {
+    pub fn conversation_initiation_source(mut self, value: ConversationInitiationSource) -> Self {
         self.conversation_initiation_source = Some(value);
         self
     }

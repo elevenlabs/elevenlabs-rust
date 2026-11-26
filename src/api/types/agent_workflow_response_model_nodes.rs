@@ -22,6 +22,12 @@ pub enum AgentWorkflowResponseModelNodes {
         data: WorkflowPhoneNumberNodeModelOutput,
     },
 
+    #[serde(rename = "say")]
+    Say {
+        #[serde(flatten)]
+        data: WorkflowSayNodeModelOutput,
+    },
+
     #[serde(rename = "standalone_agent")]
     StandaloneAgent {
         #[serde(flatten)]
@@ -44,12 +50,6 @@ pub enum AgentWorkflowResponseModelNodes {
     Tool {
         #[serde(flatten)]
         data: WorkflowToolNodeModelOutput,
-    },
-
-    #[serde(rename = "say")]
-    Say {
-        #[serde(flatten)]
-        data: WorkflowSayNodeModelOutput,
     },
 
     #[serde(rename = "update_state")]
@@ -116,6 +116,24 @@ impl AgentWorkflowResponseModelNodes {
     pub fn into_phone_number(self) -> Option<WorkflowPhoneNumberNodeModelOutput> {
         match self {
             Self::PhoneNumber { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn is_say(&self) -> bool {
+        matches!(self, Self::Say { .. })
+    }
+
+    pub fn as_say(&self) -> Option<&WorkflowSayNodeModelOutput> {
+        match self {
+            Self::Say { data } => Some(data),
+            _ => None,
+        }
+    }
+
+    pub fn into_say(self) -> Option<WorkflowSayNodeModelOutput> {
+        match self {
+            Self::Say { data } => Some(data),
             _ => None,
         }
     }
@@ -188,24 +206,6 @@ impl AgentWorkflowResponseModelNodes {
     pub fn into_tool(self) -> Option<WorkflowToolNodeModelOutput> {
         match self {
             Self::Tool { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn is_say(&self) -> bool {
-        matches!(self, Self::Say { .. })
-    }
-
-    pub fn as_say(&self) -> Option<&WorkflowSayNodeModelOutput> {
-        match self {
-            Self::Say { data } => Some(data),
-            _ => None,
-        }
-    }
-
-    pub fn into_say(self) -> Option<WorkflowSayNodeModelOutput> {
-        match self {
-            Self::Say { data } => Some(data),
             _ => None,
         }
     }

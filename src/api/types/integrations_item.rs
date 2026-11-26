@@ -5,7 +5,7 @@ pub use crate::prelude::*;
 pub struct IntegrationsItem {
     #[serde(default)]
     pub integration_id: String,
-    pub integration_type: IntegrationsItemIntegrationType,
+    pub integration_type: IntegrationType,
     #[serde(default)]
     pub is_connected: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -24,7 +24,7 @@ impl IntegrationsItem {
 #[non_exhaustive]
 pub struct IntegrationsItemBuilder {
     integration_id: Option<String>,
-    integration_type: Option<IntegrationsItemIntegrationType>,
+    integration_type: Option<IntegrationType>,
     is_connected: Option<bool>,
     tool_count: Option<i64>,
 }
@@ -35,7 +35,7 @@ impl IntegrationsItemBuilder {
         self
     }
 
-    pub fn integration_type(mut self, value: IntegrationsItemIntegrationType) -> Self {
+    pub fn integration_type(mut self, value: IntegrationType) -> Self {
         self.integration_type = Some(value);
         self
     }

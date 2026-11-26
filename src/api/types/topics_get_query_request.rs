@@ -11,7 +11,7 @@ pub struct TopicsGetQueryRequest {
     pub sort_by: Option<TopicSortBy>,
     /// Direction to sort topics.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    pub sort_direction: Option<SortDirection>,
     /// Start of the window to view topics for. When set with to_unix_secs, the completed daily topic-discovery runs in the range are aggregated together, so the window scopes the metrics as well as the topic set. Floored to the start of its UTC day because runs cover whole UTC days; aggregated_run_count reports how many runs were summed. Omit both bounds to get the single latest run.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_unix_secs: Option<i64>,
@@ -37,7 +37,7 @@ impl TopicsGetQueryRequest {
 pub struct TopicsGetQueryRequestBuilder {
     page_size: Option<i64>,
     sort_by: Option<TopicSortBy>,
-    sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    sort_direction: Option<SortDirection>,
     from_unix_secs: Option<i64>,
     to_unix_secs: Option<i64>,
     include_evaluation_criteria: Option<bool>,
@@ -55,10 +55,7 @@ impl TopicsGetQueryRequestBuilder {
         self
     }
 
-    pub fn sort_direction(
-        mut self,
-        value: BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort,
-    ) -> Self {
+    pub fn sort_direction(mut self, value: SortDirection) -> Self {
         self.sort_direction = Some(value);
         self
     }

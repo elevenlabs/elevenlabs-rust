@@ -46,7 +46,7 @@ impl PhoneNumbersClient {
         &self,
         request: &PhoneNumbersListQueryRequest,
         options: Option<RequestOptions>,
-    ) -> Result<Vec<PhoneNumbersListOkResponse>, crate::error::ApiError> {
+    ) -> Result<Vec<ListOkResponse>, crate::error::ApiError> {
         let provider = request.provider.clone();
         let agent_id = request.agent_id.clone();
         let branch_id = request.branch_id.clone();
@@ -105,7 +105,7 @@ impl PhoneNumbersClient {
 
         let status = response.status().as_u16();
         let bytes = response.bytes().await?;
-        let result: Vec<PhoneNumbersListOkResponse> = if bytes.is_empty() {
+        let result: Vec<ListOkResponse> = if bytes.is_empty() {
             Default::default()
         } else {
             serde_json::from_slice(&bytes).map_err(|err| crate::error::ApiError::DecodeError {

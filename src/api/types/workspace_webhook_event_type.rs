@@ -7,6 +7,7 @@ pub enum WorkspaceWebhookEventType {
     SpeechToText,
     AgentQa,
     Flows,
+    SupportTicket,
     /// This variant is used for forward compatibility.
     /// If the server sends a value not recognized by the current SDK version,
     /// it will be captured here with the raw string value.
@@ -21,6 +22,7 @@ impl Serialize for WorkspaceWebhookEventType {
             Self::SpeechToText => serializer.serialize_str("speech_to_text"),
             Self::AgentQa => serializer.serialize_str("agent_qa"),
             Self::Flows => serializer.serialize_str("flows"),
+            Self::SupportTicket => serializer.serialize_str("support_ticket"),
             Self::__Unknown(val) => serializer.serialize_str(val),
         }
     }
@@ -34,6 +36,7 @@ impl<'de> Deserialize<'de> for WorkspaceWebhookEventType {
             "speech_to_text" => Ok(Self::SpeechToText),
             "agent_qa" => Ok(Self::AgentQa),
             "flows" => Ok(Self::Flows),
+            "support_ticket" => Ok(Self::SupportTicket),
             _ => Ok(Self::__Unknown(value)),
         }
     }
@@ -46,6 +49,7 @@ impl fmt::Display for WorkspaceWebhookEventType {
             Self::SpeechToText => write!(f, "speech_to_text"),
             Self::AgentQa => write!(f, "agent_qa"),
             Self::Flows => write!(f, "flows"),
+            Self::SupportTicket => write!(f, "support_ticket"),
             Self::__Unknown(val) => write!(f, "{}", val),
         }
     }

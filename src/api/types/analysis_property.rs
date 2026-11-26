@@ -36,7 +36,7 @@ pub struct AnalysisProperty {
     pub name: Option<String>,
     /// LLM model to use for this analysis item. If not set, uses agent's analysis_llm default.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub llm: Option<AgentMessagesOverridesLlm>,
+    pub llm: Option<Llm>,
 }
 
 impl AnalysisProperty {
@@ -58,7 +58,7 @@ pub struct AnalysisPropertyBuilder {
     constant_value: Option<AnalysisPropertyConstantValue>,
     is_omitted: Option<bool>,
     name: Option<String>,
-    llm: Option<AgentMessagesOverridesLlm>,
+    llm: Option<Llm>,
 }
 
 impl AnalysisPropertyBuilder {
@@ -112,7 +112,7 @@ impl AnalysisPropertyBuilder {
         self
     }
 
-    pub fn llm(mut self, value: AgentMessagesOverridesLlm) -> Self {
+    pub fn llm(mut self, value: Llm) -> Self {
         self.llm = Some(value);
         self
     }

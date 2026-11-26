@@ -11,9 +11,9 @@ pub struct SupportedVoice {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_family: Option<ModelFamily>,
+    pub model_family: Option<TtsModelFamily>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub optimize_streaming_latency: Option<OptimizeStreamingLatency>,
+    pub optimize_streaming_latency: Option<TtsOptimizeStreamingLatency>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     #[serde(with = "crate::core::number_serializers::float::option")]
@@ -45,8 +45,8 @@ pub struct SupportedVoiceBuilder {
     voice_id: Option<String>,
     description: Option<String>,
     language: Option<String>,
-    model_family: Option<ModelFamily>,
-    optimize_streaming_latency: Option<OptimizeStreamingLatency>,
+    model_family: Option<TtsModelFamily>,
+    optimize_streaming_latency: Option<TtsOptimizeStreamingLatency>,
     stability: Option<f64>,
     speed: Option<f64>,
     similarity_boost: Option<f64>,
@@ -74,12 +74,12 @@ impl SupportedVoiceBuilder {
         self
     }
 
-    pub fn model_family(mut self, value: ModelFamily) -> Self {
+    pub fn model_family(mut self, value: TtsModelFamily) -> Self {
         self.model_family = Some(value);
         self
     }
 
-    pub fn optimize_streaming_latency(mut self, value: OptimizeStreamingLatency) -> Self {
+    pub fn optimize_streaming_latency(mut self, value: TtsOptimizeStreamingLatency) -> Self {
         self.optimize_streaming_latency = Some(value);
         self
     }

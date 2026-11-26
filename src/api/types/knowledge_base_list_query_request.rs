@@ -29,7 +29,7 @@ pub struct KnowledgeBaseListQueryRequest {
     pub folders_first: Option<bool>,
     /// The direction to sort the results
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    pub sort_direction: Option<SortDirection>,
     /// The field to sort the results by
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<KnowledgeBaseSortBy>,
@@ -55,7 +55,7 @@ pub struct KnowledgeBaseListQueryRequestBuilder {
     parent_folder_id: Option<String>,
     ancestor_folder_id: Option<String>,
     folders_first: Option<bool>,
-    sort_direction: Option<BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort>,
+    sort_direction: Option<SortDirection>,
     sort_by: Option<KnowledgeBaseSortBy>,
     cursor: Option<String>,
 }
@@ -101,10 +101,7 @@ impl KnowledgeBaseListQueryRequestBuilder {
         self
     }
 
-    pub fn sort_direction(
-        mut self,
-        value: BodyListApiRequestsV1WorkspaceAnalyticsRequestsPostSort,
-    ) -> Self {
+    pub fn sort_direction(mut self, value: SortDirection) -> Self {
         self.sort_direction = Some(value);
         self
     }

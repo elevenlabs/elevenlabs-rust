@@ -12,7 +12,7 @@ pub struct UpdateToolCallUnitTestRequest {
     pub chat_history: Option<Vec<ConversationHistoryTranscriptCommonModelInput>>,
     /// Simulate the test as if the conversation originated from this channel.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub conversation_initiation_source: Option<ListConversationInitiationSource>,
+    pub conversation_initiation_source: Option<ConversationInitiationSource>,
     /// The environment to resolve environment-specific variable values against when running this test (URL, headers, auth connections). If not provided, defaults to 'production'. For simulation tests, simulation_environment takes precedence when set.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<String>,
@@ -41,7 +41,7 @@ pub struct UpdateToolCallUnitTestRequestBuilder {
     from_conversation_metadata: Option<TestFromConversationMetadataInput>,
     dynamic_variables: Option<serde_json::Value>,
     chat_history: Option<Vec<ConversationHistoryTranscriptCommonModelInput>>,
-    conversation_initiation_source: Option<ListConversationInitiationSource>,
+    conversation_initiation_source: Option<ConversationInitiationSource>,
     environment: Option<String>,
     tool_call_parameters: Option<UnitTestToolCallEvaluationModelInput>,
     check_any_tool_matches: Option<bool>,
@@ -68,10 +68,7 @@ impl UpdateToolCallUnitTestRequestBuilder {
         self
     }
 
-    pub fn conversation_initiation_source(
-        mut self,
-        value: ListConversationInitiationSource,
-    ) -> Self {
+    pub fn conversation_initiation_source(mut self, value: ConversationInitiationSource) -> Self {
         self.conversation_initiation_source = Some(value);
         self
     }

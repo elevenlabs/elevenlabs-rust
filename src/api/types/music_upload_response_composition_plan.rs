@@ -4,7 +4,7 @@ pub use crate::prelude::*;
 #[serde(untagged)]
 pub enum MusicUploadResponseCompositionPlan {
     MusicPrompt(MusicPrompt),
-    CompositionPlan2(CompositionPlan2),
+    CompositionPlan(CompositionPlan),
 }
 
 impl MusicUploadResponseCompositionPlan {
@@ -26,20 +26,20 @@ impl MusicUploadResponseCompositionPlan {
         }
     }
 
-    pub fn is_composition_plan2(&self) -> bool {
-        matches!(self, Self::CompositionPlan2(_))
+    pub fn is_composition_plan(&self) -> bool {
+        matches!(self, Self::CompositionPlan(_))
     }
 
-    pub fn as_composition_plan2(&self) -> Option<&CompositionPlan2> {
+    pub fn as_composition_plan(&self) -> Option<&CompositionPlan> {
         match self {
-            Self::CompositionPlan2(value) => Some(value),
+            Self::CompositionPlan(value) => Some(value),
             _ => None,
         }
     }
 
-    pub fn into_composition_plan2(self) -> Option<CompositionPlan2> {
+    pub fn into_composition_plan(self) -> Option<CompositionPlan> {
         match self {
-            Self::CompositionPlan2(value) => Some(value),
+            Self::CompositionPlan(value) => Some(value),
             _ => None,
         }
     }
@@ -53,7 +53,7 @@ impl fmt::Display for MusicUploadResponseCompositionPlan {
                 "{}",
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))
             ),
-            Self::CompositionPlan2(value) => write!(
+            Self::CompositionPlan(value) => write!(
                 f,
                 "{}",
                 serde_json::to_string(value).unwrap_or_else(|_| format!("{:?}", value))

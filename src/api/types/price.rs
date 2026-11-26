@@ -5,7 +5,7 @@ pub use crate::prelude::*;
 pub struct Price {
     #[serde(default)]
     pub amount: String,
-    pub currency: SubscriptionResponseCurrency,
+    pub currency: Currency,
 }
 
 impl Price {
@@ -18,7 +18,7 @@ impl Price {
 #[non_exhaustive]
 pub struct PriceBuilder {
     amount: Option<String>,
-    currency: Option<SubscriptionResponseCurrency>,
+    currency: Option<Currency>,
 }
 
 impl PriceBuilder {
@@ -27,7 +27,7 @@ impl PriceBuilder {
         self
     }
 
-    pub fn currency(mut self, value: SubscriptionResponseCurrency) -> Self {
+    pub fn currency(mut self, value: Currency) -> Self {
         self.currency = Some(value);
         self
     }

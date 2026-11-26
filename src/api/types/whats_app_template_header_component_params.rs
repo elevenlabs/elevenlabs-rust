@@ -1,6 +1,6 @@
 pub use crate::prelude::*;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct WhatsAppTemplateHeaderComponentParams {
     #[serde(default)]
     pub parameters: Vec<ParametersItem>,
